@@ -45,6 +45,7 @@ public class CombatSystem : MonoBehaviour
     private List<GameObject> activeHitboxes;
 
     private Animator animator;
+    private SpriteRenderer spriteRenderer;
     private PlayerController controller;
 
     // Cached stats
@@ -63,7 +64,10 @@ public class CombatSystem : MonoBehaviour
 
     private void Awake()
     {
-        animator = GetComponent<Animator>();
+        // Auto-find Animator & SpriteRenderer 
+        animator = GetComponentInChildren<Animator>();
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+
         controller = GetComponent<PlayerController>();
 
         currentWeapon = WeaponType.None;
@@ -257,7 +261,6 @@ public class CombatSystem : MonoBehaviour
         if (activeHitboxes != null && index >= 0 && index < activeHitboxes.Count)
             activeHitboxes[index].SetActive(false);
     }
-
 
     public void DisableUpHitbox()
     {
