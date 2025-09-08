@@ -43,10 +43,6 @@ public class Health : MonoBehaviour
         if (spriteRenderer != null)
             StartCoroutine(FlashRed());
 
-        // Sound
-        if (audioSource != null && hitSound != null)
-            audioSource.PlayOneShot(hitSound);
-
         // Knockback
         if (rb != null && hitDirection.HasValue)
             rb.AddForce(hitDirection.Value.normalized * knockbackForce, ForceMode2D.Impulse);
