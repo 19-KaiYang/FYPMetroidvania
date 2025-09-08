@@ -7,36 +7,50 @@ public class Health : MonoBehaviour
     [Header("Health Settings")]
     public float maxHealth = 100f;
     public bool destroyOnDeath = true;
-
     private float currentHealth;
 
-  
-    private SpriteRenderer spriteRenderer;
+    [Header("Feedback")]
+    public SpriteRenderer spriteRenderer;
+    public float flashDuration = 0.1f;
+    public AudioClip hitSound;
+    public AudioClip deathSound;
 
-    private void Start()
+    [Header("Knockback")]
+    public float knockbackForce = 5f;
+
+  
+
+    private AudioSource audioSource;
+    private Rigidbody2D rb;
+
+    private void Awake()
     {
         currentHealth = maxHealth;
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        rb = GetComponent<Rigidbody2D>();
+        audioSource = GetComponent<AudioSource>();
+        if (spriteRenderer == null)
+            spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    public void TakeDamage(float damage)
+    public void TakeDamage(float damage, Vector2? hitDirection = null)
     {
+        if (currentHealth <= 0f) return; // already dead
+
         currentHealth -= damage;
         currentHealth = Mathf.Max(currentHealth, 0f);
 
-        // Visual feedback - flash red
+        // Visual feedback
         if (spriteRenderer != null)
-        {
             StartCoroutine(FlashRed());
-        }
+
+        // Knockback
+        if (rb != null && hitDirection.HasValue)
+            rb.AddForce(hitDirection.Value.normalized * knockbackForce, ForceMode2D.Impulse);
 
         Debug.Log($"{gameObject.name} took {damage} damage. Health: {currentHealth}/{maxHealth}");
 
-        // Check if dead
         if (currentHealth <= 0f)
-        {
             Die();
-        }
     }
 
     public void Heal(float healAmount)
@@ -46,41 +60,29 @@ public class Health : MonoBehaviour
         Debug.Log($"{gameObject.name} healed for {healAmount}. Health: {currentHealth}/{maxHealth}");
     }
 
-    public float GetHealthPercentage()
-    {
-        return currentHealth / maxHealth;
-    }
-
-    public bool IsAlive()
-    {
-        return currentHealth > 0f;
-    }
+    public float GetHealthPercentage() => currentHealth / maxHealth;
+    public bool IsAlive() => currentHealth > 0f;
 
     private void Die()
     {
         Debug.Log($"{gameObject.name} has died!");
 
-     
+        if (audioSource != null && deathSound != null)
+            audioSource.PlayOneShot(deathSound);
 
-        // Destroy or deactivate
+      
+
         if (destroyOnDeath)
-        {
             Destroy(gameObject);
-        }
         else
-        {
             gameObject.SetActive(false);
-        }
     }
 
-    private System.Collections.IEnumerator FlashRed()
+    private IEnumerator FlashRed()
     {
-        if (spriteRenderer != null)
-        {
-            Color originalColor = spriteRenderer.color;
-            spriteRenderer.color = Color.red;
-            yield return new WaitForSeconds(0.1f);
-            spriteRenderer.color = originalColor;
-        }
+        Color originalColor = spriteRenderer.color;
+        spriteRenderer.color = Color.red;
+        yield return new WaitForSeconds(flashDuration);
+        spriteRenderer.color = originalColor;
     }
 }
