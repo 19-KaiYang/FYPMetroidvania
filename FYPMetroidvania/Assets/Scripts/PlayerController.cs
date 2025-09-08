@@ -59,23 +59,16 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-    
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
 
         if (isGrounded)
-        {
             jumpLocked = false;
-        }
 
         // Movement
         if (!isDashing)
-        {
             rb.linearVelocity = new Vector2(moveInput.x * moveSpeed, rb.linearVelocity.y);
-        }
         else
-        {
             rb.linearVelocity = dashDirection * dashSpeed;
-        }
 
         // Flip sprite
         if (moveInput.x > 0 && !facingRight)
@@ -94,7 +87,7 @@ public class PlayerController : MonoBehaviour
         if (isGrounded && !jumpLocked)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
-            jumpLocked = true; 
+            jumpLocked = true;
         }
     }
 
@@ -121,7 +114,4 @@ public class PlayerController : MonoBehaviour
         spriteScale.x *= -1f;
         spriteTransform.localScale = spriteScale;
     }
-
-  
-
 }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-
 public enum WeaponType
 {
     None,
@@ -26,24 +25,24 @@ public class WeaponStats
     public float projectileLifetime = 3f;
 }
 
-
 public class CombatSystem : MonoBehaviour
 {
     [Header("Weapon Settings")]
     public WeaponType currentWeapon;
     public List<WeaponStats> weaponStatsList = new List<WeaponStats>();
 
-    [Header("Attack Points")]
+    [Header("Attack Points (for projectiles)")]
     public Transform attackPointRight;
     public Transform attackPointLeft;
-    public Transform attackPointUp;
-    public Transform attackPointDown;
-    public LayerMask enemyLayers;
+
+    [Header("Melee Hitboxes")]
+    public List<GameObject> swordHitboxes;
+    public List<GameObject> gauntletHitboxes;
+
+    private List<GameObject> activeHitboxes;
 
     private Animator animator;
     private PlayerController controller;
-    private Vector2 moveInput;
-    private Transform currentAttackPoint;
 
     // Cached stats
     private float attackDamage;
@@ -54,17 +53,17 @@ public class CombatSystem : MonoBehaviour
     private int comboStep = 0;
     private float comboTimer = 0f;
     private float attackCooldownTimer = 0f;
-    private bool isAttacking = false;
 
     // Weapon unlocks
     private HashSet<WeaponType> unlockedWeapons = new HashSet<WeaponType>();
+
+    public int CurrentComboStep => comboStep;
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
         controller = GetComponent<PlayerController>();
 
-        // Start with no weapon
         currentWeapon = WeaponType.None;
         ApplyWeaponStats(currentWeapon);
     }
@@ -86,7 +85,6 @@ public class CombatSystem : MonoBehaviour
         if (Keyboard.current.digit3Key.wasPressedThisFrame) SetWeapon(WeaponType.Gauntlet);
     }
 
-    // Unlock new weapon from pickups
     public void UnlockWeapon(WeaponType weapon)
     {
         if (!unlockedWeapons.Contains(weapon))
@@ -94,35 +92,24 @@ public class CombatSystem : MonoBehaviour
             unlockedWeapons.Add(weapon);
             Debug.Log($"{weapon} unlocked!");
 
-            // Auto-equip first weapon if currently unarmed
             if (currentWeapon == WeaponType.None)
-            {
                 SetWeapon(weapon);
-            }
         }
     }
 
-    // Switch weapons at runtime
     public void SetWeapon(WeaponType newWeapon)
     {
-        if (newWeapon == WeaponType.None)
-        {
-            currentWeapon = WeaponType.None;
-            ApplyWeaponStats(currentWeapon);
-            Debug.Log("No weapon equipped.");
-            return;
-        }
+        currentWeapon = newWeapon;
+        ApplyWeaponStats(newWeapon);
 
-        if (unlockedWeapons.Contains(newWeapon))
-        {
-            currentWeapon = newWeapon;
-            ApplyWeaponStats(newWeapon);
-            Debug.Log($"Equipped {newWeapon}");
-        }
+        if (newWeapon == WeaponType.Sword)
+            activeHitboxes = swordHitboxes;
+        else if (newWeapon == WeaponType.Gauntlet)
+            activeHitboxes = gauntletHitboxes;
         else
-        {
-            Debug.Log($"{newWeapon} not unlocked yet!");
-        }
+            activeHitboxes = null;
+
+        Debug.Log($"Equipped {newWeapon}");
     }
 
     private void ApplyWeaponStats(WeaponType type)
@@ -132,7 +119,6 @@ public class CombatSystem : MonoBehaviour
             attackDamage = 0f;
             attackRange = 0f;
             attackCooldown = 0.5f;
-            Debug.Log("Currently unarmed.");
             return;
         }
 
@@ -143,31 +129,18 @@ public class CombatSystem : MonoBehaviour
             attackRange = stats.range;
             attackCooldown = stats.attackCooldown;
         }
-        else
-        {
-            Debug.LogWarning("No stats found for weapon: " + type);
-        }
     }
 
     public void OnAttack()
     {
-        if (currentWeapon == WeaponType.None)
-        {
-            Debug.Log("Tried to attack, but no weapon equipped!");
-            return;
-        }
-
-        if (attackCooldownTimer <= 0f)
-        {
-            PerformAttack();
-        }
+        if (currentWeapon == WeaponType.None) return;
+        if (attackCooldownTimer <= 0f) PerformAttack();
     }
 
     private void PerformAttack()
     {
         comboStep++;
 
-        // Combo limits per weapon
         switch (currentWeapon)
         {
             case WeaponType.Sword:
@@ -188,62 +161,12 @@ public class CombatSystem : MonoBehaviour
         }
         else
         {
-            // Pick direction for melee
-            if (moveInput.y > 0.5f) currentAttackPoint = attackPointUp;
-            else if (moveInput.y < -0.5f) currentAttackPoint = attackPointDown;
-            else if (controller.facingRight) currentAttackPoint = attackPointRight;
-            else currentAttackPoint = attackPointLeft;
-
-            StartCoroutine(AttackSequence(comboStep));
-        }
-
-        if (animator != null)
-        {
-            animator.SetTrigger("Attack" + comboStep);
+            // Single trigger, animator checks ComboStep
+            animator.SetTrigger("DoAttack");
             animator.SetInteger("ComboStep", comboStep);
         }
 
-        Debug.Log($"Performing Combo Step {comboStep} with {currentWeapon} (Damage {attackDamage})");
-    }
-
-    private IEnumerator AttackSequence(int attackNumber)
-    {
-        isAttacking = true;
-
-        float attackDuration = GetAttackDuration(attackNumber);
-
-        yield return new WaitForSeconds(0.1f);
-        DealDamage(attackNumber);
-
-        yield return new WaitForSeconds(attackDuration - 0.1f);
-
-        isAttacking = false;
-    }
-
-    private void DealDamage(int attackNumber)
-    {
-        if (currentAttackPoint == null) return;
-
-        float damageMultiplier = GetDamageMultiplier(attackNumber);
-        float totalDamage = attackDamage * damageMultiplier;
-
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(
-            currentAttackPoint.position, attackRange, enemyLayers);
-
-        foreach (Collider2D enemy in hitEnemies)
-        {
-            Health enemyHealth = enemy.GetComponent<Health>();
-            if (enemyHealth != null)
-                enemyHealth.TakeDamage(totalDamage);
-
-            Rigidbody2D enemyRb = enemy.GetComponent<Rigidbody2D>();
-            if (enemyRb != null)
-            {
-                Vector2 knockbackDirection = (enemy.transform.position - transform.position).normalized;
-                float knockbackForce = GetKnockbackForce(attackNumber);
-                enemyRb.AddForce(knockbackDirection * knockbackForce, ForceMode2D.Impulse);
-            }
-        }
+        Debug.Log($"Performing Combo Step {comboStep} with {currentWeapon}");
     }
 
     private void ShootProjectile()
@@ -268,70 +191,47 @@ public class CombatSystem : MonoBehaviour
                 float damageMultiplier = GetDamageMultiplier(comboStep);
                 projectileScript.damage = attackDamage * damageMultiplier;
                 projectileScript.lifeTime = stats.projectileLifetime;
-
-                Debug.Log($"Projectile fired! Combo {comboStep} Damage = {projectileScript.damage}");
             }
         }
     }
 
-    private float GetAttackDuration(int attackNumber)
+    public void EnableHitbox(int index)
     {
-        switch (attackNumber)
-        {
-            case 1: return 0.3f;
-            case 2: return 0.4f;
-            case 3: return 0.6f;
-            case 4: return 0.7f;
-            default: return 0.3f;
-        }
+        if (activeHitboxes != null && index >= 0 && index < activeHitboxes.Count)
+            activeHitboxes[index].SetActive(true);
     }
 
-    private float GetDamageMultiplier(int attackNumber)
+    public void DisableHitbox(int index)
+    {
+        if (activeHitboxes != null && index >= 0 && index < activeHitboxes.Count)
+            activeHitboxes[index].SetActive(false);
+    }
+
+    public float GetDamageMultiplier(int attackNumber)
     {
         switch (currentWeapon)
         {
             case WeaponType.Sword:
-                switch (attackNumber)
-                {
-                    case 1: return 1f;
-                    case 2: return 1.2f;
-                    case 3: return 1.5f;
-                    default: return 1f;
-                }
-
+                return attackNumber switch { 1 => 1f, 2 => 1.2f, 3 => 1.5f, _ => 1f };
             case WeaponType.Tome:
-                switch (attackNumber)
-                {
-                    case 1: return 1f;
-                    case 2: return 1.3f;
-                    case 3: return 2f;
-                    default: return 1f;
-                }
-
+                return attackNumber switch { 1 => 1f, 2 => 1.3f, 3 => 2f, _ => 1f };
             case WeaponType.Gauntlet:
-                switch (attackNumber)
-                {
-                    case 1: return 1f;
-                    case 2: return 1.1f;
-                    case 3: return 1.2f;
-                    default: return 1f;
-                }
-
+                return attackNumber switch { 1 => 1f, 2 => 1.1f, 3 => 1.2f, 4 => 1.5f, _ => 1f };
             default:
                 return 1f;
         }
     }
 
-    private float GetKnockbackForce(int attackNumber)
+    public float GetKnockbackForce(int attackNumber)
     {
-        switch (attackNumber)
+        return attackNumber switch
         {
-            case 1: return 5f;
-            case 2: return 7f;
-            case 3: return 12f;
-            case 4: return 15f;
-            default: return 5f;
-        }
+            1 => 5f,
+            2 => 7f,
+            3 => 12f,
+            4 => 15f,
+            _ => 5f
+        };
     }
 
     private void ResetCombo()
@@ -342,15 +242,9 @@ public class CombatSystem : MonoBehaviour
             animator.SetInteger("ComboStep", 0);
     }
 
-    private void OnDrawGizmosSelected()
+    public float GetAttackDamage()
     {
-        if (attackPointRight != null)
-            Gizmos.DrawWireSphere(attackPointRight.position, attackRange);
-        if (attackPointLeft != null)
-            Gizmos.DrawWireSphere(attackPointLeft.position, attackRange);
-        if (attackPointUp != null)
-            Gizmos.DrawWireSphere(attackPointUp.position, attackRange);
-        if (attackPointDown != null)
-            Gizmos.DrawWireSphere(attackPointDown.position, attackRange);
+        return attackDamage;
     }
+
 }
