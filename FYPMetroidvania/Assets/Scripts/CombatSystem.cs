@@ -260,7 +260,7 @@ public class CombatSystem : MonoBehaviour
 
             Rigidbody2D rb = proj.GetComponent<Rigidbody2D>();
             if (rb != null)
-                rb.velocity = direction * stats.projectileSpeed;
+                rb.linearVelocity = direction * stats.projectileSpeed;
 
             Projectile projectileScript = proj.GetComponent<Projectile>();
             if (projectileScript != null)

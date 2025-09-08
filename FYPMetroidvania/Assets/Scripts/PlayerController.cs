@@ -70,11 +70,11 @@ public class PlayerController : MonoBehaviour
         // Movement
         if (!isDashing)
         {
-            rb.velocity = new Vector2(moveInput.x * moveSpeed, rb.velocity.y);
+            rb.linearVelocity = new Vector2(moveInput.x * moveSpeed, rb.linearVelocity.y);
         }
         else
         {
-            rb.velocity = dashDirection * dashSpeed;
+            rb.linearVelocity = dashDirection * dashSpeed;
         }
 
         // Flip sprite
@@ -93,7 +93,7 @@ public class PlayerController : MonoBehaviour
     {
         if (isGrounded && !jumpLocked)
         {
-            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
             jumpLocked = true; 
         }
     }
