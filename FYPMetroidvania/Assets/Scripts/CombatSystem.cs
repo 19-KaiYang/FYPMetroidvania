@@ -16,7 +16,6 @@ public class WeaponStats
 {
     public WeaponType type;
     public float damage;
-    public float range;
     public float attackCooldown;
 
     [Header("Ranged Only")]
@@ -35,7 +34,11 @@ public class CombatSystem : MonoBehaviour
     public Transform attackPointRight;
     public Transform attackPointLeft;
 
-    [Header("Melee Hitboxes")]
+    [Header("Directional Hitboxes")]
+    public GameObject upAttackHitbox;
+    public GameObject downAttackHitbox;
+
+    [Header("Melee Combo Hitboxes")]
     public List<GameObject> swordHitboxes;
     public List<GameObject> gauntletHitboxes;
 
@@ -46,7 +49,6 @@ public class CombatSystem : MonoBehaviour
 
     // Cached stats
     private float attackDamage;
-    private float attackRange;
     private float attackCooldown;
 
     // Combat variables
@@ -80,9 +82,14 @@ public class CombatSystem : MonoBehaviour
                 ResetCombo();
         }
 
-        if (Keyboard.current.digit1Key.wasPressedThisFrame) SetWeapon(WeaponType.Sword);
-        if (Keyboard.current.digit2Key.wasPressedThisFrame) SetWeapon(WeaponType.Tome);
-        if (Keyboard.current.digit3Key.wasPressedThisFrame) SetWeapon(WeaponType.Gauntlet);
+        if (Keyboard.current.digit1Key.wasPressedThisFrame && unlockedWeapons.Contains(WeaponType.Sword))
+            SetWeapon(WeaponType.Sword);
+
+        if (Keyboard.current.digit2Key.wasPressedThisFrame && unlockedWeapons.Contains(WeaponType.Tome))
+            SetWeapon(WeaponType.Tome);
+
+        if (Keyboard.current.digit3Key.wasPressedThisFrame && unlockedWeapons.Contains(WeaponType.Gauntlet))
+            SetWeapon(WeaponType.Gauntlet);
     }
 
     public void UnlockWeapon(WeaponType weapon)
@@ -109,6 +116,9 @@ public class CombatSystem : MonoBehaviour
         else
             activeHitboxes = null;
 
+        if (animator != null)
+            animator.SetInteger("Weapon", (int)newWeapon);
+
         Debug.Log($"Equipped {newWeapon}");
     }
 
@@ -117,7 +127,6 @@ public class CombatSystem : MonoBehaviour
         if (type == WeaponType.None)
         {
             attackDamage = 0f;
-            attackRange = 0f;
             attackCooldown = 0.5f;
             return;
         }
@@ -126,7 +135,6 @@ public class CombatSystem : MonoBehaviour
         if (stats != null)
         {
             attackDamage = stats.damage;
-            attackRange = stats.range;
             attackCooldown = stats.attackCooldown;
         }
     }
@@ -134,7 +142,45 @@ public class CombatSystem : MonoBehaviour
     public void OnAttack()
     {
         if (currentWeapon == WeaponType.None) return;
-        if (attackCooldownTimer <= 0f) PerformAttack();
+        if (attackCooldownTimer > 0f) return;
+
+        bool up = Keyboard.current.wKey.isPressed;
+        bool down = Keyboard.current.sKey.isPressed;
+
+        if (up)
+        {
+            PerformUpAttack();
+        }
+        else if (down)
+        {
+            PerformDownAttack();
+        }
+        else
+        {
+            PerformAttack();
+        }
+    }
+
+    private void PerformUpAttack()
+    {
+        comboStep = 0;
+        attackCooldownTimer = attackCooldown;
+
+        animator.SetTrigger("UpAttack");
+        animator.SetInteger("Weapon", (int)currentWeapon);
+
+        Debug.Log($"Performed UP attack with {currentWeapon}");
+    }
+
+    private void PerformDownAttack()
+    {
+        comboStep = 0;
+        attackCooldownTimer = attackCooldown;
+
+        animator.SetTrigger("DownAttack");
+        animator.SetInteger("Weapon", (int)currentWeapon);
+
+        Debug.Log($"Performed DOWN attack with {currentWeapon}");
     }
 
     private void PerformAttack()
@@ -145,10 +191,8 @@ public class CombatSystem : MonoBehaviour
         {
             case WeaponType.Sword:
             case WeaponType.Tome:
-                if (comboStep > 3) comboStep = 1;
-                break;
             case WeaponType.Gauntlet:
-                if (comboStep > 4) comboStep = 1;
+                if (comboStep > 3) comboStep = 1;
                 break;
         }
 
@@ -161,7 +205,6 @@ public class CombatSystem : MonoBehaviour
         }
         else
         {
-            // Single trigger, animator checks ComboStep
             animator.SetTrigger("DoAttack");
             animator.SetInteger("ComboStep", comboStep);
         }
@@ -195,10 +238,18 @@ public class CombatSystem : MonoBehaviour
         }
     }
 
+    // === HITBOX HELPERS ===
     public void EnableHitbox(int index)
     {
+        Debug.Log($"[EnableHitbox] index {index}");
         if (activeHitboxes != null && index >= 0 && index < activeHitboxes.Count)
             activeHitboxes[index].SetActive(true);
+    }
+
+    public void EnableUpHitbox()
+    {
+        Debug.Log("[EnableUpHitbox] Upward hitbox activated!");
+        if (upAttackHitbox != null) upAttackHitbox.SetActive(true);
     }
 
     public void DisableHitbox(int index)
@@ -207,31 +258,39 @@ public class CombatSystem : MonoBehaviour
             activeHitboxes[index].SetActive(false);
     }
 
+
+    public void DisableUpHitbox()
+    {
+        if (upAttackHitbox != null) upAttackHitbox.SetActive(false);
+    }
+
+    public void EnableDownHitbox()
+    {
+        if (downAttackHitbox != null) downAttackHitbox.SetActive(true);
+    }
+
+    public void DisableDownHitbox()
+    {
+        if (downAttackHitbox != null) downAttackHitbox.SetActive(false);
+    }
+
+    // === DAMAGE MULTIPLIER ===
     public float GetDamageMultiplier(int attackNumber)
     {
         switch (currentWeapon)
         {
             case WeaponType.Sword:
                 return attackNumber switch { 1 => 1f, 2 => 1.2f, 3 => 1.5f, _ => 1f };
+
             case WeaponType.Tome:
                 return attackNumber switch { 1 => 1f, 2 => 1.3f, 3 => 2f, _ => 1f };
+
             case WeaponType.Gauntlet:
-                return attackNumber switch { 1 => 1f, 2 => 1.1f, 3 => 1.2f, 4 => 1.5f, _ => 1f };
+                return attackNumber switch { 1 => 1f, 2 => 1.2f, 3 => 1.5f, _ => 1f };
+
             default:
                 return 1f;
         }
-    }
-
-    public float GetKnockbackForce(int attackNumber)
-    {
-        return attackNumber switch
-        {
-            1 => 5f,
-            2 => 7f,
-            3 => 12f,
-            4 => 15f,
-            _ => 5f
-        };
     }
 
     private void ResetCombo()
@@ -242,9 +301,5 @@ public class CombatSystem : MonoBehaviour
             animator.SetInteger("ComboStep", 0);
     }
 
-    public float GetAttackDamage()
-    {
-        return attackDamage;
-    }
-
+    public float GetAttackDamage() => attackDamage;
 }

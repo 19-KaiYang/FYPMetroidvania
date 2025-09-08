@@ -104,8 +104,8 @@ TextureImporter:
         y: 22
         width: 30
         height: 38
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -224,6 +224,28 @@ TextureImporter:
       bones: []
       spriteID: 5cb66a4168a5c344594b7f129d2a7859
       internalID: 1576016504
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ATTACK 3_3
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 0
+        width: 571
+        height: 84
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b24a8ca43d7c9144eb3ce4b2757f1a51
+      internalID: 283234339
       vertices: []
       indices: 
       edges: []

@@ -1,8 +1,17 @@
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 
 public class Hitbox : MonoBehaviour
 {
     private CombatSystem owner;
+
+    [Header("Hitstop Settings")]
+    public float hitstopDuration = 0.08f;
+    public bool applyHitstopToEnemy = true;
+    public bool applyHitstopToPlayer = true;
+
+    private HashSet<Health> hitEnemies = new HashSet<Health>(); 
 
     private void Awake()
     {
@@ -10,16 +19,46 @@ public class Hitbox : MonoBehaviour
         gameObject.SetActive(false);
     }
 
+    private void OnEnable()
+    {
+        hitEnemies.Clear(); 
+    }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Hurtbox"))
         {
             Health h = other.GetComponentInParent<Health>();
-            if (h != null)
+            if (h != null && !hitEnemies.Contains(h)) 
             {
+                hitEnemies.Add(h);
+
                 float totalDamage = owner.GetAttackDamage() * owner.GetDamageMultiplier(owner.CurrentComboStep);
-                h.TakeDamage(totalDamage);
+
+                // Direction for knockback
+                Vector2 dir = (other.transform.position - owner.transform.position).normalized;
+
+                // Apply damage + knockback
+                h.TakeDamage(totalDamage, dir);
+
+                // hit stop activates
+                if (applyHitstopToEnemy)
+                    StartCoroutine(ApplyHitstop(h.GetComponent<Rigidbody2D>(), h.GetComponent<Animator>()));
+
+                if (applyHitstopToPlayer)
+                    StartCoroutine(ApplyHitstop(owner.GetComponent<Rigidbody2D>(), owner.GetComponent<Animator>()));
             }
         }
+    }
+
+    private IEnumerator ApplyHitstop(Rigidbody2D rb, Animator anim)
+    {
+        if (rb != null) rb.simulated = false;
+        if (anim != null) anim.speed = 0;
+
+        yield return new WaitForSecondsRealtime(hitstopDuration);
+
+        if (rb != null) rb.simulated = true;
+        if (anim != null) anim.speed = 1;
     }
 }
