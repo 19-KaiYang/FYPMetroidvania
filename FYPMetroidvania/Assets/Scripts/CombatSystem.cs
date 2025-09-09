@@ -106,8 +106,23 @@ public class CombatSystem : MonoBehaviour
     #region Skills Usage
     public void OnSkill1(InputValue value)
     {
-        if (currentWeapon != WeaponType.Sword) return;
-        skills?.TryUseSwordDash();
+        if (skills == null) return;
+
+        //Add skills here (Skills 1)
+        switch (currentWeapon)
+        {
+            case WeaponType.Sword:
+                skills.TryUseSwordDash();
+                break;
+
+            case WeaponType.Gauntlet:
+                skills.TryUseGauntletShockwave();
+                break;
+
+            default:
+                
+                break;
+        }
     }
     #endregion
 
@@ -160,8 +175,10 @@ public class CombatSystem : MonoBehaviour
 
     public void OnAttack()
     {
+        if (skills != null && skills.IsUsingSkill) return;
         if (currentWeapon == WeaponType.None) return;
         if (attackCooldownTimer > 0f) return;
+
 
         bool up = Keyboard.current.wKey.isPressed;
         bool down = Keyboard.current.sKey.isPressed;

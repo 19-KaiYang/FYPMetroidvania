@@ -902,7 +902,7 @@ Transform:
   m_GameObject: {fileID: 608423313}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.48, y: -0.7, z: 0}
+  m_LocalPosition: {x: 2.36, y: -0.7, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2003,11 +2003,20 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   hitstop: 0.06
-  dashSpeed: 30
+  dashSpeed: 20
   dashDuration: 0.3
-  damageMultiplier: 1.2
-  boxSize: {x: 8, y: 1}
-  boxOffset: {x: 4, y: 0}
+  dashDamageMult: 1.2
+  dashBoxSize: {x: 3, y: 1}
+  dashBoxOffset: {x: 0.9, y: 0}
+  swordDashCooldown: 2
+  shockwaveRadius: 2.5
+  shockwaveDamageMult: 1.4
+  shockwaveKnockForce: 12
+  shockwaveUpwardBoost: 6
+  plungeSpeed: 28
+  maxPlungeTime: 0.8
+  preShockStopTime: 0.03
+  gauntletShockCooldown: 3
 --- !u!1 &1079405543
 GameObject:
   m_ObjectHideFlags: 0

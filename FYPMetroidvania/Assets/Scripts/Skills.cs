@@ -5,22 +5,46 @@ using UnityEngine;
 public class Skills : MonoBehaviour
 {
     [Header("Enemy Detection")]
+
     public LayerMask enemyMask;
+
     public float hitstop = 0.06f;
 
     private Rigidbody2D rb;
     private CombatSystem combat;
     private PlayerController controller;
 
+    // global skill gate
     private bool usingSkill = false;
     public bool IsUsingSkill => usingSkill;
 
-    [Header("Sword Dash Settings")]
+    // ===================== SWORD DASH =====================
+    [Header("Sword Dash")]
     public float dashSpeed = 22f;
     public float dashDuration = 0.18f;
-    public float damageMultiplier = 1.2f;
-    public Vector2 boxSize = new Vector2(1.4f, 1.0f);
-    public Vector2 boxOffset = new Vector2(0.7f, 0f);
+    public float dashDamageMult = 1.2f;
+    public Vector2 dashBoxSize = new Vector2(1.4f, 1.0f);
+    public Vector2 dashBoxOffset = new Vector2(0.7f, 0f);
+
+    [Header("Sword Dash Cooldown")]
+    public float swordDashCooldown = 2f;
+    private float swordDashCooldownTimer = 0f;
+
+    // ===================== GAUNTLET SHOCKWAVE =====================
+    [Header("Gauntlet Shockwave (Ground)")]
+    public float shockwaveRadius = 2.5f;          
+    public float shockwaveDamageMult = 1.4f;     
+    public float shockwaveKnockForce = 12f;       
+    public float shockwaveUpwardBoost = 6f;       
+
+    [Header("Gauntlet Shockwave (Air to Plunge)")]
+    public float plungeSpeed = 28f;              
+    public float maxPlungeTime = 0.8f;            
+    public float preShockStopTime = 0.03f;        
+
+    [Header("Gauntlet Shockwave Cooldown")]
+    public float gauntletShockCooldown = 3f;
+    private float gauntletShockCooldownTimer = 0f;
 
     private void Awake()
     {
@@ -29,20 +53,38 @@ public class Skills : MonoBehaviour
         controller = GetComponent<PlayerController>();
     }
 
+    private void Update()
+    {
+        if (swordDashCooldownTimer > 0f) swordDashCooldownTimer -= Time.deltaTime;
+        if (gauntletShockCooldownTimer > 0f) gauntletShockCooldownTimer -= Time.deltaTime;
+    }
+    #region CombatSystem
+    // ===================== PUBLIC API (called by CombatSystem) =====================
     public void TryUseSwordDash()
     {
-        if (!usingSkill)
-            StartCoroutine(Skill_SwordDash());
+        if (usingSkill) return;
+        if (swordDashCooldownTimer > 0f) return;
+        StartCoroutine(Skill_SwordDash());
     }
 
+    public void TryUseGauntletShockwave()
+    {
+        if (usingSkill) return;
+        if (gauntletShockCooldownTimer > 0f) return;
+        StartCoroutine(Skill_GauntletShockwave());
+    }
+    #endregion
+    #region Sword Skills
+    // ===================== SWORD: DASH =====================
     private IEnumerator Skill_SwordDash()
     {
         usingSkill = true;
+        swordDashCooldownTimer = swordDashCooldown;
 
-        // stop PlayerController from overriding our velocity
+        // prevent PlayerController from overwriting velocity
         if (controller) controller.externalVelocityOverride = true;
 
-        // ignore collisions between Player and Enemy layers
+        // pass through enemies (ignore collisions during dash)
         int playerLayer = gameObject.layer;
         int enemyLayer = SingleLayerIndex(enemyMask);
         bool collisionToggled = false;
@@ -63,18 +105,17 @@ public class Skills : MonoBehaviour
             rb.linearVelocity = dir * dashSpeed;
 
             Vector2 center = (Vector2)transform.position +
-                             new Vector2(boxOffset.x * ((controller != null && controller.facingRight) ? 1f : -1f),
-                                         boxOffset.y);
+                             new Vector2(dashBoxOffset.x * ((controller != null && controller.facingRight) ? 1f : -1f),
+                                         dashBoxOffset.y);
 
-            var cols = Physics2D.OverlapBoxAll(center, boxSize, 0f, enemyMask);
+            var cols = Physics2D.OverlapBoxAll(center, dashBoxSize, 0f, enemyMask);
             foreach (var c in cols)
             {
                 var h = c.GetComponentInParent<Health>();
                 if (h != null && !hit.Contains(h))
                 {
                     hit.Add(h);
-
-                    float dmg = combat.GetAttackDamage() * damageMultiplier;
+                    float dmg = combat.GetAttackDamage() * dashDamageMult;
                     Vector2 knockDir = (h.transform.position - transform.position).normalized;
                     h.TakeDamage(dmg, knockDir);
 
@@ -90,14 +131,75 @@ public class Skills : MonoBehaviour
 
         rb.linearVelocity = originalVel;
 
-        // restore collisions
-        if (collisionToggled)
-            Physics2D.IgnoreLayerCollision(playerLayer, enemyLayer, false);
-
-        // allow PlayerController to control velocity \
+        if (collisionToggled) Physics2D.IgnoreLayerCollision(playerLayer, enemyLayer, false);
         if (controller) controller.externalVelocityOverride = false;
 
         usingSkill = false;
+    }
+    #endregion
+    #region Gauntlet Skills
+    // ===================== GAUNTLET: SHOCKWAVE =====================
+    private IEnumerator Skill_GauntletShockwave()
+    {
+        usingSkill = true;
+        gauntletShockCooldownTimer = gauntletShockCooldown;
+
+        // If in the air : plunge straight down first
+        bool grounded = IsGrounded();
+        if (!grounded)
+        {
+            if (controller) controller.externalVelocityOverride = true;
+            float elapsed = 0f;
+            while (!IsGrounded() && elapsed < maxPlungeTime)
+            {
+                elapsed += Time.deltaTime;
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, -plungeSpeed);
+                yield return null;
+            }
+            // tiny pre-impact freeze for punch
+            if (hitstop > 0f) yield return new WaitForSecondsRealtime(preShockStopTime);
+            if (controller) controller.externalVelocityOverride = false;
+        }
+
+        
+        DoShockwave();
+
+        usingSkill = false;
+    }
+
+    private void DoShockwave()
+    {
+        // Damage + radial knockback around player
+        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, shockwaveRadius, enemyMask);
+        foreach (var c in cols)
+        {
+            var h = c.GetComponentInParent<Health>();
+            if (h == null) continue;
+
+            float dmg = combat.GetAttackDamage() * shockwaveDamageMult;
+
+            // radial knockback + upward boost to make enemies fly 
+            Vector2 away = ((Vector2)h.transform.position - (Vector2)transform.position).normalized;
+            Vector2 knock = away * shockwaveKnockForce + Vector2.up * shockwaveUpwardBoost;
+
+            h.TakeDamage(dmg, knock.normalized);
+
+            if (hitstop > 0f)
+            {
+                StartCoroutine(LocalHitstop(h.GetComponent<Rigidbody2D>(), hitstop));
+                StartCoroutine(LocalHitstop(rb, hitstop * 0.75f)); 
+            }
+        }
+    }
+    #endregion
+    #region Helpers
+
+    // ===================== Helpers =====================
+    private bool IsGrounded()
+    {
+        if (controller == null) return false;
+        if (controller.groundCheck == null) return false;
+        return Physics2D.OverlapCircle(controller.groundCheck.position, controller.groundCheckRadius, controller.groundLayer);
     }
 
     private IEnumerator LocalHitstop(Rigidbody2D targetRb, float duration)
@@ -119,13 +221,16 @@ public class Skills : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        if (controller == null) controller = GetComponent<PlayerController>();
+        // Sword dash gizmo
         bool facingRight = controller != null ? controller.facingRight : true;
-
-        Vector2 center = (Vector2)transform.position +
-                         new Vector2(boxOffset.x * (facingRight ? 1f : -1f), boxOffset.y);
-
+        Vector2 dashCenter = (Vector2)transform.position +
+                             new Vector2(dashBoxOffset.x * (facingRight ? 1f : -1f), dashBoxOffset.y);
         Gizmos.color = new Color(1f, 0.5f, 0f, 0.25f);
-        Gizmos.DrawCube(center, boxSize);
+        Gizmos.DrawCube(dashCenter, dashBoxSize);
+
+        // Shockwave radius gizmo
+        Gizmos.color = new Color(0f, 0.6f, 1f, 0.15f);
+        Gizmos.DrawSphere(transform.position, shockwaveRadius);
     }
+    #endregion
 }
