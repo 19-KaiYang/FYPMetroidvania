@@ -32,6 +32,8 @@ public class PlayerController : MonoBehaviour
     private float dashTimer;
     private float dashCooldownTimer;
 
+    [HideInInspector] public bool externalVelocityOverride = false;
+
     // Jump control
     private bool jumpLocked = false;
 
@@ -69,10 +71,13 @@ public class PlayerController : MonoBehaviour
             jumpLocked = false;
 
         // Movement
-        if (!isDashing)
-            rb.linearVelocity = new Vector2(moveInput.x * moveSpeed, rb.linearVelocity.y);
-        else
-            rb.linearVelocity = dashDirection * dashSpeed;
+        if (!externalVelocityOverride)
+        {
+            if (!isDashing)
+                rb.linearVelocity = new Vector2(moveInput.x * moveSpeed, rb.linearVelocity.y);
+            else
+                rb.linearVelocity = dashDirection * dashSpeed;
+        }
 
         // Flip sprite
         if (moveInput.x > 0 && !facingRight)

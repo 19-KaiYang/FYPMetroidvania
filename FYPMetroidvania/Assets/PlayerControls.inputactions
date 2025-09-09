@@ -1,4 +1,5 @@
 {
+    "version": 1,
     "name": "PlayerControls",
     "maps": [
         {
@@ -37,6 +38,15 @@
                     "type": "Button",
                     "id": "6f5be62e-d10e-4336-a2c1-b79cf7c2dbbc",
                     "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Skill1",
+                    "type": "Button",
+                    "id": "bf8be341-9cc6-423a-a7d2-32bd5f66fc7d",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -128,6 +138,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Attack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4407b9cd-533a-4419-a14c-fc05fce37356",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Skill1",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

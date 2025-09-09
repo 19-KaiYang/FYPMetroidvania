@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -60,6 +61,9 @@ public class CombatSystem : MonoBehaviour
     // Weapon unlocks
     private HashSet<WeaponType> unlockedWeapons = new HashSet<WeaponType>();
 
+    //Skills 
+    private Skills skills;
+
     public int CurrentComboStep => comboStep;
 
     private void Awake()
@@ -67,6 +71,7 @@ public class CombatSystem : MonoBehaviour
         // Auto-find Animator & SpriteRenderer 
         animator = GetComponentInChildren<Animator>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        skills = GetComponentInChildren<Skills>();
 
         controller = GetComponent<PlayerController>();
 
@@ -94,7 +99,17 @@ public class CombatSystem : MonoBehaviour
 
         if (Keyboard.current.digit3Key.wasPressedThisFrame && unlockedWeapons.Contains(WeaponType.Gauntlet))
             SetWeapon(WeaponType.Gauntlet);
+
+
     }
+
+    #region Skills Usage
+    public void OnSkill1(InputValue value)
+    {
+        if (currentWeapon != WeaponType.Sword) return;
+        skills?.TryUseSwordDash();
+    }
+    #endregion
 
     public void UnlockWeapon(WeaponType weapon)
     {
