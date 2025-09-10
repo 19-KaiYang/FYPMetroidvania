@@ -57,7 +57,7 @@ public class Health : MonoBehaviour
     {
         currentHealth += healAmount;
         currentHealth = Mathf.Min(currentHealth, maxHealth);
-        Debug.Log($"{gameObject.name} healed for {healAmount}. Health: {currentHealth}/{maxHealth}");
+        //Debug.Log($"{gameObject.name} healed for {healAmount}. Health: {currentHealth}/{maxHealth}");
     }
 
     public float GetHealthPercentage() => currentHealth / maxHealth;

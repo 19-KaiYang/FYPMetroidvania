@@ -22,7 +22,8 @@ public class Skills : MonoBehaviour
     [Header("Sword Dash")]
     public float dashSpeed = 22f;
     public float dashDuration = 0.18f;
-    public float dashDamageMult = 1.2f;
+    //public float dashDamageMult = 1.2f;
+    public float dashFlatDamage = 0f;
     public Vector2 dashBoxSize = new Vector2(1.4f, 1.0f);
     public Vector2 dashBoxOffset = new Vector2(0.7f, 0f);
 
@@ -33,7 +34,8 @@ public class Skills : MonoBehaviour
     // ===================== GAUNTLET SHOCKWAVE =====================
     [Header("Gauntlet Shockwave (Ground)")]
     public float shockwaveRadius = 2.5f;          
-    public float shockwaveDamageMult = 1.4f;     
+    //public float shockwaveDamageMult = 1.4f;
+    public float shockwaveFlatDamage = 0f;
     public float shockwaveKnockForce = 12f;       
     public float shockwaveUpwardBoost = 6f;       
 
@@ -115,7 +117,7 @@ public class Skills : MonoBehaviour
                 if (h != null && !hit.Contains(h))
                 {
                     hit.Add(h);
-                    float dmg = combat.GetAttackDamage() * dashDamageMult;
+                    float dmg =  dashFlatDamage;
                     Vector2 knockDir = (h.transform.position - transform.position).normalized;
                     h.TakeDamage(dmg, knockDir);
 
@@ -144,41 +146,56 @@ public class Skills : MonoBehaviour
         usingSkill = true;
         gauntletShockCooldownTimer = gauntletShockCooldown;
 
-        // If in the air : plunge straight down first
-        bool grounded = IsGrounded();
-        if (!grounded)
+        bool shockwaveTriggered = false;
+
+        if (!IsGrounded())
         {
             if (controller) controller.externalVelocityOverride = true;
             float elapsed = 0f;
+
+            // plunge until grounded or time runs out
             while (!IsGrounded() && elapsed < maxPlungeTime)
             {
                 elapsed += Time.deltaTime;
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, -plungeSpeed);
                 yield return null;
             }
-            // tiny pre-impact freeze for punch
-            if (hitstop > 0f) yield return new WaitForSecondsRealtime(preShockStopTime);
+
+            // tiny pre-impact freeze
+            if (hitstop > 0f)
+                yield return new WaitForSecondsRealtime(preShockStopTime);
+
             if (controller) controller.externalVelocityOverride = false;
+
+            DoShockwave();
+            shockwaveTriggered = true;
         }
 
-        
-        DoShockwave();
+        if (!shockwaveTriggered)
+        {
+            DoShockwave();
+        }
 
         usingSkill = false;
     }
+
+
 
     private void DoShockwave()
     {
         // Damage + radial knockback around player
         Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, shockwaveRadius, enemyMask);
+        HashSet<Health> hit = new HashSet<Health>();   
+
         foreach (var c in cols)
         {
             var h = c.GetComponentInParent<Health>();
             if (h == null) continue;
+            if (hit.Contains(h)) continue;             
+            hit.Add(h);
 
-            float dmg = combat.GetAttackDamage() * shockwaveDamageMult;
+            float dmg = shockwaveFlatDamage;
 
-            // radial knockback + upward boost to make enemies fly 
             Vector2 away = ((Vector2)h.transform.position - (Vector2)transform.position).normalized;
             Vector2 knock = away * shockwaveKnockForce + Vector2.up * shockwaveUpwardBoost;
 
@@ -187,10 +204,11 @@ public class Skills : MonoBehaviour
             if (hitstop > 0f)
             {
                 StartCoroutine(LocalHitstop(h.GetComponent<Rigidbody2D>(), hitstop));
-                StartCoroutine(LocalHitstop(rb, hitstop * 0.75f)); 
+                StartCoroutine(LocalHitstop(rb, hitstop * 0.75f));
             }
         }
     }
+
     #endregion
     #region Helpers
 
