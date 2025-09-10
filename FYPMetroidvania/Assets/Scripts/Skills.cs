@@ -32,21 +32,20 @@ public class Skills : MonoBehaviour
     public float swordDashCooldown = 2f;
     private float swordDashCooldownTimer = 0f;
 
-    // ===================== SWORD SWIRL =====================
-    [Header("Sword Swirl")]
-    public float swirlSpeed = 14f;
-    public float swirlDuration = 0.4f;
-    //public float swirlDamageMult = 1.1f;     
-    public float swirlFlatDamage = 8f;
-    public Vector2 swirlBoxSize = new Vector2(1.2f, 2.0f);
-    public Vector2 swirlBoxOffset = new Vector2(0f, 1f);
+    // ===================== SWORD UPPERCUT =====================
+    [Header("Sword Uppercut")]
 
-    [Header("Sword Swirl Cooldown")]
-    public float swordSwirlCooldown = 3f;
-    private float swordSwirlCooldownTimer = 0f;
+    public float uppercutUpSpeed = 12f;        
+    public float uppercutForwardSpeed = 4f;    
+    public float uppercutDuration = 0.35f;     
+    public float uppercutFlatDamage = 10f;    
+    public Vector2 uppercutBoxSize = new Vector2(1.2f, 2.0f);
+    public Vector2 uppercutBoxOffset = new Vector2(0.6f, 1f); 
 
-    [Header("Sword Swirl Energy Cost")]
-    public float swordSwirlCost = 20f;
+    [Header("Sword Uppercut Cooldown / Cost")]
+    public float swordUppercutCooldown = 3f;
+    private float swordUppercutCooldownTimer = 0f;
+    public float swordUppercutCost = 20f;
 
 
 
@@ -87,7 +86,8 @@ public class Skills : MonoBehaviour
     {
         if (swordDashCooldownTimer > 0f) swordDashCooldownTimer -= Time.deltaTime;
         if (gauntletShockCooldownTimer > 0f) gauntletShockCooldownTimer -= Time.deltaTime;
-        if (swordSwirlCooldownTimer > 0f) swordSwirlCooldownTimer -= Time.deltaTime;
+        if (swordUppercutCooldownTimer > 0f) swordUppercutCooldownTimer -= Time.deltaTime;
+
 
     }
     #region CombatSystem
@@ -108,15 +108,16 @@ public class Skills : MonoBehaviour
         StartCoroutine(Skill_GauntletShockwave());
     }
 
-    public void TryUseSwordSwirl()
+    public void TryUseSwordUppercut()
     {
         if (usingSkill) return;
-        if (swordSwirlCooldownTimer > 0f) return;
+        if (swordUppercutCooldownTimer > 0f) return;
 
-        if (energy != null && !energy.TrySpend(swordSwirlCost)) return;
+        if (energy != null && !energy.TrySpend(swordUppercutCost)) return;
 
-        StartCoroutine(Skill_SwordSwirl());
+        StartCoroutine(Skill_SwordUppercut());
     }
+
 
     #endregion
     #region Sword Skills
@@ -181,25 +182,41 @@ public class Skills : MonoBehaviour
 
         usingSkill = false;
     }
-    // ===================== SWORD: SWORD SWIRL =====================
-    private IEnumerator Skill_SwordSwirl()
+    // ===================== SWORD: SWORD UPPERCUT =====================
+    private IEnumerator Skill_SwordUppercut()
     {
         usingSkill = true;
-        swordSwirlCooldownTimer = swordSwirlCooldown;
+        swordUppercutCooldownTimer = swordUppercutCooldown;
 
         if (controller) controller.externalVelocityOverride = true;
+
+        //  ignore collisions with enemies while uppercutting
+        int playerLayer = gameObject.layer;
+        int enemyLayer = SingleLayerIndex(enemyMask);
+        bool collisionToggled = false;
+        if (enemyLayer >= 0)
+        {
+            Physics2D.IgnoreLayerCollision(playerLayer, enemyLayer, true);
+            collisionToggled = true;
+        }
 
         HashSet<Health> hit = new HashSet<Health>();
         float elapsed = 0f;
 
-        while (elapsed < swirlDuration)
+        // ---- Rising phase ----
+        while (elapsed < uppercutDuration)
         {
             elapsed += Time.deltaTime;
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, swirlSpeed);
 
-            //  damage enemies in swirl hitbox
-            Vector2 center = (Vector2)transform.position + swirlBoxOffset;
-            var cols = Physics2D.OverlapBoxAll(center, swirlBoxSize, 0f, enemyMask);
+            // Slight forward + upward force
+            float forward = controller.facingRight ? uppercutForwardSpeed : -uppercutForwardSpeed;
+            rb.linearVelocity = new Vector2(forward, uppercutUpSpeed);
+
+            // Damage enemies in front/above
+            Vector2 offset = new Vector2(controller.facingRight ? uppercutBoxOffset.x : -uppercutBoxOffset.x,
+                                         uppercutBoxOffset.y);
+            Vector2 center = (Vector2)transform.position + offset;
+            var cols = Physics2D.OverlapBoxAll(center, uppercutBoxSize, 0f, enemyMask);
 
             foreach (var c in cols)
             {
@@ -208,7 +225,7 @@ public class Skills : MonoBehaviour
                 {
                     hit.Add(h);
 
-                    float dmg = swirlFlatDamage;
+                    float dmg = uppercutFlatDamage;
                     Vector2 knockDir = (h.transform.position - transform.position).normalized;
                     h.TakeDamage(dmg, knockDir);
 
@@ -223,9 +240,16 @@ public class Skills : MonoBehaviour
             yield return null;
         }
 
+        // Restore collisions
+        if (collisionToggled)
+            Physics2D.IgnoreLayerCollision(playerLayer, enemyLayer, false);
+
         if (controller) controller.externalVelocityOverride = false;
         usingSkill = false;
     }
+
+
+
 
     #endregion
     #region Gauntlet Skills
@@ -373,10 +397,12 @@ public class Skills : MonoBehaviour
         Gizmos.color = new Color(0f, 0.6f, 1f, 0.15f);
         Gizmos.DrawSphere(transform.position, shockwaveRadius);
 
-        // Sword Swirl Gizmo
-        Gizmos.color = new Color(0.5f, 0f, 1f, 0.25f);
-        Vector2 swirlCenter = (Vector2)transform.position + swirlBoxOffset;
-        Gizmos.DrawCube(swirlCenter, swirlBoxSize);
+        // Sword Uppercut box gizmo
+        Gizmos.color = new Color(0.9f, 0.6f, 0f, 0.25f);
+        Vector2 offset = new Vector2(controller != null && controller.facingRight ? uppercutBoxOffset.x : -uppercutBoxOffset.x,
+                                     uppercutBoxOffset.y);
+        Vector2 center = (Vector2)transform.position + offset;
+        Gizmos.DrawCube(center, uppercutBoxSize);
     }
     #endregion
 }

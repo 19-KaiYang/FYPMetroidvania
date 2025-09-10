@@ -129,11 +129,11 @@ public class CombatSystem : MonoBehaviour
     {
         if (skills == null) return;
 
-        //Add skills here (Skills 1)
+        //Add skills here (Skills 2)
         switch (currentWeapon)
         {
             case WeaponType.Sword:
-
+                skills.TryUseSwordUppercut();
                 break;
 
      
