@@ -6,33 +6,55 @@ public class GauntletProjectile : MonoBehaviour
     [Header("Movement")]
     public float speed = 18f;
 
-    [Header("Masks")]
-    [SerializeField] private LayerMask enemyMask;
-    [SerializeField] private LayerMask terrainMask;
-
     private Rigidbody2D rb;
     private Transform owner;
     private float damage;
+
+    [Header("Masks")]
+    private LayerMask enemyMask;
+    private LayerMask terrainMask;
+
+    // States
     private bool isStuck = false;
     private bool isReturning = false;
     private Vector2 stuckPoint;
     private HashSet<Health> hitThisFlight = new HashSet<Health>();
 
-    public void Init(Transform owner, Vector2 dir, float damage, LayerMask enemyMask, LayerMask terrainMask)
+    // Ranges
+    private float minRange;
+    private float maxRange;
+    private Vector2 launchOrigin;
+
+    // ======================== Init ========================
+    public void Init(
+        Transform owner,
+        Vector2 dir,
+        float damage,
+        LayerMask enemyMask,
+        LayerMask terrainMask,
+        float minRange,
+        float maxRange)
     {
         this.owner = owner;
         this.damage = damage;
         this.enemyMask = enemyMask;
         this.terrainMask = terrainMask;
+        this.minRange = minRange;
+        this.maxRange = maxRange;
+        this.launchOrigin = owner.position;
 
         rb = GetComponent<Rigidbody2D>();
         if (!rb) rb = gameObject.AddComponent<Rigidbody2D>();
+
         rb.gravityScale = 0f;
         rb.freezeRotation = true;
         rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+
+        //  Always start moving forward
         rb.linearVelocity = dir.normalized * speed;
     }
 
+    // ======================== Update ========================
     private void Update()
     {
         if (isReturning && owner != null)
@@ -40,6 +62,7 @@ public class GauntletProjectile : MonoBehaviour
             Vector2 dir = ((Vector2)owner.position - (Vector2)transform.position).normalized;
             rb.linearVelocity = dir * speed;
 
+            // Finish retract when close enough
             if (Vector2.Distance(transform.position, owner.position) < 0.35f)
             {
                 Destroy(gameObject);
@@ -47,17 +70,33 @@ public class GauntletProjectile : MonoBehaviour
         }
         else if (isStuck)
         {
-            // Pin to the stuck point
             rb.linearVelocity = Vector2.zero;
             transform.position = stuckPoint;
         }
+        else
+        {
+            float dist = Vector2.Distance(transform.position, launchOrigin);
+
+            //  Auto retract if it travels too far
+            if (maxRange > 0f && dist > maxRange)
+            {
+                Retract();
+            }
+
+            //  If terrain is too close (within minRange), stick immediately
+            if (minRange > 0f && dist < minRange)
+            {
+                // just keep flying until it passes minRange
+            }
+        }
     }
 
+    // ======================== Collision ========================
     private void OnTriggerEnter2D(Collider2D col)
     {
         int layerBit = 1 << col.gameObject.layer;
 
-        // Damage enemies on both outbound and return paths
+        // Damage enemies both outbound and inbound
         if ((enemyMask.value & layerBit) != 0)
         {
             var h = col.GetComponentInParent<Health>();
@@ -70,18 +109,23 @@ public class GauntletProjectile : MonoBehaviour
             return;
         }
 
-        // Stick only to terrain on the outbound flight
+        // Stick only to terrain on outbound (after passing minRange)
         if (!isReturning && (terrainMask.value & layerBit) != 0)
         {
-            isStuck = true;
-            stuckPoint = transform.position;
-            rb.linearVelocity = Vector2.zero;
+            float distFromOrigin = Vector2.Distance(transform.position, launchOrigin);
+            if (distFromOrigin >= minRange)
+            {
+                isStuck = true;
+                stuckPoint = transform.position;
+                rb.linearVelocity = Vector2.zero;
+            }
         }
     }
 
+    // ======================== Retract ========================
     public void Retract()
     {
-        if (isStuck || !isReturning)   // if stuck OR still outbound
+        if (isStuck || !isReturning)   // stuck OR still outbound
         {
             isStuck = false;
             isReturning = true;
@@ -89,5 +133,6 @@ public class GauntletProjectile : MonoBehaviour
         }
     }
 
+    // ======================== State Queries ========================
     public bool IsStuck() => isStuck;
 }

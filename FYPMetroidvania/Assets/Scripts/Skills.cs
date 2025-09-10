@@ -387,7 +387,7 @@ public class Skills : MonoBehaviour
 
     
         activeGauntlet.speed = gauntletLaunchSpeed;
-        activeGauntlet.Init(transform, dir, gauntletLaunchDamage, enemyMask, terrainMask); 
+        activeGauntlet.Init(transform, dir, gauntletLaunchDamage, enemyMask, terrainMask, gauntletMinRange, gauntletMaxRange); 
 
         
         usingSkill = false;

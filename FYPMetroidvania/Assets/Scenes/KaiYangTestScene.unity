@@ -1934,8 +1934,28 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 3545103199051659466, guid: 13775344399b2974daca82989c71d56e, type: 3}
+      propertyPath: gauntletPrefab
+      value: 
+      objectReference: {fileID: 695010814415933552, guid: 1b44ea33bc24fd141b651ecb194a6593, type: 3}
+    - target: {fileID: 3545103199051659466, guid: 13775344399b2974daca82989c71d56e, type: 3}
+      propertyPath: gauntletMaxRange
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3545103199051659466, guid: 13775344399b2974daca82989c71d56e, type: 3}
+      propertyPath: gauntletMinRange
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3545103199051659466, guid: 13775344399b2974daca82989c71d56e, type: 3}
       propertyPath: swordDashCooldown
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3545103199051659466, guid: 13775344399b2974daca82989c71d56e, type: 3}
+      propertyPath: terrainMask.m_Bits
+      value: 128
+      objectReference: {fileID: 0}
+    - target: {fileID: 3545103199051659466, guid: 13775344399b2974daca82989c71d56e, type: 3}
+      propertyPath: gauntletSkillEnergyCost
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 7582358708222300783, guid: 13775344399b2974daca82989c71d56e, type: 3}
       propertyPath: m_Name
