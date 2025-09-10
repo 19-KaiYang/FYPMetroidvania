@@ -16,11 +16,14 @@ public class PlayerController : MonoBehaviour
     public float dashSpeed = 15f;
     public float dashDuration = 0.2f;
     public float dashCooldown = 1f;
+ 
 
     [Header("Ground Check")]
     public Transform groundCheck;
     public float groundCheckRadius = 0.2f;
     public LayerMask groundLayer;
+
+
 
     private Rigidbody2D rb;
     private Animator animator;
@@ -31,6 +34,8 @@ public class PlayerController : MonoBehaviour
     private bool isDashing;
     private float dashTimer;
     private float dashCooldownTimer;
+
+    [HideInInspector] public bool externalVelocityOverride = false;
 
     // Jump control
     private bool jumpLocked = false;
@@ -54,12 +59,23 @@ public class PlayerController : MonoBehaviour
         {
             dashTimer -= Time.deltaTime;
             if (dashTimer <= 0f)
+            {
                 isDashing = false;
+
+                if (Mathf.Abs(rb.linearVelocity.y) > 0.1f)
+                {
+                    rb.linearVelocity = new Vector2(
+                        rb.linearVelocity.x,
+                        rb.linearVelocity.y * 0.3f 
+                    );
+                }
+            }
         }
 
         if (dashCooldownTimer > 0f)
             dashCooldownTimer -= Time.deltaTime;
     }
+
 
     private void FixedUpdate()
     {
@@ -69,10 +85,13 @@ public class PlayerController : MonoBehaviour
             jumpLocked = false;
 
         // Movement
-        if (!isDashing)
-            rb.linearVelocity = new Vector2(moveInput.x * moveSpeed, rb.linearVelocity.y);
-        else
-            rb.linearVelocity = dashDirection * dashSpeed;
+        if (!externalVelocityOverride)
+        {
+            if (!isDashing)
+                rb.linearVelocity = new Vector2(moveInput.x * moveSpeed, rb.linearVelocity.y);
+            else
+                rb.linearVelocity = dashDirection * dashSpeed;
+        }
 
         // Flip sprite
         if (moveInput.x > 0 && !facingRight)
@@ -104,11 +123,18 @@ public class PlayerController : MonoBehaviour
             else
                 dashDirection = new Vector2(facingRight ? 1f : -1f, 0f);
 
+            float speed = dashSpeed; 
+
             isDashing = true;
             dashTimer = dashDuration;
             dashCooldownTimer = dashCooldown;
+
+            rb.linearVelocity = dashDirection * speed;
         }
     }
+
+
+
 
     private void Flip()
     {

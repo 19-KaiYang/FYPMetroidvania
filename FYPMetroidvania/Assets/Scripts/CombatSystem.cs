@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -60,6 +61,9 @@ public class CombatSystem : MonoBehaviour
     // Weapon unlocks
     private HashSet<WeaponType> unlockedWeapons = new HashSet<WeaponType>();
 
+    //Skills 
+    private Skills skills;
+
     public int CurrentComboStep => comboStep;
 
     private void Awake()
@@ -67,6 +71,7 @@ public class CombatSystem : MonoBehaviour
         // Auto-find Animator & SpriteRenderer 
         animator = GetComponentInChildren<Animator>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        skills = GetComponentInChildren<Skills>();
 
         controller = GetComponent<PlayerController>();
 
@@ -94,7 +99,51 @@ public class CombatSystem : MonoBehaviour
 
         if (Keyboard.current.digit3Key.wasPressedThisFrame && unlockedWeapons.Contains(WeaponType.Gauntlet))
             SetWeapon(WeaponType.Gauntlet);
+
+
     }
+
+    #region Skills Usage
+    public void OnSkill1(InputValue value)
+    {
+        if (skills == null) return;
+
+        //Add skills here (Skills 1)
+        switch (currentWeapon)
+        {
+            case WeaponType.Sword:
+                skills.TryUseSwordDash();
+                break;
+
+            case WeaponType.Gauntlet:
+                skills.TryUseGauntletShockwave();
+                break;
+
+            default:
+                
+                break;
+        }
+    }
+
+    public void OnSkill2(InputValue value)
+    {
+        if (skills == null) return;
+
+        //Add skills here (Skills 1)
+        switch (currentWeapon)
+        {
+            case WeaponType.Sword:
+
+                break;
+
+     
+
+            default:
+
+                break;
+        }
+    }
+    #endregion
 
     public void UnlockWeapon(WeaponType weapon)
     {
@@ -145,8 +194,10 @@ public class CombatSystem : MonoBehaviour
 
     public void OnAttack()
     {
+        if (skills != null && skills.IsUsingSkill) return;
         if (currentWeapon == WeaponType.None) return;
         if (attackCooldownTimer > 0f) return;
+
 
         bool up = Keyboard.current.wKey.isPressed;
         bool down = Keyboard.current.sKey.isPressed;
