@@ -146,38 +146,72 @@ public class Skills : MonoBehaviour
         usingSkill = true;
         gauntletShockCooldownTimer = gauntletShockCooldown;
 
-        bool shockwaveTriggered = false;
-
+        // If airborne: plunge pass-through like above sword dash skill
         if (!IsGrounded())
         {
             if (controller) controller.externalVelocityOverride = true;
+
+            //  ignore collisions with enemies during plunge 
+            int playerLayer = gameObject.layer;
+            int enemyLayer = SingleLayerIndex(enemyMask);
+            bool collisionToggled = false;
+            if (enemyLayer >= 0)
+            {
+                Physics2D.IgnoreLayerCollision(playerLayer, enemyLayer, true);
+                collisionToggled = true;
+            }
+
+            HashSet<Health> hit = new HashSet<Health>();
             float elapsed = 0f;
 
-            // plunge until grounded or time runs out
+            // plunge loop
             while (!IsGrounded() && elapsed < maxPlungeTime)
             {
                 elapsed += Time.deltaTime;
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, -plungeSpeed);
+
+                // damage enemies while falling
+                Vector2 center = transform.position;
+                Collider2D[] cols = Physics2D.OverlapCircleAll(center, 0.6f, enemyMask);
+                foreach (var c in cols)
+                {
+                    var h = c.GetComponentInParent<Health>();
+                    if (h != null && !hit.Contains(h))
+                    {
+                        hit.Add(h);
+                        float dmg = shockwaveFlatDamage;
+                        Vector2 knockDir = (h.transform.position - transform.position).normalized;
+                        h.TakeDamage(dmg, knockDir);
+
+                        if (hitstop > 0f)
+                        {
+                            StartCoroutine(LocalHitstop(h.GetComponent<Rigidbody2D>(), hitstop));
+                            StartCoroutine(LocalHitstop(rb, hitstop));
+                        }
+                    }
+                }
+
                 yield return null;
             }
 
-            // tiny pre-impact freeze
-            if (hitstop > 0f)
-                yield return new WaitForSecondsRealtime(preShockStopTime);
-
             if (controller) controller.externalVelocityOverride = false;
 
-            DoShockwave();
-            shockwaveTriggered = true;
-        }
+            // restore collisions
+            if (collisionToggled)
+                Physics2D.IgnoreLayerCollision(playerLayer, enemyLayer, false);
 
-        if (!shockwaveTriggered)
+            //  after landing  activate shockwave
+            DoShockwave();
+        }
+        else
         {
+       
             DoShockwave();
         }
 
         usingSkill = false;
     }
+
 
 
 
