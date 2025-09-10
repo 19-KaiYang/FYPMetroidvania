@@ -123,7 +123,7 @@ public class PlayerController : MonoBehaviour
             else
                 dashDirection = new Vector2(facingRight ? 1f : -1f, 0f);
 
-            float speed = dashSpeed; // same for all directions
+            float speed = dashSpeed; 
 
             isDashing = true;
             dashTimer = dashDuration;
