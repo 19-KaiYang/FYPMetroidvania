@@ -16,7 +16,6 @@ public enum WeaponType
 public class WeaponStats
 {
     public WeaponType type;
-    public float damage;
     public float attackCooldown;
 
     [Header("Ranged Only")]
@@ -27,6 +26,10 @@ public class WeaponStats
 
 public class CombatSystem : MonoBehaviour
 {
+
+    [Header("General Attack Settings")]
+    public float baseAttackDamage = 10f;
+
     [Header("Weapon Settings")]
     public WeaponType currentWeapon;
     public List<WeaponStats> weaponStatsList = new List<WeaponStats>();
@@ -135,8 +138,10 @@ public class CombatSystem : MonoBehaviour
             case WeaponType.Sword:
                 skills.TryUseSwordUppercut();
                 break;
+            case WeaponType.Gauntlet:
+                skills.TryUseGauntletLaunch();
+                break;
 
-     
 
             default:
 
@@ -156,6 +161,7 @@ public class CombatSystem : MonoBehaviour
                 SetWeapon(weapon);
         }
     }
+
 
     public void SetWeapon(WeaponType newWeapon)
     {
@@ -187,10 +193,11 @@ public class CombatSystem : MonoBehaviour
         WeaponStats stats = weaponStatsList.Find(w => w.type == type);
         if (stats != null)
         {
-            attackDamage = stats.damage;
+            attackDamage = baseAttackDamage;      
             attackCooldown = stats.attackCooldown;
         }
     }
+
 
     public void OnAttack()
     {
@@ -240,16 +247,26 @@ public class CombatSystem : MonoBehaviour
 
     private void PerformAttack()
     {
-        comboStep++;
-
-        switch (currentWeapon)
+        
+        if (currentWeapon == WeaponType.Gauntlet && skills != null)
         {
-            case WeaponType.Sword:
-            case WeaponType.Tome:
-            case WeaponType.Gauntlet:
-                if (comboStep > 3) comboStep = 1;
-                break;
+            if (skills.HasStuckGauntlet())
+            {
+               
+                skills.RetractGauntlet();
+                attackCooldownTimer = attackCooldown; 
+                return;
+            }
+            if (skills.GauntletDeployed)
+            {
+              
+                return;
+            }
         }
+
+        // Normal flow
+        comboStep++;
+        if (comboStep > 3) comboStep = 1;
 
         comboTimer = 1f;
         attackCooldownTimer = attackCooldown;
@@ -266,6 +283,7 @@ public class CombatSystem : MonoBehaviour
 
         Debug.Log($"Performing Combo Step {comboStep} with {currentWeapon}");
     }
+
 
     private void ShootProjectile()
     {
@@ -331,21 +349,15 @@ public class CombatSystem : MonoBehaviour
     // === DAMAGE MULTIPLIER ===
     public float GetDamageMultiplier(int attackNumber)
     {
-        switch (currentWeapon)
+        return attackNumber switch
         {
-            case WeaponType.Sword:
-                return attackNumber switch { 1 => 1f, 2 => 1.2f, 3 => 1.5f, _ => 1f };
-
-            case WeaponType.Tome:
-                return attackNumber switch { 1 => 1f, 2 => 1.3f, 3 => 2f, _ => 1f };
-
-            case WeaponType.Gauntlet:
-                return attackNumber switch { 1 => 1f, 2 => 1.2f, 3 => 1.5f, _ => 1f };
-
-            default:
-                return 1f;
-        }
+            1 => 1f,
+            2 => 1.2f,
+            3 => 1.5f,
+            _ => 1f
+        };
     }
+
 
     private void ResetCombo()
     {

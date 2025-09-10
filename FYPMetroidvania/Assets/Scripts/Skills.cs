@@ -15,6 +15,21 @@ public class Skills : MonoBehaviour
     private PlayerController controller;
     private EnergySystem energy;
 
+    [Header("Gauntlet Skill Requirements")]
+    public GameObject gauntletPrefab;
+    private GauntletProjectile activeGauntlet;
+
+    [Header("Gauntlet Launch")]
+    public LayerMask terrainMask;              
+    public float gauntletLaunchDamage = 12f;   
+    public float gauntletLaunchSpeed = 18f;
+    public float gauntletMinRange = 1.5f;   
+    public float gauntletMaxRange = 12f;    
+    public float gauntletSkillEnergyCost;
+
+    public bool GauntletDeployed => activeGauntlet != null;                
+    public bool HasStuckGauntlet() => activeGauntlet != null && activeGauntlet.IsStuck();
+
     // global skill gate
     private bool usingSkill = false;
     public bool IsUsingSkill => usingSkill;
@@ -107,6 +122,16 @@ public class Skills : MonoBehaviour
         if (energy != null && !energy.TrySpend(gauntletShockwaveCost)) return;
         StartCoroutine(Skill_GauntletShockwave());
     }
+
+    public void TryUseGauntletLaunch()
+    {
+        if (usingSkill) return;
+        if (activeGauntlet != null) return;
+        if (energy != null && !energy.TrySpend(gauntletSkillEnergyCost)) return;
+
+        StartCoroutine(Skill_GauntletLaunch());
+    }
+
 
     public void TryUseSwordUppercut()
     {
@@ -350,7 +375,32 @@ public class Skills : MonoBehaviour
             }
         }
     }
+    // ===================== GAUNTLET: LAUNCH =====================
+    private IEnumerator Skill_GauntletLaunch()
+    {
+        usingSkill = true;
 
+        Vector2 dir = controller.facingRight ? Vector2.right : Vector2.left;
+        GameObject g = Instantiate(gauntletPrefab, transform.position, Quaternion.identity);
+        activeGauntlet = g.GetComponent<GauntletProjectile>();
+        if (!activeGauntlet) activeGauntlet = g.AddComponent<GauntletProjectile>();
+
+    
+        activeGauntlet.speed = gauntletLaunchSpeed;
+        activeGauntlet.Init(transform, dir, gauntletLaunchDamage, enemyMask, terrainMask); 
+
+        
+        usingSkill = false;
+        yield return null;
+    }
+
+    public void RetractGauntlet()
+    {
+        if (activeGauntlet != null)
+        {
+            activeGauntlet.Retract();
+        }
+    }
     #endregion
     #region Helpers
 
