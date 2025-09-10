@@ -259,12 +259,11 @@ public class Skills : MonoBehaviour
         usingSkill = true;
         gauntletShockCooldownTimer = gauntletShockCooldown;
 
-        // If airborne: plunge pass-through like above sword dash skill
+        // If airborne: plunge pass-through
         if (!IsGrounded())
         {
             if (controller) controller.externalVelocityOverride = true;
 
-            //  ignore collisions with enemies during plunge 
             int playerLayer = gameObject.layer;
             int enemyLayer = SingleLayerIndex(enemyMask);
             bool collisionToggled = false;
@@ -275,12 +274,9 @@ public class Skills : MonoBehaviour
             }
 
             HashSet<Health> hit = new HashSet<Health>();
-            float elapsed = 0f;
 
-            // plunge loop
-            while (!IsGrounded() && elapsed < maxPlungeTime)
+            while (!IsGrounded())
             {
-                elapsed += Time.deltaTime;
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, -plungeSpeed);
 
                 // damage enemies while falling
@@ -309,21 +305,20 @@ public class Skills : MonoBehaviour
 
             if (controller) controller.externalVelocityOverride = false;
 
-            // restore collisions
+           
             if (collisionToggled)
                 Physics2D.IgnoreLayerCollision(playerLayer, enemyLayer, false);
 
-            //  after landing  activate shockwave
             DoShockwave();
         }
         else
         {
-       
             DoShockwave();
         }
 
         usingSkill = false;
     }
+
 
 
 
