@@ -13,6 +13,7 @@ public class Skills : MonoBehaviour
     private Rigidbody2D rb;
     private CombatSystem combat;
     private PlayerController controller;
+    private EnergySystem energy;
 
     // global skill gate
     private bool usingSkill = false;
@@ -48,11 +49,16 @@ public class Skills : MonoBehaviour
     public float gauntletShockCooldown = 3f;
     private float gauntletShockCooldownTimer = 0f;
 
+    [Header("Energy Usage")]
+    public float swordDashCost = 20f;
+    public float gauntletShockwaveCost = 30f;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         combat = GetComponent<CombatSystem>();
         controller = GetComponent<PlayerController>();
+        energy = GetComponent<EnergySystem>();
     }
 
     private void Update()
@@ -66,6 +72,7 @@ public class Skills : MonoBehaviour
     {
         if (usingSkill) return;
         if (swordDashCooldownTimer > 0f) return;
+        if (energy != null && !energy.TrySpend(swordDashCost)) return;
         StartCoroutine(Skill_SwordDash());
     }
 
@@ -73,6 +80,7 @@ public class Skills : MonoBehaviour
     {
         if (usingSkill) return;
         if (gauntletShockCooldownTimer > 0f) return;
+        if (energy != null && !energy.TrySpend(gauntletShockwaveCost)) return;
         StartCoroutine(Skill_GauntletShockwave());
     }
     #endregion
