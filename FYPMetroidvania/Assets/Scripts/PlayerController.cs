@@ -133,7 +133,4 @@ public class PlayerController : MonoBehaviour
         spriteScale.x *= -1f;
         spriteTransform.localScale = spriteScale;
     }
-
-  
-
 }

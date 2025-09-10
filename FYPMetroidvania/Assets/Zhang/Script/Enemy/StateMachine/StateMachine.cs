@@ -33,6 +33,4 @@ public class StateMachine : MonoBehaviour
     {
         CurrentState.OnUpdate();
     }
-
-    
 }

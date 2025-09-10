@@ -1,11 +1,14 @@
 using UnityEngine;
 
-public class Enemy : MonoBehaviour,IDamageable
+public class Enemy : MonoBehaviour, IDamageable
 {
     //[Header("-")]
-    private Rigidbody rb;
-    private Animator animator;
-    private PlayerController player;
+    protected Rigidbody2D rb;
+    protected Animator animator;
+    protected PlayerController player;
+    private StateMachine stateMachine;
+
+    
 
     [Header("-")]
     [SerializeField] public float maxHealth;
@@ -18,11 +21,14 @@ public class Enemy : MonoBehaviour,IDamageable
     [SerializeField] public bool isFacingLeft;
     [SerializeField] public Vector2 distanceToPlayer;
 
-    void Awake()
+    
+
+    protected virtual void Awake()
     {
-        rb = GetComponent<Rigidbody>();
+        rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         player = FindFirstObjectByType<PlayerController>();
+        stateMachine = GetComponent<StateMachine>();
     }
 
     void Start()
@@ -32,16 +38,19 @@ public class Enemy : MonoBehaviour,IDamageable
 
 
     void Update()
-    {   
-        
+    {
+        distanceToPlayer = transform.position - player.transform.position;
     }
+
+    
+
 
     public virtual void TakeDamage(float _damage)
     {
 
     }
 
-    public void Die()
+    public virtual void Die()
     {
 
     }
