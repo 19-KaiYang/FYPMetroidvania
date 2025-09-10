@@ -18,7 +18,7 @@ public class HealthBarUI : MonoBehaviour
     private void Update()
     {
 
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.P))
         {
             if (playerHealth != null)
             {

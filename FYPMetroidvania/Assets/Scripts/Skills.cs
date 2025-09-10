@@ -32,6 +32,24 @@ public class Skills : MonoBehaviour
     public float swordDashCooldown = 2f;
     private float swordDashCooldownTimer = 0f;
 
+    // ===================== SWORD SWIRL =====================
+    [Header("Sword Swirl")]
+    public float swirlSpeed = 14f;
+    public float swirlDuration = 0.4f;
+    //public float swirlDamageMult = 1.1f;     
+    public float swirlFlatDamage = 8f;
+    public Vector2 swirlBoxSize = new Vector2(1.2f, 2.0f);
+    public Vector2 swirlBoxOffset = new Vector2(0f, 1f);
+
+    [Header("Sword Swirl Cooldown")]
+    public float swordSwirlCooldown = 3f;
+    private float swordSwirlCooldownTimer = 0f;
+
+    [Header("Sword Swirl Energy Cost")]
+    public float swordSwirlCost = 20f;
+
+
+
     // ===================== GAUNTLET SHOCKWAVE =====================
     [Header("Gauntlet Shockwave (Ground)")]
     public float shockwaveRadius = 2.5f;          
@@ -53,6 +71,10 @@ public class Skills : MonoBehaviour
     public float swordDashCost = 20f;
     public float gauntletShockwaveCost = 30f;
 
+
+   
+
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -65,6 +87,8 @@ public class Skills : MonoBehaviour
     {
         if (swordDashCooldownTimer > 0f) swordDashCooldownTimer -= Time.deltaTime;
         if (gauntletShockCooldownTimer > 0f) gauntletShockCooldownTimer -= Time.deltaTime;
+        if (swordSwirlCooldownTimer > 0f) swordSwirlCooldownTimer -= Time.deltaTime;
+
     }
     #region CombatSystem
     // ===================== PUBLIC API (called by CombatSystem) =====================
@@ -83,6 +107,17 @@ public class Skills : MonoBehaviour
         if (energy != null && !energy.TrySpend(gauntletShockwaveCost)) return;
         StartCoroutine(Skill_GauntletShockwave());
     }
+
+    public void TryUseSwordSwirl()
+    {
+        if (usingSkill) return;
+        if (swordSwirlCooldownTimer > 0f) return;
+
+        if (energy != null && !energy.TrySpend(swordSwirlCost)) return;
+
+        StartCoroutine(Skill_SwordSwirl());
+    }
+
     #endregion
     #region Sword Skills
     // ===================== SWORD: DASH =====================
@@ -146,6 +181,52 @@ public class Skills : MonoBehaviour
 
         usingSkill = false;
     }
+    // ===================== SWORD: SWORD SWIRL =====================
+    private IEnumerator Skill_SwordSwirl()
+    {
+        usingSkill = true;
+        swordSwirlCooldownTimer = swordSwirlCooldown;
+
+        if (controller) controller.externalVelocityOverride = true;
+
+        HashSet<Health> hit = new HashSet<Health>();
+        float elapsed = 0f;
+
+        while (elapsed < swirlDuration)
+        {
+            elapsed += Time.deltaTime;
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, swirlSpeed);
+
+            //  damage enemies in swirl hitbox
+            Vector2 center = (Vector2)transform.position + swirlBoxOffset;
+            var cols = Physics2D.OverlapBoxAll(center, swirlBoxSize, 0f, enemyMask);
+
+            foreach (var c in cols)
+            {
+                var h = c.GetComponentInParent<Health>();
+                if (h != null && !hit.Contains(h))
+                {
+                    hit.Add(h);
+
+                    float dmg = swirlFlatDamage;
+                    Vector2 knockDir = (h.transform.position - transform.position).normalized;
+                    h.TakeDamage(dmg, knockDir);
+
+                    if (hitstop > 0f)
+                    {
+                        StartCoroutine(LocalHitstop(h.GetComponent<Rigidbody2D>(), hitstop));
+                        StartCoroutine(LocalHitstop(rb, hitstop));
+                    }
+                }
+            }
+
+            yield return null;
+        }
+
+        if (controller) controller.externalVelocityOverride = false;
+        usingSkill = false;
+    }
+
     #endregion
     #region Gauntlet Skills
     // ===================== GAUNTLET: SHOCKWAVE =====================
@@ -291,6 +372,11 @@ public class Skills : MonoBehaviour
         // Shockwave radius gizmo
         Gizmos.color = new Color(0f, 0.6f, 1f, 0.15f);
         Gizmos.DrawSphere(transform.position, shockwaveRadius);
+
+        // Sword Swirl Gizmo
+        Gizmos.color = new Color(0.5f, 0f, 1f, 0.25f);
+        Vector2 swirlCenter = (Vector2)transform.position + swirlBoxOffset;
+        Gizmos.DrawCube(swirlCenter, swirlBoxSize);
     }
     #endregion
 }

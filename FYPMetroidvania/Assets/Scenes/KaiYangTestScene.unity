@@ -1481,7 +1481,7 @@ Transform:
   m_GameObject: {fileID: 943000096}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.01, y: 1.44, z: 0}
+  m_LocalPosition: {x: 3.81, y: 3.26, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2162,6 +2162,13 @@ MonoBehaviour:
   dashBoxSize: {x: 3, y: 1}
   dashBoxOffset: {x: 0.9, y: 0}
   swordDashCooldown: 2
+  swirlSpeed: 14
+  swirlDuration: 0.4
+  swirlFlatDamage: 8
+  swirlBoxSize: {x: 1.2, y: 2}
+  swirlBoxOffset: {x: 0, y: 1}
+  swordSwirlCooldown: 3
+  swordSwirlCost: 20
   shockwaveRadius: 2.5
   shockwaveFlatDamage: 10
   shockwaveKnockForce: 12

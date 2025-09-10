@@ -124,6 +124,25 @@ public class CombatSystem : MonoBehaviour
                 break;
         }
     }
+
+    public void OnSkill2(InputValue value)
+    {
+        if (skills == null) return;
+
+        //Add skills here (Skills 1)
+        switch (currentWeapon)
+        {
+            case WeaponType.Sword:
+
+                break;
+
+     
+
+            default:
+
+                break;
+        }
+    }
     #endregion
 
     public void UnlockWeapon(WeaponType weapon)
