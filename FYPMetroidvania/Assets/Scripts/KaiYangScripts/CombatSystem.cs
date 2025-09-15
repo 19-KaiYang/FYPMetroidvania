@@ -73,6 +73,20 @@ public class CombatSystem : MonoBehaviour
 
     public int CurrentComboStep => comboStep;
 
+    private void Start()
+    {
+      
+        foreach (var hb in swordHitboxes)
+            if (hb) hb.SetActive(false);
+
+       
+        foreach (var hb in gauntletHitboxes)
+            if (hb) hb.SetActive(false);
+
+      
+    }
+
+
     private void Awake()
     {
         // Auto-find Animator & SpriteRenderer 
@@ -236,20 +250,22 @@ public class CombatSystem : MonoBehaviour
 
         if (currentWeapon == WeaponType.Sword && swordUpHitbox != null)
         {
-            StartCoroutine(ActivateHitbox(swordUpHitbox, 0.2f)); 
+            StartCoroutine(ToggleHitbox(swordUpHitbox, 0.2f));
         }
         else if (currentWeapon == WeaponType.Gauntlet && gauntletUpHitbox != null)
         {
-            StartCoroutine(ActivateHitbox(gauntletUpHitbox, 0.2f));
+            StartCoroutine(ToggleHitbox(gauntletUpHitbox, 0.2f));
         }
     }
 
-    private IEnumerator ActivateHitbox(GameObject hitbox, float duration)
+    private IEnumerator ToggleHitbox(GameObject hitbox, float duration)
     {
         hitbox.SetActive(true);
         yield return new WaitForSeconds(duration);
         hitbox.SetActive(false);
     }
+
+
 
     private void PerformDownAttack()
     {
@@ -345,14 +361,21 @@ public class CombatSystem : MonoBehaviour
 
     public void DisableSwordUpHitbox()
     {
-        if (swordUpHitbox != null) swordUpHitbox.SetActive(false);
+        if (swordUpHitbox != null)
+        {
+            var hb = swordUpHitbox.GetComponent<Hitbox>();
+            if (hb != null) swordUpHitbox.GetComponent<Collider2D>().enabled = false;
+        }
     }
 
     public void DisableGauntletUpHitbox()
     {
-        if (gauntletUpHitbox != null) gauntletUpHitbox.SetActive(false);
+        if (gauntletUpHitbox != null)
+        {
+            var hb = gauntletUpHitbox.GetComponent<Hitbox>();
+            if (hb != null) gauntletUpHitbox.GetComponent<Collider2D>().enabled = false;
+        }
     }
-
     public void DisableSwordDownHitbox()
     {
         if (swordDownHitbox != null) swordDownHitbox.SetActive(false);

@@ -11,17 +11,34 @@ public class Hitbox : MonoBehaviour
     public bool applyHitstopToEnemy = true;
     public bool applyHitstopToPlayer = true;
 
-    private HashSet<Health> hitEnemies = new HashSet<Health>(); 
+
+    private Collider2D col;
+    private HashSet<Health> hitEnemies = new HashSet<Health>();
 
     private void Awake()
     {
         owner = GetComponentInParent<CombatSystem>();
-        gameObject.SetActive(false);
+        col = GetComponent<Collider2D>();
+        //if (col != null) col.enabled = false;  
     }
 
     private void OnEnable()
     {
         hitEnemies.Clear(); 
+    }
+
+    public void EnableCollider(float duration)
+    {
+        if (col == null) return;
+        StartCoroutine(EnableTemporarily(duration));
+    }
+
+    private IEnumerator EnableTemporarily(float duration)
+    {
+        hitEnemies.Clear();
+        col.enabled = true;
+        yield return new WaitForSeconds(duration);
+        col.enabled = false;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
