@@ -199,6 +199,12 @@ public class CombatSystem : MonoBehaviour
         Debug.Log($"Equipped {newWeapon}");
     }
 
+    public IEnumerable<WeaponType> GetUnlockedWeapons()
+    {
+        return unlockedWeapons;
+    }
+
+
     private void ApplyWeaponStats(WeaponType type)
     {
         if (type == WeaponType.None)
@@ -419,5 +425,9 @@ public class CombatSystem : MonoBehaviour
             animator.SetInteger("ComboStep", 0);
     }
 
-    public float GetAttackDamage() => attackDamage;
+    public float GetAttackDamage()
+    {
+        return baseAttackDamage + UpgradeManager.instance.GetGeneralDamageBonus();
+    }
+
 }

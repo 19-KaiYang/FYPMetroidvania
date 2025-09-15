@@ -5,9 +5,7 @@ using UnityEngine;
 public class Skills : MonoBehaviour
 {
     [Header("Enemy Detection")]
-
     public LayerMask enemyMask;
-
     public float hitstop = 0.06f;
 
     private Rigidbody2D rb;
@@ -20,15 +18,15 @@ public class Skills : MonoBehaviour
     private GauntletProjectile activeGauntlet;
 
     [Header("Gauntlet Launch")]
-    public LayerMask terrainMask;              
-    public float gauntletLaunchDamage = 12f;   
+    public LayerMask terrainMask;
+    public float gauntletLaunchDamage = 12f;
     public float gauntletLaunchSpeed = 18f;
     public float gauntletMinRange = 1.5f;
-    public float gauntletMaxFlightRange = 8f;   
-    public float gauntletMaxLeashRange = 15f;   
+    public float gauntletMaxFlightRange = 8f;
+    public float gauntletMaxLeashRange = 15f;
     public float gauntletSkillEnergyCost;
 
-    public bool GauntletDeployed => activeGauntlet != null;                
+    public bool GauntletDeployed => activeGauntlet != null;
     public bool HasStuckGauntlet() => activeGauntlet != null && activeGauntlet.IsStuck();
 
     // global skill gate
@@ -39,7 +37,6 @@ public class Skills : MonoBehaviour
     [Header("Sword Dash")]
     public float dashSpeed = 22f;
     public float dashDuration = 0.18f;
-    //public float dashDamageMult = 1.2f;
     public float dashFlatDamage = 0f;
     public Vector2 dashBoxSize = new Vector2(1.4f, 1.0f);
     public Vector2 dashBoxOffset = new Vector2(0.7f, 0f);
@@ -50,33 +47,29 @@ public class Skills : MonoBehaviour
 
     // ===================== SWORD UPPERCUT =====================
     [Header("Sword Uppercut")]
-
-    public float uppercutUpSpeed = 12f;        
-    public float uppercutForwardSpeed = 4f;    
-    public float uppercutDuration = 0.35f;     
-    public float uppercutFlatDamage = 10f;    
+    public float uppercutUpSpeed = 12f;
+    public float uppercutForwardSpeed = 4f;
+    public float uppercutDuration = 0.35f;
+    public float uppercutFlatDamage = 10f;
     public Vector2 uppercutBoxSize = new Vector2(1.2f, 2.0f);
-    public Vector2 uppercutBoxOffset = new Vector2(0.6f, 1f); 
+    public Vector2 uppercutBoxOffset = new Vector2(0.6f, 1f);
 
     [Header("Sword Uppercut Cooldown / Cost")]
     public float swordUppercutCooldown = 3f;
     private float swordUppercutCooldownTimer = 0f;
     public float swordUppercutCost = 20f;
 
-
-
     // ===================== GAUNTLET SHOCKWAVE =====================
     [Header("Gauntlet Shockwave (Ground)")]
-    public float shockwaveRadius = 2.5f;          
-    //public float shockwaveDamageMult = 1.4f;
+    public float shockwaveRadius = 2.5f;
     public float shockwaveFlatDamage = 0f;
-    public float shockwaveKnockForce = 12f;       
-    public float shockwaveUpwardBoost = 6f;       
+    public float shockwaveKnockForce = 12f;
+    public float shockwaveUpwardBoost = 6f;
 
     [Header("Gauntlet Shockwave (Air to Plunge)")]
-    public float plungeSpeed = 28f;              
-    public float maxPlungeTime = 0.8f;            
-    public float preShockStopTime = 0.03f;        
+    public float plungeSpeed = 28f;
+    public float maxPlungeTime = 0.8f;
+    public float preShockStopTime = 0.03f;
 
     [Header("Gauntlet Shockwave Cooldown")]
     public float gauntletShockCooldown = 3f;
@@ -85,10 +78,6 @@ public class Skills : MonoBehaviour
     [Header("Energy Usage")]
     public float swordDashCost = 20f;
     public float gauntletShockwaveCost = 30f;
-
-
-   
-
 
     private void Awake()
     {
@@ -103,16 +92,17 @@ public class Skills : MonoBehaviour
         if (swordDashCooldownTimer > 0f) swordDashCooldownTimer -= Time.deltaTime;
         if (gauntletShockCooldownTimer > 0f) gauntletShockCooldownTimer -= Time.deltaTime;
         if (swordUppercutCooldownTimer > 0f) swordUppercutCooldownTimer -= Time.deltaTime;
-
-
     }
-    #region CombatSystem
-    // ===================== PUBLIC API (called by CombatSystem) =====================
+
+    #region CombatSystem API
     public void TryUseSwordDash()
     {
         if (usingSkill) return;
         if (swordDashCooldownTimer > 0f) return;
-        if (energy != null && !energy.TrySpend(swordDashCost)) return;
+
+        float cost = swordDashCost; // no reduction for dash
+        if (energy != null && !energy.TrySpend(cost)) return;
+
         StartCoroutine(Skill_SwordDash());
     }
 
@@ -125,7 +115,10 @@ public class Skills : MonoBehaviour
             return;
         }
         if (gauntletShockCooldownTimer > 0f) return;
-        if (energy != null && !energy.TrySpend(gauntletShockwaveCost)) return;
+
+        float cost = gauntletShockwaveCost; // no reduction for shockwave
+        if (energy != null && !energy.TrySpend(cost)) return;
+
         StartCoroutine(Skill_GauntletShockwave());
     }
 
@@ -138,35 +131,33 @@ public class Skills : MonoBehaviour
             return;
         }
         if (activeGauntlet != null) return;
-        if (energy != null && !energy.TrySpend(gauntletSkillEnergyCost)) return;
+
+        float cost = gauntletSkillEnergyCost - UpgradeManager.instance.GetGauntletLaunchEnergyReduction();
+        if (energy != null && !energy.TrySpend(cost)) return;
 
         StartCoroutine(Skill_GauntletLaunch());
     }
-
 
     public void TryUseSwordUppercut()
     {
         if (usingSkill) return;
         if (swordUppercutCooldownTimer > 0f) return;
 
-        if (energy != null && !energy.TrySpend(swordUppercutCost)) return;
+        float cost = swordUppercutCost - UpgradeManager.instance.GetSwordUppercutEnergyReduction();
+        if (energy != null && !energy.TrySpend(cost)) return;
 
         StartCoroutine(Skill_SwordUppercut());
     }
-
-
     #endregion
+
     #region Sword Skills
-    // ===================== SWORD: DASH =====================
     private IEnumerator Skill_SwordDash()
     {
         usingSkill = true;
         swordDashCooldownTimer = swordDashCooldown;
 
-        // prevent PlayerController from overwriting velocity
         if (controller) controller.externalVelocityOverride = true;
 
-        // pass through enemies (ignore collisions during dash)
         int playerLayer = gameObject.layer;
         int enemyLayer = SingleLayerIndex(enemyMask);
         bool collisionToggled = false;
@@ -197,7 +188,7 @@ public class Skills : MonoBehaviour
                 if (h != null && !hit.Contains(h))
                 {
                     hit.Add(h);
-                    float dmg =  dashFlatDamage;
+                    float dmg = dashFlatDamage + UpgradeManager.instance.GetSwordDashBonus();
                     Vector2 knockDir = (h.transform.position - transform.position).normalized;
                     h.TakeDamage(dmg, knockDir);
 
@@ -218,7 +209,7 @@ public class Skills : MonoBehaviour
 
         usingSkill = false;
     }
-    // ===================== SWORD: SWORD UPPERCUT =====================
+
     private IEnumerator Skill_SwordUppercut()
     {
         usingSkill = true;
@@ -226,7 +217,6 @@ public class Skills : MonoBehaviour
 
         if (controller) controller.externalVelocityOverride = true;
 
-        //  ignore collisions with enemies while uppercutting
         int playerLayer = gameObject.layer;
         int enemyLayer = SingleLayerIndex(enemyMask);
         bool collisionToggled = false;
@@ -239,16 +229,12 @@ public class Skills : MonoBehaviour
         HashSet<Health> hit = new HashSet<Health>();
         float elapsed = 0f;
 
-        // ---- Rising phase ----
         while (elapsed < uppercutDuration)
         {
             elapsed += Time.deltaTime;
-
-            // Slight forward + upward force
             float forward = controller.facingRight ? uppercutForwardSpeed : -uppercutForwardSpeed;
             rb.linearVelocity = new Vector2(forward, uppercutUpSpeed);
 
-            // Damage enemies in front/above
             Vector2 offset = new Vector2(controller.facingRight ? uppercutBoxOffset.x : -uppercutBoxOffset.x,
                                          uppercutBoxOffset.y);
             Vector2 center = (Vector2)transform.position + offset;
@@ -260,8 +246,7 @@ public class Skills : MonoBehaviour
                 if (h != null && !hit.Contains(h))
                 {
                     hit.Add(h);
-
-                    float dmg = uppercutFlatDamage;
+                    float dmg = uppercutFlatDamage + UpgradeManager.instance.GetSwordUppercutBonus();
                     Vector2 knockDir = (h.transform.position - transform.position).normalized;
                     h.TakeDamage(dmg, knockDir);
 
@@ -272,30 +257,23 @@ public class Skills : MonoBehaviour
                     }
                 }
             }
-
             yield return null;
         }
 
-        // Restore collisions
         if (collisionToggled)
             Physics2D.IgnoreLayerCollision(playerLayer, enemyLayer, false);
 
         if (controller) controller.externalVelocityOverride = false;
         usingSkill = false;
     }
-
-
-
-
     #endregion
+
     #region Gauntlet Skills
-    // ===================== GAUNTLET: SHOCKWAVE =====================
     private IEnumerator Skill_GauntletShockwave()
     {
         usingSkill = true;
         gauntletShockCooldownTimer = gauntletShockCooldown;
 
-        // If airborne: plunge pass-through
         if (!IsGrounded())
         {
             if (controller) controller.externalVelocityOverride = true;
@@ -315,7 +293,6 @@ public class Skills : MonoBehaviour
             {
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, -plungeSpeed);
 
-                // damage enemies while falling
                 Vector2 center = transform.position;
                 Collider2D[] cols = Physics2D.OverlapCircleAll(center, 0.6f, enemyMask);
                 foreach (var c in cols)
@@ -324,7 +301,7 @@ public class Skills : MonoBehaviour
                     if (h != null && !hit.Contains(h))
                     {
                         hit.Add(h);
-                        float dmg = shockwaveFlatDamage;
+                        float dmg = shockwaveFlatDamage + UpgradeManager.instance.GetGauntletShockwaveBonus();
                         Vector2 knockDir = (h.transform.position - transform.position).normalized;
                         h.TakeDamage(dmg, knockDir);
 
@@ -335,13 +312,10 @@ public class Skills : MonoBehaviour
                         }
                     }
                 }
-
                 yield return null;
             }
 
             if (controller) controller.externalVelocityOverride = false;
-
-           
             if (collisionToggled)
                 Physics2D.IgnoreLayerCollision(playerLayer, enemyLayer, false);
 
@@ -355,25 +329,19 @@ public class Skills : MonoBehaviour
         usingSkill = false;
     }
 
-
-
-
-
     private void DoShockwave()
     {
-        // Damage + radial knockback around player
         Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, shockwaveRadius, enemyMask);
-        HashSet<Health> hit = new HashSet<Health>();   
+        HashSet<Health> hit = new HashSet<Health>();
 
         foreach (var c in cols)
         {
             var h = c.GetComponentInParent<Health>();
             if (h == null) continue;
-            if (hit.Contains(h)) continue;             
+            if (hit.Contains(h)) continue;
             hit.Add(h);
 
-            float dmg = shockwaveFlatDamage;
-
+            float dmg = shockwaveFlatDamage + UpgradeManager.instance.GetGauntletShockwaveBonus();
             Vector2 away = ((Vector2)h.transform.position - (Vector2)transform.position).normalized;
             Vector2 knock = away * shockwaveKnockForce + Vector2.up * shockwaveUpwardBoost;
 
@@ -386,7 +354,7 @@ public class Skills : MonoBehaviour
             }
         }
     }
-    // ===================== GAUNTLET: LAUNCH =====================
+
     private IEnumerator Skill_GauntletLaunch()
     {
         usingSkill = true;
@@ -396,11 +364,11 @@ public class Skills : MonoBehaviour
         activeGauntlet = g.GetComponent<GauntletProjectile>();
         if (!activeGauntlet) activeGauntlet = g.AddComponent<GauntletProjectile>();
 
-    
+        float dmg = gauntletLaunchDamage + UpgradeManager.instance.GetGauntletLaunchBonus();
         activeGauntlet.speed = gauntletLaunchSpeed;
-        activeGauntlet.Init(transform, dir, gauntletLaunchDamage, enemyMask, terrainMask, gauntletMinRange, gauntletMaxFlightRange,gauntletMaxLeashRange); 
+        activeGauntlet.Init(transform, dir, dmg, enemyMask, terrainMask,
+            gauntletMinRange, gauntletMaxFlightRange, gauntletMaxLeashRange);
 
-        
         usingSkill = false;
         yield return null;
     }
@@ -413,9 +381,8 @@ public class Skills : MonoBehaviour
         }
     }
     #endregion
-    #region Helpers
 
-    // ===================== Helpers =====================
+    #region Helpers
     private bool IsGrounded()
     {
         if (controller == null) return false;
@@ -438,27 +405,6 @@ public class Skills : MonoBehaviour
         int index = 0;
         while ((v >>= 1) != 0) index++;
         return index;
-    }
-
-    private void OnDrawGizmosSelected()
-    {
-        // Sword dash gizmo
-        bool facingRight = controller != null ? controller.facingRight : true;
-        Vector2 dashCenter = (Vector2)transform.position +
-                             new Vector2(dashBoxOffset.x * (facingRight ? 1f : -1f), dashBoxOffset.y);
-        Gizmos.color = new Color(1f, 0.5f, 0f, 0.25f);
-        Gizmos.DrawCube(dashCenter, dashBoxSize);
-
-        // Shockwave radius gizmo
-        Gizmos.color = new Color(0f, 0.6f, 1f, 0.15f);
-        Gizmos.DrawSphere(transform.position, shockwaveRadius);
-
-        // Sword Uppercut box gizmo
-        Gizmos.color = new Color(0.9f, 0.6f, 0f, 0.25f);
-        Vector2 offset = new Vector2(controller != null && controller.facingRight ? uppercutBoxOffset.x : -uppercutBoxOffset.x,
-                                     uppercutBoxOffset.y);
-        Vector2 center = (Vector2)transform.position + offset;
-        Gizmos.DrawCube(center, uppercutBoxSize);
     }
     #endregion
 }
