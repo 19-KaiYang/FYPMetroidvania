@@ -23,8 +23,9 @@ public class Skills : MonoBehaviour
     public LayerMask terrainMask;              
     public float gauntletLaunchDamage = 12f;   
     public float gauntletLaunchSpeed = 18f;
-    public float gauntletMinRange = 1.5f;   
-    public float gauntletMaxRange = 12f;    
+    public float gauntletMinRange = 1.5f;
+    public float gauntletMaxFlightRange = 8f;   
+    public float gauntletMaxLeashRange = 15f;   
     public float gauntletSkillEnergyCost;
 
     public bool GauntletDeployed => activeGauntlet != null;                
@@ -387,7 +388,7 @@ public class Skills : MonoBehaviour
 
     
         activeGauntlet.speed = gauntletLaunchSpeed;
-        activeGauntlet.Init(transform, dir, gauntletLaunchDamage, enemyMask, terrainMask, gauntletMinRange, gauntletMaxRange); 
+        activeGauntlet.Init(transform, dir, gauntletLaunchDamage, enemyMask, terrainMask, gauntletMinRange, gauntletMaxFlightRange,gauntletMaxLeashRange); 
 
         
         usingSkill = false;

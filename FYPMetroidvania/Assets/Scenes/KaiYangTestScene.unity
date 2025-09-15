@@ -1954,6 +1954,14 @@ PrefabInstance:
       value: 128
       objectReference: {fileID: 0}
     - target: {fileID: 3545103199051659466, guid: 13775344399b2974daca82989c71d56e, type: 3}
+      propertyPath: gauntletShockCooldown
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3545103199051659466, guid: 13775344399b2974daca82989c71d56e, type: 3}
+      propertyPath: swordUppercutCooldown
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3545103199051659466, guid: 13775344399b2974daca82989c71d56e, type: 3}
       propertyPath: gauntletSkillEnergyCost
       value: 30
       objectReference: {fileID: 0}
