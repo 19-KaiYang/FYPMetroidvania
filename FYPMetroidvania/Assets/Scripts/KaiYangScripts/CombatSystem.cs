@@ -250,16 +250,10 @@ public class CombatSystem : MonoBehaviour
         
         if (currentWeapon == WeaponType.Gauntlet && skills != null)
         {
-            if (skills.HasStuckGauntlet())
+            if (skills.GauntletDeployed)  
             {
-               
                 skills.RetractGauntlet();
-                attackCooldownTimer = attackCooldown; 
-                return;
-            }
-            if (skills.GauntletDeployed)
-            {
-              
+                attackCooldownTimer = attackCooldown;
                 return;
             }
         }

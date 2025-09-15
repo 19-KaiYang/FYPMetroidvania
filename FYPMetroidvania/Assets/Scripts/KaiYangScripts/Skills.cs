@@ -119,6 +119,11 @@ public class Skills : MonoBehaviour
     public void TryUseGauntletShockwave()
     {
         if (usingSkill) return;
+        if (GauntletDeployed)
+        {
+            RetractGauntlet();
+            return;
+        }
         if (gauntletShockCooldownTimer > 0f) return;
         if (energy != null && !energy.TrySpend(gauntletShockwaveCost)) return;
         StartCoroutine(Skill_GauntletShockwave());
@@ -127,6 +132,11 @@ public class Skills : MonoBehaviour
     public void TryUseGauntletLaunch()
     {
         if (usingSkill) return;
+        if (GauntletDeployed)
+        {
+            RetractGauntlet();
+            return;
+        }
         if (activeGauntlet != null) return;
         if (energy != null && !energy.TrySpend(gauntletSkillEnergyCost)) return;
 
