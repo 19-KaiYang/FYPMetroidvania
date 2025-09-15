@@ -100,7 +100,9 @@ public class Skills : MonoBehaviour
         if (usingSkill) return;
         if (swordDashCooldownTimer > 0f) return;
 
-        float cost = swordDashCost; // no reduction for dash
+        float cost = swordDashCost - UpgradeManager.instance.GetSwordDashEnergyReduction();
+        if (cost < 0) cost = 0; 
+
         if (energy != null && !energy.TrySpend(cost)) return;
 
         StartCoroutine(Skill_SwordDash());
@@ -109,18 +111,18 @@ public class Skills : MonoBehaviour
     public void TryUseGauntletShockwave()
     {
         if (usingSkill) return;
-        if (GauntletDeployed)
-        {
-            RetractGauntlet();
-            return;
-        }
+        if (GauntletDeployed) { RetractGauntlet(); return; }
         if (gauntletShockCooldownTimer > 0f) return;
 
-        float cost = gauntletShockwaveCost; // no reduction for shockwave
+        float cost = gauntletShockwaveCost - UpgradeManager.instance.GetGauntletShockwaveEnergyReduction();
+        if (cost < 0) cost = 0;
+
         if (energy != null && !energy.TrySpend(cost)) return;
 
         StartCoroutine(Skill_GauntletShockwave());
     }
+
+
 
     public void TryUseGauntletLaunch()
     {

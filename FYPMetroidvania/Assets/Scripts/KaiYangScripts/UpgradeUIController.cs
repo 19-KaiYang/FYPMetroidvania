@@ -22,6 +22,7 @@ public class UpgradeUIController : MonoBehaviour
     public TextMeshProUGUI skill1NameText;
     public Button skill1DamageButton;
     public TextMeshProUGUI skill1DamageText;
+    public Button skill1EnergyButton;
     public TextMeshProUGUI skill1EnergyText;
 
     [Header("Skill 2 UI")]
@@ -49,6 +50,7 @@ public class UpgradeUIController : MonoBehaviour
         nextWeaponButton.onClick.AddListener(() => SwitchWeapon(1));
 
         skill1DamageButton.onClick.AddListener(OnSkill1DamageUpgrade);
+        skill1EnergyButton.onClick.AddListener(OnSkill1EnergyUpgrade);
         skill2DamageButton.onClick.AddListener(OnSkill2DamageUpgrade);
         skill2EnergyButton.onClick.AddListener(OnSkill2EnergyUpgrade);
 
@@ -60,6 +62,15 @@ public class UpgradeUIController : MonoBehaviour
     {
         if (currentWeapon == WeaponType.Sword) upgradeManager.swordDashDamageLevel++;
         else if (currentWeapon == WeaponType.Gauntlet) upgradeManager.gauntletShockwaveDamageLevel++;
+        RefreshUI();
+    }
+    private void OnSkill1EnergyUpgrade()
+    {
+        if (currentWeapon == WeaponType.Sword)
+            upgradeManager.swordDashEnergyLevel++;
+        else if (currentWeapon == WeaponType.Gauntlet)
+            upgradeManager.gauntletShockwaveEnergyLevel++;
+
         RefreshUI();
     }
 
@@ -113,7 +124,7 @@ public class UpgradeUIController : MonoBehaviour
             // Skill 1: Dash
             skill1NameText.text = "Sword Dash";
             skill1DamageText.text = $"+{upgradeManager.GetSwordDashBonus()} Damage";
-            skill1EnergyText.text = $"Cost: {skills.swordDashCost}";
+            skill1EnergyText.text = $"Cost: {skills.swordDashCost - upgradeManager.GetSwordDashEnergyReduction()}"; 
 
             // Skill 2: Uppercut
             skill2NameText.text = "Sword Uppercut";
@@ -125,7 +136,8 @@ public class UpgradeUIController : MonoBehaviour
             // Skill 1: Shockwave
             skill1NameText.text = "Gauntlet Shockwave";
             skill1DamageText.text = $"+{upgradeManager.GetGauntletShockwaveBonus()} Damage";
-            skill1EnergyText.text = $"Cost: {skills.gauntletShockwaveCost}";
+            skill1EnergyText.text = $"Cost: {skills.gauntletShockwaveCost - upgradeManager.GetGauntletShockwaveEnergyReduction()}";
+
 
             // Skill 2: Launch
             skill2NameText.text = "Gauntlet Launch";

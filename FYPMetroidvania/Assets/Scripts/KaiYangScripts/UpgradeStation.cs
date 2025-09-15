@@ -35,8 +35,11 @@ public class UpgradeStation : MonoBehaviour
             if (isOpen)
             {
                 isOpen = false;
-                upgradeUI.SetActive(false); 
+
+                if (upgradeUI != null)  
+                    upgradeUI.SetActive(false);
             }
         }
     }
+
 }

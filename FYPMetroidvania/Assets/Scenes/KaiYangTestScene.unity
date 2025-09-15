@@ -391,7 +391,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &151358010
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2978,6 +2978,7 @@ MonoBehaviour:
   skill1NameText: {fileID: 1586502550}
   skill1DamageButton: {fileID: 1763609491}
   skill1DamageText: {fileID: 1908294637}
+  skill1EnergyButton: {fileID: 548387030}
   skill1EnergyText: {fileID: 971864297}
   skill2NameText: {fileID: 487440511}
   skill2DamageButton: {fileID: 1344472842}
@@ -4448,12 +4449,16 @@ MonoBehaviour:
   generalDamagePerUpgrade: 10
   swordDashDamageLevel: 0
   swordDashDamagePerUpgrade: 10
+  swordDashEnergyLevel: 0
+  swordDashEnergyReductionPerUpgrade: 3
   swordUppercutDamageLevel: 0
   swordUppercutDamagePerUpgrade: 15
   swordUppercutEnergyLevel: 0
   swordUppercutEnergyReductionPerUpgrade: 5
   gauntletShockwaveDamageLevel: 0
   gauntletShockwaveDamagePerUpgrade: 20
+  gauntletShockwaveEnergyLevel: 0
+  gauntletShockwaveEnergyReductionPerUpgrade: 5
   gauntletLaunchDamageLevel: 0
   gauntletLaunchDamagePerUpgrade: 25
   gauntletLaunchEnergyLevel: 0
