@@ -272,16 +272,18 @@ public class CombatSystem : MonoBehaviour
         comboStep = 0;
         attackCooldownTimer = attackCooldown;
 
-        animator.SetTrigger("DownAttack");
-        animator.SetInteger("Weapon", (int)currentWeapon);
+        Debug.Log($"Performed DOWN attack with {currentWeapon}");
 
         if (currentWeapon == WeaponType.Sword && swordDownHitbox != null)
-            swordDownHitbox.SetActive(true);
+        {
+            StartCoroutine(ToggleHitbox(swordDownHitbox, 0.2f));
+        }
         else if (currentWeapon == WeaponType.Gauntlet && gauntletDownHitbox != null)
-            gauntletDownHitbox.SetActive(true);
-
-        Debug.Log($"Performed DOWN attack with {currentWeapon}");
+        {
+            StartCoroutine(ToggleHitbox(gauntletDownHitbox, 0.2f));
+        }
     }
+
 
 
     private void PerformAttack()
@@ -378,13 +380,22 @@ public class CombatSystem : MonoBehaviour
     }
     public void DisableSwordDownHitbox()
     {
-        if (swordDownHitbox != null) swordDownHitbox.SetActive(false);
+        if (swordDownHitbox != null)
+        {
+            var hb = swordDownHitbox.GetComponent<Hitbox>();
+            if (hb != null) swordDownHitbox.GetComponent<Collider2D>().enabled = false;
+        }
     }
 
     public void DisableGauntletDownHitbox()
     {
-        if (gauntletDownHitbox != null) gauntletDownHitbox.SetActive(false);
+        if (gauntletDownHitbox != null)
+        {
+            var hb = gauntletDownHitbox.GetComponent<Hitbox>();
+            if (hb != null) gauntletDownHitbox.GetComponent<Collider2D>().enabled = false;
+        }
     }
+
 
 
     // === DAMAGE MULTIPLIER ===

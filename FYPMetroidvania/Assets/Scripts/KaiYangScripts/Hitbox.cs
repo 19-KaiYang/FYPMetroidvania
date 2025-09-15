@@ -19,7 +19,7 @@ public class Hitbox : MonoBehaviour
     {
         owner = GetComponentInParent<CombatSystem>();
         col = GetComponent<Collider2D>();
-        //if (col != null) col.enabled = false;  
+   
     }
 
     private void OnEnable()
