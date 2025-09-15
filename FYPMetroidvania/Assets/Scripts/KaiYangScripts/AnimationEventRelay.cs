@@ -14,9 +14,16 @@ public class AnimationEventRelay : MonoBehaviour
     public void EnableHitbox(int index) => combatSystem?.EnableHitbox(index);
     public void DisableHitbox(int index) => combatSystem?.DisableHitbox(index);
 
-    public void EnableUpHitbox() => combatSystem?.EnableUpHitbox();
-    public void DisableUpHitbox() => combatSystem?.DisableUpHitbox();
+    public void EnableSwordUpHitbox() => combatSystem?.swordUpHitbox?.SetActive(true);
+    public void DisableSwordUpHitbox() => combatSystem?.DisableSwordUpHitbox();
 
-    public void EnableDownHitbox() => combatSystem?.EnableDownHitbox();
-    public void DisableDownHitbox() => combatSystem?.DisableDownHitbox();
+    public void EnableGauntletUpHitbox() => combatSystem?.gauntletUpHitbox?.SetActive(true);
+    public void DisableGauntletUpHitbox() => combatSystem?.DisableGauntletUpHitbox();
+
+    public void EnableSwordDownHitbox() => combatSystem?.swordDownHitbox?.SetActive(true);
+    public void DisableSwordDownHitbox() => combatSystem?.DisableSwordDownHitbox();
+
+    public void EnableGauntletDownHitbox() => combatSystem?.gauntletDownHitbox?.SetActive(true);
+    public void DisableGauntletDownHitbox() => combatSystem?.DisableGauntletDownHitbox();
+
 }

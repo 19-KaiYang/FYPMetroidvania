@@ -39,8 +39,12 @@ public class CombatSystem : MonoBehaviour
     public Transform attackPointLeft;
 
     [Header("Directional Hitboxes")]
-    public GameObject upAttackHitbox;
-    public GameObject downAttackHitbox;
+    public GameObject swordUpHitbox;
+    public GameObject gauntletUpHitbox;
+
+    public GameObject swordDownHitbox;
+    public GameObject gauntletDownHitbox;
+
 
     [Header("Melee Combo Hitboxes")]
     public List<GameObject> swordHitboxes;
@@ -228,10 +232,23 @@ public class CombatSystem : MonoBehaviour
         comboStep = 0;
         attackCooldownTimer = attackCooldown;
 
-        animator.SetTrigger("UpAttack");
-        animator.SetInteger("Weapon", (int)currentWeapon);
-
         Debug.Log($"Performed UP attack with {currentWeapon}");
+
+        if (currentWeapon == WeaponType.Sword && swordUpHitbox != null)
+        {
+            StartCoroutine(ActivateHitbox(swordUpHitbox, 0.2f)); 
+        }
+        else if (currentWeapon == WeaponType.Gauntlet && gauntletUpHitbox != null)
+        {
+            StartCoroutine(ActivateHitbox(gauntletUpHitbox, 0.2f));
+        }
+    }
+
+    private IEnumerator ActivateHitbox(GameObject hitbox, float duration)
+    {
+        hitbox.SetActive(true);
+        yield return new WaitForSeconds(duration);
+        hitbox.SetActive(false);
     }
 
     private void PerformDownAttack()
@@ -242,8 +259,14 @@ public class CombatSystem : MonoBehaviour
         animator.SetTrigger("DownAttack");
         animator.SetInteger("Weapon", (int)currentWeapon);
 
+        if (currentWeapon == WeaponType.Sword && swordDownHitbox != null)
+            swordDownHitbox.SetActive(true);
+        else if (currentWeapon == WeaponType.Gauntlet && gauntletDownHitbox != null)
+            gauntletDownHitbox.SetActive(true);
+
         Debug.Log($"Performed DOWN attack with {currentWeapon}");
     }
+
 
     private void PerformAttack()
     {
@@ -313,11 +336,6 @@ public class CombatSystem : MonoBehaviour
             activeHitboxes[index].SetActive(true);
     }
 
-    public void EnableUpHitbox()
-    {
-        Debug.Log("[EnableUpHitbox] Upward hitbox activated!");
-        if (upAttackHitbox != null) upAttackHitbox.SetActive(true);
-    }
 
     public void DisableHitbox(int index)
     {
@@ -325,20 +343,26 @@ public class CombatSystem : MonoBehaviour
             activeHitboxes[index].SetActive(false);
     }
 
-    public void DisableUpHitbox()
+    public void DisableSwordUpHitbox()
     {
-        if (upAttackHitbox != null) upAttackHitbox.SetActive(false);
+        if (swordUpHitbox != null) swordUpHitbox.SetActive(false);
     }
 
-    public void EnableDownHitbox()
+    public void DisableGauntletUpHitbox()
     {
-        if (downAttackHitbox != null) downAttackHitbox.SetActive(true);
+        if (gauntletUpHitbox != null) gauntletUpHitbox.SetActive(false);
     }
 
-    public void DisableDownHitbox()
+    public void DisableSwordDownHitbox()
     {
-        if (downAttackHitbox != null) downAttackHitbox.SetActive(false);
+        if (swordDownHitbox != null) swordDownHitbox.SetActive(false);
     }
+
+    public void DisableGauntletDownHitbox()
+    {
+        if (gauntletDownHitbox != null) gauntletDownHitbox.SetActive(false);
+    }
+
 
     // === DAMAGE MULTIPLIER ===
     public float GetDamageMultiplier(int attackNumber)
