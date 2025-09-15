@@ -37,6 +37,11 @@ public class EnergySystem : MonoBehaviour
         }
     }
 
+    public void ResetEnergy()
+    {
+        currentEnergy = maxEnergy;
+    }
+
     public float GetCurrentEnergy() => currentEnergy;
     public float GetMaxEnergy() => maxEnergy;
     public float GetEnergyPercent() => currentEnergy / maxEnergy;
