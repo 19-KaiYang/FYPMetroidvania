@@ -5,7 +5,6 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-
     public static PlayerController instance;
 
     [Header("References")]
@@ -28,10 +27,10 @@ public class PlayerController : MonoBehaviour
 
 
 
-    private Rigidbody2D rb;
+    public Rigidbody2D rb;
     private Animator animator;
     private SpriteRenderer spriteRenderer;
-    private Vector2 moveInput;
+    public Vector2 moveInput;
     private Vector2 dashDirection;
     private bool isGrounded;
     private bool isDashing;
@@ -46,12 +45,9 @@ public class PlayerController : MonoBehaviour
     // Facing direction
     public bool facingRight { get; private set; } = true;
 
-    //Has dashed in the air tracker
-    private bool hasAirDashed = false;
-
-
     private void Awake()
     {
+        instance = this;
         rb = GetComponent<Rigidbody2D>();
 
         //  Auto-find Animator & SpriteRenderer
@@ -90,7 +86,6 @@ public class PlayerController : MonoBehaviour
 
         if (isGrounded)
             jumpLocked = false;
-            hasAirDashed = false;
 
         // Movement
         if (!externalVelocityOverride)
@@ -126,32 +121,25 @@ public class PlayerController : MonoBehaviour
     {
         if (dashCooldownTimer <= 0f)
         {
-            if (!isGrounded && hasAirDashed)
-                return;
-
             if (moveInput.sqrMagnitude > 0.1f)
                 dashDirection = moveInput.normalized;
             else
                 dashDirection = new Vector2(facingRight ? 1f : -1f, 0f);
 
-            float speed = dashSpeed;
+            float speed = dashSpeed; 
 
             isDashing = true;
             dashTimer = dashDuration;
             dashCooldownTimer = dashCooldown;
 
             rb.linearVelocity = dashDirection * speed;
-
-            if (!isGrounded)
-                hasAirDashed = true; 
         }
     }
 
 
 
 
-
-    private void Flip()
+    public void Flip()
     {
         facingRight = !facingRight;
 
