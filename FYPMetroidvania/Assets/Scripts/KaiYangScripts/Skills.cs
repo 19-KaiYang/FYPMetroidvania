@@ -34,8 +34,8 @@ public class Skills : MonoBehaviour
     private bool usingSkill = false;
     public bool IsUsingSkill => usingSkill;
 
-    // ===================== SWORD DASH =====================
-    [Header("Sword Dash")]
+    // ===================== LUNGING STRIKE =====================
+    [Header("Lunging Strike")]
     public float dashSpeed = 22f;
     public float dashDuration = 0.18f;
     public float dashFlatDamage = 0f;
@@ -43,12 +43,17 @@ public class Skills : MonoBehaviour
     public Vector2 dashBoxSize = new Vector2(1.4f, 1.0f);
     public Vector2 dashBoxOffset = new Vector2(0.7f, 0f);
 
-    [Header("Sword Dash Cooldown")]
+    [Header("Lunging Strike Cooldown")]
     public float swordDashCooldown = 2f;
     private float swordDashCooldownTimer = 0f;
 
-    // ===================== SWORD UPPERCUT =====================
-    [Header("Sword Uppercut")]
+
+    [Header("Lunging Strike Cost")]
+    public float swordDashCost = 20f;
+    
+
+    // ===================== ASCENDING SLASH =====================
+    [Header("Ascending Slash")]
     public float uppercutUpSpeed = 12f;
     public float uppercutForwardSpeed = 4f;
     public float uppercutDuration = 0.35f;
@@ -57,10 +62,20 @@ public class Skills : MonoBehaviour
     public Vector2 uppercutBoxSize = new Vector2(1.2f, 2.0f);
     public Vector2 uppercutBoxOffset = new Vector2(0.6f, 1f);
 
-    [Header("Sword Uppercut Cooldown / Cost")]
+    [Header("Ascending Slash Cost")]
     public float swordUppercutCooldown = 3f;
     private float swordUppercutCooldownTimer = 0f;
     public float swordUppercutCost = 20f;
+
+    // ===================== CRIMSON WAVE =====================
+
+    [Header("Crimson Wave")]
+    public GameObject swordSlashProjectilePrefab;
+    public Transform projectileSpawnPoint; 
+    public float swordSlashBloodCost = 5f;
+    public float swordSlashEnergyCost;
+
+    //COST EDIT IN SWORDPROJECTILE.CS
 
     // ===================== GAUNTLET SHOCKWAVE =====================
     [Header("Gauntlet Shockwave (Ground)")]
@@ -78,9 +93,9 @@ public class Skills : MonoBehaviour
     public float gauntletShockCooldown = 3f;
     private float gauntletShockCooldownTimer = 0f;
 
-    [Header("Energy Usage")]
-    public float swordDashCost = 20f;
+    [Header("Gauntlet Shockwave Cost")]
     public float gauntletShockwaveCost = 30f;
+
 
     private void Awake()
     {
@@ -142,6 +157,37 @@ public class Skills : MonoBehaviour
         if (!PlayerController.instance.IsGrounded)
             PlayerController.instance.MarkAirUppercut();
     }
+
+    public void TryUseSwordCrimsonWave()
+    {
+        if (swordSlashProjectilePrefab == null)
+            return;
+
+        // Energy Cost
+        float cost = swordSlashEnergyCost;
+        if (cost < 0) cost = 0;
+
+        if (energy != null && !energy.TrySpend(cost))
+            return; 
+
+        Vector2 dir = controller.facingRight ? Vector2.right : Vector2.left;
+        Vector3 spawnPos = transform.position + (Vector3)(dir * 0.7f);
+
+        GameObject proj = Instantiate(swordSlashProjectilePrefab, spawnPos, Quaternion.identity);
+
+        Rigidbody2D rbProj = proj.GetComponent<Rigidbody2D>();
+        if (rbProj != null)
+        {
+            rbProj.linearVelocity = dir * 12f; 
+        }
+
+        SwordSlashProjectile slash = proj.GetComponent<SwordSlashProjectile>();
+        if (slash != null)
+        {
+            slash.bloodCost = swordSlashBloodCost;
+        }
+    }
+
 
 
     public void TryUseGauntletShockwave()

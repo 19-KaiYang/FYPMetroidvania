@@ -166,6 +166,23 @@ public class CombatSystem : MonoBehaviour
                 break;
         }
     }
+    public void OnSkill3(InputValue value)
+    {
+        if (skills == null) return;
+
+        //Add skills here (Skills 3)
+        switch (currentWeapon)
+        {
+            case WeaponType.Sword:
+                skills.TryUseSwordCrimsonWave();
+                break;
+          
+
+            default:
+
+                break;
+        }
+    }
     #endregion
 
     public void UnlockWeapon(WeaponType weapon)
