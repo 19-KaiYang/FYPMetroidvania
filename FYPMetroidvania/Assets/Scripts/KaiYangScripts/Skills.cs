@@ -204,7 +204,7 @@ public class Skills : MonoBehaviour
             yield return null;
         }
 
-        rb.linearVelocity = originalVel;
+        rb.linearVelocity = new Vector2(dir.x * dashSpeed * 0.5f, rb.linearVelocity.y);
 
         if (collisionToggled) Physics2D.IgnoreLayerCollision(playerLayer, enemyLayer, false);
         if (controller) controller.externalVelocityOverride = false;
