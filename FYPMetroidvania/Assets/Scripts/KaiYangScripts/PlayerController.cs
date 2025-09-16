@@ -18,21 +18,17 @@ public class PlayerController : MonoBehaviour
     public float dashSpeed = 15f;
     public float dashDuration = 0.2f;
     public float dashCooldown = 1f;
- 
 
     [Header("Ground Check")]
     public Transform groundCheck;
     public float groundCheckRadius = 0.2f;
     public LayerMask groundLayer;
 
-
-
     public Rigidbody2D rb;
     private Animator animator;
     private SpriteRenderer spriteRenderer;
     public Vector2 moveInput;
     private Vector2 dashDirection;
-    private bool isGrounded;
     private bool isDashing;
     private float dashTimer;
     private float dashCooldownTimer;
@@ -45,15 +41,18 @@ public class PlayerController : MonoBehaviour
     // Facing direction
     public bool facingRight { get; private set; } = true;
 
+    // Conditions
     private bool hasAirDashed = false;
-
+    public bool HasAirSwordDashed { get; private set; }   
+    public bool HasAirUppercut { get; private set; }      
+    public bool IsGrounded { get; private set; }
 
     private void Awake()
     {
         instance = this;
         rb = GetComponent<Rigidbody2D>();
 
-        //  Auto-find Animator & SpriteRenderer
+        // Auto-find Animator & SpriteRenderer
         animator = GetComponentInChildren<Animator>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
     }
@@ -72,7 +71,7 @@ public class PlayerController : MonoBehaviour
                 {
                     rb.linearVelocity = new Vector2(
                         rb.linearVelocity.x,
-                        rb.linearVelocity.y * 0.3f 
+                        rb.linearVelocity.y * 0.3f
                     );
                 }
             }
@@ -82,17 +81,17 @@ public class PlayerController : MonoBehaviour
             dashCooldownTimer -= Time.deltaTime;
     }
 
-
     private void FixedUpdate()
     {
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+        IsGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
 
-        if (isGrounded)
+        if (IsGrounded)
         {
             jumpLocked = false;
-            hasAirDashed = false; 
+            hasAirDashed = false;
+            HasAirSwordDashed = false;   
+            HasAirUppercut = false;      
         }
-
 
         // Movement
         if (!externalVelocityOverride)
@@ -117,7 +116,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnJump()
     {
-        if (isGrounded && !jumpLocked)
+        if (IsGrounded && !jumpLocked)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
             jumpLocked = true;
@@ -128,8 +127,7 @@ public class PlayerController : MonoBehaviour
     {
         if (dashCooldownTimer <= 0f)
         {
-          
-            if (!isGrounded && hasAirDashed)
+            if (!IsGrounded && hasAirDashed)
                 return;
 
             if (moveInput.sqrMagnitude > 0.1f)
@@ -145,14 +143,20 @@ public class PlayerController : MonoBehaviour
 
             rb.linearVelocity = dashDirection * speed;
 
-            if (!isGrounded)
+            if (!IsGrounded)
                 hasAirDashed = true;
         }
     }
 
+    public void MarkAirSwordDash()
+    {
+        HasAirSwordDashed = true;
+    }
 
-
-
+    public void MarkAirUppercut()
+    {
+        HasAirUppercut = true;
+    }
 
     public void Flip()
     {

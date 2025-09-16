@@ -5249,6 +5249,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 988365794338784792, guid: 13775344399b2974daca82989c71d56e, type: 3}
+      propertyPath: rb
+      value: 
+      objectReference: {fileID: 8417507502501863208}
     - target: {fileID: 3406486467313327299, guid: 13775344399b2974daca82989c71d56e, type: 3}
       propertyPath: m_Name
       value: Player
@@ -5398,6 +5402,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fa4667b65a52e84da64884ae45da734, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!50 &8417507502501863208 stripped
+Rigidbody2D:
+  m_CorrespondingSourceObject: {fileID: 2456330196087166867, guid: 13775344399b2974daca82989c71d56e, type: 3}
+  m_PrefabInstance: {fileID: 3604116496920861226}
+  m_PrefabAsset: {fileID: 0}
 --- !u!20 &8583376885249448302
 Camera:
   m_ObjectHideFlags: 0

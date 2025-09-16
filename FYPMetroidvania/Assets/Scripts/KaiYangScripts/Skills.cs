@@ -100,12 +100,18 @@ public class Skills : MonoBehaviour
         if (usingSkill) return;
         if (swordDashCooldownTimer > 0f) return;
 
+        if (!PlayerController.instance.IsGrounded && PlayerController.instance.HasAirSwordDashed)
+            return;
+
         float cost = swordDashCost - UpgradeManager.instance.GetSwordDashEnergyReduction();
-        if (cost < 0) cost = 0; 
+        if (cost < 0) cost = 0;
 
         if (energy != null && !energy.TrySpend(cost)) return;
 
         StartCoroutine(Skill_SwordDash());
+
+        if (!PlayerController.instance.IsGrounded)
+            PlayerController.instance.MarkAirSwordDash();
     }
 
     public void TryUseGauntletShockwave()
@@ -145,10 +151,17 @@ public class Skills : MonoBehaviour
         if (usingSkill) return;
         if (swordUppercutCooldownTimer > 0f) return;
 
+ 
+        if (!PlayerController.instance.IsGrounded && PlayerController.instance.HasAirUppercut)
+            return;
+
         float cost = swordUppercutCost - UpgradeManager.instance.GetSwordUppercutEnergyReduction();
         if (energy != null && !energy.TrySpend(cost)) return;
 
         StartCoroutine(Skill_SwordUppercut());
+
+        if (!PlayerController.instance.IsGrounded)
+            PlayerController.instance.MarkAirUppercut();
     }
     #endregion
 
@@ -204,7 +217,7 @@ public class Skills : MonoBehaviour
             yield return null;
         }
 
-        rb.linearVelocity = new Vector2(dir.x * dashSpeed * 0.5f, rb.linearVelocity.y);
+          rb.linearVelocity = new Vector2(dir.x * dashSpeed * 0.5f, rb.linearVelocity.y);
 
         if (collisionToggled) Physics2D.IgnoreLayerCollision(playerLayer, enemyLayer, false);
         if (controller) controller.externalVelocityOverride = false;
