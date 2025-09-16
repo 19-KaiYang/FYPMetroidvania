@@ -46,6 +46,10 @@ public class PlayerController : MonoBehaviour
     // Facing direction
     public bool facingRight { get; private set; } = true;
 
+    //Has dashed in the air tracker
+    private bool hasAirDashed = false;
+
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -86,6 +90,7 @@ public class PlayerController : MonoBehaviour
 
         if (isGrounded)
             jumpLocked = false;
+            hasAirDashed = false;
 
         // Movement
         if (!externalVelocityOverride)
@@ -121,20 +126,27 @@ public class PlayerController : MonoBehaviour
     {
         if (dashCooldownTimer <= 0f)
         {
+            if (!isGrounded && hasAirDashed)
+                return;
+
             if (moveInput.sqrMagnitude > 0.1f)
                 dashDirection = moveInput.normalized;
             else
                 dashDirection = new Vector2(facingRight ? 1f : -1f, 0f);
 
-            float speed = dashSpeed; 
+            float speed = dashSpeed;
 
             isDashing = true;
             dashTimer = dashDuration;
             dashCooldownTimer = dashCooldown;
 
             rb.linearVelocity = dashDirection * speed;
+
+            if (!isGrounded)
+                hasAirDashed = true; 
         }
     }
+
 
 
 
