@@ -78,4 +78,19 @@ public class Hitbox : MonoBehaviour
         if (rb != null) rb.simulated = true;
         if (anim != null) anim.speed = 1;
     }
+
+    //Helper
+    private void OnDrawGizmos()
+    {
+        if (col == null) col = GetComponent<Collider2D>();
+        if (col == null) return;
+
+        Gizmos.color = Color.yellow;
+
+        if (col is BoxCollider2D box)
+            Gizmos.DrawWireCube(box.bounds.center, box.bounds.size);
+        else if (col is CircleCollider2D circle)
+            Gizmos.DrawWireSphere(circle.bounds.center, circle.radius * transform.lossyScale.x);
+    }
+
 }

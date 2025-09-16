@@ -4,7 +4,8 @@ public class SwordSlashProjectile : MonoBehaviour
 {
     public float damage = 20f;
     public float maxDistance = 10f;
-    public float bloodCost = 5f;
+    public float bloodCost;
+    public float knockbackForce = 8f;
 
     private Vector3 startPos;
     private Health playerHealth;
@@ -26,12 +27,18 @@ public class SwordSlashProjectile : MonoBehaviour
         Health enemy = collision.GetComponent<Health>();
         if (enemy != null && !enemy.isPlayer)
         {
+
             enemy.TakeDamage(damage);
 
-            // apply BloodMark
             enemy.ApplyBloodMark();
 
-            //  apply blood cost (only if hit connects)
+            Rigidbody2D rbEnemy = enemy.GetComponent<Rigidbody2D>();
+            if (rbEnemy != null)
+            {
+                Vector2 knockDir = (enemy.transform.position - transform.position).normalized;
+                rbEnemy.AddForce(knockDir * knockbackForce, ForceMode2D.Impulse);
+            }
+
             if (playerHealth != null && bloodCost > 0f)
             {
                 float safeCost = Mathf.Min(bloodCost, playerHealth.CurrentHealth - 1f);

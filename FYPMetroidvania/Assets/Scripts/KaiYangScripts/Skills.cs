@@ -512,4 +512,31 @@ public class Skills : MonoBehaviour
         return index;
     }
     #endregion
+
+    //Helper 
+
+    private void OnDrawGizmosSelected()
+    {
+        // --- Sword Dash Box ---
+        Gizmos.color = Color.red;
+        Vector2 dashCenter = (Vector2)transform.position +
+                             new Vector2(dashBoxOffset.x * (controller != null && controller.facingRight ? 1f : -1f),
+                                         dashBoxOffset.y);
+        Gizmos.DrawWireCube(dashCenter, dashBoxSize);
+
+        // --- Sword Uppercut Box ---
+        Gizmos.color = Color.blue;
+        if (controller != null)
+        {
+            Vector2 upOffset = new Vector2(controller.facingRight ? uppercutBoxOffset.x : -uppercutBoxOffset.x,
+                                           uppercutBoxOffset.y);
+            Vector2 upCenter = (Vector2)transform.position + upOffset;
+            Gizmos.DrawWireCube(upCenter, uppercutBoxSize);
+        }
+
+        // --- Gauntlet Shockwave Radius ---
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, shockwaveRadius);
+    }
+
 }
