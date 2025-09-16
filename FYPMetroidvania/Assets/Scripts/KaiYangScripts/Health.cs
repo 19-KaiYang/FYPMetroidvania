@@ -21,6 +21,9 @@ public class Health : MonoBehaviour
     private AudioSource audioSource;
     private Rigidbody2D rb;
 
+    public float CurrentHealth => currentHealth;
+
+
     private void Awake()
     {
         currentHealth = maxHealth;

@@ -12,6 +12,7 @@ public class Skills : MonoBehaviour
     private CombatSystem combat;
     private PlayerController controller;
     private EnergySystem energy;
+    private Health health;
 
     [Header("Gauntlet Skill Requirements")]
     public GameObject gauntletPrefab;
@@ -38,6 +39,7 @@ public class Skills : MonoBehaviour
     public float dashSpeed = 22f;
     public float dashDuration = 0.18f;
     public float dashFlatDamage = 0f;
+    public float swordDashHealthCost = 5f;
     public Vector2 dashBoxSize = new Vector2(1.4f, 1.0f);
     public Vector2 dashBoxOffset = new Vector2(0.7f, 0f);
 
@@ -51,6 +53,7 @@ public class Skills : MonoBehaviour
     public float uppercutForwardSpeed = 4f;
     public float uppercutDuration = 0.35f;
     public float uppercutFlatDamage = 10f;
+    public float swordUppercutHealthCost = 8f;
     public Vector2 uppercutBoxSize = new Vector2(1.2f, 2.0f);
     public Vector2 uppercutBoxOffset = new Vector2(0.6f, 1f);
 
@@ -85,6 +88,7 @@ public class Skills : MonoBehaviour
         combat = GetComponent<CombatSystem>();
         controller = GetComponent<PlayerController>();
         energy = GetComponent<EnergySystem>();
+        health = GetComponent<Health>();
     }
 
     private void Update()
@@ -100,6 +104,7 @@ public class Skills : MonoBehaviour
         if (usingSkill) return;
         if (swordDashCooldownTimer > 0f) return;
 
+    
         if (!PlayerController.instance.IsGrounded && PlayerController.instance.HasAirSwordDashed)
             return;
 
@@ -108,11 +113,21 @@ public class Skills : MonoBehaviour
 
         if (energy != null && !energy.TrySpend(cost)) return;
 
+
+        if (health != null && swordDashHealthCost > 0f)
+        {
+            float safeCost = Mathf.Min(swordDashHealthCost, health.CurrentHealth - 1f);
+            if (safeCost > 0f)
+                health.TakeDamage(safeCost);
+        }
+
+
         StartCoroutine(Skill_SwordDash());
 
         if (!PlayerController.instance.IsGrounded)
             PlayerController.instance.MarkAirSwordDash();
     }
+
 
     public void TryUseGauntletShockwave()
     {
@@ -151,18 +166,29 @@ public class Skills : MonoBehaviour
         if (usingSkill) return;
         if (swordUppercutCooldownTimer > 0f) return;
 
- 
         if (!PlayerController.instance.IsGrounded && PlayerController.instance.HasAirUppercut)
             return;
 
         float cost = swordUppercutCost - UpgradeManager.instance.GetSwordUppercutEnergyReduction();
+        if (cost < 0) cost = 0;
+
         if (energy != null && !energy.TrySpend(cost)) return;
+
+        if (health != null && swordUppercutHealthCost > 0f)
+        {
+            float safeCost = Mathf.Min(swordUppercutHealthCost, health.CurrentHealth - 1f);
+            if (safeCost > 0f)
+                health.TakeDamage(safeCost);
+        }
+
+
 
         StartCoroutine(Skill_SwordUppercut());
 
         if (!PlayerController.instance.IsGrounded)
             PlayerController.instance.MarkAirUppercut();
     }
+
     #endregion
 
     #region Sword Skills
