@@ -114,6 +114,12 @@ public class Skills : MonoBehaviour
     private bool isCharging;
     private Coroutine chargeRoutine;
 
+    [Header("Gauntlet Charge Shot Particles")]
+    public ParticleSystem sharedChargeParticles;
+    private int lastStage = 0;
+
+
+
 
 
     private void Awake()
@@ -523,14 +529,66 @@ public class Skills : MonoBehaviour
     {
         isCharging = true;
         currentChargeTime = 0f;
+        lastStage = 0;
 
         while (currentChargeTime < gauntletChargeMaxTime)
         {
             currentChargeTime += Time.deltaTime;
+            float ratio = currentChargeTime / gauntletChargeMaxTime;
+
+            int stage = 0;
+            if (ratio >= 0.66f) stage = 3;
+            else if (ratio >= 0.33f) stage = 2;
+            else stage = 1;
+
+            if (stage != lastStage)
+            {
+                PlayChargeStage(stage);
+                lastStage = stage;
+            }
+
             yield return null;
         }
+
         yield return FireGauntletChargeShot();
     }
+    private void PlayChargeStage(int stage)
+    {
+        if (sharedChargeParticles == null) return;
+
+        var main = sharedChargeParticles.main;
+        var emission = sharedChargeParticles.emission;
+
+        switch (stage)
+        {
+            case 1: // weak
+                main.startColor = Color.yellow;
+                main.startSize = 0.15f;
+                main.startSpeed = -2f;
+                emission.rateOverTime = 30;
+                break;
+
+            case 2: // medium
+                main.startColor = Color.cyan;
+                main.startSize = 0.3f;
+                main.startSpeed = -1.5f;
+                emission.rateOverTime = 20;
+                break;
+
+            case 3: // max
+                main.startColor = Color.magenta;
+                main.startSize = 0.6f;
+                main.startSpeed = -1f;
+                emission.rateOverTime = 10;
+                break;
+        }
+
+        if (!sharedChargeParticles.isPlaying)
+            sharedChargeParticles.Play();
+    }
+
+
+
 
 
 
@@ -551,6 +609,10 @@ public class Skills : MonoBehaviour
         GauntletChargeProjectile chargeProj = proj.GetComponent<GauntletChargeProjectile>();
         if (chargeProj != null)
             chargeProj.Init(dir, damage, knockback, ratio);
+
+        if (sharedChargeParticles != null)
+            sharedChargeParticles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+
 
         yield return null;
     }
