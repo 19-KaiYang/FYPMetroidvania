@@ -97,6 +97,25 @@ public class Skills : MonoBehaviour
     public float gauntletShockwaveCost = 30f;
 
 
+    // ===================== GAUNTLET CHARGE SHOT =====================
+
+    [Header("Gauntlet Charge Shot")]
+    public GameObject gauntletChargeProjectilePrefab;
+    public Transform gauntletChargeSpawnPoint;
+
+    public float gauntletChargeMaxTime = 2f;  
+    public float gauntletChargeMinDamage = 10f;
+    public float gauntletChargeMaxDamage = 40f;
+    public float gauntletChargeMinKnockback = 5f;
+    public float gauntletChargeMaxKnockback = 15f;
+    public float gauntletChargeEnergyCost = 20f;
+
+    private float currentChargeTime;
+    private bool isCharging;
+    private Coroutine chargeRoutine;
+
+
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -222,7 +241,21 @@ public class Skills : MonoBehaviour
         StartCoroutine(Skill_GauntletLaunch());
     }
 
- 
+    public void TryUseGauntletChargeShot()
+    {
+        if (!isCharging)
+        {
+            chargeRoutine = StartCoroutine(Skill_GauntletChargeShot());
+        }
+        else
+        {
+            if (chargeRoutine != null) StopCoroutine(chargeRoutine);
+            StartCoroutine(FireGauntletChargeShot());
+        }
+    }
+
+
+
 
     #endregion
 
@@ -485,6 +518,45 @@ public class Skills : MonoBehaviour
             activeGauntlet.Retract();
         }
     }
+
+    private IEnumerator Skill_GauntletChargeShot()
+    {
+        isCharging = true;
+        currentChargeTime = 0f;
+
+        while (currentChargeTime < gauntletChargeMaxTime)
+        {
+            currentChargeTime += Time.deltaTime;
+            yield return null;
+        }
+        yield return FireGauntletChargeShot();
+    }
+
+
+
+    private IEnumerator FireGauntletChargeShot()
+    {
+        isCharging = false;
+
+        if (energy != null && !energy.TrySpend(gauntletChargeEnergyCost))
+            yield break;
+
+        float ratio = Mathf.Clamp01(currentChargeTime / gauntletChargeMaxTime);
+        float damage = Mathf.Lerp(gauntletChargeMinDamage, gauntletChargeMaxDamage, ratio);
+        float knockback = Mathf.Lerp(gauntletChargeMinKnockback, gauntletChargeMaxKnockback, ratio);
+
+        Vector2 dir = controller.facingRight ? Vector2.right : Vector2.left;
+        GameObject proj = Instantiate(gauntletChargeProjectilePrefab, gauntletChargeSpawnPoint.position, Quaternion.identity);
+
+        GauntletChargeProjectile chargeProj = proj.GetComponent<GauntletChargeProjectile>();
+        if (chargeProj != null)
+            chargeProj.Init(dir, damage, knockback, ratio);
+
+        yield return null;
+    }
+
+
+
     #endregion
 
     #region Helpers

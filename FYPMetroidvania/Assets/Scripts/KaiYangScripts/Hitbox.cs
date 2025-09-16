@@ -92,5 +92,5 @@ public class Hitbox : MonoBehaviour
         else if (col is CircleCollider2D circle)
             Gizmos.DrawWireSphere(circle.bounds.center, circle.radius * transform.lossyScale.x);
     }
-
+    
 }

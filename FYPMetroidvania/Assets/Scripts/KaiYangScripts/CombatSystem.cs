@@ -176,7 +176,9 @@ public class CombatSystem : MonoBehaviour
             case WeaponType.Sword:
                 skills.TryUseSwordCrimsonWave();
                 break;
-          
+            case WeaponType.Gauntlet:
+                skills.TryUseGauntletChargeShot();
+                break;
 
             default:
 
