@@ -114,12 +114,6 @@ public class Skills : MonoBehaviour
         if (energy != null && !energy.TrySpend(cost)) return;
 
 
-        if (health != null && swordDashHealthCost > 0f)
-        {
-            float safeCost = Mathf.Min(swordDashHealthCost, health.CurrentHealth - 1f);
-            if (safeCost > 0f)
-                health.TakeDamage(safeCost);
-        }
 
 
         StartCoroutine(Skill_SwordDash());
@@ -174,13 +168,6 @@ public class Skills : MonoBehaviour
 
         if (energy != null && !energy.TrySpend(cost)) return;
 
-        if (health != null && swordUppercutHealthCost > 0f)
-        {
-            float safeCost = Mathf.Min(swordUppercutHealthCost, health.CurrentHealth - 1f);
-            if (safeCost > 0f)
-                health.TakeDamage(safeCost);
-        }
-
 
 
         StartCoroutine(Skill_SwordUppercut());
@@ -232,6 +219,19 @@ public class Skills : MonoBehaviour
                     float dmg = dashFlatDamage + UpgradeManager.instance.GetSwordDashBonus();
                     Vector2 knockDir = (h.transform.position - transform.position).normalized;
                     h.TakeDamage(dmg, knockDir);
+
+                    //Blood mark occurs
+                    if (!h.isPlayer)
+                        h.ApplyBloodMark();
+                    
+                    //Deduct Health if hit enemy
+                    if (health != null && swordDashHealthCost > 0f)
+                    {
+                        float safeCost = Mathf.Min(swordDashHealthCost, health.CurrentHealth - 1f);
+                        if (safeCost > 0f)
+                            health.TakeDamage(safeCost);
+                    }
+
 
                     if (hitstop > 0f)
                     {
@@ -290,6 +290,18 @@ public class Skills : MonoBehaviour
                     float dmg = uppercutFlatDamage + UpgradeManager.instance.GetSwordUppercutBonus();
                     Vector2 knockDir = (h.transform.position - transform.position).normalized;
                     h.TakeDamage(dmg, knockDir);
+
+                    //Apply Bloodmark
+                    if (!h.isPlayer)
+                        h.ApplyBloodMark();
+
+                    //Deduct health when skill used
+                    if (health != null && swordUppercutHealthCost > 0f)
+                    {
+                        float safeCost = Mathf.Min(swordUppercutHealthCost, health.CurrentHealth - 1f);
+                        if (safeCost > 0f)
+                            health.TakeDamage(safeCost);
+                    }
 
                     if (hitstop > 0f)
                     {
