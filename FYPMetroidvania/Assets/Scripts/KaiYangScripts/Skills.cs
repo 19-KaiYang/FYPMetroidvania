@@ -220,16 +220,17 @@ public class Skills : MonoBehaviour
                     Vector2 knockDir = (h.transform.position - transform.position).normalized;
                     h.TakeDamage(dmg, knockDir);
 
-                    //Blood mark occurs
                     if (!h.isPlayer)
-                        h.ApplyBloodMark();
-                    
-                    //Deduct Health if hit enemy
-                    if (health != null && swordDashHealthCost > 0f)
                     {
-                        float safeCost = Mathf.Min(swordDashHealthCost, health.CurrentHealth - 1f);
-                        if (safeCost > 0f)
-                            health.TakeDamage(safeCost);
+                        h.ApplyBloodMark();
+
+                        //Deduct using blood cost
+                        if (health != null && swordDashHealthCost > 0f)
+                        {
+                            float safeCost = Mathf.Min(swordDashHealthCost, health.CurrentHealth - 1f);
+                            if (safeCost > 0f)
+                                health.TakeDamage(safeCost);
+                        }
                     }
 
 
@@ -293,15 +294,18 @@ public class Skills : MonoBehaviour
 
                     //Apply Bloodmark
                     if (!h.isPlayer)
+                    {
                         h.ApplyBloodMark();
 
-                    //Deduct health when skill used
-                    if (health != null && swordUppercutHealthCost > 0f)
-                    {
-                        float safeCost = Mathf.Min(swordUppercutHealthCost, health.CurrentHealth - 1f);
-                        if (safeCost > 0f)
-                            health.TakeDamage(safeCost);
+                        // Deduct blood cost health
+                        if (health != null && swordUppercutHealthCost > 0f)
+                        {
+                            float safeCost = Mathf.Min(swordUppercutHealthCost, health.CurrentHealth - 1f);
+                            if (safeCost > 0f)
+                                health.TakeDamage(safeCost);
+                        }
                     }
+
 
                     if (hitstop > 0f)
                     {
