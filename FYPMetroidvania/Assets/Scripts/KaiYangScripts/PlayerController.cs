@@ -5,6 +5,9 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+
+    public static PlayerController instance;
+
     [Header("References")]
     public Transform spriteTransform;
 

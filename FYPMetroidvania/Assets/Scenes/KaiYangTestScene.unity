@@ -5257,6 +5257,10 @@ PrefabInstance:
       propertyPath: isPlayer
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5278410194848176884, guid: 13775344399b2974daca82989c71d56e, type: 3}
+      propertyPath: spriteRenderer
+      value: 
+      objectReference: {fileID: 3604116496920861227}
     - target: {fileID: 6436026122552544290, guid: 13775344399b2974daca82989c71d56e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -5302,6 +5306,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 13775344399b2974daca82989c71d56e, type: 3}
+--- !u!212 &3604116496920861227 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 6050737709817090118, guid: 13775344399b2974daca82989c71d56e, type: 3}
+  m_PrefabInstance: {fileID: 3604116496920861226}
+  m_PrefabAsset: {fileID: 0}
 --- !u!81 &4294503883500359241
 AudioListener:
   m_ObjectHideFlags: 0
