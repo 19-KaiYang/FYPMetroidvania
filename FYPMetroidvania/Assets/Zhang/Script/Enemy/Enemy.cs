@@ -6,9 +6,12 @@ public class Enemy : MonoBehaviour, IDamageable
     protected Rigidbody2D rb;
     protected Animator animator;
     protected PlayerController player;
-    private StateMachine stateMachine;
+    protected StateMachine stateMachine;
 
-    
+    [Header("Detaect")]
+    [SerializeField] protected LayerMask playerLayer;
+    [SerializeField] protected LayerMask obstacleLayer;
+    [SerializeField] protected LayerMask groundleLayer;
 
     [Header("-")]
     [SerializeField] public float maxHealth;
@@ -28,7 +31,6 @@ public class Enemy : MonoBehaviour, IDamageable
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         player = FindFirstObjectByType<PlayerController>();
-        stateMachine = GetComponent<StateMachine>();
     }
 
     void Start()
@@ -37,13 +39,18 @@ public class Enemy : MonoBehaviour, IDamageable
     }
 
 
-    void Update()
+    protected virtual void Update()
     {
         distanceToPlayer = transform.position - player.transform.position;
     }
 
-    
-
+    protected virtual void Flip()
+    {
+        isFacingRight = !isFacingRight;
+        Vector3 f = transform.localScale;
+        f.x = -f.x;
+        transform.localScale = f;
+    }
 
     public virtual void TakeDamage(float _damage)
     {

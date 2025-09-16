@@ -2,17 +2,11 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 
-public class StateMachine : MonoBehaviour
+public class StateMachine
 {
     public IState CurrentState { get; private set; }
 
-    //public List<IState> states;
     public event Action<IState> stateChanged;
-
-    //public StateMachine()
-    //{
-    //    states = new List<IState>();
-    //}
 
     public void Initialize(IState state)
     {

@@ -29,7 +29,7 @@ public class SceneTransitionManager : MonoBehaviour
     }
 
     void Update()
-    {
+    {   
         
     }
 
