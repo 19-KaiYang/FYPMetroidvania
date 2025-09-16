@@ -122,6 +122,27 @@ public class Skills : MonoBehaviour
             PlayerController.instance.MarkAirSwordDash();
     }
 
+    public void TryUseSwordUppercut()
+    {
+        if (usingSkill) return;
+        if (swordUppercutCooldownTimer > 0f) return;
+
+        if (!PlayerController.instance.IsGrounded && PlayerController.instance.HasAirUppercut)
+            return;
+
+        float cost = swordUppercutCost - UpgradeManager.instance.GetSwordUppercutEnergyReduction();
+        if (cost < 0) cost = 0;
+
+        if (energy != null && !energy.TrySpend(cost)) return;
+
+
+
+        StartCoroutine(Skill_SwordUppercut());
+
+        if (!PlayerController.instance.IsGrounded)
+            PlayerController.instance.MarkAirUppercut();
+    }
+
 
     public void TryUseGauntletShockwave()
     {
@@ -155,26 +176,7 @@ public class Skills : MonoBehaviour
         StartCoroutine(Skill_GauntletLaunch());
     }
 
-    public void TryUseSwordUppercut()
-    {
-        if (usingSkill) return;
-        if (swordUppercutCooldownTimer > 0f) return;
-
-        if (!PlayerController.instance.IsGrounded && PlayerController.instance.HasAirUppercut)
-            return;
-
-        float cost = swordUppercutCost - UpgradeManager.instance.GetSwordUppercutEnergyReduction();
-        if (cost < 0) cost = 0;
-
-        if (energy != null && !energy.TrySpend(cost)) return;
-
-
-
-        StartCoroutine(Skill_SwordUppercut());
-
-        if (!PlayerController.instance.IsGrounded)
-            PlayerController.instance.MarkAirUppercut();
-    }
+ 
 
     #endregion
 
