@@ -20,6 +20,12 @@ public class PlayerController : MonoBehaviour
     public float dashDuration = 0.2f;
     public float dashCooldown = 1f;
 
+    [Header("Wall Jump")]
+    public float wallCheckDistance = 0.3f;
+    public float wallJumpForce = 8f;
+    public Vector2 wallJumpDirection = new Vector2(1, 1);
+    private bool hasWallJumped;
+
     [Header("Ground Check")]
     public Transform groundCheck;
     public float groundCheckRadius = 0.2f;
@@ -34,8 +40,6 @@ public class PlayerController : MonoBehaviour
     private float dashTimer;
     private float dashCooldownTimer;
 
-
-
     [HideInInspector] public bool externalVelocityOverride = false;
 
     // Jump control
@@ -46,8 +50,8 @@ public class PlayerController : MonoBehaviour
 
     // Conditions
     private bool hasAirDashed = false;
-    public bool HasAirSwordDashed { get; private set; }   
-    public bool HasAirUppercut { get; private set; }      
+    public bool HasAirSwordDashed { get; private set; }
+    public bool HasAirUppercut { get; private set; }
     public bool IsGrounded { get; private set; }
 
     private void Awake()
@@ -55,7 +59,6 @@ public class PlayerController : MonoBehaviour
         instance = this;
         rb = GetComponent<Rigidbody2D>();
         skills = GetComponentInChildren<Skills>();
-
 
         // Auto-find Animator & SpriteRenderer
         animator = GetComponentInChildren<Animator>();
@@ -94,8 +97,9 @@ public class PlayerController : MonoBehaviour
         {
             jumpLocked = false;
             hasAirDashed = false;
-            HasAirSwordDashed = false;   
-            HasAirUppercut = false;      
+            HasAirSwordDashed = false;
+            HasAirUppercut = false;
+            hasWallJumped = false;
         }
 
         // Movement
@@ -103,7 +107,6 @@ public class PlayerController : MonoBehaviour
         {
             if (skills != null && skills.IsChargeLocked)
             {
-              
                 rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
             }
             else if (!isDashing)
@@ -138,11 +141,36 @@ public class PlayerController : MonoBehaviour
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
             jumpLocked = true;
         }
+        else if (!IsGrounded && !hasWallJumped && IsTouchingWall())
+        {
+            hasWallJumped = true;
+
+            // Determine which side the wall is on
+            bool wallOnRight = IsWallOnRight();
+            float horizontalDirection = wallOnRight ? -1f : 1f; 
+
+            
+            Vector2 finalJumpVector = new Vector2(
+                horizontalDirection * wallJumpDirection.x * wallJumpForce,
+                wallJumpDirection.y * wallJumpForce
+            );
+
+            rb.linearVelocity = finalJumpVector;
+
+         
+            StartCoroutine(WallJumpBuffer());
+        }
+    }
+
+    private IEnumerator WallJumpBuffer()
+    {
+        externalVelocityOverride = true;
+        yield return new WaitForSeconds(0.2f); 
+        externalVelocityOverride = false;
     }
 
     public void OnDash()
     {
-
         if (skills != null && skills.IsChargeLocked)
             return;
 
@@ -186,5 +214,38 @@ public class PlayerController : MonoBehaviour
         Vector3 spriteScale = spriteTransform.localScale;
         spriteScale.x *= -1f;
         spriteTransform.localScale = spriteScale;
+    }
+
+    //Helper
+    private bool IsTouchingWall()
+    {
+        float offsetX = GetComponent<Collider2D>().bounds.extents.x + 0.05f;
+        Vector2 originRight = (Vector2)transform.position + Vector2.right * offsetX;
+        Vector2 originLeft = (Vector2)transform.position + Vector2.left * offsetX;
+
+        return Physics2D.Raycast(originRight, Vector2.right, wallCheckDistance, groundLayer) ||
+               Physics2D.Raycast(originLeft, Vector2.left, wallCheckDistance, groundLayer);
+    }
+
+    private bool IsWallOnRight()
+    {
+        float offsetX = GetComponent<Collider2D>().bounds.extents.x + 0.05f;
+        Vector2 originRight = (Vector2)transform.position + Vector2.right * offsetX;
+
+        return Physics2D.Raycast(originRight, Vector2.right, wallCheckDistance, groundLayer);
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (!Application.isPlaying) return;
+
+        Gizmos.color = Color.yellow;
+
+        float offsetX = GetComponent<Collider2D>().bounds.extents.x + 0.05f;
+        Vector3 originRight = transform.position + Vector3.right * offsetX;
+        Vector3 originLeft = transform.position + Vector3.left * offsetX;
+
+        Gizmos.DrawLine(originRight, originRight + Vector3.right * wallCheckDistance);
+        Gizmos.DrawLine(originLeft, originLeft + Vector3.left * wallCheckDistance);
     }
 }
