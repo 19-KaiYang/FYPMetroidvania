@@ -174,3 +174,9 @@ MonoBehaviour:
   strongSprite: {fileID: 5974009189253629341, guid: 4a54f84124af9154d9fc3916d34ed6a0, type: 3}
   baseSpeed: 10
   lifeTime: 3
+  minExplosionRadius: 1
+  midExplosionRadius: 2
+  maxExplosionRadius: 3
+  enemyMask:
+    serializedVersion: 2
+    m_Bits: 64
