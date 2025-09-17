@@ -5090,9 +5090,17 @@ PrefabInstance:
       value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 3203265738349540524, guid: 13775344399b2974daca82989c71d56e, type: 3}
+      propertyPath: gauntletMaxLeashRange
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 3203265738349540524, guid: 13775344399b2974daca82989c71d56e, type: 3}
       propertyPath: sharedChargeParticles
       value: 
       objectReference: {fileID: 408598911}
+    - target: {fileID: 3203265738349540524, guid: 13775344399b2974daca82989c71d56e, type: 3}
+      propertyPath: gauntletMaxFlightRange
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 3203265738349540524, guid: 13775344399b2974daca82989c71d56e, type: 3}
       propertyPath: gauntletChargeSpawnPoint
       value: 
