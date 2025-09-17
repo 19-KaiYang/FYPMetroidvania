@@ -1296,13 +1296,25 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4790274713519360748, guid: 45a708e87f1b8114ba4fdfa514b9be70, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5244010995103515337, guid: 45a708e87f1b8114ba4fdfa514b9be70, type: 3}
       propertyPath: playOnAwake
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5244010995103515337, guid: 45a708e87f1b8114ba4fdfa514b9be70, type: 3}
+      propertyPath: InitialModule.maxNumParticles
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 5244010995103515337, guid: 45a708e87f1b8114ba4fdfa514b9be70, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5244010995103515337, guid: 45a708e87f1b8114ba4fdfa514b9be70, type: 3}
       propertyPath: InitialModule.startLifetime.scalar
-      value: 1
+      value: 0.4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4753,6 +4765,74 @@ PrefabInstance:
       propertyPath: gauntletChargeProjectilePrefab
       value: 
       objectReference: {fileID: 2052117845091223822, guid: 0cd155da40cd8fa4e972d3f432d78ee0, type: 3}
+    - target: {fileID: 3203265738349540524, guid: 13775344399b2974daca82989c71d56e, type: 3}
+      propertyPath: chargeStages.Array.data[0].startSize
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3203265738349540524, guid: 13775344399b2974daca82989c71d56e, type: 3}
+      propertyPath: chargeStages.Array.data[1].startSize
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3203265738349540524, guid: 13775344399b2974daca82989c71d56e, type: 3}
+      propertyPath: chargeStages.Array.data[2].startSize
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3203265738349540524, guid: 13775344399b2974daca82989c71d56e, type: 3}
+      propertyPath: chargeStages.Array.data[0].startSpeed
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3203265738349540524, guid: 13775344399b2974daca82989c71d56e, type: 3}
+      propertyPath: chargeStages.Array.data[2].startSpeed
+      value: -2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3203265738349540524, guid: 13775344399b2974daca82989c71d56e, type: 3}
+      propertyPath: chargeStages.Array.data[0].rateOverTime
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3203265738349540524, guid: 13775344399b2974daca82989c71d56e, type: 3}
+      propertyPath: chargeStages.Array.data[0].startColor.b
+      value: 0.015723169
+      objectReference: {fileID: 0}
+    - target: {fileID: 3203265738349540524, guid: 13775344399b2974daca82989c71d56e, type: 3}
+      propertyPath: chargeStages.Array.data[0].startColor.g
+      value: 0.925555
+      objectReference: {fileID: 0}
+    - target: {fileID: 3203265738349540524, guid: 13775344399b2974daca82989c71d56e, type: 3}
+      propertyPath: chargeStages.Array.data[0].startColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3203265738349540524, guid: 13775344399b2974daca82989c71d56e, type: 3}
+      propertyPath: chargeStages.Array.data[1].rateOverTime
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 3203265738349540524, guid: 13775344399b2974daca82989c71d56e, type: 3}
+      propertyPath: chargeStages.Array.data[1].startColor.b
+      value: 0.9559748
+      objectReference: {fileID: 0}
+    - target: {fileID: 3203265738349540524, guid: 13775344399b2974daca82989c71d56e, type: 3}
+      propertyPath: chargeStages.Array.data[1].startColor.g
+      value: 0.8579835
+      objectReference: {fileID: 0}
+    - target: {fileID: 3203265738349540524, guid: 13775344399b2974daca82989c71d56e, type: 3}
+      propertyPath: chargeStages.Array.data[1].startColor.r
+      value: 0.26154017
+      objectReference: {fileID: 0}
+    - target: {fileID: 3203265738349540524, guid: 13775344399b2974daca82989c71d56e, type: 3}
+      propertyPath: chargeStages.Array.data[2].rateOverTime
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 3203265738349540524, guid: 13775344399b2974daca82989c71d56e, type: 3}
+      propertyPath: chargeStages.Array.data[2].startColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3203265738349540524, guid: 13775344399b2974daca82989c71d56e, type: 3}
+      propertyPath: chargeStages.Array.data[2].startColor.g
+      value: 0.26100624
+      objectReference: {fileID: 0}
+    - target: {fileID: 3203265738349540524, guid: 13775344399b2974daca82989c71d56e, type: 3}
+      propertyPath: chargeStages.Array.data[2].startColor.r
+      value: 0.9101495
+      objectReference: {fileID: 0}
     - target: {fileID: 3406486467313327299, guid: 13775344399b2974daca82989c71d56e, type: 3}
       propertyPath: m_Name
       value: Player

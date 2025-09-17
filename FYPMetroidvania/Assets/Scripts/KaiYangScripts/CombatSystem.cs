@@ -197,10 +197,15 @@ public class CombatSystem : MonoBehaviour
     {
         if (currentWeapon == WeaponType.Gauntlet)
         {
-            skills.IsChargeButtonHeld = true;   
-            skills.StartGauntletChargeShot();
+            if (skills != null)
+            {
+                skills.IsChargeButtonHeld = true;
+                skills.StartGauntletChargeShot(); 
+            }
+
         }
     }
+
 
     private void OnSkill3ChargeCanceled(InputAction.CallbackContext ctx)
     {

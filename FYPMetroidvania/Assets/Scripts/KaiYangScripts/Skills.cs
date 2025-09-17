@@ -126,6 +126,21 @@ public class Skills : MonoBehaviour
     private ParticleSystem.MainModule chargeMain;
     private ParticleSystem.EmissionModule chargeEmission;
 
+    [Header("Gauntlet Charge Stages")]
+    public ChargeStageSettings[] chargeStages = new ChargeStageSettings[3];
+
+
+
+    [System.Serializable]
+    public class ChargeStageSettings
+    {
+        public Color startColor = Color.white;
+        public float startSize = 0.2f;
+        public float startSpeed = -2f;
+        public float rateOverTime = 20f;
+    }
+
+
 
     public bool IsChargeButtonHeld { get; set; }
 
@@ -278,17 +293,17 @@ public class Skills : MonoBehaviour
 
     public void StartGauntletChargeShot()
     {
-        if (isCharging) return; // Don't start if already charging
+        if (!CanUseGauntletChargeShot())
+        {
 
+            if (sharedChargeParticles != null)
+                sharedChargeParticles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            return;
+        }
         isCharging = true;
-        currentChargeTime = 0f;
-        lastStage = 0;
-
-        // Start the charging coroutine
-        if (chargeRoutine != null)
-            StopCoroutine(chargeRoutine);
-        chargeRoutine = StartCoroutine(ChargeLoop());
+        chargeRoutine = StartCoroutine(Skill_GauntletChargeShot());
     }
+
 
     public void ReleaseGauntletChargeShot()
     {
@@ -304,6 +319,17 @@ public class Skills : MonoBehaviour
         // Fire immediately when button is released
         FireGauntletChargeShot();
     }
+
+    private bool CanUseGauntletChargeShot()
+    {
+        if (isCharging) return false; 
+        if (energy == null) return false;
+        if (!energy.HasEnough(gauntletChargeEnergyCost)) return false; 
+
+        return true;
+    }
+
+
 
     private IEnumerator ChargeLoop()
     {
@@ -634,35 +660,17 @@ public class Skills : MonoBehaviour
     private void PlayChargeStage(int stage)
     {
         if (sharedChargeParticles == null) return;
+        if (stage <= 0 || stage > chargeStages.Length) return;
 
-        switch (stage)
-        {
-            case 1: // weak
-                chargeMain.startColor = Color.yellow;
-                chargeMain.startSize = 0.15f;
-                chargeMain.startSpeed = -2f;
-                chargeEmission.rateOverTime = 30;
-                break;
-
-            case 2: // medium
-                chargeMain.startColor = Color.cyan;
-                chargeMain.startSize = 0.3f;
-                chargeMain.startSpeed = -1.5f;
-                chargeEmission.rateOverTime = 20;
-                break;
-
-            case 3: // max
-                chargeMain.startColor = Color.magenta;
-                chargeMain.startSize = 0.6f;
-                chargeMain.startSpeed = -1f;
-                chargeEmission.rateOverTime = 10;
-                break;
-        }
+        var settings = chargeStages[stage - 1]; 
+        chargeMain.startColor = settings.startColor;
+        chargeMain.startSize = settings.startSize;
+        chargeMain.startSpeed = settings.startSpeed;
+        chargeEmission.rateOverTime = settings.rateOverTime;
 
         if (!sharedChargeParticles.isPlaying)
             sharedChargeParticles.Play();
     }
-
 
 
 
