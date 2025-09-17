@@ -26,6 +26,7 @@ public class WeaponStats
 
 public class CombatSystem : MonoBehaviour
 {
+    private InputAction _skill3ChargeAction;
 
     [Header("General Attack Settings")]
     public float baseAttackDamage = 10f;
@@ -95,6 +96,13 @@ public class CombatSystem : MonoBehaviour
         skills = GetComponentInChildren<Skills>();
 
         controller = GetComponent<PlayerController>();
+
+        var pi = GetComponent<PlayerInput>();
+        _skill3ChargeAction = pi.actions["Skill3Charge"];
+
+        _skill3ChargeAction.started += OnSkill3ChargeStarted;
+        _skill3ChargeAction.canceled += OnSkill3ChargeCanceled;
+
 
         currentWeapon = WeaponType.None;
         ApplyWeaponStats(currentWeapon);
@@ -169,6 +177,7 @@ public class CombatSystem : MonoBehaviour
     public void OnSkill3(InputValue value)
     {
         if (skills == null) return;
+        bool pressed = value.isPressed;
 
         //Add skills here (Skills 3)
         switch (currentWeapon)
@@ -176,15 +185,42 @@ public class CombatSystem : MonoBehaviour
             case WeaponType.Sword:
                 skills.TryUseSwordCrimsonWave();
                 break;
-            case WeaponType.Gauntlet:
-                skills.TryUseGauntletChargeShot();
-                break;
 
             default:
 
                 break;
         }
     }
+
+    //strictly for hold gauntlet chargeshot
+    private void OnSkill3ChargeStarted(InputAction.CallbackContext ctx)
+    {
+        if (currentWeapon == WeaponType.Gauntlet)
+        {
+            skills.IsChargeButtonHeld = true;   
+            skills.StartGauntletChargeShot();
+        }
+    }
+
+    private void OnSkill3ChargeCanceled(InputAction.CallbackContext ctx)
+    {
+        if (currentWeapon == WeaponType.Gauntlet)
+        {
+            skills.IsChargeButtonHeld = false;  
+            skills.ReleaseGauntletChargeShot();
+        }
+    }
+
+
+    private void OnDestroy()
+    {
+        if (_skill3ChargeAction != null)
+        {
+            _skill3ChargeAction.started -= OnSkill3ChargeStarted;
+            _skill3ChargeAction.canceled -= OnSkill3ChargeCanceled;
+        }
+    }
+
     #endregion
 
     public void UnlockWeapon(WeaponType weapon)
@@ -448,5 +484,8 @@ public class CombatSystem : MonoBehaviour
     {
         return baseAttackDamage + UpgradeManager.instance.GetGeneralDamageBonus();
     }
+
+
+  
 
 }

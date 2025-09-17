@@ -14,21 +14,7 @@ public class Skills : MonoBehaviour
     private EnergySystem energy;
     private Health health;
 
-    [Header("Gauntlet Skill Requirements")]
-    public GameObject gauntletPrefab;
-    private GauntletProjectile activeGauntlet;
-
-    [Header("Gauntlet Launch")]
-    public LayerMask terrainMask;
-    public float gauntletLaunchDamage = 12f;
-    public float gauntletLaunchSpeed = 18f;
-    public float gauntletMinRange = 1.5f;
-    public float gauntletMaxFlightRange = 8f;
-    public float gauntletMaxLeashRange = 15f;
-    public float gauntletSkillEnergyCost;
-
-    public bool GauntletDeployed => activeGauntlet != null;
-    public bool HasStuckGauntlet() => activeGauntlet != null && activeGauntlet.IsStuck();
+ 
 
     // global skill gate
     private bool usingSkill = false;
@@ -96,6 +82,24 @@ public class Skills : MonoBehaviour
     [Header("Gauntlet Shockwave Cost")]
     public float gauntletShockwaveCost = 30f;
 
+    // ===================== Rocket Hand =====================
+
+    [Header("Gauntlet Skill Requirements")]
+    public GameObject gauntletPrefab;
+    private GauntletProjectile activeGauntlet;
+
+    [Header("Rocket Hand")]
+    public LayerMask terrainMask;
+    public float gauntletLaunchDamage = 12f;
+    public float gauntletLaunchSpeed = 18f;
+    public float gauntletMinRange = 1.5f;
+    public float gauntletMaxFlightRange = 8f;
+    public float gauntletMaxLeashRange = 15f;
+    public float gauntletSkillEnergyCost;
+
+    public bool GauntletDeployed => activeGauntlet != null;
+    public bool HasStuckGauntlet() => activeGauntlet != null && activeGauntlet.IsStuck();
+
 
     // ===================== GAUNTLET CHARGE SHOT =====================
 
@@ -118,9 +122,12 @@ public class Skills : MonoBehaviour
     public ParticleSystem sharedChargeParticles;
     private int lastStage = 0;
 
+    //cache modules
+    private ParticleSystem.MainModule chargeMain;
+    private ParticleSystem.EmissionModule chargeEmission;
 
 
-
+    public bool IsChargeButtonHeld { get; set; }
 
     private void Awake()
     {
@@ -129,6 +136,12 @@ public class Skills : MonoBehaviour
         controller = GetComponent<PlayerController>();
         energy = GetComponent<EnergySystem>();
         health = GetComponent<Health>();
+
+        if (sharedChargeParticles != null)
+        {
+            chargeMain = sharedChargeParticles.main;
+            chargeEmission = sharedChargeParticles.emission;
+        }
     }
 
     private void Update()
@@ -136,6 +149,8 @@ public class Skills : MonoBehaviour
         if (swordDashCooldownTimer > 0f) swordDashCooldownTimer -= Time.deltaTime;
         if (gauntletShockCooldownTimer > 0f) gauntletShockCooldownTimer -= Time.deltaTime;
         if (swordUppercutCooldownTimer > 0f) swordUppercutCooldownTimer -= Time.deltaTime;
+
+     
     }
 
     #region CombatSystem API
@@ -247,18 +262,79 @@ public class Skills : MonoBehaviour
         StartCoroutine(Skill_GauntletLaunch());
     }
 
-    public void TryUseGauntletChargeShot()
+    //public void TryUseGauntletChargeShot()
+    //{
+    //    if (!isCharging)
+    //    {
+    //        chargeRoutine = StartCoroutine(Skill_GauntletChargeShot());
+    //    }
+    //    else
+    //    {
+    //        if (chargeRoutine != null) StopCoroutine(chargeRoutine);
+    //        StartCoroutine(FireGauntletChargeShot());
+    //    }
+    //}
+    // Replace these methods in Skills.cs:
+
+    public void StartGauntletChargeShot()
     {
-        if (!isCharging)
+        if (isCharging) return; // Don't start if already charging
+
+        isCharging = true;
+        currentChargeTime = 0f;
+        lastStage = 0;
+
+        // Start the charging coroutine
+        if (chargeRoutine != null)
+            StopCoroutine(chargeRoutine);
+        chargeRoutine = StartCoroutine(ChargeLoop());
+    }
+
+    public void ReleaseGauntletChargeShot()
+    {
+        if (!isCharging) return;
+
+        // Stop the charging coroutine
+        if (chargeRoutine != null)
         {
-            chargeRoutine = StartCoroutine(Skill_GauntletChargeShot());
+            StopCoroutine(chargeRoutine);
+            chargeRoutine = null;
         }
-        else
+
+        // Fire immediately when button is released
+        FireGauntletChargeShot();
+    }
+
+    private IEnumerator ChargeLoop()
+    {
+        while (isCharging && IsChargeButtonHeld && currentChargeTime < gauntletChargeMaxTime)
         {
-            if (chargeRoutine != null) StopCoroutine(chargeRoutine);
-            StartCoroutine(FireGauntletChargeShot());
+            currentChargeTime += Time.deltaTime;
+            float ratio = currentChargeTime / gauntletChargeMaxTime;
+
+            int stage = 0;
+            if (ratio >= 0.66f) stage = 3;
+            else if (ratio >= 0.33f) stage = 2;
+            else stage = 1;
+
+            if (stage != lastStage)
+            {
+                PlayChargeStage(stage);
+                lastStage = stage;
+            }
+
+            yield return null;
+        }
+
+        // Only auto-fire if we reached max charge AND still charging
+        if (isCharging && currentChargeTime >= gauntletChargeMaxTime)
+        {
+            chargeRoutine = null; // Clear the reference
+            FireGauntletChargeShot();
         }
     }
+
+
 
 
 
@@ -531,7 +607,7 @@ public class Skills : MonoBehaviour
         currentChargeTime = 0f;
         lastStage = 0;
 
-        while (currentChargeTime < gauntletChargeMaxTime)
+        while (currentChargeTime < gauntletChargeMaxTime && IsChargeButtonHeld)
         {
             currentChargeTime += Time.deltaTime;
             float ratio = currentChargeTime / gauntletChargeMaxTime;
@@ -550,36 +626,36 @@ public class Skills : MonoBehaviour
             yield return null;
         }
 
-        yield return FireGauntletChargeShot();
+
+        FireGauntletChargeShot();
+        yield break;
     }
+
     private void PlayChargeStage(int stage)
     {
         if (sharedChargeParticles == null) return;
 
-        var main = sharedChargeParticles.main;
-        var emission = sharedChargeParticles.emission;
-
         switch (stage)
         {
             case 1: // weak
-                main.startColor = Color.yellow;
-                main.startSize = 0.15f;
-                main.startSpeed = -2f;
-                emission.rateOverTime = 30;
+                chargeMain.startColor = Color.yellow;
+                chargeMain.startSize = 0.15f;
+                chargeMain.startSpeed = -2f;
+                chargeEmission.rateOverTime = 30;
                 break;
 
             case 2: // medium
-                main.startColor = Color.cyan;
-                main.startSize = 0.3f;
-                main.startSpeed = -1.5f;
-                emission.rateOverTime = 20;
+                chargeMain.startColor = Color.cyan;
+                chargeMain.startSize = 0.3f;
+                chargeMain.startSpeed = -1.5f;
+                chargeEmission.rateOverTime = 20;
                 break;
 
             case 3: // max
-                main.startColor = Color.magenta;
-                main.startSize = 0.6f;
-                main.startSpeed = -1f;
-                emission.rateOverTime = 10;
+                chargeMain.startColor = Color.magenta;
+                chargeMain.startSize = 0.6f;
+                chargeMain.startSpeed = -1f;
+                chargeEmission.rateOverTime = 10;
                 break;
         }
 
@@ -592,17 +668,29 @@ public class Skills : MonoBehaviour
 
 
 
-    private IEnumerator FireGauntletChargeShot()
+    private void FireGauntletChargeShot()
     {
+        if (!isCharging) return; 
+
+        // Reset charging state first
         isCharging = false;
 
-        if (energy != null && !energy.TrySpend(gauntletChargeEnergyCost))
-            yield break;
+        // Stop particles
+        if (sharedChargeParticles != null)
+            sharedChargeParticles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
 
+        if (energy != null && !energy.TrySpend(gauntletChargeEnergyCost))
+        {
+            currentChargeTime = 0f;
+            return;
+        }
+
+        // Calculate damage based on charge time
         float ratio = Mathf.Clamp01(currentChargeTime / gauntletChargeMaxTime);
         float damage = Mathf.Lerp(gauntletChargeMinDamage, gauntletChargeMaxDamage, ratio);
         float knockback = Mathf.Lerp(gauntletChargeMinKnockback, gauntletChargeMaxKnockback, ratio);
 
+        // Fire
         Vector2 dir = controller.facingRight ? Vector2.right : Vector2.left;
         GameObject proj = Instantiate(gauntletChargeProjectilePrefab, gauntletChargeSpawnPoint.position, Quaternion.identity);
 
@@ -610,13 +698,11 @@ public class Skills : MonoBehaviour
         if (chargeProj != null)
             chargeProj.Init(dir, damage, knockback, ratio);
 
-        if (sharedChargeParticles != null)
-            sharedChargeParticles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+        // Reset charge time
+        currentChargeTime = 0f;
 
-
-        yield return null;
+        Debug.Log($"Fired charge shot at {ratio * 100f}% charge");
     }
-
 
 
     #endregion
@@ -656,7 +742,7 @@ public class Skills : MonoBehaviour
         Vector2 dashCenter = (Vector2)transform.position +
                              new Vector2(dashBoxOffset.x * (controller != null && controller.facingRight ? 1f : -1f),
                                          dashBoxOffset.y);
-        Gizmos.DrawWireCube(dashCenter, dashBoxSize);
+        Gizmos.DrawWireCube(dashCenter, dashBoxSize); 
 
         // --- Sword Uppercut Box ---
         Gizmos.color = Color.blue;
