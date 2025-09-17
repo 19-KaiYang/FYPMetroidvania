@@ -129,6 +129,8 @@ public class Skills : MonoBehaviour
     [Header("Gauntlet Charge Stages")]
     public ChargeStageSettings[] chargeStages = new ChargeStageSettings[3];
 
+    public bool IsChargeLocked { get; private set; }
+
 
 
     [System.Serializable]
@@ -295,30 +297,31 @@ public class Skills : MonoBehaviour
     {
         if (!CanUseGauntletChargeShot())
         {
-
             if (sharedChargeParticles != null)
                 sharedChargeParticles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
             return;
         }
+
         isCharging = true;
+        IsChargeLocked = true;   
         chargeRoutine = StartCoroutine(Skill_GauntletChargeShot());
     }
-
 
     public void ReleaseGauntletChargeShot()
     {
         if (!isCharging) return;
 
-        // Stop the charging coroutine
         if (chargeRoutine != null)
         {
             StopCoroutine(chargeRoutine);
             chargeRoutine = null;
         }
 
-        // Fire immediately when button is released
         FireGauntletChargeShot();
+
+        IsChargeLocked = false;  
     }
+
 
     private bool CanUseGauntletChargeShot()
     {
@@ -708,6 +711,8 @@ public class Skills : MonoBehaviour
 
         // Reset charge time
         currentChargeTime = 0f;
+
+        IsChargeLocked = false;
 
         Debug.Log($"Fired charge shot at {ratio * 100f}% charge");
     }

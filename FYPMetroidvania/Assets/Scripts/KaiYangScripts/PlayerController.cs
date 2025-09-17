@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     public static PlayerController instance;
+    private Skills skills;
 
     [Header("References")]
     public Transform spriteTransform;
@@ -33,6 +34,8 @@ public class PlayerController : MonoBehaviour
     private float dashTimer;
     private float dashCooldownTimer;
 
+
+
     [HideInInspector] public bool externalVelocityOverride = false;
 
     // Jump control
@@ -51,6 +54,8 @@ public class PlayerController : MonoBehaviour
     {
         instance = this;
         rb = GetComponent<Rigidbody2D>();
+        skills = GetComponentInChildren<Skills>();
+
 
         // Auto-find Animator & SpriteRenderer
         animator = GetComponentInChildren<Animator>();
@@ -96,10 +101,19 @@ public class PlayerController : MonoBehaviour
         // Movement
         if (!externalVelocityOverride)
         {
-            if (!isDashing)
+            if (skills != null && skills.IsChargeLocked)
+            {
+              
+                rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+            }
+            else if (!isDashing)
+            {
                 rb.linearVelocity = new Vector2(moveInput.x * moveSpeed, rb.linearVelocity.y);
+            }
             else
+            {
                 rb.linearVelocity = dashDirection * dashSpeed;
+            }
         }
 
         // Flip sprite
@@ -116,6 +130,9 @@ public class PlayerController : MonoBehaviour
 
     public void OnJump()
     {
+        if (skills != null && skills.IsChargeLocked)
+            return;
+
         if (IsGrounded && !jumpLocked)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
@@ -125,6 +142,10 @@ public class PlayerController : MonoBehaviour
 
     public void OnDash()
     {
+
+        if (skills != null && skills.IsChargeLocked)
+            return;
+
         if (dashCooldownTimer <= 0f)
         {
             if (!IsGrounded && hasAirDashed)

@@ -120,6 +120,9 @@ public class CombatSystem : MonoBehaviour
                 ResetCombo();
         }
 
+        if (skills != null && skills.IsChargeLocked)
+            return; 
+
         if (Keyboard.current.digit1Key.wasPressedThisFrame && unlockedWeapons.Contains(WeaponType.Sword))
             SetWeapon(WeaponType.Sword);
 
@@ -135,6 +138,7 @@ public class CombatSystem : MonoBehaviour
     #region Skills Usage
     public void OnSkill1(InputValue value)
     {
+        if (skills != null && skills.IsChargeLocked) return;
         if (skills == null) return;
 
         //Add skills here (Skills 1)
@@ -156,6 +160,7 @@ public class CombatSystem : MonoBehaviour
 
     public void OnSkill2(InputValue value)
     {
+        if (skills != null && skills.IsChargeLocked) return;
         if (skills == null) return;
 
         //Add skills here (Skills 2)
@@ -176,6 +181,7 @@ public class CombatSystem : MonoBehaviour
     }
     public void OnSkill3(InputValue value)
     {
+        if (skills != null && skills.IsChargeLocked) return;
         if (skills == null) return;
         bool pressed = value.isPressed;
 
@@ -285,6 +291,7 @@ public class CombatSystem : MonoBehaviour
 
     public void OnAttack()
     {
+        if (skills != null && skills.IsChargeLocked) return;
         if (skills != null && skills.IsUsingSkill) return;
         if (currentWeapon == WeaponType.None) return;
         if (attackCooldownTimer > 0f) return;
