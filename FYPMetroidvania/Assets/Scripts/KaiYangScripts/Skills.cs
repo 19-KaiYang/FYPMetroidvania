@@ -491,64 +491,76 @@ public class Skills : MonoBehaviour
             collisionToggled = true;
         }
 
-        // one clean velocity boost instead of Translate each frame
-        float forward = controller.facingRight ? uppercutForwardSpeed : -uppercutForwardSpeed;
-        controller.SetVelocity(new Vector2(forward, uppercutUpSpeed));
-
         HashSet<Health> hit = new HashSet<Health>();
         float elapsed = 0f;
 
-        while (elapsed < uppercutDuration)
+        float forward = controller.facingRight ? uppercutForwardSpeed : -uppercutForwardSpeed;
+
+        // --- Phase 1: short forward dash (little upward) ---
+        controller.SetVelocity(new Vector2(forward, uppercutUpSpeed * 0.25f));
+        float dashPhase = 0.12f; // tweak: how long forward dash lasts
+        while (elapsed < dashPhase)
         {
             elapsed += Time.deltaTime;
-
-            // enemy hit detection
-            Vector2 offset = new Vector2(
-                controller.facingRight ? uppercutBoxOffset.x : -uppercutBoxOffset.x,
-                uppercutBoxOffset.y
-            );
-            Vector2 center = (Vector2)transform.position + offset;
-
-            var cols = Physics2D.OverlapBoxAll(center, uppercutBoxSize, 0f, enemyMask);
-            foreach (var c in cols)
-            {
-                var h = c.GetComponentInParent<Health>();
-                if (h != null && !hit.Contains(h))
-                {
-                    hit.Add(h);
-                    float dmg = uppercutFlatDamage + UpgradeManager.instance.GetSwordUppercutBonus();
-                    Vector2 knockDir = (h.transform.position - transform.position).normalized;
-                    h.TakeDamage(dmg, knockDir);
-
-                    if (!h.isPlayer)
-                    {
-                        h.ApplyBloodMark();
-                        if (health != null && swordUppercutHealthCost > 0f)
-                        {
-                            float safeCost = Mathf.Min(swordUppercutHealthCost, health.CurrentHealth - 1f);
-                            if (safeCost > 0f)
-                                health.TakeDamage(safeCost);
-                        }
-                    }
-
-                    if (hitstop > 0f)
-                    {
-                        StartCoroutine(LocalHitstop(h.GetComponent<Rigidbody2D>(), hitstop));
-                        StartCoroutine(LocalHitstop(rb, hitstop));
-                    }
-
-                }
-            }
-
+            DoUppercutHitDetection(hit);
             yield return null;
         }
 
+        // --- Phase 2: rising slash (forward + strong upward) ---
+        controller.SetVelocity(new Vector2(forward * 0.7f, uppercutUpSpeed));
+        while (elapsed < uppercutDuration)
+        {
+            elapsed += Time.deltaTime;
+            DoUppercutHitDetection(hit);
+            yield return null;
+        }
+
+        // restore collisions
         if (collisionToggled)
             Physics2D.IgnoreLayerCollision(playerLayer, enemyLayer, false);
 
         if (controller) controller.externalVelocityOverride = false;
         usingSkill = false;
     }
+    private void DoUppercutHitDetection(HashSet<Health> hit)
+    {
+        Vector2 offset = new Vector2(
+            controller.facingRight ? uppercutBoxOffset.x : -uppercutBoxOffset.x,
+            uppercutBoxOffset.y
+        );
+        Vector2 center = (Vector2)transform.position + offset;
+
+        var cols = Physics2D.OverlapBoxAll(center, uppercutBoxSize, 0f, enemyMask);
+        foreach (var c in cols)
+        {
+            var h = c.GetComponentInParent<Health>();
+            if (h != null && !hit.Contains(h))
+            {
+                hit.Add(h);
+                float dmg = uppercutFlatDamage + UpgradeManager.instance.GetSwordUppercutBonus();
+                Vector2 knockDir = (h.transform.position - transform.position).normalized;
+                h.TakeDamage(dmg, knockDir);
+
+                if (!h.isPlayer)
+                {
+                    h.ApplyBloodMark();
+                    if (health != null && swordUppercutHealthCost > 0f)
+                    {
+                        float safeCost = Mathf.Min(swordUppercutHealthCost, health.CurrentHealth - 1f);
+                        if (safeCost > 0f)
+                            health.TakeDamage(safeCost);
+                    }
+                }
+
+                if (hitstop > 0f)
+                {
+                    StartCoroutine(LocalHitstop(h.GetComponent<Rigidbody2D>(), hitstop));
+                    StartCoroutine(LocalHitstop(rb, hitstop));
+                }
+            }
+        }
+    }
+
 
 
     #endregion
@@ -795,14 +807,25 @@ public class Skills : MonoBehaviour
     public IEnumerator LocalHitstop(Rigidbody2D targetRb, float duration)
     {
         PlayerController pc = targetRb ? targetRb.GetComponent<PlayerController>() : null;
+
+        Vector2 savedVel = Vector2.zero;
+        if (pc != null) savedVel = pc.GetVelocity();
+
+        // freeze
         if (pc != null) pc.SetHitstop(true);
         if (targetRb) targetRb.simulated = false;
 
         yield return new WaitForSecondsRealtime(duration);
 
-        if (pc != null) pc.SetHitstop(false);
+        // unfreeze
+        if (pc != null)
+        {
+            pc.SetHitstop(false);
+            pc.SetVelocity(savedVel);
+        }
         if (targetRb) targetRb.simulated = true;
     }
+
 
 
     private int SingleLayerIndex(LayerMask mask)

@@ -68,6 +68,8 @@ public class PlayerController : MonoBehaviour
     public bool IsGrounded { get; private set; }
 
     public bool isInHitstop { get; private set; }
+    public Vector2 GetVelocity() => velocity;
+
 
     public Vector2 CurrentVelocity => velocity;
 
