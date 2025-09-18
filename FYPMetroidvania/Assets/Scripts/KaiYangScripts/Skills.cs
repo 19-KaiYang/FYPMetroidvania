@@ -396,6 +396,8 @@ public class Skills : MonoBehaviour
         {
             t += Time.deltaTime;
 
+            controller.SetVelocity(Vector2.zero);
+
             // movement step
             Vector2 moveStep = dir * dashSpeed * Time.deltaTime;
 
@@ -465,6 +467,7 @@ public class Skills : MonoBehaviour
     }
 
 
+
     private IEnumerator Skill_SwordUppercut()
     {
         usingSkill = true;
@@ -472,6 +475,7 @@ public class Skills : MonoBehaviour
 
         if (controller) controller.externalVelocityOverride = true;
 
+        // temporarily disable collisions with enemies
         int playerLayer = gameObject.layer;
         int enemyLayer = SingleLayerIndex(enemyMask);
         bool collisionToggled = false;
@@ -481,20 +485,25 @@ public class Skills : MonoBehaviour
             collisionToggled = true;
         }
 
+        // one clean velocity boost instead of Translate each frame
+        float forward = controller.facingRight ? uppercutForwardSpeed : -uppercutForwardSpeed;
+        controller.SetVelocity(new Vector2(forward, uppercutUpSpeed));
+
         HashSet<Health> hit = new HashSet<Health>();
         float elapsed = 0f;
 
         while (elapsed < uppercutDuration)
         {
             elapsed += Time.deltaTime;
-            float forward = controller.facingRight ? uppercutForwardSpeed : -uppercutForwardSpeed;
-            rb.linearVelocity = new Vector2(forward, uppercutUpSpeed);
 
-            Vector2 offset = new Vector2(controller.facingRight ? uppercutBoxOffset.x : -uppercutBoxOffset.x,
-                                         uppercutBoxOffset.y);
+            // enemy hit detection
+            Vector2 offset = new Vector2(
+                controller.facingRight ? uppercutBoxOffset.x : -uppercutBoxOffset.x,
+                uppercutBoxOffset.y
+            );
             Vector2 center = (Vector2)transform.position + offset;
-            var cols = Physics2D.OverlapBoxAll(center, uppercutBoxSize, 0f, enemyMask);
 
+            var cols = Physics2D.OverlapBoxAll(center, uppercutBoxSize, 0f, enemyMask);
             foreach (var c in cols)
             {
                 var h = c.GetComponentInParent<Health>();
@@ -505,12 +514,9 @@ public class Skills : MonoBehaviour
                     Vector2 knockDir = (h.transform.position - transform.position).normalized;
                     h.TakeDamage(dmg, knockDir);
 
-                    //Apply Bloodmark
                     if (!h.isPlayer)
                     {
                         h.ApplyBloodMark();
-
-                        // Deduct blood cost health
                         if (health != null && swordUppercutHealthCost > 0f)
                         {
                             float safeCost = Mathf.Min(swordUppercutHealthCost, health.CurrentHealth - 1f);
@@ -519,14 +525,11 @@ public class Skills : MonoBehaviour
                         }
                     }
 
-
                     if (hitstop > 0f)
-                    {
                         StartCoroutine(LocalHitstop(h.GetComponent<Rigidbody2D>(), hitstop));
-                        StartCoroutine(LocalHitstop(rb, hitstop));
-                    }
                 }
             }
+
             yield return null;
         }
 
@@ -536,6 +539,8 @@ public class Skills : MonoBehaviour
         if (controller) controller.externalVelocityOverride = false;
         usingSkill = false;
     }
+
+
     #endregion
 
     #region Gauntlet Skills

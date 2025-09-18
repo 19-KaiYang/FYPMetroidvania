@@ -67,6 +67,8 @@ public class PlayerController : MonoBehaviour
     public bool HasAirUppercut { get; private set; }
     public bool IsGrounded { get; private set; }
 
+    public Vector2 CurrentVelocity => velocity;
+
     private void Awake()
     {
         instance = this;
@@ -294,6 +296,12 @@ public class PlayerController : MonoBehaviour
         Vector2 originRight = (Vector2)transform.position + Vector2.right * offsetX;
         return Physics2D.Raycast(originRight, Vector2.right, wallCheckDistance, groundLayer);
     }
+
+    public void SetVelocity(Vector2 newVel)
+    {
+        velocity = newVel;
+    }
+
 
     private void OnDrawGizmosSelected()
     {
