@@ -451,7 +451,13 @@ public class Skills : MonoBehaviour
                     }
 
                     if (hitstop > 0f)
+                    {
+                        // Enemy hitstop
                         StartCoroutine(LocalHitstop(h.GetComponent<Rigidbody2D>(), hitstop));
+                        // Player hitstop
+                        StartCoroutine(LocalHitstop(rb, hitstop));
+                    }
+
                 }
             }
 
@@ -526,7 +532,11 @@ public class Skills : MonoBehaviour
                     }
 
                     if (hitstop > 0f)
+                    {
                         StartCoroutine(LocalHitstop(h.GetComponent<Rigidbody2D>(), hitstop));
+                        StartCoroutine(LocalHitstop(rb, hitstop));
+                    }
+
                 }
             }
 
@@ -607,8 +617,9 @@ public class Skills : MonoBehaviour
                         if (hitstop > 0f)
                         {
                             StartCoroutine(LocalHitstop(h.GetComponent<Rigidbody2D>(), hitstop));
-                            StartCoroutine(LocalHitstop(rb, hitstop));
+                            StartCoroutine(LocalHitstop(rb, hitstop * 0.75f));
                         }
+
                     }
                 }
 
@@ -780,12 +791,19 @@ public class Skills : MonoBehaviour
         return Physics2D.OverlapCircle(controller.groundCheck.position, controller.groundCheckRadius, controller.groundLayer);
     }
 
-    private IEnumerator LocalHitstop(Rigidbody2D targetRb, float duration)
+
+    public IEnumerator LocalHitstop(Rigidbody2D targetRb, float duration)
     {
+        PlayerController pc = targetRb ? targetRb.GetComponent<PlayerController>() : null;
+        if (pc != null) pc.SetHitstop(true);
         if (targetRb) targetRb.simulated = false;
+
         yield return new WaitForSecondsRealtime(duration);
+
+        if (pc != null) pc.SetHitstop(false);
         if (targetRb) targetRb.simulated = true;
     }
+
 
     private int SingleLayerIndex(LayerMask mask)
     {
@@ -798,8 +816,7 @@ public class Skills : MonoBehaviour
     }
     #endregion
 
-    //Helper 
-
+    #region Gizmos
     private void OnDrawGizmosSelected()
     {
         // --- Sword Dash Box ---
@@ -823,5 +840,5 @@ public class Skills : MonoBehaviour
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, shockwaveRadius);
     }
-
+    #endregion
 }

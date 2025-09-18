@@ -5,6 +5,8 @@ using System.Collections.Generic;
 public class Hitbox : MonoBehaviour
 {
     private CombatSystem owner;
+    private Skills skills;
+
 
     [Header("Hitstop Settings")]
     public float hitstopDuration = 0.08f;
@@ -19,7 +21,11 @@ public class Hitbox : MonoBehaviour
     {
         owner = GetComponentInParent<CombatSystem>();
         col = GetComponent<Collider2D>();
-   
+        skills = Object.FindFirstObjectByType<Skills>();
+
+
+
+
     }
 
     private void OnEnable()
@@ -59,25 +65,30 @@ public class Hitbox : MonoBehaviour
                 h.TakeDamage(totalDamage, dir);
 
                 // hit stop activates
-                if (applyHitstopToEnemy)
-                    StartCoroutine(ApplyHitstop(h.GetComponent<Rigidbody2D>(), h.GetComponent<Animator>()));
+                if (skills != null)
+                {
+                    if (applyHitstopToEnemy)
+                        StartCoroutine(skills.LocalHitstop(h.GetComponent<Rigidbody2D>(), hitstopDuration));
 
-                if (applyHitstopToPlayer)
-                    StartCoroutine(ApplyHitstop(owner.GetComponent<Rigidbody2D>(), owner.GetComponent<Animator>()));
+                    if (applyHitstopToPlayer)
+                        StartCoroutine(skills.LocalHitstop(skills.GetComponent<Rigidbody2D>(), hitstopDuration));
+
+                }
+
             }
         }
     }
 
-    private IEnumerator ApplyHitstop(Rigidbody2D rb, Animator anim)
-    {
-        if (rb != null) rb.simulated = false;
-        if (anim != null) anim.speed = 0;
+    //private IEnumerator ApplyHitstop(Rigidbody2D rb, Animator anim)
+    //{
+    //    if (rb != null) rb.simulated = false;
+    //    if (anim != null) anim.speed = 0;
 
-        yield return new WaitForSecondsRealtime(hitstopDuration);
+    //    yield return new WaitForSecondsRealtime(hitstopDuration);
 
-        if (rb != null) rb.simulated = true;
-        if (anim != null) anim.speed = 1;
-    }
+    //    if (rb != null) rb.simulated = true;
+    //    if (anim != null) anim.speed = 1;
+    //}
 
     //Helper
     private void OnDrawGizmos()

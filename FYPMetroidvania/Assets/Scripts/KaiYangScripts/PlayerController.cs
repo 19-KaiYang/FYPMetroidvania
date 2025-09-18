@@ -67,6 +67,8 @@ public class PlayerController : MonoBehaviour
     public bool HasAirUppercut { get; private set; }
     public bool IsGrounded { get; private set; }
 
+    public bool isInHitstop { get; private set; }
+
     public Vector2 CurrentVelocity => velocity;
 
     private void Awake()
@@ -76,6 +78,7 @@ public class PlayerController : MonoBehaviour
         rb.bodyType = RigidbodyType2D.Kinematic; 
         rb.simulated = true;                     
 
+
         skills = GetComponentInChildren<Skills>();
         animator = GetComponentInChildren<Animator>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
@@ -83,6 +86,8 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        if (isInHitstop) return;
+
         // Dash timers
         if (isDashing)
         {
@@ -161,6 +166,8 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+
+        if (isInHitstop) return;
         // Apply gravity
         if (!isDashing)
             velocity.y += gravity * Time.fixedDeltaTime;
@@ -301,6 +308,15 @@ public class PlayerController : MonoBehaviour
     {
         velocity = newVel;
     }
+
+    //HIT STOP
+    public void SetHitstop(bool state)
+    {
+        isInHitstop = state;
+        if (state)
+            velocity = Vector2.zero; 
+    }
+
 
 
     private void OnDrawGizmosSelected()
