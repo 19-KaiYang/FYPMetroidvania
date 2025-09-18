@@ -549,6 +549,7 @@ public class Skills : MonoBehaviour
         usingSkill = true;
         gauntletShockCooldownTimer = gauntletShockCooldown;
 
+        // air to plunge
         if (!IsGrounded())
         {
             if (controller) controller.externalVelocityOverride = true;
@@ -564,10 +565,33 @@ public class Skills : MonoBehaviour
 
             HashSet<Health> hit = new HashSet<Health>();
 
-            while (!IsGrounded())
+            while (true)
             {
-                rb.linearVelocity = new Vector2(rb.linearVelocity.x, -plungeSpeed);
+                Vector2 moveStep = Vector2.down * plungeSpeed * Time.deltaTime;
 
+                //stop going thru ground
+                RaycastHit2D hitGround = Physics2D.BoxCast(
+                    transform.position,
+                    controller.colliderSize,
+                    0f,
+                    Vector2.down,
+                    moveStep.magnitude,
+                    controller.groundLayer
+                );
+
+                if (hitGround.collider != null)
+                {
+                    //hit ground
+                    float dist = hitGround.distance - 0.01f;
+                    transform.Translate(Vector2.down * dist);
+                    break; 
+                }
+                else
+                {
+                    transform.Translate(moveStep);
+                }
+
+                // enemy hit detection mid-plunge
                 Vector2 center = transform.position;
                 Collider2D[] cols = Physics2D.OverlapCircleAll(center, 0.6f, enemyMask);
                 foreach (var c in cols)
@@ -587,6 +611,7 @@ public class Skills : MonoBehaviour
                         }
                     }
                 }
+
                 yield return null;
             }
 
@@ -603,6 +628,7 @@ public class Skills : MonoBehaviour
 
         usingSkill = false;
     }
+
 
     private void DoShockwave()
     {
