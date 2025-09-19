@@ -5,7 +5,7 @@ public class Enemy : MonoBehaviour, IDamageable
     //[Header("-")]
     protected Rigidbody2D rb;
     protected Animator animator;
-    protected PlayerController player;
+    public PlayerController player;
     protected StateMachine stateMachine;
 
     [Header("Detaect")]
@@ -50,6 +50,18 @@ public class Enemy : MonoBehaviour, IDamageable
         Vector3 f = transform.localScale;
         f.x = -f.x;
         transform.localScale = f;
+    }
+
+    protected virtual void FaceToPlayer()
+    {
+        if (player.transform.position.x < transform.position.x && isFacingRight)
+        {
+            Flip();
+        }
+        else if (player.transform.position.x > transform.position.x && !isFacingRight)
+        {
+            Flip();
+        }
     }
 
     public virtual void TakeDamage(float _damage)

@@ -41,6 +41,10 @@ public class PlayerController : MonoBehaviour
     [Header("Collider")]
     public Vector2 colliderSize = new Vector2(0.5f, 1f);
 
+
+    public Rigidbody2D rb;
+    private Animator animator;
+    private SpriteRenderer spriteRenderer;
     public Rigidbody2D rb;
     private Animator animator;
     private SpriteRenderer spriteRenderer;
@@ -75,7 +79,16 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
-        instance = this;
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
         rb = GetComponent<Rigidbody2D>();
         rb.bodyType = RigidbodyType2D.Kinematic; 
         rb.simulated = true;                     
@@ -280,6 +293,8 @@ public class PlayerController : MonoBehaviour
 
     public void MarkAirSwordDash() => HasAirSwordDashed = true;
     public void MarkAirUppercut() => HasAirUppercut = true;
+
+
 
     public void Flip()
     {
