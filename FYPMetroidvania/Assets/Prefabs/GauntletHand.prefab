@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5772647505414360117}
   - component: {fileID: 2563242755087348423}
   m_Layer: 0
-  m_Name: GauntletProjectile
+  m_Name: GauntletHand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -105,14 +105,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1befedfb418add949ae0a4aa4af77629, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GauntletProjectile
+  rb: {fileID: 0}
+  col: {fileID: 0}
+  lineRenderer: {fileID: 0}
   speed: 15
-  damage: 10
-  terrainMask:
-    serializedVersion: 2
-    m_Bits: 128
-  enemyMask:
-    serializedVersion: 2
-    m_Bits: 64
 --- !u!58 &5772647505414360117
 CircleCollider2D:
   m_ObjectHideFlags: 0

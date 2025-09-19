@@ -165,7 +165,6 @@ public class FlyEnemy : Enemy
     public class FlyEnemyChaseState : IState
     {
         private FlyEnemy enemy;
-        private float startTime;
 
         public FlyEnemyChaseState(FlyEnemy _enemy)
         {
@@ -175,7 +174,6 @@ public class FlyEnemy : Enemy
         public void OnEnter()
         {
             Debug.Log("Enter FlyEnemy Chase State");
-            startTime = Time.time;
         }
         public void OnUpdate()
         {

@@ -3,12 +3,13 @@ using UnityEngine;
 
 public class GauntletProjectile : MonoBehaviour
 {
+    [Header("References")]
+    public Rigidbody2D rb;
+    public Collider2D col;
+    public LineRenderer lineRenderer;
+
     [Header("Movement")]
     public float speed = 18f;
-
-    private Rigidbody2D rb;
-    private Transform owner;
-    private float damage;
 
     [Header("Masks")]
     private LayerMask enemyMask;
@@ -17,7 +18,7 @@ public class GauntletProjectile : MonoBehaviour
     // States
     private bool isStuck = false;
     private bool isReturning = false;
-    private bool isFallen = false;   
+    private bool isFallen = false;
     private Vector2 stuckPoint;
     private HashSet<Health> hitThisFlight = new HashSet<Health>();
 
@@ -27,16 +28,20 @@ public class GauntletProjectile : MonoBehaviour
     private float maxLeashRange;
     private Vector2 launchOrigin;
 
+    // Owner + damage
+    private Transform owner;
+    private float damage;
+
     // ======================== Init ========================
     public void Init(
-     Transform owner,
-     Vector2 dir,
-     float damage,
-     LayerMask enemyMask,
-     LayerMask terrainMask,
-     float minRange,
-     float maxFlightRange,
-     float maxLeashRange)
+        Transform owner,
+        Vector2 dir,
+        float damage,
+        LayerMask enemyMask,
+        LayerMask terrainMask,
+        float minRange,
+        float maxFlightRange,
+        float maxLeashRange)
     {
         this.owner = owner;
         this.damage = damage;
@@ -47,20 +52,40 @@ public class GauntletProjectile : MonoBehaviour
         this.maxLeashRange = maxLeashRange;
         this.launchOrigin = owner.position;
 
-        rb = GetComponent<Rigidbody2D>();
-        if (!rb) rb = gameObject.AddComponent<Rigidbody2D>();
+        if (!rb) rb = GetComponent<Rigidbody2D>();
+        if (!col) col = GetComponent<Collider2D>();
+        if (!lineRenderer) lineRenderer = GetComponent<LineRenderer>();
 
         rb.gravityScale = 0f;
         rb.freezeRotation = true;
         rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
 
         rb.linearVelocity = dir.normalized * speed;
+
+        isStuck = false;
+        isFallen = false;
+        isReturning = false;
+
+        if (lineRenderer)
+        {
+            lineRenderer.enabled = true;
+            lineRenderer.positionCount = 2;
+        }
     }
 
     // =================================== Update ======================
     private void Update()
     {
-        if (isReturning && owner != null)
+        if (!owner) return;
+
+        // Update line renderer
+        if (lineRenderer && lineRenderer.enabled)
+        {
+            lineRenderer.SetPosition(0, owner.position);
+            lineRenderer.SetPosition(1, transform.position);
+        }
+
+        if (isReturning)
         {
             Vector2 dir = ((Vector2)owner.position - (Vector2)transform.position).normalized;
             rb.gravityScale = 0f;
@@ -85,28 +110,26 @@ public class GauntletProjectile : MonoBehaviour
         {
             float dist = Vector2.Distance(transform.position, launchOrigin);
 
-            //  Use flight range for dropping
+            //  Enable gravity for arc after max flight range
             if (maxFlightRange > 0f && dist > maxFlightRange)
             {
                 rb.gravityScale = 3f;
             }
         }
 
-        //  Use leash range for recall
-        if (owner != null && maxLeashRange > 0f &&
-            Vector2.Distance(transform.position, owner.position) > maxLeashRange)
+        //  Retract if beyond leash
+        if (maxLeashRange > 0f && Vector2.Distance(transform.position, owner.position) > maxLeashRange)
         {
             Retract();
         }
     }
-
 
     // ======================== Collision ========================
     private void OnTriggerEnter2D(Collider2D col)
     {
         int layerBit = 1 << col.gameObject.layer;
 
-        // Damage enemies both outbound and inbound
+        //  Damage enemies both outbound and inbound
         if ((enemyMask.value & layerBit) != 0)
         {
             var h = col.GetComponentInParent<Health>();
@@ -119,7 +142,7 @@ public class GauntletProjectile : MonoBehaviour
             return;
         }
 
-        // Stick if terrain hit while outbound
+        //  Stick to terrain if outbound & past minRange
         if (!isReturning && (terrainMask.value & layerBit) != 0)
         {
             float distFromOrigin = Vector2.Distance(transform.position, launchOrigin);
@@ -131,8 +154,6 @@ public class GauntletProjectile : MonoBehaviour
                 rb.linearVelocity = Vector2.zero;
             }
         }
-
-        // If falling and it hits ground, mark as fallen
         if (!isReturning && !isStuck && (terrainMask.value & layerBit) != 0)
         {
             isFallen = true;
@@ -149,6 +170,7 @@ public class GauntletProjectile : MonoBehaviour
             isStuck = false;
             isFallen = false;
             isReturning = true;
+            rb.gravityScale = 0f;
             hitThisFlight.Clear();
         }
     }

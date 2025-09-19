@@ -1,15 +1,18 @@
 using System.Collections;
-using System.Xml.Serialization;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public class MeleeEnemy : Enemy
 {
+    [SerializeField] private string currentState;
+
     [Header("Detaect")]
     [SerializeField] private Vector2 detectSize;
     [SerializeField] private Vector2 playerEscapeSize;
     [SerializeField] private Vector2 detectOffset;
     [SerializeField] private Vector2 playerEscapeOffset;
+    [SerializeField] private Vector2 attackArea;
+    [SerializeField] private Vector2 attackAreaOffset;
     [SerializeField] private float groundCheckSize;
     [SerializeField] private Vector2 groundCheckOffset;
 
@@ -23,36 +26,49 @@ public class MeleeEnemy : Enemy
     [SerializeField] private float jumpForceX;
     [SerializeField] private float gravityA;
     [SerializeField] private float gravityB;
-
-    
+    [SerializeField] private float distanceOffset;
 
     protected override void Awake()
     {
         base.Awake();
         stateMachine = new StateMachine();
 
+        stateMachine.stateChanged += OnStateChanged;
     }
     void Start()
     {
         stateMachine.Initialize(new MeleeEnemyIdleState(this));
+
+        Debug.Log(Random.value);
     }
 
     protected override void Update()
     {
         base.Update();
-
         stateMachine.Update();
         DetectPlayer();
 
-        if (Input.GetKeyDown(KeyCode.M))
+        if (rb.linearVelocity.y < 0)
         {
-            rb.linearVelocity = new Vector2(2*transform.localScale.x, 10);
+            rb.gravityScale = gravityB;
+        }
+        else
+        {
+            rb.gravityScale = gravityA;
+        }
+        if (Input.GetKey(KeyCode.M))
+        {
+            if (isGround)
+            {
+                rb.linearVelocity = new Vector2(jumpForceX * transform.localScale.x, jumpForceY);   
+            }
         }
         if (Input.GetKeyDown(KeyCode.N))
         {
             animator.SetTrigger("Attack");
         }
     }
+
 
     private void DetectPlayer()
     {
@@ -62,6 +78,7 @@ public class MeleeEnemy : Enemy
 
         Collider2D pDetected = Physics2D.OverlapBox((Vector2)transform.position + detectOffset, detectSize, 0f, playerLayer);
         Collider2D pEscaped = Physics2D.OverlapBox((Vector2)transform.position + playerEscapeOffset, playerEscapeSize, 0f, playerLayer);
+        Collider2D attack = Physics2D.OverlapBox((Vector2)transform.position + attackAreaOffset * transform.localScale.x, attackArea, 0f, playerLayer);
 
         Vector2 dir = (player.transform.position - transform.position).normalized;
         float distance = Vector2.Distance(transform.position, player.transform.position);
@@ -83,6 +100,39 @@ public class MeleeEnemy : Enemy
         }
     }
 
+    private void JumpToPlayer(Rigidbody2D _rb, Transform _enemy, Transform _player, float _jumpForceY, float offsetX)
+    {
+        float g = Mathf.Abs(Physics2D.gravity.y * _rb.gravityScale);
+
+        Vector2 enemyPos = _enemy.position;
+        Vector2 playerPos = _player.position;
+
+        float VelocitY = _jumpForceY;
+
+        float time = (2 * VelocitY) / g;
+
+        float direction = Mathf.Sign(playerPos.x - enemyPos.x);
+        float targetX = playerPos.x + direction * offsetX;
+
+        float velocitX = (targetX - enemyPos.x) / time;
+
+        _rb.linearVelocity = new Vector2(velocitX, VelocitY);
+    }
+
+    private void MoveBack()
+    {
+        if (isFacingRight)
+        {
+            rb.linearVelocity = new Vector2(-moveSpeed, 0);
+        }
+        else if(!isFacingRight) 
+        {
+            rb.linearVelocity = new Vector2(moveSpeed, 0);
+        }
+    }
+
+
+
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.orange;
@@ -92,7 +142,10 @@ public class MeleeEnemy : Enemy
         Gizmos.DrawWireCube((Vector2)transform.position + detectOffset, detectSize);
 
         Gizmos.color = Color.green;
-        Gizmos.DrawWireCube((Vector2)transform.position + detectOffset, playerEscapeSize);
+        Gizmos.DrawWireCube((Vector2)transform.position + playerEscapeOffset, playerEscapeSize);
+
+        Gizmos.color = Color.purple ;
+        Gizmos.DrawWireCube((Vector2)transform.position + attackAreaOffset * transform.localScale.x, attackArea);
 
         if (player != null && inDetectArea)
         {
@@ -105,12 +158,18 @@ public class MeleeEnemy : Enemy
         }
     }
 
+    void OnStateChanged(IState _state)
+    {
+        currentState = _state.GetType().Name;
+    }
+
     public class MeleeEnemyIdleState : IState
     {
         private MeleeEnemy enemy;
         public MeleeEnemyIdleState(MeleeEnemy _enemy)
         {
             enemy = _enemy;
+
         }
 
         public void OnEnter()
@@ -119,9 +178,10 @@ public class MeleeEnemy : Enemy
         }
         public void OnUpdate()
         {
+
             if (enemy.playerDetected)
             {
-                enemy.stateMachine.ChangeState(new MeleeEnemyAttackState(enemy));
+                enemy.stateMachine.ChangeState(new MeleeEnemyChaseState(enemy));
             }
         }
         public void OnExit()
@@ -133,6 +193,11 @@ public class MeleeEnemy : Enemy
     public class MeleeEnemyChaseState : IState
     {
         private MeleeEnemy enemy;
+
+        private float jumpAttackProbability = 0.3f;
+        private float attackCheckCooldown = 1f;
+        private float lastAttackCheckTime;
+
         public MeleeEnemyChaseState(MeleeEnemy _enemy)
         {
             enemy = _enemy;
@@ -143,7 +208,27 @@ public class MeleeEnemy : Enemy
         }
         public void OnUpdate()
         {
+            if (enemy.playerDetected)
+            {
+                if(Mathf.Abs(enemy.distanceToPlayer.x)<99 && Mathf.Abs(enemy.distanceToPlayer.x) > 6)
+                {
+                    //if (Time.time >= lastAttackCheckTime + attackCheckCooldown)
+                    //{
+                    //    lastAttackCheckTime = Time.time;
 
+                    //    if (Random.value < jumpAttackProbability)
+                    //    {
+                    //        enemy.stateMachine.ChangeState(new MeleeEnemyAttackState(enemy));
+                    //    }
+                    //}
+
+                    if (Input.GetKey(KeyCode.C))
+                    {
+                        enemy.stateMachine.ChangeState(new MeleeEnemyAttackState(enemy));
+                    }
+                    
+                }
+            }
         }
         public void OnExit()
         {
@@ -154,6 +239,8 @@ public class MeleeEnemy : Enemy
     public class MeleeEnemyAttackState : IState
     {
         private MeleeEnemy enemy;
+        private int state;
+        private bool hasJumped;
         public MeleeEnemyAttackState(MeleeEnemy _enemy)
         {
             enemy = _enemy;
@@ -161,11 +248,11 @@ public class MeleeEnemy : Enemy
 
         public void OnEnter()
         {
+            hasJumped = false;
+            state = Random.Range(1, 10);
+            Debug.Log("randon"+state);
 
-        }
-        public void OnUpdate()
-        {
-            if(enemy.rb.linearVelocity.y < 0)
+            if (enemy.rb.linearVelocity.y < 0)
             {
                 enemy.rb.gravityScale = enemy.gravityB;
             }
@@ -176,7 +263,22 @@ public class MeleeEnemy : Enemy
 
             if (enemy.isGround)
             {
-                enemy.rb.linearVelocity = new Vector2(enemy.jumpForceX * enemy.transform.localScale.x, enemy.jumpForceY);
+                //if (enemy.player.transform.position.x < enemy.transform.position.x)
+                //{
+                //    if (enemy.player.moveInput.x < 0) enemy.distanceOffset = 5;
+                //    else if (enemy.player.moveInput.x > 0) enemy.distanceOffset = -3;
+                //}
+                //else if (enemy.player.transform.position.x > enemy.transform.position.x)
+                //{
+                //    if (enemy.player.moveInput.x < 0) enemy.distanceOffset = -3;
+                //    else if (enemy.player.moveInput.x > 0) enemy.distanceOffset = 5;
+                //}
+
+                //enemy.rb.linearVelocity = new Vector2(enemy.jumpForceX, enemy.jumpForceY);
+
+                enemy.JumpToPlayer(enemy.rb, enemy.transform, enemy.player.transform, enemy.jumpForceY, enemy.distanceOffset);
+
+                enemy.StartCoroutine(Wait(0.1f));
             }
 
             if (enemy.player.transform.position.x < enemy.transform.position.x && enemy.isFacingRight)
@@ -188,12 +290,53 @@ public class MeleeEnemy : Enemy
                 enemy.Flip();
             }
         }
+        public void OnUpdate()
+        {
+            if (hasJumped && enemy.isGround)
+            {
+                //switch (state)
+                //{
+                //    case < 2:
+                //        enemy.stateMachine.ChangeState(new MeleeEnemyIdleState(enemy));
+                //        break;
+                //    case >= 2:
+                //        enemy.stateMachine.ChangeState(new MeleeEnemyIdleState(enemy));
+                //        break;
+                //}
+                enemy.stateMachine.ChangeState(new MeleeEnemyIdleState(enemy));
+            }   
+        }
+        public void OnExit()
+        {
+            enemy.distanceOffset = 0;
+        }
+
+        private IEnumerator Wait(float _time)
+        {
+            yield return new WaitForSeconds(_time);
+            hasJumped = true;
+        }
+    }
+
+    public class MeleeEnemyAttack2State : IState
+    {
+        private MeleeEnemy enemy;
+        public MeleeEnemyAttack2State   (MeleeEnemy _enemy)
+        {
+            enemy = _enemy;
+        }
+
+        public void OnEnter()
+        {
+
+        }
+        public void OnUpdate()
+        {
+
+        }
         public void OnExit()
         {
 
         }
-
-       
     }
-
 }
