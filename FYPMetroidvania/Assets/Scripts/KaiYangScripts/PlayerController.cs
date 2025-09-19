@@ -5,6 +5,8 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+    public static PlayerController instance;
+
     [Header("References")]
     public Transform spriteTransform;
 
@@ -25,10 +27,10 @@ public class PlayerController : MonoBehaviour
 
 
 
-    private Rigidbody2D rb;
+    public Rigidbody2D rb;
     private Animator animator;
     private SpriteRenderer spriteRenderer;
-    private Vector2 moveInput;
+    public Vector2 moveInput;
     private Vector2 dashDirection;
     private bool isGrounded;
     private bool isDashing;
@@ -45,6 +47,16 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
         rb = GetComponent<Rigidbody2D>();
 
         //  Auto-find Animator & SpriteRenderer
@@ -136,7 +148,7 @@ public class PlayerController : MonoBehaviour
 
 
 
-    private void Flip()
+    public void Flip()
     {
         facingRight = !facingRight;
 

@@ -5253,6 +5253,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 3643713224820082570, guid: 13775344399b2974daca82989c71d56e, type: 3}
+      propertyPath: m_Size.x
+      value: 0.26
+      objectReference: {fileID: 0}
+    - target: {fileID: 3643713224820082570, guid: 13775344399b2974daca82989c71d56e, type: 3}
+      propertyPath: m_Size.y
+      value: 0.35
+      objectReference: {fileID: 0}
     - target: {fileID: 5278410194848176884, guid: 13775344399b2974daca82989c71d56e, type: 3}
       propertyPath: isPlayer
       value: 1

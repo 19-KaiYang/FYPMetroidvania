@@ -12,6 +12,8 @@ public class SceneTransition : MonoBehaviour
     [SerializeField] private bool isTriggered = false;
     [SerializeField] private bool dir = true;
 
+
+
     private void Start()
     {
         if (nextSceneName == SceneTransitionManager.instance.lastSceneName && SceneTransitionManager.instance.isTrasition == true)
@@ -23,6 +25,7 @@ public class SceneTransition : MonoBehaviour
             //exitDirection = PlayerController.instance.spriteTransform.localScale;
 
             StartCoroutine(SceneTransitionManager.instance.MoveToNewScene(exitDirection, exitTime, dir));
+            StartCoroutine(SceneTransitionManager.instance.Fade(SceneTransitionManager.FadeDirection.OUT));
         }
     }
 
@@ -39,8 +42,8 @@ public class SceneTransition : MonoBehaviour
 
             SceneTransitionManager.instance.lastSceneName = SceneManager.GetActiveScene().name;
 
-            SceneManager.LoadScene(nextSceneName);
-
+            //SceneManager.LoadScene(nextSceneName);
+            
             //StartCoroutine(FadeSceneTransitionManager.Instance.sceneFade.FadeAndLoadScene(SceneFade.FadeDirection.IN, nextSceneName));
         }
     }
@@ -57,8 +60,8 @@ public class SceneTransition : MonoBehaviour
 
                 // PlayerController.Instance.cutScene = true;
 
-                SceneManager.LoadScene(nextSceneName);
-
+                //SceneManager.LoadScene(nextSceneName);
+                StartCoroutine(SceneTransitionManager.instance.FadeAndLoadScene(SceneTransitionManager.FadeDirection.IN, nextSceneName));
                 //StartCoroutine(FadeSceneTransitionManager.Instance.sceneFade.FadeAndLoadScene(SceneFade.FadeDirection.IN, nextSceneName));
             }
         }

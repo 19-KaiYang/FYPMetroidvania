@@ -18,8 +18,6 @@ public class RespawnManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
-        
     }
     void Start()
     {

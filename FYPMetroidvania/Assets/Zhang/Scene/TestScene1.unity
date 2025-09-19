@@ -233,6 +233,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8780616739343995702, guid: d21725a38083a5440af0e2af387f94f3, type: 3}
+      propertyPath: exitTime
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8780616739343995702, guid: d21725a38083a5440af0e2af387f94f3, type: 3}
       propertyPath: nextSceneName
       value: TestScene0
       objectReference: {fileID: 0}
@@ -535,6 +539,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   destroyOnDeath: 0
+  isPlayer: 0
+  spriteRenderer: {fileID: 0}
+  flashDuration: 0.1
+  hitSound: {fileID: 0}
+  deathSound: {fileID: 0}
+  knockbackForce: 5
 --- !u!114 &880777592
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -547,25 +557,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fa4667b65a52e84da64884ae45da734, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  baseAttackDamage: 10
   currentWeapon: 0
   weaponStatsList:
   - type: 0
-    damage: 0
-    range: 0
     attackCooldown: 0
     projectilePrefabs: []
     projectileSpeed: 0
     projectileLifetime: 3
   - type: 1
-    damage: 10
-    range: 0.6
     attackCooldown: 0.1
     projectilePrefabs: []
     projectileSpeed: 0
     projectileLifetime: 3
   - type: 2
-    damage: 5
-    range: 0
     attackCooldown: 0.2
     projectilePrefabs:
     - {fileID: 3091998704232215583, guid: bfab57cc7abdc004ab52b548f3c53d6f, type: 3}
@@ -573,11 +578,12 @@ MonoBehaviour:
     projectileLifetime: 0.3
   attackPointRight: {fileID: 1782727839}
   attackPointLeft: {fileID: 574545287}
-  attackPointUp: {fileID: 1908801759}
-  attackPointDown: {fileID: 1379454588}
-  enemyLayers:
-    serializedVersion: 2
-    m_Bits: 64
+  swordUpHitbox: {fileID: 0}
+  gauntletUpHitbox: {fileID: 0}
+  swordDownHitbox: {fileID: 0}
+  gauntletDownHitbox: {fileID: 0}
+  swordHitboxes: []
+  gauntletHitboxes: []
 --- !u!114 &880777593
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -633,6 +639,7 @@ MonoBehaviour:
     m_Bits: 128
   rb: {fileID: 0}
   moveInput: {x: 0, y: 0}
+  externalVelocityOverride: 0
 --- !u!50 &880777595
 Rigidbody2D:
   serializedVersion: 5
@@ -1318,63 +1325,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 880777598}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &1549303288
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 5089291840826235280, guid: ee182696bfe6fc841961ec2d6c8c5124, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -3.11531
-      objectReference: {fileID: 0}
-    - target: {fileID: 5089291840826235280, guid: ee182696bfe6fc841961ec2d6c8c5124, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.62155
-      objectReference: {fileID: 0}
-    - target: {fileID: 5089291840826235280, guid: ee182696bfe6fc841961ec2d6c8c5124, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5089291840826235280, guid: ee182696bfe6fc841961ec2d6c8c5124, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5089291840826235280, guid: ee182696bfe6fc841961ec2d6c8c5124, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5089291840826235280, guid: ee182696bfe6fc841961ec2d6c8c5124, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5089291840826235280, guid: ee182696bfe6fc841961ec2d6c8c5124, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5089291840826235280, guid: ee182696bfe6fc841961ec2d6c8c5124, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5089291840826235280, guid: ee182696bfe6fc841961ec2d6c8c5124, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5089291840826235280, guid: ee182696bfe6fc841961ec2d6c8c5124, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6342637972996166917, guid: ee182696bfe6fc841961ec2d6c8c5124, type: 3}
-      propertyPath: m_Name
-      value: -----SceneManager-----
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: ee182696bfe6fc841961ec2d6c8c5124, type: 3}
 --- !u!1 &1782727838
 GameObject:
   m_ObjectHideFlags: 0
@@ -1975,7 +1925,6 @@ Transform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 1549303288}
   - {fileID: 880777598}
   - {fileID: 1083237989}
   - {fileID: 2092010991}

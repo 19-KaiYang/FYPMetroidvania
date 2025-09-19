@@ -1,14 +1,20 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class SceneTransitionManager : MonoBehaviour
 {
-    public static SceneTransitionManager instance { get; private set; }
+    public static SceneTransitionManager instance;
 
     [SerializeField] public string lastSceneName;
     [SerializeField] public string currentSceneName;
     [SerializeField] public bool isTrasition = false;
+
+    [Header("fade")]
+    [SerializeField] private float fadeTime;
+    [SerializeField] private float fadeOutTime;
+    [SerializeField] private Image fadeImage;
 
     private void Awake()
     {
@@ -32,6 +38,49 @@ public class SceneTransitionManager : MonoBehaviour
     {   
         
     }
+    public enum FadeDirection
+    {
+        IN, OUT
+    }
+    public IEnumerator FadeAndLoadScene(FadeDirection _fadeDir, string _sceneName)
+    {
+        //fadeImage.enabled = true;
+        yield return Fade(_fadeDir);
+        SceneManager.LoadScene(_sceneName);
+    }
+    public IEnumerator Fade(FadeDirection _fadeDir)
+    {
+        float _startAlpha = _fadeDir == FadeDirection.OUT ? 1 : 0;
+        float _endAlpha = _fadeDir == FadeDirection.OUT ? 0 : 1;
+
+        if (_fadeDir == FadeDirection.OUT)
+        {
+            yield return new WaitForSeconds(fadeOutTime);
+            while (_startAlpha >= _endAlpha)
+            {
+                SetColorImage(ref _startAlpha, _fadeDir);
+                yield return null;
+            }
+            //fadeImage.enabled = false;
+        }
+        else
+        {
+            //fadeImage.enabled = true;
+            while (_startAlpha <= _endAlpha)
+            {
+                SetColorImage(ref _startAlpha, _fadeDir);
+                yield return null;
+            }
+        }
+    }
+    void SetColorImage(ref float _alpha, FadeDirection _fadeDir)
+    {
+        fadeImage.color = new Color(fadeImage.color.r,
+                                    fadeImage.color.g,
+                                    fadeImage.color.b, _alpha);
+
+        _alpha += Time.deltaTime * (1 / fadeTime) * (_fadeDir == FadeDirection.OUT ? -1 : 1);
+    }
 
     public IEnumerator MoveToNewScene(Vector2 exitDir, float delay, bool _dir)
     {
@@ -49,8 +98,6 @@ public class SceneTransitionManager : MonoBehaviour
             {
                 exitDir = PlayerController.instance.spriteTransform.localScale;
             }
-            
-
             player.moveInput.x = exitDir.x > 0 ? 1 : -1;
 
             //rb.linearVelocity = new Vector2(exitDir.x * 15, rb.linearVelocity.y);

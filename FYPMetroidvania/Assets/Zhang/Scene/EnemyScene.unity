@@ -328,7 +328,7 @@ Transform:
   m_GameObject: {fileID: 565422587}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -14.36512, y: -2.594871, z: 0}
+  m_LocalPosition: {x: 2.42, y: -2.594871, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -348,6 +348,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 561c6486d18beb343b01f9aeac18feb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MeleeEnemy
+  player: {fileID: 0}
   playerLayer:
     serializedVersion: 2
     m_Bits: 256
@@ -359,21 +360,29 @@ MonoBehaviour:
     m_Bits: 128
   maxHealth: 0
   currentHealth: 0
-  isDead: 0
-  moveSpeed: 0
+  isDead: 1
+  moveSpeed: -3.46
   isFacingRight: 1
   isFacingLeft: 0
   distanceToPlayer: {x: 0, y: 0}
+  currentState: 
   detectSize: {x: 10, y: 1.5}
-  playerEscapeSize: {x: 15, y: 5}
+  playerEscapeSize: {x: 30, y: 8.95}
   detectOffset: {x: 0, y: 0}
   playerEscapeOffset: {x: 0, y: 0}
+  attackArea: {x: 1.93, y: 0.67}
+  attackAreaOffset: {x: 1.73, y: 0}
   groundCheckSize: 0.05
   groundCheckOffset: {x: 0, y: -0.5}
   playerDetected: 0
   inDetectArea: 0
   inAttackArea: 0
   isGround: 0
+  jumpForceY: 12
+  jumpForceX: 0
+  gravityA: 3
+  gravityB: 3
+  distanceOffset: 0
 --- !u!95 &565422591
 Animator:
   serializedVersion: 7
@@ -412,7 +421,7 @@ Rigidbody2D:
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 3
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: c8000a6b7aae31a4e9fd27300081cd03, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -600,7 +609,7 @@ Transform:
   m_GameObject: {fileID: 675707286}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.8786616, y: -2.3463273, z: 0}
+  m_LocalPosition: {x: -1.8786616, y: 6.16, z: 0}
   m_LocalScale: {x: 1.5, y: 2.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -825,6 +834,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   destroyOnDeath: 0
+  isPlayer: 0
+  spriteRenderer: {fileID: 0}
+  flashDuration: 0.1
+  hitSound: {fileID: 0}
+  deathSound: {fileID: 0}
+  knockbackForce: 5
 --- !u!114 &901369158
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -837,25 +852,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fa4667b65a52e84da64884ae45da734, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  baseAttackDamage: 10
   currentWeapon: 0
   weaponStatsList:
   - type: 0
-    damage: 0
-    range: 0
     attackCooldown: 0
     projectilePrefabs: []
     projectileSpeed: 0
     projectileLifetime: 3
   - type: 1
-    damage: 10
-    range: 0.6
     attackCooldown: 0.1
     projectilePrefabs: []
     projectileSpeed: 0
     projectileLifetime: 3
   - type: 2
-    damage: 5
-    range: 0
     attackCooldown: 0.2
     projectilePrefabs:
     - {fileID: 3091998704232215583, guid: bfab57cc7abdc004ab52b548f3c53d6f, type: 3}
@@ -863,11 +873,12 @@ MonoBehaviour:
     projectileLifetime: 0.3
   attackPointRight: {fileID: 229803134}
   attackPointLeft: {fileID: 1981457432}
-  attackPointUp: {fileID: 1992622178}
-  attackPointDown: {fileID: 914272804}
-  enemyLayers:
-    serializedVersion: 2
-    m_Bits: 64
+  swordUpHitbox: {fileID: 0}
+  gauntletUpHitbox: {fileID: 0}
+  swordDownHitbox: {fileID: 0}
+  gauntletDownHitbox: {fileID: 0}
+  swordHitboxes: []
+  gauntletHitboxes: []
 --- !u!114 &901369159
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -923,6 +934,7 @@ MonoBehaviour:
     m_Bits: 128
   rb: {fileID: 0}
   moveInput: {x: 0, y: 0}
+  externalVelocityOverride: 0
 --- !u!50 &901369161
 Rigidbody2D:
   serializedVersion: 5
@@ -1063,7 +1075,7 @@ Transform:
   m_GameObject: {fileID: 901369156}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.885087, y: -0.47224307, z: 0}
+  m_LocalPosition: {x: -8.15, y: -0.47224307, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1814,7 +1826,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!50 &1879483529
 Rigidbody2D:
   serializedVersion: 5
@@ -1975,6 +1987,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ead5e900edc397d44bf4f8ddfafef221, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FlyEnemy
+  player: {fileID: 0}
   playerLayer:
     serializedVersion: 2
     m_Bits: 256
