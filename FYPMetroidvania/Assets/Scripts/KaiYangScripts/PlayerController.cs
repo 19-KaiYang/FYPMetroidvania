@@ -45,9 +45,6 @@ public class PlayerController : MonoBehaviour
     public Rigidbody2D rb;
     private Animator animator;
     private SpriteRenderer spriteRenderer;
-    public Rigidbody2D rb;
-    private Animator animator;
-    private SpriteRenderer spriteRenderer;
 
     public Vector2 moveInput;
     private Vector2 dashDirection;
