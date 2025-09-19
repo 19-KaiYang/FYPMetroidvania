@@ -7,6 +7,8 @@ public class EnergySystem : MonoBehaviour
     public float regenPerSecond = 5f;
 
     private float currentEnergy;
+    public bool HasEnough(float amount) => currentEnergy >= amount;
+
 
     private void Awake()
     {

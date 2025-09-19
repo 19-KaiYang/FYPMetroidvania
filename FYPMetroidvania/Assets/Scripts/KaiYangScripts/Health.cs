@@ -18,8 +18,18 @@ public class Health : MonoBehaviour
     [Header("Knockback")]
     public float knockbackForce = 5f;
 
+    //Enemy Use
+    [Header("Blood Mark")]
+    public bool isBloodMarked = false;
+    public float bloodMarkHealAmount = 10f;
+    public GameObject bloodMarkIcon;  
+
+
     private AudioSource audioSource;
     private Rigidbody2D rb;
+
+    public float CurrentHealth => currentHealth;
+
 
     private void Awake()
     {
@@ -71,6 +81,24 @@ public class Health : MonoBehaviour
     {
         Debug.Log($"{gameObject.name} has died!");
 
+        if (!isPlayer && isBloodMarked)
+        {
+            var player = PlayerController.instance;
+            if (player != null)
+            {
+                Health playerHealth = player.GetComponent<Health>();
+                if (playerHealth != null)
+                    playerHealth.Heal(bloodMarkHealAmount);
+            }
+        }
+
+        if (bloodMarkIcon != null)
+        {
+            var sr = bloodMarkIcon.GetComponent<SpriteRenderer>();
+            if (sr != null) sr.enabled = false;
+            bloodMarkIcon.SetActive(false);
+        }
+
         if (audioSource != null && deathSound != null)
             audioSource.PlayOneShot(deathSound);
 
@@ -79,6 +107,9 @@ public class Health : MonoBehaviour
         else
             gameObject.SetActive(false);
     }
+
+
+
 
     private IEnumerator RespawnPlayer()
     {
@@ -120,4 +151,25 @@ public class Health : MonoBehaviour
         yield return new WaitForSeconds(flashDuration);
         spriteRenderer.color = originalColor;
     }
+
+    public void ApplyBloodMark()
+    {
+        if (!isPlayer && !isBloodMarked)
+        {
+            isBloodMarked = true;
+
+            if (bloodMarkIcon != null)
+            {
+                bloodMarkIcon.SetActive(true); 
+
+                var sr = bloodMarkIcon.GetComponent<SpriteRenderer>();
+                if (sr != null) sr.enabled = true;
+            }
+        }
+    }
+
+
+
+
+
 }
