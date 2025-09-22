@@ -375,6 +375,8 @@ public class CombatSystem : MonoBehaviour
         comboTimer = 1f;
         attackCooldownTimer = attackCooldown;
 
+        animator.SetTrigger("DoAttack");
+        animator.SetInteger("ComboStep", comboStep);
 
         Debug.Log($"Performing Combo Step {comboStep} with {currentWeapon}");
     }

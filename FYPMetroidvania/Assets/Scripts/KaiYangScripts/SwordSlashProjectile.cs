@@ -1,35 +1,41 @@
 using UnityEngine;
 
-public class SwordSlashProjectile : MonoBehaviour
+public class SwordSlashProjectile : ProjectileBase
 {
-    public float damage = 20f;
     public float maxDistance = 10f;
     public float bloodCost;
     public float knockbackForce = 8f;
+    public float speed;
 
     private Vector3 startPos;
     private Health playerHealth;
 
-    void Start()
+    private void OnEnable()
     {
         startPos = transform.position;
         playerHealth = PlayerController.instance.GetComponent<Health>();
     }
 
-    void Update()
+    protected override void Move()
     {
+        // SwordSlash doesn't self-move, just dies after distance
         if (Vector3.Distance(startPos, transform.position) >= maxDistance)
-            Destroy(gameObject);
+            gameObject.SetActive(false);
     }
+
+    public void Init(Vector2 dir)
+    {
+        if (!rb) rb = GetComponent<Rigidbody2D>();
+        rb.linearVelocity = dir.normalized * speed;
+    }
+
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         Health enemy = collision.GetComponent<Health>();
         if (enemy != null && !enemy.isPlayer)
         {
-
             enemy.TakeDamage(damage);
-
             enemy.ApplyBloodMark();
 
             Rigidbody2D rbEnemy = enemy.GetComponent<Rigidbody2D>();
@@ -46,7 +52,7 @@ public class SwordSlashProjectile : MonoBehaviour
                     playerHealth.TakeDamage(safeCost);
             }
 
-            Destroy(gameObject); 
+            gameObject.SetActive(false);
         }
     }
 }

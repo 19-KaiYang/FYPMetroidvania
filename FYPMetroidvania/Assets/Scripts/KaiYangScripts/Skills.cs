@@ -215,8 +215,6 @@ public class Skills : MonoBehaviour
 
     public void TryUseSwordCrimsonWave()
     {
-
-        // Energy Cost
         float cost = swordSlashEnergyCost;
         if (cost < 0) cost = 0;
 
@@ -226,18 +224,17 @@ public class Skills : MonoBehaviour
         Vector2 dir = controller.facingRight ? Vector2.right : Vector2.left;
         Vector3 spawnPos = transform.position + (Vector3)(dir * 0.7f);
 
-
-        SwordSlashProjectile slash = ProjectileManager.instance.SpawnSwordSlash(spawnPos, Quaternion.identity);
-
-        if (slash != null)
+        SwordSlashProjectile proj = ProjectileManager.instance.SpawnSwordSlash(spawnPos, Quaternion.identity);
+        if (proj != null)
         {
-            slash.bloodCost = swordSlashBloodCost;
+            // assign only what’s needed
+            proj.bloodCost = swordSlashBloodCost;
 
-            Rigidbody2D rbProj = slash.GetComponent<Rigidbody2D>();
-            if (rbProj != null)
-                rbProj.linearVelocity = dir * 12f;
+            // initialize movement
+            proj.Init(dir);
         }
     }
+
 
 
 

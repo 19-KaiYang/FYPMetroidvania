@@ -1804,7 +1804,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9775e8ea9d8700e45a188ad7aade7a3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProjectileManager
-  basicProjectilePrefab: {fileID: 0}
   swordSlashPrefab: {fileID: 1827530487365237664, guid: 488d56ac8ae6b8f4887f0d811256ebfe, type: 3}
   gauntletPrefab: {fileID: 695010814415933552, guid: 1b44ea33bc24fd141b651ecb194a6593, type: 3}
   gauntletChargePrefab: {fileID: 2052117845091223822, guid: 0cd155da40cd8fa4e972d3f432d78ee0, type: 3}
@@ -2888,7 +2887,6 @@ MonoBehaviour:
   combatSystem: {fileID: 3667531655252450664}
   weaponIcon: {fileID: 1507188509}
   swordIcon: {fileID: 331284638908780446, guid: f1dbdbe2600667341b0b9d6cd4ddd813, type: 3}
-  tomeIcon: {fileID: 5974009189253629341, guid: 4a54f84124af9154d9fc3916d34ed6a0, type: 3}
   gauntletIcon: {fileID: 7383769937413905404, guid: 41ab7cf74a2df5d49bd836cfa17601f8, type: 3}
   noneIcon: {fileID: 0}
 --- !u!1 &1151025055
@@ -5194,7 +5192,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5849400672767626961, guid: 7284da21ccdd6d949aeb79e4d098aa1e, type: 3}
       propertyPath: weaponType
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
