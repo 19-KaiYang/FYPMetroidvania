@@ -40,6 +40,8 @@ public class ProjectileManager : MonoBehaviour
 
     public void ReturnToPool(GameObject obj)
     {
+        obj.SetActive(false); // This was missing!
+
         foreach (var kvp in pools)
         {
             if (obj.name.Contains(kvp.Key.name)) // match prefab name
@@ -49,6 +51,7 @@ public class ProjectileManager : MonoBehaviour
             }
         }
     }
+
 
     // === Typed Spawns ===
     public SwordSlashProjectile SpawnSwordSlash(Vector3 pos, Quaternion rot)

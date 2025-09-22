@@ -12,7 +12,6 @@ public class GauntletChargeProjectile : ProjectileBase
     public Sprite strongSprite;
 
     [Header("Projectile Settings")]
-    public float baseSpeed = 10f;
     public float lifeTime = 3f;
 
     [Header("Explosion Settings")]
@@ -27,9 +26,8 @@ public class GauntletChargeProjectile : ProjectileBase
         damage = dmg;
         knockback = kb;
         chargeRatio = ratio;
-
         if (rb)
-            rb.linearVelocity = dir * baseSpeed * Mathf.Lerp(1f, 1.5f, ratio);
+            rb.linearVelocity = dir * speed * Mathf.Lerp(1f, 1.5f, ratio);
 
         if (spriteRenderer != null)
         {

@@ -792,6 +792,10 @@ public class Skills : MonoBehaviour
         return Physics2D.OverlapCircle(controller.groundCheck.position, controller.groundCheckRadius, controller.groundLayer);
     }
 
+    public void ClearGauntlet()
+    {
+        activeGauntlet = null;
+    }
 
     public IEnumerator LocalHitstop(Rigidbody2D targetRb, float duration)
     {

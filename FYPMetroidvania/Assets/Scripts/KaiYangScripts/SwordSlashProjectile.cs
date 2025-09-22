@@ -5,7 +5,6 @@ public class SwordSlashProjectile : ProjectileBase
     public float maxDistance = 10f;
     public float bloodCost;
     public float knockbackForce = 8f;
-    public float speed;
 
     private Vector3 startPos;
     private Health playerHealth;

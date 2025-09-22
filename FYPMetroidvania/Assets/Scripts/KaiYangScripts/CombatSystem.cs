@@ -362,8 +362,7 @@ public class CombatSystem : MonoBehaviour
         {
             if (skills.GauntletDeployed)  
             {
-                skills.RetractGauntlet();
-                attackCooldownTimer = attackCooldown;
+                skills.RetractGauntlet(); // return 
                 return;
             }
         }

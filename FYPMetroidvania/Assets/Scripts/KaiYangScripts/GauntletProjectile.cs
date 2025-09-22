@@ -7,9 +7,6 @@ public class GauntletProjectile : ProjectileBase
     public Collider2D col;
     public LineRenderer lineRenderer;
 
-    [Header("Movement")]
-    public float speed = 18f;
-
     [Header("Masks")]
     private LayerMask enemyMask;
     private LayerMask terrainMask;
@@ -84,7 +81,22 @@ public class GauntletProjectile : ProjectileBase
             rb.linearVelocity = dir * speed;
 
             if (Vector2.Distance(transform.position, owner.position) < 0.35f)
-                gameObject.SetActive(false);
+            {
+                isReturning = false;
+                isStuck = false;
+                isFallen = false;
+                hitThisFlight.Clear();
+                if (lineRenderer) lineRenderer.enabled = false;
+
+                // Notify skills the gauntlet is done
+                var skills = owner.GetComponent<Skills>();
+                if (skills) skills.ClearGauntlet();
+
+
+                Despawn(); // return to pool
+            }
+
+
         }
         else if (isStuck)
         {
