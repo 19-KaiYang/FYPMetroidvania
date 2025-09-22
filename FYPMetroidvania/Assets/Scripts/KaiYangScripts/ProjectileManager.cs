@@ -1,77 +1,82 @@
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class ProjectileManager : MonoBehaviour
 {
     public static ProjectileManager instance;
 
     [Header("Projectile Prefabs")]
-    public GameObject basicProjectilePrefab;
     public GameObject swordSlashPrefab;
     public GameObject gauntletPrefab;
     public GameObject gauntletChargePrefab;
 
-    private List<GameObject> activeProjectiles = new List<GameObject>();
+    private Dictionary<GameObject, Queue<GameObject>> pools = new Dictionary<GameObject, Queue<GameObject>>();
 
     private void Awake()
     {
         if (instance == null) instance = this;
-        else Destroy(gameObject);
     }
 
-    // ===== Generic spawn =====
-    public T SpawnProjectile<T>(T prefab, Vector3 position, Quaternion rotation) where T : Projectile
+    private GameObject GetFromPool(GameObject prefab, Vector3 pos, Quaternion rot)
     {
-        T proj = Instantiate(prefab, position, rotation);
-        Register(proj.gameObject);
-        return proj;
+        if (!pools.ContainsKey(prefab))
+            pools[prefab] = new Queue<GameObject>();
+
+        GameObject obj;
+
+        if (pools[prefab].Count > 0)
+        {
+            obj = pools[prefab].Dequeue();
+            obj.transform.SetPositionAndRotation(pos, rot);
+            obj.SetActive(true);
+        }
+        else
+        {
+            obj = Instantiate(prefab, pos, rot);
+        }
+
+        return obj;
     }
 
-    // ===== Typed spawns (shortcut functions) =====
-    public SwordSlashProjectile SpawnSwordSlash(Vector3 position, Quaternion rotation)
+    public void ReturnToPool(GameObject obj)
     {
-        var go = Instantiate(swordSlashPrefab, position, rotation);
+        foreach (var kvp in pools)
+        {
+            if (obj.name.Contains(kvp.Key.name)) // match prefab name
+            {
+                pools[kvp.Key].Enqueue(obj);
+                return;
+            }
+        }
+    }
+
+    // === Typed Spawns ===
+    public SwordSlashProjectile SpawnSwordSlash(Vector3 pos, Quaternion rot)
+    {
+        var go = GetFromPool(swordSlashPrefab, pos, rot);
         var proj = go.GetComponent<SwordSlashProjectile>();
-        Register(proj.gameObject);
         return proj;
     }
 
-    public GauntletProjectile SpawnGauntlet(Vector3 position, Quaternion rotation)
+    public GauntletProjectile SpawnGauntlet(Vector3 pos, Quaternion rot)
     {
-        var go = Instantiate(gauntletPrefab, position, rotation);
-        var proj = go.GetComponent<GauntletProjectile>();
-        Register(proj.gameObject);
-        return proj;
+        var go = GetFromPool(gauntletPrefab, pos, rot);
+        return go.GetComponent<GauntletProjectile>();
     }
 
-    public GauntletChargeProjectile SpawnGauntletCharge(Vector3 position, Quaternion rotation)
+    public GauntletChargeProjectile SpawnGauntletCharge(Vector3 pos, Quaternion rot)
     {
-        var go = Instantiate(gauntletChargePrefab, position, rotation);
-        var proj = go.GetComponent<GauntletChargeProjectile>();
-        Register(proj.gameObject);
-        return proj;
+        var go = GetFromPool(gauntletChargePrefab, pos, rot);
+        return go.GetComponent<GauntletChargeProjectile>();
     }
 
-
-    // ===== Management =====
-    public void Register(GameObject proj)
-    {
-        if (!activeProjectiles.Contains(proj))
-            activeProjectiles.Add(proj);
-    }
-
-    public void Unregister(GameObject proj)
-    {
-        if (activeProjectiles.Contains(proj))
-            activeProjectiles.Remove(proj);
-    }
-
+    // Clear all active projectiles
     public void ClearAll()
     {
-        foreach (var proj in activeProjectiles)
+        foreach (var kvp in pools)
         {
-            if (proj != null) Destroy(proj);
+            foreach (var obj in kvp.Value)
+                obj.SetActive(false);
         }
-        activeProjectiles.Clear();
     }
 }

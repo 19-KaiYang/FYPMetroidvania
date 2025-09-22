@@ -9,7 +9,6 @@ public class WeaponIconUI : MonoBehaviour
 
     [Header("Icons")]
     public Sprite swordIcon;
-    public Sprite tomeIcon;
     public Sprite gauntletIcon;
     public Sprite noneIcon;
 
@@ -41,9 +40,6 @@ public class WeaponIconUI : MonoBehaviour
         {
             case WeaponType.Sword:
                 weaponIcon.sprite = swordIcon;
-                break;
-            case WeaponType.Tome:
-                weaponIcon.sprite = tomeIcon;
                 break;
             case WeaponType.Gauntlet:
                 weaponIcon.sprite = gauntletIcon;
