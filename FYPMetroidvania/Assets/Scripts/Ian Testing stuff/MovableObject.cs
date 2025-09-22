@@ -4,6 +4,9 @@ public class MovableObject : MonoBehaviour
 {
     private Rigidbody2D rb;
     public float force = 10f;
+    bool checkPlayer = false;
+
+    public PlayerController player;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -14,11 +17,24 @@ public class MovableObject : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            rb.AddForceY(force, ForceMode2D.Impulse);
+            rb.linearVelocityY += force;
+            if (player != null)
+            {
+                player.SetVelocity(rb.linearVelocity);
+            }
         }
-        if(Input.GetKeyDown(KeyCode.RightArrow))
+    }
+    private void FixedUpdate()
+    {
+        bool playerDetected = false;
+        RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position + new Vector3(0f,0.5f,0f), Vector2.up, 0.5f);
+        foreach(RaycastHit2D hit in hits )
         {
-            rb.AddForceX(force, ForceMode2D.Impulse);
+            if(hit.collider.gameObject.tag == "Player"){
+                if(player == null) player = hit.collider.gameObject.GetComponent<PlayerController>();
+                playerDetected = true; break;
+            }
         }
+        if (!playerDetected) player = null;
     }
 }
