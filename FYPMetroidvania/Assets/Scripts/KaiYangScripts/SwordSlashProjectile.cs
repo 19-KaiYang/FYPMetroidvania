@@ -17,9 +17,8 @@ public class SwordSlashProjectile : ProjectileBase
 
     protected override void Move()
     {
-        // SwordSlash doesn't self-move, just dies after distance
         if (Vector3.Distance(startPos, transform.position) >= maxDistance)
-            gameObject.SetActive(false);
+            Despawn();
     }
 
     public void Init(Vector2 dir)
@@ -27,7 +26,6 @@ public class SwordSlashProjectile : ProjectileBase
         if (!rb) rb = GetComponent<Rigidbody2D>();
         rb.linearVelocity = dir.normalized * speed;
     }
-
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -51,7 +49,7 @@ public class SwordSlashProjectile : ProjectileBase
                     playerHealth.TakeDamage(safeCost);
             }
 
-            gameObject.SetActive(false);
+            Despawn();
         }
     }
 }

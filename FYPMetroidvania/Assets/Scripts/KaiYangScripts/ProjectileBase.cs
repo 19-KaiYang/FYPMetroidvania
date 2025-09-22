@@ -27,6 +27,6 @@ public abstract class ProjectileBase : MonoBehaviour
             gameObject.SetActive(false);                   
     }
 
-
+    //CREATE YOUR OWN MOVEMENT IN YOUR PROJECTILES
 
 }

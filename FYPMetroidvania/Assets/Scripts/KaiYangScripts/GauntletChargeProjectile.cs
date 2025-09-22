@@ -78,6 +78,7 @@ public class GauntletChargeProjectile : ProjectileBase
             }
         }
 
-        gameObject.SetActive(false);
+        Despawn();
+
     }
 }
