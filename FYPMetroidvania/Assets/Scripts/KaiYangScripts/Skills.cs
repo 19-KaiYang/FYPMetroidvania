@@ -56,7 +56,6 @@ public class Skills : MonoBehaviour
     // ===================== CRIMSON WAVE =====================
 
     [Header("Crimson Wave")]
-    public GameObject swordSlashProjectilePrefab;
     public Transform projectileSpawnPoint; 
     public float swordSlashBloodCost = 5f;
     public float swordSlashEnergyCost;
@@ -84,8 +83,7 @@ public class Skills : MonoBehaviour
 
     // ===================== Rocket Hand =====================
 
-    [Header("Gauntlet Skill Requirements")]
-    public GameObject gauntletPrefab;
+
     private GauntletProjectile activeGauntlet;
 
     [Header("Rocket Hand")]
@@ -217,33 +215,26 @@ public class Skills : MonoBehaviour
 
     public void TryUseSwordCrimsonWave()
     {
-        if (swordSlashProjectilePrefab == null)
-            return;
-
-        // Energy Cost
         float cost = swordSlashEnergyCost;
         if (cost < 0) cost = 0;
 
         if (energy != null && !energy.TrySpend(cost))
-            return; 
+            return;
 
         Vector2 dir = controller.facingRight ? Vector2.right : Vector2.left;
         Vector3 spawnPos = transform.position + (Vector3)(dir * 0.7f);
 
-        GameObject proj = Instantiate(swordSlashProjectilePrefab, spawnPos, Quaternion.identity);
-
-        Rigidbody2D rbProj = proj.GetComponent<Rigidbody2D>();
-        if (rbProj != null)
+        SwordSlashProjectile proj = ProjectileManager.instance.SpawnSwordSlash(spawnPos, Quaternion.identity);
+        if (proj != null)
         {
-            rbProj.linearVelocity = dir * 12f; 
-        }
+            // assign only what’s needed
+            proj.bloodCost = swordSlashBloodCost;
 
-        SwordSlashProjectile slash = proj.GetComponent<SwordSlashProjectile>();
-        if (slash != null)
-        {
-            slash.bloodCost = swordSlashBloodCost;
+            // initialize movement
+            proj.Init(dir);
         }
     }
+
 
 
 
@@ -684,9 +675,7 @@ public class Skills : MonoBehaviour
         usingSkill = true;
 
         Vector2 dir = controller.facingRight ? Vector2.right : Vector2.left;
-        GameObject g = Instantiate(gauntletPrefab, transform.position, Quaternion.identity);
-        activeGauntlet = g.GetComponent<GauntletProjectile>();
-        if (!activeGauntlet) activeGauntlet = g.AddComponent<GauntletProjectile>();
+        activeGauntlet = ProjectileManager.instance.SpawnGauntlet(transform.position,Quaternion.identity);
 
         float dmg = gauntletLaunchDamage + UpgradeManager.instance.GetGauntletLaunchBonus();
         activeGauntlet.speed = gauntletLaunchSpeed;
@@ -803,6 +792,10 @@ public class Skills : MonoBehaviour
         return Physics2D.OverlapCircle(controller.groundCheck.position, controller.groundCheckRadius, controller.groundLayer);
     }
 
+    public void ClearGauntlet()
+    {
+        activeGauntlet = null;
+    }
 
     public IEnumerator LocalHitstop(Rigidbody2D targetRb, float duration)
     {

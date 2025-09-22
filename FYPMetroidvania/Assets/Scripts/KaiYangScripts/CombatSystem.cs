@@ -8,7 +8,6 @@ public enum WeaponType
 {
     None,
     Sword,
-    Tome,
     Gauntlet
 }
 
@@ -126,10 +125,7 @@ public class CombatSystem : MonoBehaviour
         if (Keyboard.current.digit1Key.wasPressedThisFrame && unlockedWeapons.Contains(WeaponType.Sword))
             SetWeapon(WeaponType.Sword);
 
-        if (Keyboard.current.digit2Key.wasPressedThisFrame && unlockedWeapons.Contains(WeaponType.Tome))
-            SetWeapon(WeaponType.Tome);
-
-        if (Keyboard.current.digit3Key.wasPressedThisFrame && unlockedWeapons.Contains(WeaponType.Gauntlet))
+        if (Keyboard.current.digit2Key.wasPressedThisFrame && unlockedWeapons.Contains(WeaponType.Gauntlet))
             SetWeapon(WeaponType.Gauntlet);
 
 
@@ -366,8 +362,7 @@ public class CombatSystem : MonoBehaviour
         {
             if (skills.GauntletDeployed)  
             {
-                skills.RetractGauntlet();
-                attackCooldownTimer = attackCooldown;
+                skills.RetractGauntlet(); // return 
                 return;
             }
         }
@@ -379,15 +374,8 @@ public class CombatSystem : MonoBehaviour
         comboTimer = 1f;
         attackCooldownTimer = attackCooldown;
 
-        if (currentWeapon == WeaponType.Tome)
-        {
-            ShootProjectile();
-        }
-        else
-        {
-            animator.SetTrigger("DoAttack");
-            animator.SetInteger("ComboStep", comboStep);
-        }
+        animator.SetTrigger("DoAttack");
+        animator.SetInteger("ComboStep", comboStep);
 
         Debug.Log($"Performing Combo Step {comboStep} with {currentWeapon}");
     }

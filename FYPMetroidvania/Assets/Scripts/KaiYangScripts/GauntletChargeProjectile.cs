@@ -1,9 +1,7 @@
 using UnityEngine;
 
-public class GauntletChargeProjectile : MonoBehaviour
+public class GauntletChargeProjectile : ProjectileBase
 {
-    private Rigidbody2D rb;
-    private float damage;
     private float knockback;
     private float chargeRatio;
 
@@ -14,7 +12,6 @@ public class GauntletChargeProjectile : MonoBehaviour
     public Sprite strongSprite;
 
     [Header("Projectile Settings")]
-    public float baseSpeed = 10f;
     public float lifeTime = 3f;
 
     [Header("Explosion Settings")]
@@ -22,19 +19,16 @@ public class GauntletChargeProjectile : MonoBehaviour
     public float midExplosionRadius = 2f;
     public float maxExplosionRadius = 3f;
 
-    public LayerMask enemyMask; 
+    public LayerMask enemyMask;
 
     public void Init(Vector2 dir, float dmg, float kb, float ratio)
     {
-        rb = GetComponent<Rigidbody2D>();
         damage = dmg;
         knockback = kb;
         chargeRatio = ratio;
+        if (rb)
+            rb.linearVelocity = dir * speed * Mathf.Lerp(1f, 1.5f, ratio);
 
-        // Projectile speed scales slightly with charge
-        rb.linearVelocity = dir * baseSpeed * Mathf.Lerp(1f, 1.5f, ratio);
-
-        // Choose sprite
         if (spriteRenderer != null)
         {
             if (ratio < 0.33f && weakSprite != null)
@@ -45,12 +39,16 @@ public class GauntletChargeProjectile : MonoBehaviour
                 spriteRenderer.sprite = strongSprite;
         }
 
-        Destroy(gameObject, lifeTime);
+        Invoke(nameof(Explode), lifeTime);
+    }
+
+    protected override void Move()
+    {
+        
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // explode on hitting something valid
         Health target = other.GetComponent<Health>();
         if (target != null && !target.isPlayer)
         {
@@ -60,7 +58,6 @@ public class GauntletChargeProjectile : MonoBehaviour
 
     private void Explode()
     {
-        // pick radius based on charge level
         float radius = (chargeRatio < 0.33f) ? minExplosionRadius :
                        (chargeRatio < 0.66f) ? midExplosionRadius : maxExplosionRadius;
 
@@ -81,24 +78,6 @@ public class GauntletChargeProjectile : MonoBehaviour
             }
         }
 
-        Debug.Log($"Gauntlet shot exploded with radius {radius} and damage {damage}");
-
-        Destroy(gameObject);
+        gameObject.SetActive(false);
     }
-
-
-
-    //Helper
-
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-
-        // pick radius based on chargeRatio
-        float radius = (chargeRatio < 0.33f) ? minExplosionRadius :
-                       (chargeRatio < 0.66f) ? midExplosionRadius : maxExplosionRadius;
-
-        Gizmos.DrawWireSphere(transform.position, radius);
-    }
-
 }
