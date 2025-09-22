@@ -73,12 +73,12 @@ public class GauntletProjectile : MonoBehaviour
         }
     }
 
-    // =================================== Update ======================
+    // ======================== Update ========================
     private void Update()
     {
         if (!owner) return;
 
-        // Update line renderer
+        // Update tether line
         if (lineRenderer && lineRenderer.enabled)
         {
             lineRenderer.SetPosition(0, owner.position);
@@ -92,9 +92,7 @@ public class GauntletProjectile : MonoBehaviour
             rb.linearVelocity = dir * speed;
 
             if (Vector2.Distance(transform.position, owner.position) < 0.35f)
-            {
                 Destroy(gameObject);
-            }
         }
         else if (isStuck)
         {
@@ -110,18 +108,14 @@ public class GauntletProjectile : MonoBehaviour
         {
             float dist = Vector2.Distance(transform.position, launchOrigin);
 
-            //  Enable gravity for arc after max flight range
+            // Enable gravity arc after max flight range
             if (maxFlightRange > 0f && dist > maxFlightRange)
-            {
                 rb.gravityScale = 3f;
-            }
         }
 
-        //  Retract if beyond leash
+        // Retract if beyond leash
         if (maxLeashRange > 0f && Vector2.Distance(transform.position, owner.position) > maxLeashRange)
-        {
             Retract();
-        }
     }
 
     // ======================== Collision ========================
@@ -129,7 +123,7 @@ public class GauntletProjectile : MonoBehaviour
     {
         int layerBit = 1 << col.gameObject.layer;
 
-        //  Damage enemies both outbound and inbound
+        // Damage enemies
         if ((enemyMask.value & layerBit) != 0)
         {
             var h = col.GetComponentInParent<Health>();
@@ -142,7 +136,7 @@ public class GauntletProjectile : MonoBehaviour
             return;
         }
 
-        //  Stick to terrain if outbound & past minRange
+        // Stick to terrain if outbound & past minRange
         if (!isReturning && (terrainMask.value & layerBit) != 0)
         {
             float distFromOrigin = Vector2.Distance(transform.position, launchOrigin);
@@ -154,6 +148,8 @@ public class GauntletProjectile : MonoBehaviour
                 rb.linearVelocity = Vector2.zero;
             }
         }
+
+        // Fall if outbound and not stuck
         if (!isReturning && !isStuck && (terrainMask.value & layerBit) != 0)
         {
             isFallen = true;
@@ -177,4 +173,6 @@ public class GauntletProjectile : MonoBehaviour
 
     // ======================== State Queries ========================
     public bool IsStuck() => isStuck || isFallen;
+
+
 }
