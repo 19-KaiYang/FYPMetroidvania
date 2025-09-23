@@ -381,31 +381,7 @@ public class CombatSystem : MonoBehaviour
     }
 
 
-    private void ShootProjectile()
-    {
-        WeaponStats stats = weaponStatsList.Find(w => w.type == currentWeapon);
-        if (stats == null || stats.projectilePrefabs.Count == 0) return;
-
-        Transform spawnPoint = controller.facingRight ? attackPointRight : attackPointLeft;
-        Vector2 direction = controller.facingRight ? Vector2.right : Vector2.left;
-
-        foreach (GameObject prefab in stats.projectilePrefabs)
-        {
-            GameObject proj = Instantiate(prefab, spawnPoint.position, Quaternion.identity);
-
-            Rigidbody2D rb = proj.GetComponent<Rigidbody2D>();
-            if (rb != null)
-                rb.linearVelocity = direction * stats.projectileSpeed;
-
-            Projectile projectileScript = proj.GetComponent<Projectile>();
-            if (projectileScript != null)
-            {
-                float damageMultiplier = GetDamageMultiplier(comboStep);
-                projectileScript.damage = attackDamage * damageMultiplier;
-                projectileScript.lifeTime = stats.projectileLifetime;
-            }
-        }
-    }
+ 
 
     // === HITBOX HELPERS ===
     public void EnableHitbox(int index)

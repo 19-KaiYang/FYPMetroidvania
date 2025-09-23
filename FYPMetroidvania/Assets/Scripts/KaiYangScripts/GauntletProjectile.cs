@@ -129,8 +129,9 @@ public class GauntletProjectile : ProjectileBase
             if (h != null && !hitThisFlight.Contains(h))
             {
                 hitThisFlight.Add(h);
-                Vector2 knock = ((Vector2)col.transform.position - (Vector2)transform.position).normalized;
-                h.TakeDamage(damage, knock);
+                Vector2 dir = ((Vector2)col.transform.position - (Vector2)transform.position).normalized;
+                h.TakeDamage(damage);
+                ApplyKnockback(h, dir);
             }
             return;
         }

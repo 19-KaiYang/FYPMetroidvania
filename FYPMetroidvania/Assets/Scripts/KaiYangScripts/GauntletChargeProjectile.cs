@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class GauntletChargeProjectile : ProjectileBase
 {
-    private float knockback;
     private float chargeRatio;
     private bool hasExploded = false; 
 
@@ -88,7 +87,7 @@ public class GauntletChargeProjectile : ProjectileBase
                 if (trb != null)
                 {
                     Vector2 dir = (trb.transform.position - transform.position).normalized;
-                    trb.AddForce(dir * knockback, ForceMode2D.Impulse);
+                    ApplyKnockback(h, dir);
                 }
             }
         }

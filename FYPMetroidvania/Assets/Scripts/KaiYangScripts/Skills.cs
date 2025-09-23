@@ -675,11 +675,10 @@ public class Skills : MonoBehaviour
         usingSkill = true;
 
         Vector2 dir = controller.facingRight ? Vector2.right : Vector2.left;
-        activeGauntlet = ProjectileManager.instance.SpawnGauntlet(transform.position,Quaternion.identity);
 
-        float dmg = gauntletLaunchDamage + UpgradeManager.instance.GetGauntletLaunchBonus();
+        activeGauntlet = ProjectileManager.instance.SpawnGauntlet(transform.position,Quaternion.identity);
         activeGauntlet.speed = gauntletLaunchSpeed;
-        activeGauntlet.Init(transform, dir, dmg, enemyMask, terrainMask,
+        activeGauntlet.Init(transform, dir, activeGauntlet.damage, enemyMask, terrainMask,
             gauntletMinRange, gauntletMaxFlightRange, gauntletMaxLeashRange);
 
         usingSkill = false;
