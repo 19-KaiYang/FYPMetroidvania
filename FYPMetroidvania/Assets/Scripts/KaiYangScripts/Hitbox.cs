@@ -52,7 +52,7 @@ public class Hitbox : MonoBehaviour
         if (other.CompareTag("Hurtbox"))
         {
             Health h = other.GetComponentInParent<Health>();
-            if (h != null && !hitEnemies.Contains(h)) 
+            if (h != null && !hitEnemies.Contains(h))
             {
                 hitEnemies.Add(h);
 
@@ -64,6 +64,11 @@ public class Hitbox : MonoBehaviour
                 // Apply damage + knockback
                 h.TakeDamage(totalDamage, dir);
 
+                if (!h.isPlayer)
+                {
+                    h.ApplyBloodMark();
+                }
+
                 // hit stop activates
                 if (skills != null)
                 {
@@ -72,12 +77,11 @@ public class Hitbox : MonoBehaviour
 
                     if (applyHitstopToPlayer)
                         StartCoroutine(skills.LocalHitstop(skills.GetComponent<Rigidbody2D>(), hitstopDuration));
-
                 }
-
             }
         }
     }
+
 
     //private IEnumerator ApplyHitstop(Rigidbody2D rb, Animator anim)
     //{

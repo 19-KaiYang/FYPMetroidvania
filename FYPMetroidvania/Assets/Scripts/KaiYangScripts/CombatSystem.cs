@@ -377,6 +377,8 @@ public class CombatSystem : MonoBehaviour
         animator.SetTrigger("DoAttack");
         animator.SetInteger("ComboStep", comboStep);
 
+        controller.externalVelocityOverride = false;
+
         Debug.Log($"Performing Combo Step {comboStep} with {currentWeapon}");
     }
 
