@@ -64,9 +64,14 @@ public class Enemy : MonoBehaviour, IDamageable
         }
     }
 
-    public virtual void TakeDamage(float _damage)
+    public virtual void TakeDamage(float _damage, Vector2 _dir)
     {
+        currentHealth -= _damage;
 
+        if(currentHealth <= 0)
+        {
+            Die();
+        }
     }
 
     public virtual void Die()

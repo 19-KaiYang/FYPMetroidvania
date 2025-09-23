@@ -28,6 +28,13 @@ public class MeleeEnemy : Enemy
     [SerializeField] private float gravityB;
     [SerializeField] private float distanceOffset;
 
+    [SerializeField] private float meleeAttackCooldown;
+    [SerializeField] private float meleeAttackTimer;
+    [SerializeField] private bool isAttackFinished;
+
+    [SerializeField] private float jumpCooldown;
+    [SerializeField] private float jumpTimer;
+
     protected override void Awake()
     {
         base.Awake();
@@ -38,10 +45,7 @@ public class MeleeEnemy : Enemy
     void Start()
     {
         stateMachine.Initialize(new MeleeEnemyIdleState(this));
-
-        Debug.Log(Random.value);
     }
-
     protected override void Update()
     {
         base.Update();
@@ -68,8 +72,6 @@ public class MeleeEnemy : Enemy
             animator.SetTrigger("Attack");
         }
     }
-
-
     private void DetectPlayer()
     {
         Collider2D ground = Physics2D.OverlapCircle((Vector2)transform.position + groundCheckOffset, groundCheckSize, groundleLayer);
@@ -98,8 +100,10 @@ public class MeleeEnemy : Enemy
         {
             playerDetected = false;
         }
-    }
 
+        if (attack != null) inAttackArea = true;
+        else if (attack == null) inAttackArea = false;
+    }
     private void JumpToPlayer(Rigidbody2D _rb, Transform _enemy, Transform _player, float _jumpForceY, float offsetX)
     {
         float g = Mathf.Abs(Physics2D.gravity.y * _rb.gravityScale);
@@ -118,7 +122,6 @@ public class MeleeEnemy : Enemy
 
         _rb.linearVelocity = new Vector2(velocitX, VelocitY);
     }
-
     private void MoveBack()
     {
         if (isFacingRight)
@@ -130,9 +133,6 @@ public class MeleeEnemy : Enemy
             rb.linearVelocity = new Vector2(moveSpeed, 0);
         }
     }
-
-
-
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.orange;
@@ -157,10 +157,16 @@ public class MeleeEnemy : Enemy
             Gizmos.DrawLine(transform.position, player.transform.position);
         }
     }
-
     void OnStateChanged(IState _state)
     {
         currentState = _state.GetType().Name;
+    }
+
+    public override void TakeDamage(float _damage, Vector2 _dir)
+    {
+        base.TakeDamage(_damage, _dir);
+
+
     }
 
     public class MeleeEnemyIdleState : IState
@@ -174,7 +180,7 @@ public class MeleeEnemy : Enemy
 
         public void OnEnter()
         {
-            Debug.Log("Enter Melee Idle state");
+            //Debug.Log("Enter Melee Idle state");
         }
         public void OnUpdate()
         {
@@ -194,9 +200,7 @@ public class MeleeEnemy : Enemy
     {
         private MeleeEnemy enemy;
 
-        private float jumpAttackProbability = 0.3f;
-        private float attackCheckCooldown = 1f;
-        private float lastAttackCheckTime;
+        private float attack_2_Cooldown;
 
         public MeleeEnemyChaseState(MeleeEnemy _enemy)
         {
@@ -204,35 +208,60 @@ public class MeleeEnemy : Enemy
         }
         public void OnEnter()
         {
-
+            enemy.meleeAttackCooldown = Random.Range(1f, 2f);
+            enemy.jumpCooldown = Random.Range(1f, 3f);
         }
         public void OnUpdate()
         {
             if (enemy.playerDetected)
             {
-                if(Mathf.Abs(enemy.distanceToPlayer.x)<99 && Mathf.Abs(enemy.distanceToPlayer.x) > 6)
+                if (Mathf.Abs(enemy.distanceToPlayer.x) >= Mathf.Abs(enemy.attackAreaOffset.x))
                 {
-                    //if (Time.time >= lastAttackCheckTime + attackCheckCooldown)
-                    //{
-                    //    lastAttackCheckTime = Time.time;
+                    enemy.FaceToPlayer();
+                    enemy.rb.linearVelocity = new Vector2(enemy.moveSpeed * enemy.transform.localScale.x, 0);
+                }
 
-                    //    if (Random.value < jumpAttackProbability)
+                
+
+                if (Mathf.Abs(enemy.distanceToPlayer.x) < 99 && Mathf.Abs(enemy.distanceToPlayer.x) > Mathf.Abs(enemy.attackAreaOffset.x * 2))
+                {
+                    enemy.jumpTimer += Time.deltaTime;
+                    if(enemy.jumpTimer>= enemy.jumpCooldown)
+                    {
+                        enemy.stateMachine.ChangeState(new MeleeEnemyAttackState(enemy));
+                    }
+                }
+                else
+                {
+                    enemy.meleeAttackTimer += Time.deltaTime;
+
+                    if (enemy.meleeAttackTimer >= enemy.meleeAttackCooldown)
+                    {
+                        enemy.stateMachine.ChangeState(new MeleeEnemyAttack2State(enemy));
+                    }
+                }
+
+                //if (Mathf.Abs(enemy.distanceToPlayer.x) < 99 && Mathf.Abs(enemy.distanceToPlayer.x) > 5.5f)
+                //{
+                //    if (Time.time >= lastAttackCheckTime + attackCheckCooldown)
+                //    {
+                //        lastAttackCheckTime = Time.time;
+
+                    //        if (Random.value < jumpAttackProbability)
+                    //        {
+                    //            enemy.stateMachine.ChangeState(new MeleeEnemyAttackState(enemy));
+                    //        }
+                    //    }
+
+                    //    if (Input.GetKey(KeyCode.C))
                     //    {
                     //        enemy.stateMachine.ChangeState(new MeleeEnemyAttackState(enemy));
                     //    }
                     //}
-
-                    if (Input.GetKey(KeyCode.C))
-                    {
-                        enemy.stateMachine.ChangeState(new MeleeEnemyAttackState(enemy));
-                    }
-                    
-                }
             }
         }
         public void OnExit()
         {
-
         }
     }
 
@@ -249,6 +278,7 @@ public class MeleeEnemy : Enemy
         public void OnEnter()
         {
             hasJumped = false;
+            enemy.jumpTimer = 0;
             state = Random.Range(1, 10);
             Debug.Log("randon"+state);
 
@@ -328,11 +358,16 @@ public class MeleeEnemy : Enemy
 
         public void OnEnter()
         {
-
+            enemy.animator.SetTrigger("Attack");
+            enemy.isAttackFinished = false;
+            enemy.meleeAttackTimer = 0;
         }
         public void OnUpdate()
         {
-
+            if(enemy.isAttackFinished)
+            {
+                enemy.stateMachine.ChangeState(new MeleeEnemyChaseState(enemy));
+            }
         }
         public void OnExit()
         {
