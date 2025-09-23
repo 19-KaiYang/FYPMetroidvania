@@ -42,8 +42,6 @@ public class Health : MonoBehaviour
 
     public void TakeDamage(float amount, Vector2? hitDirection = null)
     {
-        Debug.Log($"{gameObject.name} took {amount} damage! Remaining HP: {currentHealth}/{maxHealth}");
-
         currentHealth -= amount;
 
         // Visual feedback

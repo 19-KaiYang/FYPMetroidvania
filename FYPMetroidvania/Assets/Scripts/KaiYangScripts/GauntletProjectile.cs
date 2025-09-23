@@ -150,7 +150,7 @@ public class GauntletProjectile : ProjectileBase
                 Retract();
             }
         }
-        else if ((terrainMask.value & layerBit) != 0) 
+        else if ((terrainMask.value & layerBit) != 0)
         {
             // Immediately retract on terrain hit
             Retract();
