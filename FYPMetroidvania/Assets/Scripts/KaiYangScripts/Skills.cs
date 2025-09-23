@@ -96,7 +96,8 @@ public class Skills : MonoBehaviour
     public float gauntletSkillEnergyCost;
 
     public bool GauntletDeployed => activeGauntlet != null;
-    public bool HasStuckGauntlet() => activeGauntlet != null && activeGauntlet.IsStuck();
+    public bool HasActiveGauntlet() => activeGauntlet != null;
+
 
 
     // ===================== GAUNTLET CHARGE SHOT =====================
@@ -678,8 +679,8 @@ public class Skills : MonoBehaviour
 
         activeGauntlet = ProjectileManager.instance.SpawnGauntlet(transform.position,Quaternion.identity);
         activeGauntlet.speed = gauntletLaunchSpeed;
-        activeGauntlet.Init(transform, dir, activeGauntlet.damage, enemyMask, terrainMask,
-            gauntletMinRange, gauntletMaxFlightRange, gauntletMaxLeashRange);
+        activeGauntlet.Init(transform, dir, activeGauntlet.damage, enemyMask, terrainMask,gauntletMaxFlightRange, gauntletMaxLeashRange);
+
 
         usingSkill = false;
         yield return null;

@@ -11,18 +11,16 @@ public class GauntletProjectile : ProjectileBase
     private LayerMask enemyMask;
     private LayerMask terrainMask;
 
-    private bool isStuck = false;
     private bool isReturning = false;
-    private bool isFallen = false;
-    private Vector2 stuckPoint;
     private HashSet<Health> hitThisFlight = new HashSet<Health>();
 
-    private float minRange;
     private float maxFlightRange;
     private float maxLeashRange;
     private Vector2 launchOrigin;
 
     private Transform owner;
+    private Transform grabbedEnemy = null; // track the grabbed enemy
+    private Vector2 grabbedEnemyOffset; // offset from gauntlet to enemy
 
     public void Init(
         Transform owner,
@@ -30,7 +28,6 @@ public class GauntletProjectile : ProjectileBase
         float dmg,
         LayerMask enemyMask,
         LayerMask terrainMask,
-        float minRange,
         float maxFlightRange,
         float maxLeashRange)
     {
@@ -38,7 +35,6 @@ public class GauntletProjectile : ProjectileBase
         this.damage = dmg;
         this.enemyMask = enemyMask;
         this.terrainMask = terrainMask;
-        this.minRange = minRange;
         this.maxFlightRange = maxFlightRange;
         this.maxLeashRange = maxLeashRange;
         this.launchOrigin = owner.position;
@@ -53,9 +49,10 @@ public class GauntletProjectile : ProjectileBase
 
         rb.linearVelocity = dir.normalized * speed;
 
-        isStuck = false;
-        isFallen = false;
         isReturning = false;
+        hitThisFlight.Clear();
+        grabbedEnemy = null;
+        grabbedEnemyOffset = Vector2.zero;
 
         if (lineRenderer)
         {
@@ -80,11 +77,32 @@ public class GauntletProjectile : ProjectileBase
             rb.gravityScale = 0f;
             rb.linearVelocity = dir * speed;
 
+            // Update grabbed enemy position continuously during return
+            if (grabbedEnemy != null)
+            {
+                // Keep enemy at the same offset from the gauntlet
+                grabbedEnemy.position = transform.position + (Vector3)grabbedEnemyOffset;
+            }
+
             if (Vector2.Distance(transform.position, owner.position) < 0.35f)
             {
+                // Release enemy at player position
+                if (grabbedEnemy != null)
+                {
+                    grabbedEnemy.SetParent(null);
+
+                    // Re-enable enemy physics when releasing
+                    var enemyRb = grabbedEnemy.GetComponent<Rigidbody2D>();
+                    if (enemyRb != null)
+                    {
+                        enemyRb.simulated = true; // Re-enable physics
+                        enemyRb.linearVelocity = Vector2.zero; // Stop the enemy
+                    }
+
+                    grabbedEnemy = null;
+                }
+
                 isReturning = false;
-                isStuck = false;
-                isFallen = false;
                 hitThisFlight.Clear();
                 if (lineRenderer) lineRenderer.enabled = false;
 
@@ -92,80 +110,69 @@ public class GauntletProjectile : ProjectileBase
                 var skills = owner.GetComponent<Skills>();
                 if (skills) skills.ClearGauntlet();
 
-
                 Despawn(); // return to pool
             }
-
-
-        }
-        else if (isStuck)
-        {
-            rb.linearVelocity = Vector2.zero;
-            transform.position = stuckPoint;
-        }
-        else if (isFallen)
-        {
-            rb.linearVelocity = Vector2.zero;
-            rb.gravityScale = 0f;
         }
         else
         {
+            // Auto retract if it travels too far
             float dist = Vector2.Distance(transform.position, launchOrigin);
             if (maxFlightRange > 0f && dist > maxFlightRange)
-                rb.gravityScale = 3f;
-        }
+                Retract();
 
-        if (maxLeashRange > 0f && Vector2.Distance(transform.position, owner.position) > maxLeashRange)
-            Retract();
+            if (maxLeashRange > 0f && Vector2.Distance(transform.position, owner.position) > maxLeashRange)
+                Retract();
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D col)
     {
         int layerBit = 1 << col.gameObject.layer;
 
-        if ((enemyMask.value & layerBit) != 0)
+        if ((enemyMask.value & layerBit) != 0 && grabbedEnemy == null)
         {
             var h = col.GetComponentInParent<Health>();
             if (h != null && !hitThisFlight.Contains(h))
             {
                 hitThisFlight.Add(h);
-                Vector2 dir = ((Vector2)col.transform.position - (Vector2)transform.position).normalized;
                 h.TakeDamage(damage);
-                ApplyKnockback(h, dir);
-            }
-            return;
-        }
 
-        if (!isReturning && (terrainMask.value & layerBit) != 0)
+                // Attach enemy to gauntlet
+                grabbedEnemy = h.transform;
+
+                // Calculate and store the offset from gauntlet to enemy
+                grabbedEnemyOffset = (Vector2)(grabbedEnemy.position - transform.position);
+
+                // Parent the enemy to the gauntlet for easier management
+                grabbedEnemy.SetParent(transform);
+
+                // Retract after grabbing
+                Retract();
+            }
+        }
+        else if ((terrainMask.value & layerBit) != 0)
         {
-            float distFromOrigin = Vector2.Distance(transform.position, launchOrigin);
-            if (distFromOrigin >= minRange)
-            {
-                isStuck = true;
-                stuckPoint = transform.position;
-                rb.gravityScale = 0f;
-                rb.linearVelocity = Vector2.zero;
-            }
-            else
-            {
-                isFallen = true;
-                rb.linearVelocity = Vector2.zero;
-                rb.gravityScale = 0f;
-            }
+            // Immediately retract on terrain hit
+            Retract();
         }
     }
 
     public void Retract()
     {
-        if (isStuck || isFallen || !isReturning)
+        if (!isReturning)
         {
-            isStuck = false;
-            isFallen = false;
             isReturning = true;
             rb.gravityScale = 0f;
-            hitThisFlight.Clear();
+
+            // Only disable enemy physics when we start retracting (if we have an enemy)
+            if (grabbedEnemy != null)
+            {
+                var enemyRb = grabbedEnemy.GetComponent<Rigidbody2D>();
+                if (enemyRb != null)
+                {
+                    enemyRb.simulated = false; // Disable physics during drag
+                }
+            }
         }
     }
-
-    public bool IsStuck() => isStuck || isFallen;
 }
