@@ -8,7 +8,6 @@ public enum WeaponType
 {
     None,
     Sword,
-    Tome,
     Gauntlet
 }
 
@@ -126,10 +125,7 @@ public class CombatSystem : MonoBehaviour
         if (Keyboard.current.digit1Key.wasPressedThisFrame && unlockedWeapons.Contains(WeaponType.Sword))
             SetWeapon(WeaponType.Sword);
 
-        if (Keyboard.current.digit2Key.wasPressedThisFrame && unlockedWeapons.Contains(WeaponType.Tome))
-            SetWeapon(WeaponType.Tome);
-
-        if (Keyboard.current.digit3Key.wasPressedThisFrame && unlockedWeapons.Contains(WeaponType.Gauntlet))
+        if (Keyboard.current.digit2Key.wasPressedThisFrame && unlockedWeapons.Contains(WeaponType.Gauntlet))
             SetWeapon(WeaponType.Gauntlet);
 
 
@@ -366,8 +362,7 @@ public class CombatSystem : MonoBehaviour
         {
             if (skills.GauntletDeployed)  
             {
-                skills.RetractGauntlet();
-                attackCooldownTimer = attackCooldown;
+                skills.RetractGauntlet(); // return 
                 return;
             }
         }
@@ -379,45 +374,14 @@ public class CombatSystem : MonoBehaviour
         comboTimer = 1f;
         attackCooldownTimer = attackCooldown;
 
-        if (currentWeapon == WeaponType.Tome)
-        {
-            ShootProjectile();
-        }
-        else
-        {
-            animator.SetTrigger("DoAttack");
-            animator.SetInteger("ComboStep", comboStep);
-        }
+        animator.SetTrigger("DoAttack");
+        animator.SetInteger("ComboStep", comboStep);
 
         Debug.Log($"Performing Combo Step {comboStep} with {currentWeapon}");
     }
 
 
-    private void ShootProjectile()
-    {
-        WeaponStats stats = weaponStatsList.Find(w => w.type == currentWeapon);
-        if (stats == null || stats.projectilePrefabs.Count == 0) return;
-
-        Transform spawnPoint = controller.facingRight ? attackPointRight : attackPointLeft;
-        Vector2 direction = controller.facingRight ? Vector2.right : Vector2.left;
-
-        foreach (GameObject prefab in stats.projectilePrefabs)
-        {
-            GameObject proj = Instantiate(prefab, spawnPoint.position, Quaternion.identity);
-
-            Rigidbody2D rb = proj.GetComponent<Rigidbody2D>();
-            if (rb != null)
-                rb.linearVelocity = direction * stats.projectileSpeed;
-
-            Projectile projectileScript = proj.GetComponent<Projectile>();
-            if (projectileScript != null)
-            {
-                float damageMultiplier = GetDamageMultiplier(comboStep);
-                projectileScript.damage = attackDamage * damageMultiplier;
-                projectileScript.lifeTime = stats.projectileLifetime;
-            }
-        }
-    }
+ 
 
     // === HITBOX HELPERS ===
     public void EnableHitbox(int index)

@@ -1,11 +1,9 @@
 using UnityEngine;
 
-public class GauntletChargeProjectile : MonoBehaviour
+public class GauntletChargeProjectile : ProjectileBase
 {
-    private Rigidbody2D rb;
-    private float damage;
-    private float knockback;
     private float chargeRatio;
+    private bool hasExploded = false; 
 
     [Header("Visuals")]
     public SpriteRenderer spriteRenderer;
@@ -14,7 +12,6 @@ public class GauntletChargeProjectile : MonoBehaviour
     public Sprite strongSprite;
 
     [Header("Projectile Settings")]
-    public float baseSpeed = 10f;
     public float lifeTime = 3f;
 
     [Header("Explosion Settings")]
@@ -22,19 +19,20 @@ public class GauntletChargeProjectile : MonoBehaviour
     public float midExplosionRadius = 2f;
     public float maxExplosionRadius = 3f;
 
-    public LayerMask enemyMask; 
+    public LayerMask enemyMask;
 
     public void Init(Vector2 dir, float dmg, float kb, float ratio)
     {
-        rb = GetComponent<Rigidbody2D>();
+        // Reset state for pooling
+        hasExploded = false;
+
         damage = dmg;
         knockback = kb;
         chargeRatio = ratio;
 
-        // Projectile speed scales slightly with charge
-        rb.linearVelocity = dir * baseSpeed * Mathf.Lerp(1f, 1.5f, ratio);
+        if (rb)
+            rb.linearVelocity = dir * speed * Mathf.Lerp(1f, 1.5f, ratio);
 
-        // Choose sprite
         if (spriteRenderer != null)
         {
             if (ratio < 0.33f && weakSprite != null)
@@ -45,12 +43,20 @@ public class GauntletChargeProjectile : MonoBehaviour
                 spriteRenderer.sprite = strongSprite;
         }
 
-        Destroy(gameObject, lifeTime);
+        // Cancel any existing invokes before scheduling a new one
+        CancelInvoke();
+        Invoke(nameof(Explode), lifeTime);
+    }
+
+    protected override void Move()
+    {
+        // Empty - projectile moves via physics
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // explode on hitting something valid
+        if (hasExploded) return; // Prevent multiple explosions
+
         Health target = other.GetComponent<Health>();
         if (target != null && !target.isPlayer)
         {
@@ -60,7 +66,12 @@ public class GauntletChargeProjectile : MonoBehaviour
 
     private void Explode()
     {
-        // pick radius based on charge level
+        if (hasExploded) return; // Prevent multiple explosions
+        hasExploded = true;
+
+        // Cancel the lifetime invoke since we're exploding early
+        CancelInvoke();
+
         float radius = (chargeRatio < 0.33f) ? minExplosionRadius :
                        (chargeRatio < 0.66f) ? midExplosionRadius : maxExplosionRadius;
 
@@ -76,29 +87,34 @@ public class GauntletChargeProjectile : MonoBehaviour
                 if (trb != null)
                 {
                     Vector2 dir = (trb.transform.position - transform.position).normalized;
-                    trb.AddForce(dir * knockback, ForceMode2D.Impulse);
+                    ApplyKnockback(h, dir);
                 }
             }
         }
 
-        Debug.Log($"Gauntlet shot exploded with radius {radius} and damage {damage}");
-
-        Destroy(gameObject);
+        Despawn();
     }
 
-
-
-    //Helper
-
-    private void OnDrawGizmosSelected()
+    // Clean up when object is disabled (returned to pool)
+    private void OnDisable()
     {
-        Gizmos.color = Color.red;
+        CancelInvoke();
+        hasExploded = false;
 
-        // pick radius based on chargeRatio
-        float radius = (chargeRatio < 0.33f) ? minExplosionRadius :
-                       (chargeRatio < 0.66f) ? midExplosionRadius : maxExplosionRadius;
-
-        Gizmos.DrawWireSphere(transform.position, radius);
+        // Reset velocity
+        if (rb != null)
+            rb.linearVelocity = Vector2.zero;
     }
 
+    public override void Despawn()
+    {
+        // Clean up before returning to pool
+        CancelInvoke();
+        hasExploded = false;
+
+        if (rb != null)
+            rb.linearVelocity = Vector2.zero;
+
+        base.Despawn();
+    }
 }

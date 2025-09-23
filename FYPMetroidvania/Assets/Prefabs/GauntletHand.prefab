@@ -105,10 +105,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1befedfb418add949ae0a4aa4af77629, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GauntletProjectile
+  damage: 1000
+  speed: 15
+  knockback: 8
   rb: {fileID: 0}
   col: {fileID: 0}
   lineRenderer: {fileID: 0}
-  speed: 15
 --- !u!58 &5772647505414360117
 CircleCollider2D:
   m_ObjectHideFlags: 0

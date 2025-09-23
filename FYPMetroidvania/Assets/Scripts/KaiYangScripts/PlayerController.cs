@@ -17,6 +17,12 @@ public class PlayerController : MonoBehaviour
     public float jumpBufferTime = 0.15f;
     private float jumpBufferCounter;
 
+    [Header("Platform dropping")]
+    public bool platformDropping;
+    public float platformDropDuration = 0.5f;
+    private float platformDropTimer = 0f;
+    public float platformDropSpeed = 2f;
+
     [Header("Wall Coyote Time")]
     public float wallCoyoteTime = 0.15f;
     private float wallCoyoteCounter;
@@ -37,6 +43,8 @@ public class PlayerController : MonoBehaviour
     public Transform groundCheck;
     public float groundCheckRadius = 0.2f;
     public LayerMask groundLayer;
+    public LayerMask platformLayer;
+    private LayerMask GroundCheckLayer;
 
     [Header("Collider")]
     public Vector2 colliderSize = new Vector2(0.5f, 1f);
@@ -67,6 +75,7 @@ public class PlayerController : MonoBehaviour
     public bool HasAirSwordDashed { get; private set; }
     public bool HasAirUppercut { get; private set; }
     public bool IsGrounded { get; private set; }
+    private bool IsOnPlatform;
 
     public bool isInHitstop { get; private set; }
     public Vector2 GetVelocity() => velocity;
@@ -94,6 +103,12 @@ public class PlayerController : MonoBehaviour
         skills = GetComponentInChildren<Skills>();
         animator = GetComponentInChildren<Animator>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+
+        if(groundCheck != null)
+        {
+            groundCheck.position = new Vector2(transform.position.x, transform.position.y - (colliderSize.y / 2));
+        }
+        GroundCheckLayer = groundLayer | platformLayer;
     }
 
     private void Update()
@@ -116,8 +131,17 @@ public class PlayerController : MonoBehaviour
             dashCooldownTimer -= Time.deltaTime;
 
         // Ground check
-        IsGrounded = Physics2D.Raycast(groundCheck.position,Vector2.down,groundCheckRadius,groundLayer);
-
+        RaycastHit2D ground = Physics2D.Raycast(groundCheck.position,Vector2.down,groundCheckRadius,GroundCheckLayer);
+        if(ground.collider != null)
+        {
+            IsGrounded = true;
+            IsOnPlatform = ground.collider.CompareTag("Platform");
+        }
+        else
+        {
+            IsGrounded = false;
+            IsOnPlatform = false;
+        }
 
         if (IsGrounded)
         {
@@ -129,12 +153,25 @@ public class PlayerController : MonoBehaviour
 
             if (velocity.y < 0) velocity.y = -1f;
 
-          
-            if (jumpBufferCounter > 0f && !jumpLocked)
+
+            if (jumpBufferCounter > 0f && !jumpLocked && !platformDropping)
             {
                 velocity.y = jumpForce;
                 jumpLocked = true;
                 jumpBufferCounter = 0f;
+            }
+
+        }
+
+
+        if (platformDropping)
+        {
+            if (!externalVelocityOverride) velocity.y = -platformDropSpeed;
+            platformDropTimer -= Time.deltaTime;
+            if (platformDropTimer < 0f)
+            {
+                platformDropTimer = 0f;
+                platformDropping = false;
             }
         }
 
@@ -220,25 +257,50 @@ public class PlayerController : MonoBehaviour
                 float dist = hit.distance - 0.01f;
                 transform.Translate(dir * dist);
                 velocity.y = 0;
+                return;
             }
-            else
-                transform.Translate(Vector2.up * moveAmount.y);
+            if (dir.y < 0 && !platformDropping) // check platform collision seperately
+            {
+                hit = Physics2D.BoxCast(groundCheck.position, new Vector2(colliderSize.x, 0.01f), 0f, Vector2.down, Mathf.Abs(moveAmount.y), platformLayer);
+                if (hit.collider != null)
+                {
+                    float dist = hit.distance - 0.01f;
+                    transform.Translate(dir * dist);
+                    velocity.y = 0;
+                    return;
+                }
+            }
+            transform.Translate(Vector2.up * moveAmount.y);
         }
     }
 
-    public void OnMove(InputValue value) => moveInput = value.Get<Vector2>();
+    public void OnMove(InputValue value) 
+    { 
+        moveInput = value.Get<Vector2>();
+
+    }
 
     public void OnJump()
     {
         if (skills != null && skills.IsChargeLocked) return;
 
+        if (platformDropping) return;
 
         jumpBufferCounter = jumpBufferTime;
 
         if (IsGrounded && !jumpLocked)
         {
-            velocity.y = jumpForce;
-            jumpLocked = true;
+            if (IsOnPlatform && moveInput.y < 0)
+            {
+                platformDropping = true;
+                platformDropTimer = platformDropDuration;
+                velocity.y = -platformDropSpeed;
+            }
+            else
+            {
+                velocity.y = jumpForce;
+                jumpLocked = true;
+            }
         }
         else if (!IsGrounded && !hasWallJumped && IsTouchingWall())
         {

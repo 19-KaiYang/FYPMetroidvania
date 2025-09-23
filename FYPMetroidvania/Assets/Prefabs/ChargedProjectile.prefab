@@ -168,11 +168,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d25b93f28ad1cc47a5ac43a210f16d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GauntletChargeProjectile
+  damage: 0
+  speed: 20
+  lifetime: 1
+  rb: {fileID: 0}
   spriteRenderer: {fileID: 8181900488030366562}
   weakSprite: {fileID: -6443220620536129070, guid: 9839c9f61830cf0489629a9002bc6966, type: 3}
   midSprite: {fileID: -1148497932167561204, guid: 7d2bf996ef9c9ce40a5c55b385c9250a, type: 3}
   strongSprite: {fileID: 5974009189253629341, guid: 4a54f84124af9154d9fc3916d34ed6a0, type: 3}
-  baseSpeed: 10
   lifeTime: 3
   minExplosionRadius: 1
   midExplosionRadius: 2
