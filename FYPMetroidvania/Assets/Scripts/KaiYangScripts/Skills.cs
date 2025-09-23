@@ -181,7 +181,7 @@ public class Skills : MonoBehaviour
         if (!PlayerController.instance.IsGrounded && PlayerController.instance.HasAirSwordDashed)
             return;
 
-        float cost = swordDashCost - UpgradeManager.instance.GetSwordDashEnergyReduction();
+        float cost = swordDashCost;
         if (cost < 0) cost = 0;
 
         if (energy != null && !energy.TrySpend(cost)) return;
@@ -203,7 +203,7 @@ public class Skills : MonoBehaviour
         if (!PlayerController.instance.IsGrounded && PlayerController.instance.HasAirUppercut)
             return;
 
-        float cost = swordUppercutCost - UpgradeManager.instance.GetSwordUppercutEnergyReduction();
+        float cost = swordUppercutCost;
         if (cost < 0) cost = 0;
 
         if (energy != null && !energy.TrySpend(cost)) return;
@@ -248,7 +248,7 @@ public class Skills : MonoBehaviour
         if (GauntletDeployed) { RetractGauntlet(); return; }
         if (gauntletShockCooldownTimer > 0f) return;
 
-        float cost = gauntletShockwaveCost - UpgradeManager.instance.GetGauntletShockwaveEnergyReduction();
+        float cost = gauntletShockwaveCost;
         if (cost < 0) cost = 0;
 
         if (energy != null && !energy.TrySpend(cost)) return;
@@ -271,7 +271,7 @@ public class Skills : MonoBehaviour
         }
         if (activeGauntlet != null) return;
 
-        float cost = gauntletSkillEnergyCost - UpgradeManager.instance.GetGauntletLaunchEnergyReduction();
+        float cost = gauntletSkillEnergyCost;
         if (energy != null && !energy.TrySpend(cost)) return;
 
         overheat.AddHeat(overheat.heatPerSkill);
@@ -436,7 +436,7 @@ public class Skills : MonoBehaviour
                 if (h != null && !hit.Contains(h))
                 {
                     hit.Add(h);
-                    float dmg = dashFlatDamage + UpgradeManager.instance.GetSwordDashBonus();
+                    float dmg = dashFlatDamage;
                     Vector2 knockDir = (h.transform.position - transform.position).normalized;
                     h.TakeDamage(dmg, knockDir);
 
@@ -538,7 +538,7 @@ public class Skills : MonoBehaviour
             if (h != null && !hit.Contains(h))
             {
                 hit.Add(h);
-                float dmg = uppercutFlatDamage + UpgradeManager.instance.GetSwordUppercutBonus();
+                float dmg = uppercutFlatDamage;
                 Vector2 knockDir = (h.transform.position - transform.position).normalized;
                 h.TakeDamage(dmg, knockDir);
 
@@ -623,7 +623,7 @@ public class Skills : MonoBehaviour
                     if (h != null && !hit.Contains(h))
                     {
                         hit.Add(h);
-                        float dmg = shockwaveFlatDamage + UpgradeManager.instance.GetGauntletShockwaveBonus();
+                        float dmg = shockwaveFlatDamage;
                         Vector2 knockDir = (h.transform.position - transform.position).normalized;
                         h.TakeDamage(dmg, knockDir);
 
@@ -666,7 +666,7 @@ public class Skills : MonoBehaviour
             if (hit.Contains(h)) continue;
             hit.Add(h);
 
-            float dmg = shockwaveFlatDamage + UpgradeManager.instance.GetGauntletShockwaveBonus();
+            float dmg = shockwaveFlatDamage;
             Vector2 away = ((Vector2)h.transform.position - (Vector2)transform.position).normalized;
             Vector2 knock = away * shockwaveKnockForce + Vector2.up * shockwaveUpwardBoost;
 
