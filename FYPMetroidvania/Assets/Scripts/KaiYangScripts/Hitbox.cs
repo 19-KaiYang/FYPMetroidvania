@@ -56,13 +56,14 @@ public class Hitbox : MonoBehaviour
             {
                 hitEnemies.Add(h);
 
-                float totalDamage = owner.GetAttackDamage() * owner.GetDamageMultiplier(owner.CurrentComboStep);
+                float totalDamage = owner.GetAttackDamage(owner.CurrentComboStep);
 
                 // Direction for knockback
                 Vector2 dir = (other.transform.position - owner.transform.position).normalized;
 
                 // Apply damage + knockback
                 h.TakeDamage(totalDamage, dir);
+
 
                 if (!h.isPlayer)
                 {

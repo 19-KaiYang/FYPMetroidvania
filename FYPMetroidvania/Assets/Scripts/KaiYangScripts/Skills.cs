@@ -13,6 +13,7 @@ public class Skills : MonoBehaviour
     private PlayerController controller;
     private EnergySystem energy;
     private Health health;
+    private OverheatSystem overheat;
 
  
 
@@ -152,6 +153,7 @@ public class Skills : MonoBehaviour
         controller = GetComponent<PlayerController>();
         energy = GetComponent<EnergySystem>();
         health = GetComponent<Health>();
+        overheat = GetComponent<OverheatSystem>();
 
         if (sharedChargeParticles != null)
         {
@@ -242,6 +244,7 @@ public class Skills : MonoBehaviour
     public void TryUseGauntletShockwave()
     {
         if (usingSkill) return;
+        if (overheat != null && overheat.IsOverheated) return;
         if (GauntletDeployed) { RetractGauntlet(); return; }
         if (gauntletShockCooldownTimer > 0f) return;
 
@@ -249,6 +252,8 @@ public class Skills : MonoBehaviour
         if (cost < 0) cost = 0;
 
         if (energy != null && !energy.TrySpend(cost)) return;
+
+        overheat.AddHeat(overheat.heatPerSkill);
 
         StartCoroutine(Skill_GauntletShockwave());
     }
@@ -258,6 +263,7 @@ public class Skills : MonoBehaviour
     public void TryUseGauntletLaunch()
     {
         if (usingSkill) return;
+        if (overheat != null && overheat.IsOverheated) return;
         if (GauntletDeployed)
         {
             RetractGauntlet();
@@ -267,6 +273,8 @@ public class Skills : MonoBehaviour
 
         float cost = gauntletSkillEnergyCost - UpgradeManager.instance.GetGauntletLaunchEnergyReduction();
         if (energy != null && !energy.TrySpend(cost)) return;
+
+        overheat.AddHeat(overheat.heatPerSkill);
 
         StartCoroutine(Skill_GauntletLaunch());
     }
@@ -287,6 +295,7 @@ public class Skills : MonoBehaviour
 
     public void StartGauntletChargeShot()
     {
+        if (overheat != null && overheat.IsOverheated) return;
         if (!CanUseGauntletChargeShot())
         {
             if (sharedChargeParticles != null)
@@ -764,18 +773,28 @@ public class Skills : MonoBehaviour
 
         Vector2 dir = controller.facingRight ? Vector2.right : Vector2.left;
 
-        
         GauntletChargeProjectile chargeProj = ProjectileManager.instance.SpawnGauntletCharge(
             gauntletChargeSpawnPoint.position, Quaternion.identity
         );
         if (chargeProj != null)
             chargeProj.Init(dir, damage, knockback, ratio);
 
+        if (overheat != null)
+        {
+            if (ratio < 0.33f)          // Stage 1
+                overheat.AddHeat(overheat.heatPerSkill * 0.5f); 
+            else if (ratio < 0.66f)     // Stage 2
+                overheat.AddHeat(overheat.heatPerSkill * 1.0f);  
+            else                        // Stage 3
+                overheat.AddHeat(overheat.heatPerSkill * 1.5f);  
+        }
+
         currentChargeTime = 0f;
         IsChargeLocked = false;
 
         Debug.Log($"Fired charge shot at {ratio * 100f}% charge");
     }
+
 
 
     #endregion

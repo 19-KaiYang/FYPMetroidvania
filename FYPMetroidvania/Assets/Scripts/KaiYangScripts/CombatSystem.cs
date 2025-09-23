@@ -27,6 +27,8 @@ public class CombatSystem : MonoBehaviour
 {
     private InputAction _skill3ChargeAction;
 
+    public OverheatSystem overheat;
+
     [Header("General Attack Settings")]
     public float baseAttackDamage = 10f;
 
@@ -93,6 +95,7 @@ public class CombatSystem : MonoBehaviour
         animator = GetComponentInChildren<Animator>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         skills = GetComponentInChildren<Skills>();
+        overheat = GetComponent<OverheatSystem>();
 
         controller = GetComponent<PlayerController>();
 
@@ -458,12 +461,27 @@ public class CombatSystem : MonoBehaviour
             animator.SetInteger("ComboStep", 0);
     }
 
-    public float GetAttackDamage()
+    public float GetAttackDamage(int attackNumber)
     {
-        return baseAttackDamage + UpgradeManager.instance.GetGeneralDamageBonus();
+        float dmg = baseAttackDamage;
+        dmg *= GetDamageMultiplier(attackNumber);
+
+        // Debug each condition separately
+        Debug.Log($"Current weapon: {currentWeapon}");
+        Debug.Log($"Overheat reference null? {overheat == null}");
+        if (overheat != null)
+        {
+            Debug.Log($"Is overheated? {overheat.IsOverheated}");
+            Debug.Log($"Current heat: {overheat.CurrentHeat}");
+        }
+
+        if (currentWeapon == WeaponType.Gauntlet && overheat != null && overheat.IsOverheated)
+        {
+            Debug.Log("OVERHEAT MULTIPLIER APPLIED! Damage boosted from " + (dmg / 3f) + " to " + dmg);
+            dmg *= 3f;
+        }
+        return dmg;
     }
 
-
-  
 
 }

@@ -42,6 +42,9 @@ public class Health : MonoBehaviour
 
     public void TakeDamage(float amount, Vector2? hitDirection = null)
     {
+      
+
+
         currentHealth -= amount;
 
         // Visual feedback
@@ -65,6 +68,7 @@ public class Health : MonoBehaviour
                 Die(); 
             }
         }
+        Debug.Log($"{gameObject.name} took {amount} damage! Remaining HP: {currentHealth}/{maxHealth}");
     }
  
 
