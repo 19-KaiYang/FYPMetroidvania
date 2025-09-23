@@ -4,7 +4,6 @@ public class SwordSlashProjectile : ProjectileBase
 {
     public float maxDistance = 10f;
     public float bloodCost;
-    public float knockbackForce = 8f;
 
     private Vector3 startPos;
     private Health playerHealth;
@@ -17,9 +16,8 @@ public class SwordSlashProjectile : ProjectileBase
 
     protected override void Move()
     {
-        // SwordSlash doesn't self-move, just dies after distance
         if (Vector3.Distance(startPos, transform.position) >= maxDistance)
-            gameObject.SetActive(false);
+            Despawn();
     }
 
     public void Init(Vector2 dir)
@@ -27,7 +25,6 @@ public class SwordSlashProjectile : ProjectileBase
         if (!rb) rb = GetComponent<Rigidbody2D>();
         rb.linearVelocity = dir.normalized * speed;
     }
-
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -41,7 +38,7 @@ public class SwordSlashProjectile : ProjectileBase
             if (rbEnemy != null)
             {
                 Vector2 knockDir = (enemy.transform.position - transform.position).normalized;
-                rbEnemy.AddForce(knockDir * knockbackForce, ForceMode2D.Impulse);
+                ApplyKnockback(enemy, knockDir);
             }
 
             if (playerHealth != null && bloodCost > 0f)
@@ -51,7 +48,7 @@ public class SwordSlashProjectile : ProjectileBase
                     playerHealth.TakeDamage(safeCost);
             }
 
-            gameObject.SetActive(false);
+            Despawn();
         }
     }
 }

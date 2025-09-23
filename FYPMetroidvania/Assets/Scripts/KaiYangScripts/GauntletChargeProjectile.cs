@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class GauntletChargeProjectile : ProjectileBase
 {
-    private float knockback;
     private float chargeRatio;
+    private bool hasExploded = false; 
 
     [Header("Visuals")]
     public SpriteRenderer spriteRenderer;
@@ -23,9 +23,13 @@ public class GauntletChargeProjectile : ProjectileBase
 
     public void Init(Vector2 dir, float dmg, float kb, float ratio)
     {
+        // Reset state for pooling
+        hasExploded = false;
+
         damage = dmg;
         knockback = kb;
         chargeRatio = ratio;
+
         if (rb)
             rb.linearVelocity = dir * speed * Mathf.Lerp(1f, 1.5f, ratio);
 
@@ -39,16 +43,20 @@ public class GauntletChargeProjectile : ProjectileBase
                 spriteRenderer.sprite = strongSprite;
         }
 
+        // Cancel any existing invokes before scheduling a new one
+        CancelInvoke();
         Invoke(nameof(Explode), lifeTime);
     }
 
     protected override void Move()
     {
-        
+        // Empty - projectile moves via physics
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        if (hasExploded) return; // Prevent multiple explosions
+
         Health target = other.GetComponent<Health>();
         if (target != null && !target.isPlayer)
         {
@@ -58,6 +66,12 @@ public class GauntletChargeProjectile : ProjectileBase
 
     private void Explode()
     {
+        if (hasExploded) return; // Prevent multiple explosions
+        hasExploded = true;
+
+        // Cancel the lifetime invoke since we're exploding early
+        CancelInvoke();
+
         float radius = (chargeRatio < 0.33f) ? minExplosionRadius :
                        (chargeRatio < 0.66f) ? midExplosionRadius : maxExplosionRadius;
 
@@ -73,11 +87,34 @@ public class GauntletChargeProjectile : ProjectileBase
                 if (trb != null)
                 {
                     Vector2 dir = (trb.transform.position - transform.position).normalized;
-                    trb.AddForce(dir * knockback, ForceMode2D.Impulse);
+                    ApplyKnockback(h, dir);
                 }
             }
         }
 
-        gameObject.SetActive(false);
+        Despawn();
+    }
+
+    // Clean up when object is disabled (returned to pool)
+    private void OnDisable()
+    {
+        CancelInvoke();
+        hasExploded = false;
+
+        // Reset velocity
+        if (rb != null)
+            rb.linearVelocity = Vector2.zero;
+    }
+
+    public override void Despawn()
+    {
+        // Clean up before returning to pool
+        CancelInvoke();
+        hasExploded = false;
+
+        if (rb != null)
+            rb.linearVelocity = Vector2.zero;
+
+        base.Despawn();
     }
 }

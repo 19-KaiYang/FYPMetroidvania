@@ -675,11 +675,10 @@ public class Skills : MonoBehaviour
         usingSkill = true;
 
         Vector2 dir = controller.facingRight ? Vector2.right : Vector2.left;
-        activeGauntlet = ProjectileManager.instance.SpawnGauntlet(transform.position,Quaternion.identity);
 
-        float dmg = gauntletLaunchDamage + UpgradeManager.instance.GetGauntletLaunchBonus();
+        activeGauntlet = ProjectileManager.instance.SpawnGauntlet(transform.position,Quaternion.identity);
         activeGauntlet.speed = gauntletLaunchSpeed;
-        activeGauntlet.Init(transform, dir, dmg, enemyMask, terrainMask,
+        activeGauntlet.Init(transform, dir, activeGauntlet.damage, enemyMask, terrainMask,
             gauntletMinRange, gauntletMaxFlightRange, gauntletMaxLeashRange);
 
         usingSkill = false;
@@ -745,12 +744,10 @@ public class Skills : MonoBehaviour
 
     private void FireGauntletChargeShot()
     {
-        if (!isCharging) return; 
+        if (!isCharging) return;
 
-        // Reset charging state first
         isCharging = false;
 
-        // Stop particles
         if (sharedChargeParticles != null)
             sharedChargeParticles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
 
@@ -760,22 +757,20 @@ public class Skills : MonoBehaviour
             return;
         }
 
-        // Calculate damage based on charge time
         float ratio = Mathf.Clamp01(currentChargeTime / gauntletChargeMaxTime);
         float damage = Mathf.Lerp(gauntletChargeMinDamage, gauntletChargeMaxDamage, ratio);
         float knockback = Mathf.Lerp(gauntletChargeMinKnockback, gauntletChargeMaxKnockback, ratio);
 
-        // Fire
         Vector2 dir = controller.facingRight ? Vector2.right : Vector2.left;
-        GameObject proj = Instantiate(gauntletChargeProjectilePrefab, gauntletChargeSpawnPoint.position, Quaternion.identity);
 
-        GauntletChargeProjectile chargeProj = proj.GetComponent<GauntletChargeProjectile>();
+        
+        GauntletChargeProjectile chargeProj = ProjectileManager.instance.SpawnGauntletCharge(
+            gauntletChargeSpawnPoint.position, Quaternion.identity
+        );
         if (chargeProj != null)
             chargeProj.Init(dir, damage, knockback, ratio);
 
-        // Reset charge time
         currentChargeTime = 0f;
-
         IsChargeLocked = false;
 
         Debug.Log($"Fired charge shot at {ratio * 100f}% charge");
