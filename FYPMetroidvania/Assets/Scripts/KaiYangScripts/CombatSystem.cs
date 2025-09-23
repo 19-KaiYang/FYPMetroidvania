@@ -26,6 +26,7 @@ public class WeaponStats
 public class CombatSystem : MonoBehaviour
 {
     private InputAction _skill3ChargeAction;
+    public OverheatSystem overheat;
 
     [Header("General Attack Settings")]
     public float baseAttackDamage = 10f;
@@ -93,6 +94,8 @@ public class CombatSystem : MonoBehaviour
         animator = GetComponentInChildren<Animator>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         skills = GetComponentInChildren<Skills>();
+        overheat = GetComponent<OverheatSystem>();
+
 
         controller = GetComponent<PlayerController>();
 
@@ -460,10 +463,18 @@ public class CombatSystem : MonoBehaviour
 
     public float GetAttackDamage()
     {
-        return baseAttackDamage + UpgradeManager.instance.GetGeneralDamageBonus();
+        float dmg = baseAttackDamage;
+
+        if (currentWeapon == WeaponType.Gauntlet && overheat != null && overheat.IsOverheated)
+        {
+            dmg *= 1.5f;
+        }
+
+        return dmg;
     }
 
 
-  
+
+
 
 }
