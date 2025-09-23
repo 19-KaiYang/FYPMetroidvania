@@ -36,7 +36,7 @@ public class ProjectileManager : MonoBehaviour
         else
         {
             obj = Instantiate(prefab, pos, rot);
-            instanceToPrefab[obj] = prefab; // Track which prefab this came from
+            instanceToPrefab[obj] = prefab; // track which prefab this came from
         }
 
         return obj;
@@ -46,7 +46,6 @@ public class ProjectileManager : MonoBehaviour
     {
         obj.SetActive(false);
 
-        // Use our tracking dictionary to find the correct prefab
         if (instanceToPrefab.TryGetValue(obj, out GameObject prefab))
         {
             if (pools.ContainsKey(prefab))
@@ -56,7 +55,6 @@ public class ProjectileManager : MonoBehaviour
             }
         }
 
-        // Fallback: try to match by component type (your original method)
         foreach (var kvp in pools)
         {
             if (obj.TryGetComponent(out ProjectileBase proj) &&
@@ -68,7 +66,6 @@ public class ProjectileManager : MonoBehaviour
             }
         }
 
-        // If we get here, something went wrong - destroy the object to prevent leaks
         Debug.LogWarning($"Failed to return {obj.name} to pool, destroying instead");
         Destroy(obj);
     }
@@ -107,4 +104,26 @@ public class ProjectileManager : MonoBehaviour
     {
         instanceToPrefab.Clear();
     }
+
+
+
+    /*
+     * How to use (examples)
+     * //  Spawn a Sword Slash projectile
+            SwordSlashProjectile proj = ProjectileManager.instance.SpawnSwordSlash(position, rotation);
+            proj.Init(direction);
+
+       //  Spawn a Gauntlet (rocket hand) projectile
+            GauntletProjectile g = ProjectileManager.instance.SpawnGauntlet(position, rotation);
+            g.Init(owner, dir, damage, enemyMask, terrainMask, minRange, maxFlight, maxLeash);
+
+        //  Spawn a Gauntlet Charge Shot
+            GauntletChargeProjectile charge = ProjectileManager.instance.SpawnGauntletCharge(position, rotation);
+            charge.Init(dir, damage, knockback, chargeRatio);
+
+        //  Despawn any projectile (returns it to pool)
+            myProjectile.Despawn(); 
+
+
+     */
 }
