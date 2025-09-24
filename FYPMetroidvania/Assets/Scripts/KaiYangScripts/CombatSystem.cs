@@ -31,6 +31,7 @@ public class CombatSystem : MonoBehaviour
 
     [Header("General Attack Settings")]
     public float baseAttackDamage = 10f;
+    public float OverheatMultiplier;
 
     [Header("Weapon Settings")]
     public WeaponType currentWeapon;
@@ -370,7 +371,7 @@ public class CombatSystem : MonoBehaviour
             }
         }
 
-        // Normal flow
+        // Normal flow  
         comboStep++;
         if (comboStep > 3) comboStep = 1;
 
@@ -463,8 +464,8 @@ public class CombatSystem : MonoBehaviour
 
     public float GetAttackDamage(int attackNumber)
     {
-        float dmg = baseAttackDamage;
-        dmg *= GetDamageMultiplier(attackNumber);
+        OverheatMultiplier = baseAttackDamage;
+        OverheatMultiplier *= GetDamageMultiplier(attackNumber);
 
         // Debug each condition separately
         Debug.Log($"Current weapon: {currentWeapon}");
@@ -477,10 +478,10 @@ public class CombatSystem : MonoBehaviour
 
         if (currentWeapon == WeaponType.Gauntlet && overheat != null && overheat.IsOverheated)
         {
-            Debug.Log("OVERHEAT MULTIPLIER APPLIED! Damage boosted from " + (dmg / 3f) + " to " + dmg);
-            dmg *= 3f;
+            Debug.Log("OVERHEAT MULTIPLIER APPLIED! Damage boosted from " + (OverheatMultiplier / 3f) + " to " + OverheatMultiplier);
+            OverheatMultiplier *= 3f;
         }
-        return dmg;
+        return OverheatMultiplier;
     }
 
 
