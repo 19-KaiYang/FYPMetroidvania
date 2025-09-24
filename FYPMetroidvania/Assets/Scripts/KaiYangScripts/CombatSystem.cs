@@ -361,17 +361,16 @@ public class CombatSystem : MonoBehaviour
 
     private void PerformAttack()
     {
-        
         if (currentWeapon == WeaponType.Gauntlet && skills != null)
         {
-            if (skills.GauntletDeployed)  
+            if (skills.GauntletDeployed)
             {
-                skills.RetractGauntlet(); // return 
+                skills.RetractGauntlet();
                 return;
             }
         }
 
-        // Normal flow  
+        // Normal flow
         comboStep++;
         if (comboStep > 3) comboStep = 1;
 
@@ -382,12 +381,14 @@ public class CombatSystem : MonoBehaviour
         animator.SetInteger("ComboStep", comboStep);
 
         controller.externalVelocityOverride = false;
+        controller.SetHitstop(false); // clear any leftover hitstop
 
         Debug.Log($"Performing Combo Step {comboStep} with {currentWeapon}");
     }
 
 
- 
+
+
 
     // === HITBOX HELPERS ===
     public void EnableHitbox(int index)
@@ -458,14 +459,19 @@ public class CombatSystem : MonoBehaviour
     {
         comboStep = 0;
         comboTimer = 0f;
+
         if (animator != null)
             animator.SetInteger("ComboStep", 0);
+
+        controller.externalVelocityOverride = false;
+        controller.SetHitstop(false);
     }
+
 
     public float GetAttackDamage(int attackNumber)
     {
-        OverheatMultiplier = baseAttackDamage;
-        OverheatMultiplier *= GetDamageMultiplier(attackNumber);
+        float dmg = baseAttackDamage;
+        dmg *= GetDamageMultiplier(attackNumber);
 
         // Debug each condition separately
         Debug.Log($"Current weapon: {currentWeapon}");
@@ -478,10 +484,10 @@ public class CombatSystem : MonoBehaviour
 
         if (currentWeapon == WeaponType.Gauntlet && overheat != null && overheat.IsOverheated)
         {
-            Debug.Log("OVERHEAT MULTIPLIER APPLIED! Damage boosted from " + (OverheatMultiplier / 3f) + " to " + OverheatMultiplier);
-            OverheatMultiplier *= 3f;
+            Debug.Log("OVERHEAT MULTIPLIER APPLIED! Damage boosted from " + (dmg / 3f) + " to " + dmg);
+            dmg *= OverheatMultiplier;
         }
-        return OverheatMultiplier;
+        return dmg;
     }
 
 

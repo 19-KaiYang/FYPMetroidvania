@@ -2264,17 +2264,21 @@ PrefabInstance:
       propertyPath: platformDropDuration
       value: 0.1
       objectReference: {fileID: 0}
+    - target: {fileID: 4809458677118695231, guid: 13775344399b2974daca82989c71d56e, type: 3}
+      propertyPath: regenPerSecond
+      value: 30
+      objectReference: {fileID: 0}
     - target: {fileID: 6666684164016502184, guid: 13775344399b2974daca82989c71d56e, type: 3}
       propertyPath: OverheatMultiplier
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7202174868536862745, guid: 13775344399b2974daca82989c71d56e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -18.6
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: 7202174868536862745, guid: 13775344399b2974daca82989c71d56e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 61.1
+      value: -0.3
       objectReference: {fileID: 0}
     - target: {fileID: 7202174868536862745, guid: 13775344399b2974daca82989c71d56e, type: 3}
       propertyPath: m_LocalPosition.z

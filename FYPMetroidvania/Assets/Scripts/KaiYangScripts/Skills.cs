@@ -830,9 +830,12 @@ public class Skills : MonoBehaviour
         {
             pc.SetHitstop(false);
             pc.SetVelocity(savedVel);
+            pc.externalVelocityOverride = false;
         }
+
         if (targetRb) targetRb.simulated = true;
     }
+
 
 
 
