@@ -21,6 +21,7 @@ public class Skills : MonoBehaviour
     private bool usingSkill = false;
     public bool IsUsingSkill => usingSkill;
 
+    #region Skills Variables
     // ===================== LUNGING STRIKE =====================
     [Header("Lunging Strike")]
     public float dashSpeed = 22f;
@@ -142,6 +143,17 @@ public class Skills : MonoBehaviour
         public float rateOverTime = 20f;
     }
 
+    #endregion
+
+    #region Ultimate Variables
+    [Header("Sword Ultimate")]
+    public GameObject spiritSlashPrefab;
+    public float spiritSlashInterval = 0.2f; 
+    public float spiritSlashRadius = 6f;     
+
+    private SpiritGauge spirit;
+
+    #endregion
 
 
     public bool IsChargeButtonHeld { get; set; }
@@ -154,6 +166,8 @@ public class Skills : MonoBehaviour
         energy = GetComponent<EnergySystem>();
         health = GetComponent<Health>();
         overheat = GetComponent<OverheatSystem>();
+        spirit = GetComponent<SpiritGauge>();
+
 
         if (sharedChargeParticles != null)
         {
@@ -238,9 +252,6 @@ public class Skills : MonoBehaviour
         }
     }
 
-
-
-
     public void TryUseGauntletShockwave()
     {
         if (usingSkill) return;
@@ -257,8 +268,6 @@ public class Skills : MonoBehaviour
 
         StartCoroutine(Skill_GauntletShockwave());
     }
-
-
 
     public void TryUseGauntletLaunch()
     {
@@ -278,20 +287,6 @@ public class Skills : MonoBehaviour
 
         StartCoroutine(Skill_GauntletLaunch());
     }
-
-    //public void TryUseGauntletChargeShot()
-    //{
-    //    if (!isCharging)
-    //    {
-    //        chargeRoutine = StartCoroutine(Skill_GauntletChargeShot());
-    //    }
-    //    else
-    //    {
-    //        if (chargeRoutine != null) StopCoroutine(chargeRoutine);
-    //        StartCoroutine(FireGauntletChargeShot());
-    //    }
-    //}
-    // Replace these methods in Skills.cs:
 
     public void StartGauntletChargeShot()
     {
@@ -364,10 +359,58 @@ public class Skills : MonoBehaviour
         }
     }
 
+    // Ultimates
+
+    public void TryUseSwordUltimate()
+    {
+        if (usingSkill) return;
+        if (spirit == null || spirit.IsEmpty) return;
+
+        StartCoroutine(Skill_SwordUltimate());
+    }
 
 
+    private IEnumerator Skill_SwordUltimate()
+    {
+        usingSkill = true;
+        spirit.StartDrain();
 
+        // Find first enemy in range
+        Collider2D[] enemies = Physics2D.OverlapCircleAll(transform.position, spiritSlashRadius, enemyMask);
+        Transform firstTarget = enemies.Length > 0 ? enemies[Random.Range(0, enemies.Length)].transform : null;
 
+        if (firstTarget == null)
+        {
+            Debug.Log("No enemies in range for ultimate!");
+            spirit.StopDrain();
+            usingSkill = false;
+            yield return null;
+        }
+
+        // Spawn ONE persistent spirit slash that will bounce between enemies
+        GameObject slash = Instantiate(spiritSlashPrefab, transform.position, Quaternion.identity);
+        SpiritSlash slashComp = slash.GetComponent<SpiritSlash>();
+
+        if (slashComp != null)
+        {
+            slashComp.Init(transform, firstTarget, enemyMask);
+        }
+
+        // Wait until spirit is fully drained
+        while (!spirit.IsEmpty)
+        {
+            yield return null;
+        }
+
+        // Cleanup - destroy the slash when spirit is empty
+        if (slash != null)
+        {
+            Destroy(slash);
+        }
+
+        spirit.StopDrain();
+        usingSkill = false;
+    }
 
     #endregion
 

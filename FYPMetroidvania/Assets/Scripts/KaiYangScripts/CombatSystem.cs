@@ -236,6 +236,24 @@ public class CombatSystem : MonoBehaviour
 
     #endregion
 
+    #region Ultimate Usage
+
+    public void OnUltimate(InputValue value)
+    {
+        if (skills != null && !skills.IsChargeLocked)
+        {
+            switch (currentWeapon)
+            {
+                case WeaponType.Sword:
+                    skills.TryUseSwordUltimate();
+                    break;
+
+            }
+        }
+    }
+
+    #endregion
+
     public void UnlockWeapon(WeaponType weapon)
     {
         if (!unlockedWeapons.Contains(weapon))
