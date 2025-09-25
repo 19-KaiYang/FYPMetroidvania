@@ -7,12 +7,18 @@ public class Hitbox : MonoBehaviour
     private CombatSystem owner;
     private Skills skills;
 
-
     [Header("Hitstop Settings")]
     public float hitstopDuration = 0.08f;
     public bool applyHitstopToEnemy = true;
     public bool applyHitstopToPlayer = true;
 
+    [Header("Knockback Overrides")]
+    public bool forceUpKnockback = false;
+    public Vector2 customKnockback = Vector2.zero;
+
+    [Header("Special Sweep Knockback")]
+    public bool isSweepHitbox = false;       
+    public float sweepKnockbackForce = 12f;  
 
     private Collider2D col;
     private HashSet<Health> hitEnemies = new HashSet<Health>();
@@ -22,15 +28,11 @@ public class Hitbox : MonoBehaviour
         owner = GetComponentInParent<CombatSystem>();
         col = GetComponent<Collider2D>();
         skills = Object.FindFirstObjectByType<Skills>();
-
-
-
-
     }
 
     private void OnEnable()
     {
-        hitEnemies.Clear(); 
+        hitEnemies.Clear();
     }
 
     public void EnableCollider(float duration)
@@ -58,12 +60,26 @@ public class Hitbox : MonoBehaviour
 
                 float totalDamage = owner.GetAttackDamage(owner.CurrentComboStep);
 
-                // Direction for knockback
-                Vector2 dir = (other.transform.position - owner.transform.position).normalized;
+                Vector2 dir;
+                bool useRawForce = false;
+
+                if (isSweepHitbox)
+                {
+                    // Sweep = always knock straight up, strong raw force
+                    dir = Vector2.up * sweepKnockbackForce;
+                    useRawForce = true;
+                }
+                else if (forceUpKnockback)
+                {
+                    dir = customKnockback;
+                }
+                else
+                {
+                    dir = (other.transform.position - owner.transform.position).normalized;
+                }
 
                 // Apply damage + knockback
-                h.TakeDamage(totalDamage, dir);
-
+                h.TakeDamage(totalDamage, dir, useRawForce);
 
                 if (!h.isPlayer)
                 {
@@ -83,19 +99,6 @@ public class Hitbox : MonoBehaviour
         }
     }
 
-
-    //private IEnumerator ApplyHitstop(Rigidbody2D rb, Animator anim)
-    //{
-    //    if (rb != null) rb.simulated = false;
-    //    if (anim != null) anim.speed = 0;
-
-    //    yield return new WaitForSecondsRealtime(hitstopDuration);
-
-    //    if (rb != null) rb.simulated = true;
-    //    if (anim != null) anim.speed = 1;
-    //}
-
-    //Helper
     private void OnDrawGizmos()
     {
         if (col == null) col = GetComponent<Collider2D>();
@@ -108,5 +111,4 @@ public class Hitbox : MonoBehaviour
         else if (col is CircleCollider2D circle)
             Gizmos.DrawWireSphere(circle.bounds.center, circle.radius * transform.lossyScale.x);
     }
-    
 }

@@ -48,6 +48,8 @@ public class CombatSystem : MonoBehaviour
     public GameObject swordDownHitbox;
     public GameObject gauntletDownHitbox;
 
+    public GameObject swordDownSweepHitbox;
+
 
     [Header("Melee Combo Hitboxes")]
     public List<GameObject> swordHitboxes;
@@ -347,15 +349,30 @@ public class CombatSystem : MonoBehaviour
 
         Debug.Log($"Performed DOWN attack with {currentWeapon}");
 
-        if (currentWeapon == WeaponType.Sword && swordDownHitbox != null)
+        if (currentWeapon == WeaponType.Sword)
         {
-            StartCoroutine(ToggleHitbox(swordDownHitbox, 0.2f));
+            if (controller.IsGrounded && swordDownSweepHitbox != null)
+            {
+                // Grounded sweep attack
+                var hb = swordDownSweepHitbox.GetComponent<Hitbox>();
+                if (hb != null)
+                    hb.isSweepHitbox = true; 
+
+                StartCoroutine(ToggleHitbox(swordDownSweepHitbox, 0.2f));
+            }
+            else if (swordDownHitbox != null)
+            {
+                // Air down attack
+                StartCoroutine(ToggleHitbox(swordDownHitbox, 0.2f));
+            }
         }
         else if (currentWeapon == WeaponType.Gauntlet && gauntletDownHitbox != null)
         {
             StartCoroutine(ToggleHitbox(gauntletDownHitbox, 0.2f));
         }
     }
+
+
 
 
 

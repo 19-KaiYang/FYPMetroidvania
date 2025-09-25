@@ -40,11 +40,8 @@ public class Health : MonoBehaviour
             spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    public void TakeDamage(float amount, Vector2? hitDirection = null)
+    public void TakeDamage(float amount, Vector2? hitDirection = null, bool useRawForce = false)
     {
-      
-
-
         currentHealth -= amount;
 
         // Visual feedback
@@ -53,7 +50,12 @@ public class Health : MonoBehaviour
 
         // Knockback
         if (rb != null && hitDirection.HasValue)
-            rb.AddForce(hitDirection.Value.normalized * knockbackForce, ForceMode2D.Impulse);
+        {
+            if (useRawForce)
+                rb.AddForce(hitDirection.Value, ForceMode2D.Impulse); 
+            else
+                rb.AddForce(hitDirection.Value.normalized * knockbackForce, ForceMode2D.Impulse);
+        }
 
         if (currentHealth <= 0)
         {
@@ -61,16 +63,16 @@ public class Health : MonoBehaviour
 
             if (isPlayer)
             {
-                StartCoroutine(RespawnPlayer()); 
+                StartCoroutine(RespawnPlayer());
             }
             else
             {
-                Die(); 
+                Die();
             }
         }
         Debug.Log($"{gameObject.name} took {amount} damage! Remaining HP: {currentHealth}/{maxHealth}");
     }
- 
+
 
     public void Heal(float healAmount)
     {
