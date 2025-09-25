@@ -19,7 +19,6 @@ public class SpiritBarUI : MonoBehaviour
         {
             float percent = spiritGauge.GetSpiritPercent();
 
-            // shrink based on pivot = left
             fillTransform.sizeDelta = new Vector2(fullWidth * percent, fillTransform.sizeDelta.y);
         }
     }
