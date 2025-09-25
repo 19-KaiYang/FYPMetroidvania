@@ -8,6 +8,7 @@ public class SceneTransition : MonoBehaviour
     [SerializeField] private Transform startPoint;
     [SerializeField] private Vector2 exitDirection;
     [SerializeField] private float exitTime;
+    [SerializeField] private float jumpForce;
     [SerializeField] private bool needPress = false;
     [SerializeField] private bool isTriggered = false;
     [SerializeField] private bool dir = true;
@@ -24,7 +25,7 @@ public class SceneTransition : MonoBehaviour
 
             //exitDirection = PlayerController.instance.spriteTransform.localScale;
 
-            StartCoroutine(SceneTransitionManager.instance.MoveToNewScene(exitDirection, exitTime, dir));
+            StartCoroutine(SceneTransitionManager.instance.MoveToNewScene(exitDirection, jumpForce, exitTime, dir));
             StartCoroutine(SceneTransitionManager.instance.Fade(SceneTransitionManager.FadeDirection.OUT));
         }
     }
@@ -43,8 +44,7 @@ public class SceneTransition : MonoBehaviour
             SceneTransitionManager.instance.lastSceneName = SceneManager.GetActiveScene().name;
 
             //SceneManager.LoadScene(nextSceneName);
-            
-            //StartCoroutine(FadeSceneTransitionManager.Instance.sceneFade.FadeAndLoadScene(SceneFade.FadeDirection.IN, nextSceneName));
+            StartCoroutine(SceneTransitionManager.instance.FadeAndLoadScene(SceneTransitionManager.FadeDirection.IN, nextSceneName));
         }
     }
 
@@ -58,11 +58,8 @@ public class SceneTransition : MonoBehaviour
 
                 SceneTransitionManager.instance.lastSceneName = SceneManager.GetActiveScene().name;
 
-                // PlayerController.Instance.cutScene = true;
-
                 //SceneManager.LoadScene(nextSceneName);
                 StartCoroutine(SceneTransitionManager.instance.FadeAndLoadScene(SceneTransitionManager.FadeDirection.IN, nextSceneName));
-                //StartCoroutine(FadeSceneTransitionManager.Instance.sceneFade.FadeAndLoadScene(SceneFade.FadeDirection.IN, nextSceneName));
             }
         }
     }

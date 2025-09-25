@@ -13,7 +13,6 @@ public class SceneTransitionManager : MonoBehaviour
 
     [Header("fade")]
     [SerializeField] private float fadeTime;
-    [SerializeField] private float fadeOutTime;
     [SerializeField] private Image fadeImage;
 
     private void Awake()
@@ -35,7 +34,7 @@ public class SceneTransitionManager : MonoBehaviour
     }
 
     void Update()
-    {   
+    {
         
     }
     public enum FadeDirection
@@ -44,59 +43,58 @@ public class SceneTransitionManager : MonoBehaviour
     }
     public IEnumerator FadeAndLoadScene(FadeDirection _fadeDir, string _sceneName)
     {
-        //fadeImage.enabled = true;
+        fadeImage.enabled = true;
         yield return Fade(_fadeDir);
         SceneManager.LoadScene(_sceneName);
     }
     public IEnumerator Fade(FadeDirection _fadeDir)
     {
-        float _startAlpha = _fadeDir == FadeDirection.OUT ? 1 : 0;
-        float _endAlpha = _fadeDir == FadeDirection.OUT ? 0 : 1;
+        float startAlpha = _fadeDir == FadeDirection.OUT ? 1f : 0f;
+        float endAlpha = _fadeDir == FadeDirection.OUT ? 0f : 1f;
 
-        if (_fadeDir == FadeDirection.OUT)
+        float t = 0f;
+        while (t < fadeTime)
         {
-            yield return new WaitForSeconds(fadeOutTime);
-            while (_startAlpha >= _endAlpha)
-            {
-                SetColorImage(ref _startAlpha, _fadeDir);
-                yield return null;
-            }
-            //fadeImage.enabled = false;
+            t += Time.deltaTime;
+
+            float alpha = Mathf.Lerp(startAlpha, endAlpha, t / fadeTime);
+
+            fadeImage.color = new Color(fadeImage.color.r,
+                                        fadeImage.color.g,
+                                        fadeImage.color.b,
+                                        alpha);
+
+            yield return null;
         }
-        else
-        {
-            //fadeImage.enabled = true;
-            while (_startAlpha <= _endAlpha)
-            {
-                SetColorImage(ref _startAlpha, _fadeDir);
-                yield return null;
-            }
-        }
-    }
-    void SetColorImage(ref float _alpha, FadeDirection _fadeDir)
-    {
         fadeImage.color = new Color(fadeImage.color.r,
-                                    fadeImage.color.g,
-                                    fadeImage.color.b, _alpha);
+                                fadeImage.color.g,
+                                fadeImage.color.b,
+                                endAlpha);
+        }
+        void SetColorImage(ref float _alpha, FadeDirection _fadeDir)
+        {
+            fadeImage.color = new Color(fadeImage.color.r,
+                                        fadeImage.color.g,
+                                        fadeImage.color.b, _alpha);
 
-        _alpha += Time.deltaTime * (1 / fadeTime) * (_fadeDir == FadeDirection.OUT ? -1 : 1);
-    }
+            _alpha += Time.deltaTime * (1 / fadeTime) * (_fadeDir == FadeDirection.OUT ? -1 : 1);
+        }
 
-    public IEnumerator MoveToNewScene(Vector2 exitDir, float delay, bool _dir)
+    public IEnumerator MoveToNewScene(Vector2 exitDir, float _jumpForce, float delay, bool _dir)
     {
         PlayerController player = PlayerController.instance;
         Rigidbody2D rb = player.rb;
 
         if (exitDir.y > 0)
         {
-            rb.linearVelocity = 10 * exitDir;
+            player.SetVelocity(_jumpForce * exitDir);
         }
 
         if (exitDir.x != 0)
         {
             if (_dir)
             {
-                exitDir = PlayerController.instance.spriteTransform.localScale;
+                exitDir.x = PlayerController.instance.spriteTransform.localScale.x > 0 ? 1 : -1;
             }
             player.moveInput.x = exitDir.x > 0 ? 1 : -1;
 

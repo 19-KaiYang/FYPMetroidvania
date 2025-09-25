@@ -230,7 +230,7 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    private void Move(Vector2 moveAmount)
+    public void Move(Vector2 moveAmount)
     {
         // Horizontal
         if (moveAmount.x != 0)
