@@ -218,7 +218,8 @@ public class PlayerController : MonoBehaviour
             jumpBufferCounter -= Time.fixedDeltaTime;
     }
 
-    private void Move(Vector2 moveAmount)
+
+    public void Move(Vector2 moveAmount)
     {
         // Horizontal
         if (moveAmount.x != 0)

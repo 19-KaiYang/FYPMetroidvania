@@ -23,7 +23,7 @@ public class FlyEnemy : Enemy
 
     private bool stopAttack = false;
 
-    [Header("Detaect")]
+    [Header("Detect")]
     [SerializeField] private float playerDetectDistance = 5f;
     [SerializeField] private float attackDistance = 3f;
     [SerializeField] private float playerEscapeDistance = 10f;
