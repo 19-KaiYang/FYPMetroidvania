@@ -6,16 +6,19 @@ public class MeleeEnemy : Enemy
 {
     [SerializeField] private string currentState;
 
-    [Header("Detaect")]
+    [Header("Detect")]
     [SerializeField] private Vector2 detectSize;
-    [SerializeField] private Vector2 playerEscapeSize;
     [SerializeField] private Vector2 detectOffset;
+    [Space]
+    [SerializeField] private Vector2 playerEscapeSize;
     [SerializeField] private Vector2 playerEscapeOffset;
+    [Space]
     [SerializeField] private Vector2 attackArea;
     [SerializeField] private Vector2 attackAreaOffset;
+    [Space]
     [SerializeField] private float groundCheckSize;
     [SerializeField] private Vector2 groundCheckOffset;
-
+    [Space]
     [SerializeField] private bool playerDetected;
     [SerializeField] private bool inDetectArea;
     [SerializeField] private bool inAttackArea;
@@ -60,13 +63,13 @@ public class MeleeEnemy : Enemy
         {
             rb.gravityScale = gravityA;
         }
-        if (Input.GetKey(KeyCode.M))
-        {
-            if (isGround)
-            {
-                rb.linearVelocity = new Vector2(jumpForceX * transform.localScale.x, jumpForceY);   
-            }
-        }
+        //if (Input.GetKey(KeyCode.M))
+        //{
+        //    if (isGround)
+        //    {
+        //        rb.linearVelocity = new Vector2(jumpForceX * transform.localScale.x, jumpForceY);   
+        //    }
+        //}
         if (Input.GetKeyDown(KeyCode.N))
         {
             animator.SetTrigger("Attack");
@@ -165,7 +168,6 @@ public class MeleeEnemy : Enemy
     public override void TakeDamage(float _damage, Vector2 _dir)
     {
         base.TakeDamage(_damage, _dir);
-
 
     }
 

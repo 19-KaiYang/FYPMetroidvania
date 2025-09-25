@@ -8,7 +8,7 @@ public class Enemy : MonoBehaviour, IDamageable
     public PlayerController player;
     protected StateMachine stateMachine;
 
-    [Header("Detaect")]
+    [Header("Layer")]
     [SerializeField] protected LayerMask playerLayer;
     [SerializeField] protected LayerMask obstacleLayer;
     [SerializeField] protected LayerMask groundleLayer;
@@ -23,8 +23,11 @@ public class Enemy : MonoBehaviour, IDamageable
     [SerializeField] public bool isFacingRight;
     [SerializeField] public bool isFacingLeft;
     [SerializeField] public Vector2 distanceToPlayer;
+    //[Space]
+    //[SerializeField] private float groundCheckSize;
+    //[SerializeField] private Vector2 groundCheckOffset;
 
-    
+
 
     protected virtual void Awake()
     {
