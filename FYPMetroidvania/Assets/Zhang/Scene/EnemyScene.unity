@@ -644,14 +644,11 @@ MonoBehaviour:
   hitSound: {fileID: 0}
   deathSound: {fileID: 0}
   knockbackForce: 5
+  currentCCState: 0
+  invincibilityDuration: 0.3
   isBloodMarked: 0
   bloodMarkHealAmount: 10
   bloodMarkIcon: {fileID: 0}
---- !u!4 &636154012 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7202174868536862745, guid: 13775344399b2974daca82989c71d56e, type: 3}
-  m_PrefabInstance: {fileID: 205407317}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &675707286
 GameObject:
   m_ObjectHideFlags: 0
@@ -1014,6 +1011,8 @@ MonoBehaviour:
   hitSound: {fileID: 0}
   deathSound: {fileID: 0}
   knockbackForce: 5
+  currentCCState: 0
+  invincibilityDuration: 0.3
   isBloodMarked: 0
   bloodMarkHealAmount: 10
   bloodMarkIcon: {fileID: 0}
@@ -1029,7 +1028,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fa4667b65a52e84da64884ae45da734, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  overheat: {fileID: 0}
   baseAttackDamage: 10
+  OverheatMultiplier: 0
   currentWeapon: 0
   weaponStatsList:
   - type: 0
@@ -1054,6 +1055,7 @@ MonoBehaviour:
   gauntletUpHitbox: {fileID: 0}
   swordDownHitbox: {fileID: 0}
   gauntletDownHitbox: {fileID: 0}
+  swordDownSweepHitbox: {fileID: 0}
   swordHitboxes: []
   gauntletHitboxes: []
 --- !u!114 &901369159
@@ -1788,7 +1790,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac24c21d60940b940b79d144e26c8882, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraFollow
-  target: {fileID: 636154012}
+  target: {fileID: 0}
   smoothSpeed: 5
   offset: {x: 0, y: 0, z: -10}
 --- !u!81 &1466655338
@@ -2385,7 +2387,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!50 &1879483529
 Rigidbody2D:
   serializedVersion: 5
