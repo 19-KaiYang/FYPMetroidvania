@@ -156,8 +156,8 @@ MonoBehaviour:
   damage: 30
   bounceRange: 6
   overshootDistance: 1
-  hitDelay: 1
-  hitCooldown: 1
+  hitDelay: 0.3
+  hitCooldown: 0.3
 --- !u!96 &6553343887951831201
 TrailRenderer:
   serializedVersion: 3
