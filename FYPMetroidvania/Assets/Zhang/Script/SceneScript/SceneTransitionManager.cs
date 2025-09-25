@@ -15,6 +15,10 @@ public class SceneTransitionManager : MonoBehaviour
     [SerializeField] private float fadeTime;
     [SerializeField] private Image fadeImage;
 
+    [Header("Room Data")]
+    [SerializeField] ProgressionData progressionData;
+    public int roomIndex = 0;
+
     private void Awake()
     {
         if (instance == null)
@@ -44,8 +48,13 @@ public class SceneTransitionManager : MonoBehaviour
     public IEnumerator FadeAndLoadScene(FadeDirection _fadeDir, string _sceneName)
     {
         fadeImage.enabled = true;
-        yield return Fade(_fadeDir);
-        SceneManager.LoadScene(_sceneName);
+        string random = GetRandomRoom();
+        if (random != null) _sceneName = random;
+        if (_sceneName != null)
+        {
+            yield return Fade(_fadeDir);
+            SceneManager.LoadScene(_sceneName);
+        }
     }
     public IEnumerator Fade(FadeDirection _fadeDir)
     {
@@ -111,6 +120,22 @@ public class SceneTransitionManager : MonoBehaviour
         player.moveInput.x = 0;
     }
 
+    private string GetRandomRoom()
+    {
+
+        if(progressionData == null) return null;
+        if (progressionData.rooms.Count < 2) return null;
+
+        //string sceneName = "";
+        while (true)
+        {
+            string scene = progressionData.rooms[Random.Range(0, progressionData.rooms.Count)];
+            if(scene != SceneManager.GetActiveScene().name)
+            {
+                return scene;
+            }
+        }
+    }
 
     #region get current scene
     private void OnEnable()

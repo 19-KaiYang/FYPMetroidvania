@@ -13,8 +13,6 @@ public class SceneTransition : MonoBehaviour
     [SerializeField] private bool isTriggered = false;
     [SerializeField] private bool dir = true;
 
-
-
     private void Start()
     {
         if (nextSceneName == SceneTransitionManager.instance.lastSceneName && SceneTransitionManager.instance.isTrasition == true)
@@ -63,7 +61,6 @@ public class SceneTransition : MonoBehaviour
             }
         }
     }
-
     private void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
