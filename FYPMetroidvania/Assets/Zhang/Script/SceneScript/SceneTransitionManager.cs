@@ -15,9 +15,10 @@ public class SceneTransitionManager : MonoBehaviour
     [SerializeField] private float fadeTime;
     [SerializeField] private Image fadeImage;
 
-    [Header("Room Data")]
+    [Header("Room Handling")]
     [SerializeField] ProgressionData progressionData;
     public int roomIndex = 0;
+    public static System.Action<string> roomLoaded;
 
     private void Awake()
     {
@@ -25,6 +26,7 @@ public class SceneTransitionManager : MonoBehaviour
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
         else
         {
@@ -151,6 +153,7 @@ public class SceneTransitionManager : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         currentSceneName = scene.name;
+        roomLoaded.Invoke(currentSceneName);
     }
     #endregion
 }

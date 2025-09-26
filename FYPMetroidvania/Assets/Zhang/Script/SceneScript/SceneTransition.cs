@@ -28,6 +28,15 @@ public class SceneTransition : MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {
+        SceneTransitionManager.roomLoaded += SetPlayerSpawnPos;
+    }
+    private void OnDisable()
+    {
+        SceneTransitionManager.roomLoaded -= SetPlayerSpawnPos;
+    }
+
     private void Update()
     {
         TransitionScene();
@@ -45,7 +54,15 @@ public class SceneTransition : MonoBehaviour
             StartCoroutine(SceneTransitionManager.instance.FadeAndLoadScene(SceneTransitionManager.FadeDirection.IN, nextSceneName));
         }
     }
+    void SetPlayerSpawnPos(string sceneName)
+    {
+        SceneTransitionManager.instance.isTrasition = false;
 
+        PlayerController.instance.transform.position = startPoint.position;
+
+        StartCoroutine(SceneTransitionManager.instance.MoveToNewScene(exitDirection, jumpForce, exitTime, dir));
+        StartCoroutine(SceneTransitionManager.instance.Fade(SceneTransitionManager.FadeDirection.OUT));
+    }
     private void OnTriggerEnter2D(Collider2D _other)
     {
         if (!needPress)
