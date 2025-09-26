@@ -10,6 +10,7 @@ public class SpiritSlash : MonoBehaviour
     public float overshootDistance = 1f;
     public float hitDelay = 0.3f;
     public float hitCooldown = 0.5f;
+    public float spiritSlashBloodCost = 10f;
 
     private Transform player;
     private Transform currentTarget;
@@ -79,6 +80,20 @@ public class SpiritSlash : MonoBehaviour
                 h.TakeDamage(damage, (h.transform.position - player.position).normalized);
                 hitEnemyIds.Add(id);
                 Debug.Log($"[SpiritSlash] DEALT damage once to {h.name} (id {id})");
+
+                // --- Apply Blood Mark + Health Cost ---
+                if (!h.isPlayer) // only apply to enemies
+                {
+                    h.ApplyBloodMark();
+
+                    Health playerHealth = player.GetComponent<Health>();
+                    if (playerHealth != null && spiritSlashBloodCost > 0f)
+                    {
+                        float safeCost = Mathf.Min(spiritSlashBloodCost, playerHealth.CurrentHealth - 1f);
+                        if (safeCost > 0f)
+                            playerHealth.TakeDamage(safeCost);
+                    }
+                }
             }
             else
             {
@@ -101,6 +116,7 @@ public class SpiritSlash : MonoBehaviour
         // Short pause before selecting the next enemy
         StartCoroutine(DelayBeforeNextTarget());
     }
+
 
     private IEnumerator DelayBeforeNextTarget()
     {

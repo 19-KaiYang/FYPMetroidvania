@@ -41,6 +41,7 @@ public class Skills : MonoBehaviour
     private float swordDashCooldownTimer = 0f;
 
 
+
     [Header("Lunging Strike Cost")]
     public float swordDashCost = 20f;
     
@@ -162,7 +163,8 @@ public class Skills : MonoBehaviour
     [Header("Sword Ultimate")]
     public GameObject spiritSlashPrefab;
     public float spiritSlashInterval = 0.2f; 
-    public float spiritSlashRadius = 6f;     
+    public float spiritSlashRadius = 6f;
+    public float spiritSlashHealthCost = 10f;
 
     private SpiritGauge spirit;
 

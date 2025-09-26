@@ -152,12 +152,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e486a116bc99c0c42b7bc49f873df3d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpiritSlash
-  speed: 20
+  speed: 30
   damage: 30
   bounceRange: 6
   overshootDistance: 1
   hitDelay: 0.3
   hitCooldown: 0.3
+  spiritSlashBloodCost: 0
 --- !u!96 &6553343887951831201
 TrailRenderer:
   serializedVersion: 3
