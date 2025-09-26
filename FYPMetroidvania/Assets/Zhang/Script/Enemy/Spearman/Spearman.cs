@@ -3,6 +3,8 @@ using UnityEngine.Rendering;
 
 public class Spearman : Enemy
 {
+    [SerializeField] private string currentState;
+
     [Header("Detect")]
     [SerializeField] private Vector2 detectSize;
     [SerializeField] private Vector2 detectOffset;
@@ -17,9 +19,23 @@ public class Spearman : Enemy
     [SerializeField] private bool inDetectArea;
     [SerializeField] private bool inAttackArea;
 
+    [Header("Attack")]
+    [SerializeField] private float thrustCooldown;
+    [SerializeField] private float thrustTimer;
+    [SerializeField] private bool isThrustFinished;
+
+    [SerializeField] private float throwCooldown;
+    [SerializeField] private float throwTimer;
+    [SerializeField] private bool isThrowFinished;
+
+    [SerializeField] private GameObject spearPrefab;
+    [SerializeField] private Transform throwPoint;
+
     protected override void Awake()
     {
         base.Awake();
+        stateMachine = new StateMachine();
+        stateMachine.stateChanged += OnStateChanged;
     }
 
     void Start()
@@ -30,8 +46,13 @@ public class Spearman : Enemy
     protected override void Update()
     {
         base.Update();
-        //stateMachine.Update();
+        stateMachine.Update();
         DetectPlayer();
+
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            ThrowSpear();
+        }
     }
 
     private void DetectPlayer()
@@ -63,6 +84,11 @@ public class Spearman : Enemy
         else if (attack == null) inAttackArea = false;
     }
 
+    private void ThrowSpear()
+    {
+        Instantiate(spearPrefab,throwPoint.position, throwPoint.rotation);
+    }
+
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
@@ -83,6 +109,10 @@ public class Spearman : Enemy
 
             Gizmos.DrawLine(transform.position, player.transform.position);
         }
+    }
+    void OnStateChanged(IState _state)
+    {
+        currentState = _state.GetType().Name;
     }
     public class SpearmanIdleState : IState
     {
@@ -119,11 +149,41 @@ public class Spearman : Enemy
         }
         public void OnEnter()
         {
-
+            enemy.thrustCooldown = Random.Range(1f, 2f);
+            enemy.throwCooldown = Random.Range(1f, 3f);
         }
         public void OnUpdate()
         {
+            if (enemy.playerDetected)
+            {
+                enemy.FaceToPlayer();
 
+                if (Mathf.Abs(enemy.distanceToPlayer.x) >= Mathf.Abs(enemy.attackAreaOffset.x))
+                {
+                    
+                    enemy.rb.linearVelocity = new Vector2(enemy.moveSpeed * enemy.transform.localScale.x, 0);
+                }
+
+
+                if (Mathf.Abs(enemy.distanceToPlayer.x) < 99 && Mathf.Abs(enemy.distanceToPlayer.x) > Mathf.Abs(enemy.attackAreaOffset.x * 2))
+                {
+                    //SpearmanThrowtState
+                    enemy.throwTimer += Time.deltaTime;
+                    if (enemy.throwTimer >= enemy.throwCooldown)
+                    {
+                        enemy.stateMachine.ChangeState(new SpearmanThrowtState(enemy));
+                    }
+                }
+                else
+                {
+                    enemy.thrustTimer += Time.deltaTime;
+
+                    if (enemy.thrustTimer >= enemy.thrustCooldown)
+                    {
+                        enemy.stateMachine.ChangeState(new SpearmanThrustState(enemy));
+                    }
+                }
+            }
         }
         public void OnExit()
         {
@@ -141,11 +201,16 @@ public class Spearman : Enemy
         }
         public void OnEnter()
         {
-
+            enemy.animator.SetTrigger("Thrust");
+            enemy.isThrustFinished = false;
+            enemy.thrustTimer = 0;
         }
         public void OnUpdate()
         {
-
+            if (enemy.isThrustFinished)
+            {
+                enemy.stateMachine.ChangeState(new SpearmanChaseState(enemy));
+            }
         }
         public void OnExit()
         {
@@ -163,11 +228,16 @@ public class Spearman : Enemy
         }
         public void OnEnter()
         {
-
+            enemy.animator.SetTrigger("Throw");
+            enemy.isThrowFinished = false;
+            enemy.throwTimer = 0;
         }
         public void OnUpdate()
         {
-
+            if (enemy.isThrowFinished)
+            {
+                enemy.stateMachine.ChangeState(new SpearmanChaseState(enemy));
+            }
         }
         public void OnExit()
         {
