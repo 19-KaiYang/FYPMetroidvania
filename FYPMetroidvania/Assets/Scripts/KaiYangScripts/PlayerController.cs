@@ -112,6 +112,13 @@ public class PlayerController : MonoBehaviour
     {
         if (isInHitstop) return;
 
+        var health = GetComponent<Health>();
+        if (health != null && health.currentCCState != CrowdControlState.None)
+        {
+            velocity.x = 0f; 
+            return; 
+        }
+
         // Dash timers
         if (isDashing)
         {
@@ -206,6 +213,9 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         if (isInHitstop) return;
+
+        var health = GetComponent<Health>();
+        bool inArcKnockdown = health != null && health.isInArcKnockdown;
         // Apply gravity
         if (!isDashing)
             velocity.y += gravity * Time.fixedDeltaTime;

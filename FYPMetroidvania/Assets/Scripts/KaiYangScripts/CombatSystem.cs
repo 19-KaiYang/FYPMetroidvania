@@ -108,6 +108,10 @@ public class CombatSystem : MonoBehaviour
         _skill3ChargeAction.started += OnSkill3ChargeStarted;
         _skill3ChargeAction.canceled += OnSkill3ChargeCanceled;
 
+        int playerLayer = gameObject.layer;
+        int enemyLayer = LayerMask.NameToLayer("EnemyLayer");
+        if (enemyLayer >= 0)
+            Physics2D.IgnoreLayerCollision(playerLayer, enemyLayer, false);
 
         currentWeapon = WeaponType.None;
         ApplyWeaponStats(currentWeapon);
@@ -311,6 +315,10 @@ public class CombatSystem : MonoBehaviour
 
     public void OnAttack()
     {
+        var health = GetComponent<Health>();
+        if (health != null && health.currentCCState != CrowdControlState.None)
+            return;
+
         if (skills != null && skills.IsChargeLocked) return;
         if (skills != null && skills.IsUsingSkill) return;
         if (currentWeapon == WeaponType.None) return;
