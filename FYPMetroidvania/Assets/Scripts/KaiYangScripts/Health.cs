@@ -84,9 +84,20 @@ public class Health : MonoBehaviour
                 }
                 else
                 {
-                    RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 0.1f, LayerMask.GetMask("Ground"));
-                    landed = hit.collider != null;
+                    // Adjustable ray length (uses inspector value, fallback 0.5f)
+                    float rayDist = groundCheckValue > 0 ? groundCheckValue : 0.5f;
+                    LayerMask groundMask = LayerMask.GetMask("Ground") | LayerMask.GetMask("Platform");
+                    RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, rayDist, groundMask);
+
+                    bool touchingGround = hit.collider != null;
+                    bool stoppedFalling = rb != null && Mathf.Abs(rb.linearVelocity.y) < 0.1f;
+
+                    // Must be both on ground AND no longer falling
+                    landed = touchingGround && stoppedFalling;
+
+                    Debug.Log($"{gameObject.name} - TouchingGround: {touchingGround}, StoppedFalling: {stoppedFalling}, Y velocity: {(rb ? rb.linearVelocity.y : 0f)}");
                 }
+
 
                 // If in air knockdown, don't count down timer until landed
                 if (isInArcKnockdown)
@@ -96,7 +107,11 @@ public class Health : MonoBehaviour
                         // Just landed, start the recovery timer
                         ccTimer = knockdownRecoveryTime;
                         isInArcKnockdown = false;
-                        Debug.Log($"{gameObject.name} landed from air knockdown, starting recovery timer");
+                        Debug.Log($"{gameObject.name} landed from air knockdown, starting recovery timer ({knockdownRecoveryTime}s)");
+                    }
+                    else
+                    {
+                        Debug.Log($"{gameObject.name} still in air knockdown");
                     }
                     // Don't count down timer while airborne
                     return;
@@ -106,10 +121,11 @@ public class Health : MonoBehaviour
                 if (ccTimer > 0f)
                 {
                     ccTimer -= Time.deltaTime;
+                    Debug.Log($"{gameObject.name} knockdown recovery timer: {ccTimer:F2}s remaining");
                     if (ccTimer <= 0f)
                     {
                         currentCCState = CrowdControlState.None;
-                        Debug.Log($"{gameObject.name} recovered from knockdown");
+                        Debug.Log($"{gameObject.name} recovered from knockdown - can move again!");
                     }
                 }
             }
@@ -381,6 +397,9 @@ public class Health : MonoBehaviour
         Debug.Log($"{gameObject.name} knockdown for {duration} sec");
     }
 
+    /// <summary>
+    /// Apply knockdown using the default duration set in inspector
+    /// </summary>
     public void ApplyKnockdown(bool isAirborne = false, Vector2? hitDirection = null)
     {
         ApplyKnockdown(defaultKnockdownDuration, isAirborne, hitDirection);
@@ -395,17 +414,15 @@ public class Health : MonoBehaviour
             var pc = PlayerController.instance;
             if (pc != null)
             {
-
                 Vector2 currentVel = pc.GetVelocity();
                 currentVel.y -= arcKnockdownGravity * Time.deltaTime;
                 pc.SetVelocity(currentVel);
 
-
-                if (pc.IsGrounded)
+                // Landing is handled in Update() method now
+                if (pc.IsGrounded && isInArcKnockdown)
                 {
-                    isInArcKnockdown = false;
+                    // The timer handling is done in Update(), just stop external velocity override
                     pc.externalVelocityOverride = false;
-                    currentCCState = CrowdControlState.None;
                 }
             }
         }
@@ -419,13 +436,8 @@ public class Health : MonoBehaviour
                 currentVel.y -= arcKnockdownGravity * Time.deltaTime;
                 rb.linearVelocity = currentVel;
 
-                // Check if landed
-                RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 0.1f, LayerMask.GetMask("Ground"));
-                if (hit.collider != null)
-                {
-                    isInArcKnockdown = false;
-                    currentCCState = CrowdControlState.None;
-                }
+                // Landing detection is now handled in Update() method
+                // Don't change CC state here - let Update() handle the transition
             }
         }
     }
