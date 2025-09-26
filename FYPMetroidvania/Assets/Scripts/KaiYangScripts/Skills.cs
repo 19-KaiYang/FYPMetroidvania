@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Unity.Collections.AllocatorManager;
 
 public class Skills : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class Skills : MonoBehaviour
     private PlayerController controller;
     private EnergySystem energy;
     private Health health;
+    private OverheatSystem overheat;
 
  
 
@@ -20,6 +22,7 @@ public class Skills : MonoBehaviour
     private bool usingSkill = false;
     public bool IsUsingSkill => usingSkill;
 
+    #region Skills Variables
     // ===================== LUNGING STRIKE =====================
     [Header("Lunging Strike")]
     public float dashSpeed = 22f;
@@ -29,9 +32,14 @@ public class Skills : MonoBehaviour
     public Vector2 dashBoxSize = new Vector2(1.4f, 1.0f);
     public Vector2 dashBoxOffset = new Vector2(0.7f, 0f);
 
+    public CrowdControlState swordDashGroundedCC = CrowdControlState.Stunned;
+    public CrowdControlState swordDashAirborneCC = CrowdControlState.Knockdown;
+    public float swordDashCCDuration = 1.5f;
+
     [Header("Lunging Strike Cooldown")]
     public float swordDashCooldown = 2f;
     private float swordDashCooldownTimer = 0f;
+
 
 
     [Header("Lunging Strike Cost")]
@@ -48,6 +56,10 @@ public class Skills : MonoBehaviour
     public Vector2 uppercutBoxSize = new Vector2(1.2f, 2.0f);
     public Vector2 uppercutBoxOffset = new Vector2(0.6f, 1f);
 
+    public CrowdControlState swordUppercutGroundedCC = CrowdControlState.Knockdown; 
+    public CrowdControlState swordUppercutAirborneCC = CrowdControlState.Knockdown;
+    public float swordUppercutCCDuration = 2.0f;
+
     [Header("Ascending Slash Cost")]
     public float swordUppercutCooldown = 3f;
     private float swordUppercutCooldownTimer = 0f;
@@ -63,11 +75,15 @@ public class Skills : MonoBehaviour
     //COST EDIT IN SWORDPROJECTILE.CS
 
     // ===================== GAUNTLET SHOCKWAVE =====================
-    [Header("Gauntlet Shockwave (Ground)")]
+    [Header("Gauntlet Shockwave")]
     public float shockwaveRadius = 2.5f;
     public float shockwaveFlatDamage = 0f;
     public float shockwaveKnockForce = 12f;
     public float shockwaveUpwardBoost = 6f;
+
+    public CrowdControlState gauntletShockwaveGroundedCC = CrowdControlState.Knockdown;
+    public CrowdControlState gauntletShockwaveAirborneCC = CrowdControlState.Knockdown;
+    public float gauntletShockwaveCCDuration = 2.5f;
 
     [Header("Gauntlet Shockwave (Air to Plunge)")]
     public float plungeSpeed = 28f;
@@ -96,7 +112,8 @@ public class Skills : MonoBehaviour
     public float gauntletSkillEnergyCost;
 
     public bool GauntletDeployed => activeGauntlet != null;
-    public bool HasStuckGauntlet() => activeGauntlet != null && activeGauntlet.IsStuck();
+    public bool HasActiveGauntlet() => activeGauntlet != null;
+
 
 
     // ===================== GAUNTLET CHARGE SHOT =====================
@@ -140,6 +157,18 @@ public class Skills : MonoBehaviour
         public float rateOverTime = 20f;
     }
 
+    #endregion
+
+    #region Ultimate Variables
+    [Header("Sword Ultimate")]
+    public GameObject spiritSlashPrefab;
+    public float spiritSlashInterval = 0.2f; 
+    public float spiritSlashRadius = 6f;
+    public float spiritSlashHealthCost = 10f;
+
+    private SpiritGauge spirit;
+
+    #endregion
 
 
     public bool IsChargeButtonHeld { get; set; }
@@ -151,6 +180,9 @@ public class Skills : MonoBehaviour
         controller = GetComponent<PlayerController>();
         energy = GetComponent<EnergySystem>();
         health = GetComponent<Health>();
+        overheat = GetComponent<OverheatSystem>();
+        spirit = GetComponent<SpiritGauge>();
+
 
         if (sharedChargeParticles != null)
         {
@@ -178,7 +210,7 @@ public class Skills : MonoBehaviour
         if (!PlayerController.instance.IsGrounded && PlayerController.instance.HasAirSwordDashed)
             return;
 
-        float cost = swordDashCost - UpgradeManager.instance.GetSwordDashEnergyReduction();
+        float cost = swordDashCost;
         if (cost < 0) cost = 0;
 
         if (energy != null && !energy.TrySpend(cost)) return;
@@ -200,7 +232,7 @@ public class Skills : MonoBehaviour
         if (!PlayerController.instance.IsGrounded && PlayerController.instance.HasAirUppercut)
             return;
 
-        float cost = swordUppercutCost - UpgradeManager.instance.GetSwordUppercutEnergyReduction();
+        float cost = swordUppercutCost;
         if (cost < 0) cost = 0;
 
         if (energy != null && !energy.TrySpend(cost)) return;
@@ -235,28 +267,27 @@ public class Skills : MonoBehaviour
         }
     }
 
-
-
-
     public void TryUseGauntletShockwave()
     {
         if (usingSkill) return;
+        if (overheat != null && overheat.IsOverheated) return;
         if (GauntletDeployed) { RetractGauntlet(); return; }
         if (gauntletShockCooldownTimer > 0f) return;
 
-        float cost = gauntletShockwaveCost - UpgradeManager.instance.GetGauntletShockwaveEnergyReduction();
+        float cost = gauntletShockwaveCost;
         if (cost < 0) cost = 0;
 
         if (energy != null && !energy.TrySpend(cost)) return;
 
+        overheat.AddHeat(overheat.heatPerSkill);
+
         StartCoroutine(Skill_GauntletShockwave());
     }
-
-
 
     public void TryUseGauntletLaunch()
     {
         if (usingSkill) return;
+        if (overheat != null && overheat.IsOverheated) return;
         if (GauntletDeployed)
         {
             RetractGauntlet();
@@ -264,28 +295,17 @@ public class Skills : MonoBehaviour
         }
         if (activeGauntlet != null) return;
 
-        float cost = gauntletSkillEnergyCost - UpgradeManager.instance.GetGauntletLaunchEnergyReduction();
+        float cost = gauntletSkillEnergyCost;
         if (energy != null && !energy.TrySpend(cost)) return;
+
+        overheat.AddHeat(overheat.heatPerSkill);
 
         StartCoroutine(Skill_GauntletLaunch());
     }
 
-    //public void TryUseGauntletChargeShot()
-    //{
-    //    if (!isCharging)
-    //    {
-    //        chargeRoutine = StartCoroutine(Skill_GauntletChargeShot());
-    //    }
-    //    else
-    //    {
-    //        if (chargeRoutine != null) StopCoroutine(chargeRoutine);
-    //        StartCoroutine(FireGauntletChargeShot());
-    //    }
-    //}
-    // Replace these methods in Skills.cs:
-
     public void StartGauntletChargeShot()
     {
+        if (overheat != null && overheat.IsOverheated) return;
         if (!CanUseGauntletChargeShot())
         {
             if (sharedChargeParticles != null)
@@ -354,10 +374,58 @@ public class Skills : MonoBehaviour
         }
     }
 
+    // Ultimates
+
+    public void TryUseSwordUltimate()
+    {
+        if (usingSkill) return;
+        if (spirit == null || spirit.IsEmpty) return;
+
+        StartCoroutine(Skill_SwordUltimate());
+    }
 
 
+    private IEnumerator Skill_SwordUltimate()
+    {
+        usingSkill = true;
+        spirit.StartDrain();
 
+        // Find first enemy in range
+        Collider2D[] enemies = Physics2D.OverlapCircleAll(transform.position, spiritSlashRadius, enemyMask);
+        Transform firstTarget = enemies.Length > 0 ? enemies[Random.Range(0, enemies.Length)].transform : null;
 
+        if (firstTarget == null)
+        {
+            Debug.Log("No enemies in range for ultimate!");
+            spirit.StopDrain();
+            usingSkill = false;
+            yield return null;
+        }
+
+        // Spawn ONE persistent spirit slash that will bounce between enemies
+        GameObject slash = Instantiate(spiritSlashPrefab, transform.position, Quaternion.identity);
+        SpiritSlash slashComp = slash.GetComponent<SpiritSlash>();
+
+        if (slashComp != null)
+        {
+            slashComp.Init(transform, firstTarget, enemyMask);
+        }
+
+        // Wait until spirit is fully drained
+        while (!spirit.IsEmpty)
+        {
+            yield return null;
+        }
+
+        // Cleanup - destroy the slash when spirit is empty
+        if (slash != null)
+        {
+            Destroy(slash);
+        }
+
+        spirit.StopDrain();
+        usingSkill = false;
+    }
 
     #endregion
 
@@ -426,9 +494,10 @@ public class Skills : MonoBehaviour
                 if (h != null && !hit.Contains(h))
                 {
                     hit.Add(h);
-                    float dmg = dashFlatDamage + UpgradeManager.instance.GetSwordDashBonus();
+                    float dmg = dashFlatDamage;
                     Vector2 knockDir = (h.transform.position - transform.position).normalized;
-                    h.TakeDamage(dmg, knockDir);
+                    h.TakeDamage(dmg, knockDir, false, CrowdControlState.None, 0f); 
+                    ApplySkillCC(h, knockDir, swordDashGroundedCC, swordDashAirborneCC, swordDashCCDuration);
 
                     if (!h.isPlayer)
                     {
@@ -528,9 +597,10 @@ public class Skills : MonoBehaviour
             if (h != null && !hit.Contains(h))
             {
                 hit.Add(h);
-                float dmg = uppercutFlatDamage + UpgradeManager.instance.GetSwordUppercutBonus();
+                float dmg = uppercutFlatDamage;
                 Vector2 knockDir = (h.transform.position - transform.position).normalized;
-                h.TakeDamage(dmg, knockDir);
+                h.TakeDamage(dmg, knockDir, false, CrowdControlState.None, 0f); // No forced CC
+                ApplySkillCC(h, knockDir, swordUppercutGroundedCC, swordUppercutAirborneCC, swordUppercutCCDuration);
 
                 if (!h.isPlayer)
                 {
@@ -613,9 +683,10 @@ public class Skills : MonoBehaviour
                     if (h != null && !hit.Contains(h))
                     {
                         hit.Add(h);
-                        float dmg = shockwaveFlatDamage + UpgradeManager.instance.GetGauntletShockwaveBonus();
+                        float dmg = shockwaveFlatDamage;
                         Vector2 knockDir = (h.transform.position - transform.position).normalized;
-                        h.TakeDamage(dmg, knockDir);
+                        h.TakeDamage(dmg, knockDir.normalized, false, CrowdControlState.None, 0f); // No forced CC
+                        ApplySkillCC(h, knockDir.normalized, gauntletShockwaveGroundedCC, gauntletShockwaveAirborneCC, gauntletShockwaveCCDuration);
 
                         if (hitstop > 0f)
                         {
@@ -656,7 +727,7 @@ public class Skills : MonoBehaviour
             if (hit.Contains(h)) continue;
             hit.Add(h);
 
-            float dmg = shockwaveFlatDamage + UpgradeManager.instance.GetGauntletShockwaveBonus();
+            float dmg = shockwaveFlatDamage;
             Vector2 away = ((Vector2)h.transform.position - (Vector2)transform.position).normalized;
             Vector2 knock = away * shockwaveKnockForce + Vector2.up * shockwaveUpwardBoost;
 
@@ -678,8 +749,8 @@ public class Skills : MonoBehaviour
 
         activeGauntlet = ProjectileManager.instance.SpawnGauntlet(transform.position,Quaternion.identity);
         activeGauntlet.speed = gauntletLaunchSpeed;
-        activeGauntlet.Init(transform, dir, activeGauntlet.damage, enemyMask, terrainMask,
-            gauntletMinRange, gauntletMaxFlightRange, gauntletMaxLeashRange);
+        activeGauntlet.Init(transform, dir, activeGauntlet.damage, enemyMask, terrainMask,gauntletMaxFlightRange, gauntletMaxLeashRange);
+
 
         usingSkill = false;
         yield return null;
@@ -763,18 +834,28 @@ public class Skills : MonoBehaviour
 
         Vector2 dir = controller.facingRight ? Vector2.right : Vector2.left;
 
-        
         GauntletChargeProjectile chargeProj = ProjectileManager.instance.SpawnGauntletCharge(
             gauntletChargeSpawnPoint.position, Quaternion.identity
         );
         if (chargeProj != null)
             chargeProj.Init(dir, damage, knockback, ratio);
 
+        if (overheat != null)
+        {
+            if (ratio < 0.33f)          // Stage 1
+                overheat.AddHeat(overheat.heatPerSkill * 0.5f); 
+            else if (ratio < 0.66f)     // Stage 2
+                overheat.AddHeat(overheat.heatPerSkill * 1.0f);  
+            else                        // Stage 3
+                overheat.AddHeat(overheat.heatPerSkill * 1.5f);  
+        }
+
         currentChargeTime = 0f;
         IsChargeLocked = false;
 
         Debug.Log($"Fired charge shot at {ratio * 100f}% charge");
     }
+
 
 
     #endregion
@@ -810,9 +891,12 @@ public class Skills : MonoBehaviour
         {
             pc.SetHitstop(false);
             pc.SetVelocity(savedVel);
+            pc.externalVelocityOverride = false;
         }
+
         if (targetRb) targetRb.simulated = true;
     }
+
 
 
 
@@ -824,6 +908,22 @@ public class Skills : MonoBehaviour
         int index = 0;
         while ((v >>= 1) != 0) index++;
         return index;
+    }
+
+    private void ApplySkillCC(Health targetHealth, Vector2 knockDir, CrowdControlState groundedCC, CrowdControlState airborneCC, float duration)
+    {
+        if (targetHealth == null || targetHealth.isPlayer) return;
+
+        // Check if target is airborne
+        Rigidbody2D targetRb = targetHealth.GetComponent<Rigidbody2D>();
+        bool isAirborne = targetRb != null && Mathf.Abs(targetRb.linearVelocity.y) > 0.5f;
+
+        CrowdControlState ccToApply = isAirborne ? airborneCC : groundedCC;
+
+        if (ccToApply == CrowdControlState.Stunned)
+            targetHealth.ApplyStun(duration);
+        else if (ccToApply == CrowdControlState.Knockdown)
+            targetHealth.ApplyKnockdown(duration, isAirborne, knockDir);
     }
     #endregion
 

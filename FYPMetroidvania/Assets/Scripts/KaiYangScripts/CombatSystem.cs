@@ -27,8 +27,11 @@ public class CombatSystem : MonoBehaviour
 {
     private InputAction _skill3ChargeAction;
 
+    public OverheatSystem overheat;
+
     [Header("General Attack Settings")]
     public float baseAttackDamage = 10f;
+    public float OverheatMultiplier;
 
     [Header("Weapon Settings")]
     public WeaponType currentWeapon;
@@ -44,6 +47,8 @@ public class CombatSystem : MonoBehaviour
 
     public GameObject swordDownHitbox;
     public GameObject gauntletDownHitbox;
+
+    public GameObject swordDownSweepHitbox;
 
 
     [Header("Melee Combo Hitboxes")]
@@ -93,6 +98,7 @@ public class CombatSystem : MonoBehaviour
         animator = GetComponentInChildren<Animator>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         skills = GetComponentInChildren<Skills>();
+        overheat = GetComponent<OverheatSystem>();
 
         controller = GetComponent<PlayerController>();
 
@@ -102,6 +108,10 @@ public class CombatSystem : MonoBehaviour
         _skill3ChargeAction.started += OnSkill3ChargeStarted;
         _skill3ChargeAction.canceled += OnSkill3ChargeCanceled;
 
+        int playerLayer = gameObject.layer;
+        int enemyLayer = LayerMask.NameToLayer("EnemyLayer");
+        if (enemyLayer >= 0)
+            Physics2D.IgnoreLayerCollision(playerLayer, enemyLayer, false);
 
         currentWeapon = WeaponType.None;
         ApplyWeaponStats(currentWeapon);
@@ -230,6 +240,24 @@ public class CombatSystem : MonoBehaviour
 
     #endregion
 
+    #region Ultimate Usage
+
+    public void OnUltimate(InputValue value)
+    {
+        if (skills != null && !skills.IsChargeLocked)
+        {
+            switch (currentWeapon)
+            {
+                case WeaponType.Sword:
+                    skills.TryUseSwordUltimate();
+                    break;
+
+            }
+        }
+    }
+
+    #endregion
+
     public void UnlockWeapon(WeaponType weapon)
     {
         if (!unlockedWeapons.Contains(weapon))
@@ -287,6 +315,10 @@ public class CombatSystem : MonoBehaviour
 
     public void OnAttack()
     {
+        var health = GetComponent<Health>();
+        if (health != null && health.currentCCState != CrowdControlState.None)
+            return;
+
         if (skills != null && skills.IsChargeLocked) return;
         if (skills != null && skills.IsUsingSkill) return;
         if (currentWeapon == WeaponType.None) return;
@@ -343,9 +375,22 @@ public class CombatSystem : MonoBehaviour
 
         Debug.Log($"Performed DOWN attack with {currentWeapon}");
 
-        if (currentWeapon == WeaponType.Sword && swordDownHitbox != null)
+        if (currentWeapon == WeaponType.Sword)
         {
-            StartCoroutine(ToggleHitbox(swordDownHitbox, 0.2f));
+            if (controller.IsGrounded && swordDownSweepHitbox != null)
+            {
+                // Grounded sweep attack
+                var hb = swordDownSweepHitbox.GetComponent<Hitbox>();
+                if (hb != null)
+                    hb.isSweepHitbox = true; 
+
+                StartCoroutine(ToggleHitbox(swordDownSweepHitbox, 0.2f));
+            }
+            else if (swordDownHitbox != null)
+            {
+                // Air down attack
+                StartCoroutine(ToggleHitbox(swordDownHitbox, 0.2f));
+            }
         }
         else if (currentWeapon == WeaponType.Gauntlet && gauntletDownHitbox != null)
         {
@@ -355,14 +400,15 @@ public class CombatSystem : MonoBehaviour
 
 
 
+
+
     private void PerformAttack()
     {
-        
         if (currentWeapon == WeaponType.Gauntlet && skills != null)
         {
-            if (skills.GauntletDeployed)  
+            if (skills.GauntletDeployed)
             {
-                skills.RetractGauntlet(); // return 
+                skills.RetractGauntlet();
                 return;
             }
         }
@@ -377,11 +423,15 @@ public class CombatSystem : MonoBehaviour
         animator.SetTrigger("DoAttack");
         animator.SetInteger("ComboStep", comboStep);
 
+        controller.externalVelocityOverride = false;
+        controller.SetHitstop(false); // clear any leftover hitstop
+
         Debug.Log($"Performing Combo Step {comboStep} with {currentWeapon}");
     }
 
 
- 
+
+
 
     // === HITBOX HELPERS ===
     public void EnableHitbox(int index)
@@ -452,16 +502,36 @@ public class CombatSystem : MonoBehaviour
     {
         comboStep = 0;
         comboTimer = 0f;
+
         if (animator != null)
             animator.SetInteger("ComboStep", 0);
+
+        controller.externalVelocityOverride = false;
+        controller.SetHitstop(false);
     }
 
-    public float GetAttackDamage()
+
+    public float GetAttackDamage(int attackNumber)
     {
-        return baseAttackDamage + UpgradeManager.instance.GetGeneralDamageBonus();
+        float dmg = baseAttackDamage;
+        dmg *= GetDamageMultiplier(attackNumber);
+
+        // Debug each condition separately
+        Debug.Log($"Current weapon: {currentWeapon}");
+        Debug.Log($"Overheat reference null? {overheat == null}");
+        if (overheat != null)
+        {
+            Debug.Log($"Is overheated? {overheat.IsOverheated}");
+            Debug.Log($"Current heat: {overheat.CurrentHeat}");
+        }
+
+        if (currentWeapon == WeaponType.Gauntlet && overheat != null && overheat.IsOverheated)
+        {
+            Debug.Log("OVERHEAT MULTIPLIER APPLIED! Damage boosted from " + (dmg / 3f) + " to " + dmg);
+            dmg *= OverheatMultiplier;
+        }
+        return dmg;
     }
 
-
-  
 
 }

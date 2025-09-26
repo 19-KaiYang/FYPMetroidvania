@@ -180,8 +180,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SwordSlashProjectile
   damage: 20
   speed: 12
-  knockback: 50
+  knockback: 10
   rb: {fileID: 5666887810853791225}
   maxDistance: 5
   bloodCost: 10
-  knockbackForce: 8

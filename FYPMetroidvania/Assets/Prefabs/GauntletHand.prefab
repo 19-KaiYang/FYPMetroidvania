@@ -105,9 +105,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1befedfb418add949ae0a4aa4af77629, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GauntletProjectile
-  damage: 1000
+  damage: 10
   speed: 15
-  knockback: 8
+  knockback: 0
   rb: {fileID: 0}
   col: {fileID: 0}
   lineRenderer: {fileID: 0}

@@ -27,7 +27,6 @@ public class PlayerController : MonoBehaviour
     public float wallCoyoteTime = 0.15f;
     private float wallCoyoteCounter;
 
-
     [Header("Dash")]
     public float dashSpeed = 15f;
     public float dashDuration = 0.2f;
@@ -38,6 +37,7 @@ public class PlayerController : MonoBehaviour
     public float wallJumpForce = 8f;
     public Vector2 wallJumpDirection = new Vector2(1, 1);
     private bool hasWallJumped;
+    private float lastWallJumpDirection = 0f; 
 
     [Header("Ground Check")]
     public Transform groundCheck;
@@ -48,7 +48,6 @@ public class PlayerController : MonoBehaviour
 
     [Header("Collider")]
     public Vector2 colliderSize = new Vector2(0.5f, 1f);
-
 
     public Rigidbody2D rb;
     private Animator animator;
@@ -80,7 +79,6 @@ public class PlayerController : MonoBehaviour
     public bool isInHitstop { get; private set; }
     public Vector2 GetVelocity() => velocity;
 
-
     public Vector2 CurrentVelocity => velocity;
 
     private void Awake()
@@ -96,15 +94,14 @@ public class PlayerController : MonoBehaviour
         }
 
         rb = GetComponent<Rigidbody2D>();
-        rb.bodyType = RigidbodyType2D.Kinematic; 
-        rb.simulated = true;                     
-
+        rb.bodyType = RigidbodyType2D.Kinematic;
+        rb.simulated = true;
 
         skills = GetComponentInChildren<Skills>();
         animator = GetComponentInChildren<Animator>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
 
-        if(groundCheck != null)
+        if (groundCheck != null)
         {
             groundCheck.position = new Vector2(transform.position.x, transform.position.y - (colliderSize.y / 2));
         }
@@ -114,6 +111,13 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         if (isInHitstop) return;
+
+        var health = GetComponent<Health>();
+        if (health != null && health.currentCCState != CrowdControlState.None)
+        {
+            velocity.x = 0f; 
+            return; 
+        }
 
         // Dash timers
         if (isDashing)
@@ -131,8 +135,8 @@ public class PlayerController : MonoBehaviour
             dashCooldownTimer -= Time.deltaTime;
 
         // Ground check
-        RaycastHit2D ground = Physics2D.Raycast(groundCheck.position,Vector2.down,groundCheckRadius,GroundCheckLayer);
-        if(ground.collider != null)
+        RaycastHit2D ground = Physics2D.Raycast(groundCheck.position, Vector2.down, groundCheckRadius, GroundCheckLayer);
+        if (ground.collider != null)
         {
             IsGrounded = true;
             IsOnPlatform = ground.collider.CompareTag("Platform");
@@ -150,9 +154,9 @@ public class PlayerController : MonoBehaviour
             HasAirSwordDashed = false;
             HasAirUppercut = false;
             hasWallJumped = false;
+            lastWallJumpDirection = 0f; // Reset wall jump direction
 
             if (velocity.y < 0) velocity.y = -1f;
-
 
             if (jumpBufferCounter > 0f && !jumpLocked && !platformDropping)
             {
@@ -160,9 +164,7 @@ public class PlayerController : MonoBehaviour
                 jumpLocked = true;
                 jumpBufferCounter = 0f;
             }
-
         }
-
 
         if (platformDropping)
         {
@@ -186,8 +188,6 @@ public class PlayerController : MonoBehaviour
                 velocity = dashDirection * dashSpeed;
         }
 
-      
-
         // Flip sprite
         if (moveInput.x > 0 && !facingRight)
             Flip();
@@ -206,17 +206,16 @@ public class PlayerController : MonoBehaviour
         {
             if (wallCoyoteCounter > 0)
                 wallCoyoteCounter -= Time.deltaTime;
-            else
-                hasWallJumped = false; 
+          
         }
-
-
     }
 
     private void FixedUpdate()
     {
-
         if (isInHitstop) return;
+
+        var health = GetComponent<Health>();
+        bool inArcKnockdown = health != null && health.isInArcKnockdown;
         // Apply gravity
         if (!isDashing)
             velocity.y += gravity * Time.fixedDeltaTime;
@@ -274,10 +273,9 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void OnMove(InputValue value) 
-    { 
+    public void OnMove(InputValue value)
+    {
         moveInput = value.Get<Vector2>();
-
     }
 
     public void OnJump()
@@ -302,24 +300,42 @@ public class PlayerController : MonoBehaviour
                 jumpLocked = true;
             }
         }
-        else if (!IsGrounded && !hasWallJumped && IsTouchingWall())
+        else if (!IsGrounded && IsTouchingWall())
         {
-            hasWallJumped = true;
-
             bool wallOnRight = IsWallOnRight();
-            float dir = wallOnRight ? -1f : 1f;
+            bool wallOnLeft = IsWallOnLeft();
 
-            velocity = new Vector2(
-                dir * wallJumpDirection.x * wallJumpForce,
-                wallJumpDirection.y * wallJumpForce
-            );
+            float jumpDirection = 0f;
+            bool canWallJump = false;
 
-            StartCoroutine(WallJumpBuffer());
+            // determine jump direction based on wall
+            if (wallOnRight && !wallOnLeft)
+            {
+                jumpDirection = -1f; // jump left from right wall
+            }
+            else if (wallOnLeft && !wallOnRight)
+            {
+                jumpDirection = 1f; // jump right from left wall
+            }
+
+            if (jumpDirection != 0f && (!hasWallJumped || jumpDirection != lastWallJumpDirection))
+            {
+                canWallJump = true;
+            }
+
+            if (canWallJump)
+            {
+                hasWallJumped = true;
+                lastWallJumpDirection = jumpDirection;
+
+                velocity = new Vector2(
+                    jumpDirection * wallJumpDirection.x * wallJumpForce,
+                    wallJumpDirection.y * wallJumpForce
+                );
+
+                StartCoroutine(WallJumpBuffer());
+            }
         }
-
-
-
-
     }
 
     private IEnumerator WallJumpBuffer()
@@ -328,7 +344,6 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
         externalVelocityOverride = false;
     }
-
 
     public void OnDash()
     {
@@ -353,8 +368,6 @@ public class PlayerController : MonoBehaviour
     public void MarkAirSwordDash() => HasAirSwordDashed = true;
     public void MarkAirUppercut() => HasAirUppercut = true;
 
-
-
     public void Flip()
     {
         facingRight = !facingRight;
@@ -365,12 +378,7 @@ public class PlayerController : MonoBehaviour
 
     private bool IsTouchingWall()
     {
-        float offsetX = colliderSize.x / 2f + 0.05f;
-        Vector2 originRight = (Vector2)transform.position + Vector2.right * offsetX;
-        Vector2 originLeft = (Vector2)transform.position + Vector2.left * offsetX;
-
-        return Physics2D.Raycast(originRight, Vector2.right, wallCheckDistance, groundLayer) ||
-               Physics2D.Raycast(originLeft, Vector2.left, wallCheckDistance, groundLayer);
+        return IsWallOnRight() || IsWallOnLeft();
     }
 
     private bool IsWallOnRight()
@@ -378,6 +386,13 @@ public class PlayerController : MonoBehaviour
         float offsetX = colliderSize.x / 2f + 0.05f;
         Vector2 originRight = (Vector2)transform.position + Vector2.right * offsetX;
         return Physics2D.Raycast(originRight, Vector2.right, wallCheckDistance, groundLayer);
+    }
+
+    private bool IsWallOnLeft()
+    {
+        float offsetX = colliderSize.x / 2f + 0.05f;
+        Vector2 originLeft = (Vector2)transform.position + Vector2.left * offsetX;
+        return Physics2D.Raycast(originLeft, Vector2.left, wallCheckDistance, groundLayer);
     }
 
     public void SetVelocity(Vector2 newVel)
@@ -390,10 +405,8 @@ public class PlayerController : MonoBehaviour
     {
         isInHitstop = state;
         if (state)
-            velocity = Vector2.zero; 
+            velocity = Vector2.zero;
     }
-
-
 
     private void OnDrawGizmosSelected()
     {
