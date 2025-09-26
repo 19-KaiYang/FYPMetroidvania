@@ -210,6 +210,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7223694547949486057, guid: c5e0f571f6e495b49a73e7bd59a67977, type: 3}
+      propertyPath: groundCheckValue
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8504892941802031584, guid: c5e0f571f6e495b49a73e7bd59a67977, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.9087424
@@ -1091,6 +1095,10 @@ PrefabInstance:
       propertyPath: knockbackForce
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 790515554272389244, guid: f29dbcd3a54762246ba77d6908aad532, type: 3}
+      propertyPath: groundCheckValue
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 5560883104358344807, guid: f29dbcd3a54762246ba77d6908aad532, type: 3}
       propertyPath: m_LocalPosition.x
       value: 5.4
@@ -1164,7 +1172,11 @@ MonoBehaviour:
   flashDuration: 0.1
   hitSound: {fileID: 0}
   deathSound: {fileID: 0}
+  arcKnockdownGravity: 15
+  isInArcKnockdown: 0
   knockbackForce: 5
+  stunPushbackForce: 5
+  groundCheckValue: 0
   currentCCState: 0
   invincibilityDuration: 0.3
   isBloodMarked: 1
@@ -2706,6 +2718,14 @@ PrefabInstance:
     - target: {fileID: 790515554272389244, guid: f29dbcd3a54762246ba77d6908aad532, type: 3}
       propertyPath: knockbackForce
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 790515554272389244, guid: f29dbcd3a54762246ba77d6908aad532, type: 3}
+      propertyPath: groundCheckValue
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 790515554272389244, guid: f29dbcd3a54762246ba77d6908aad532, type: 3}
+      propertyPath: stunPushbackForce
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5560883104358344807, guid: f29dbcd3a54762246ba77d6908aad532, type: 3}
       propertyPath: m_LocalPosition.x

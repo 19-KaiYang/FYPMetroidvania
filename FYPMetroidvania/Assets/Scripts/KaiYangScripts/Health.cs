@@ -25,8 +25,10 @@ public class Health : MonoBehaviour
     public float arcKnockdownGravity = 15f; 
     public bool isInArcKnockdown = false;
 
-    [Header("Knockback")]
+    [Header("Default Knockback")]
     public float knockbackForce = 5f;
+    public float stunPushbackForce = 5f;
+    public float groundCheckValue = 1f;
 
     [Header("Combat States")]
     public CrowdControlState currentCCState = CrowdControlState.None;
@@ -60,10 +62,6 @@ public class Health : MonoBehaviour
 
     private void Update()
     {
-        if (isPlayer && Input.GetKeyDown(KeyCode.K))
-        {
-            TestDamage();
-        }
 
         // === CC TIMERS ===
         if (currentCCState != CrowdControlState.None)
@@ -103,7 +101,7 @@ public class Health : MonoBehaviour
     }
 
 
-    public void TakeDamage(float amount, Vector2? hitDirection = null, bool useRawForce = false)
+    public void TakeDamage(float amount, Vector2? hitDirection = null, bool useRawForce = false, CrowdControlState forceCC = CrowdControlState.None, float forceCCDuration = 0f)
     {
         if (isPlayer && invincible) return;
 
@@ -122,27 +120,28 @@ public class Health : MonoBehaviour
                 rb.AddForce(hitDirection.Value.normalized * knockbackForce, ForceMode2D.Impulse);
         }
 
-        bool grounded = false;
-        if (isPlayer)
-        {
-            grounded = PlayerController.instance != null && PlayerController.instance.IsGrounded;
-        }
-        else
-        {
-            // Simple enemy grounded check using velocity
-            grounded = Mathf.Abs(rb.linearVelocity.y) < 0.1f;
-
-        }
-
-     
         if (!isPlayer)
         {
-            if (grounded)
-                ApplyStun(1.0f);
+            if (forceCC != CrowdControlState.None)
+            {
+                // Skill specified exact CC type
+                if (forceCC == CrowdControlState.Stunned)
+                    ApplyStun(forceCCDuration > 0 ? forceCCDuration : 1.0f);
+                else if (forceCC == CrowdControlState.Knockdown)
+                    ApplyKnockdown(forceCCDuration > 0 ? forceCCDuration : 2.0f, true, hitDirection);
+            }
             else
-                ApplyKnockdown(2.0f, true);
-        }
+            {
+                // Default behavior based on grounded state
+                RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, groundCheckValue, LayerMask.GetMask("Ground"));
+                bool grounded = hit.collider != null;
 
+                if (grounded)
+                    ApplyStun(1.0f, hitDirection);
+                else
+                    ApplyKnockdown(2.0f, true, hitDirection);
+            }
+        }
 
         // Death handling
         if (currentHealth <= 0)
@@ -224,7 +223,7 @@ public class Health : MonoBehaviour
         // Re-enable controls
         if (controller != null) controller.enabled = true;
 
-        // Re-link camera follow if needed
+
         Camera mainCam = Camera.main;
         if (mainCam != null)
         {
@@ -259,14 +258,24 @@ public class Health : MonoBehaviour
         }
     }
 
-    public void ApplyStun(float duration)
+    public void ApplyStun(float duration, Vector2? hitDirection = null)
     {
         currentCCState = CrowdControlState.Stunned;
         ccTimer = duration;
+
+        // Apply pushback for stunned enemies
+        if (!isPlayer && rb != null && hitDirection.HasValue)
+        {
+            rb.linearVelocity = Vector2.zero;
+
+            Vector2 pushDirection = new Vector2(hitDirection.Value.x, 0f).normalized;
+            rb.AddForce(pushDirection * stunPushbackForce, ForceMode2D.Impulse);
+        }
+
         Debug.Log($"{gameObject.name} stunned for {duration} sec");
     }
 
-    public void ApplyKnockdown(float duration, bool isAirborne = false)
+    public void ApplyKnockdown(float duration, bool isAirborne = false, Vector2? hitDirection = null)
     {
         currentCCState = CrowdControlState.Knockdown;
         ccTimer = duration;
@@ -276,21 +285,13 @@ public class Health : MonoBehaviour
             var pc = GetComponent<PlayerController>();
             if (pc != null)
             {
-                // Clear old velocity
                 pc.SetVelocity(Vector2.zero);
-
-                // Determine knockback direction
                 float xDir = pc.facingRight ? -1f : 1f;
-
-                // Arc knockback with higher horizontal speed, moderate vertical
-                Vector2 arcKnockback = new Vector2(xDir * 10f, 8f); // More horizontal, less vertical
+                Vector2 arcKnockback = new Vector2(xDir * 10f, 8f);
                 pc.SetVelocity(arcKnockback);
-
-                // Enable arc knockdown mode
                 isInArcKnockdown = true;
                 pc.externalVelocityOverride = true;
             }
-
             StartCoroutine(PlayerKnockdownInvincibility(duration));
         }
         else
@@ -299,19 +300,22 @@ public class Health : MonoBehaviour
             {
                 rb.linearVelocity = Vector2.zero;
 
-                // Determine knockback direction away from player
-                float xDir = -1f; // default left
-                if (PlayerController.instance != null)
+                float xDir = -1f; 
+                if (hitDirection.HasValue)
                 {
+                    // Use the actual hit direction from the attack
+                    xDir = hitDirection.Value.x > 0 ? 1f : -1f;
+                }
+                else if (PlayerController.instance != null)
+                {
+                    // Fallback: calculate from positions
                     Vector2 playerPos = PlayerController.instance.transform.position;
                     Vector2 enemyPos = transform.position;
-                    xDir = (enemyPos.x > playerPos.x) ? 1f : -1f; // knock away from player
+                    xDir = (enemyPos.x > playerPos.x) ? 1f : -1f;
                 }
 
-                // Arc knockback for enemies
                 Vector2 arcKnockback = new Vector2(xDir * 8f, 6f);
                 rb.AddForce(arcKnockback, ForceMode2D.Impulse);
-
                 isInArcKnockdown = true;
             }
 
@@ -330,12 +334,12 @@ public class Health : MonoBehaviour
             var pc = PlayerController.instance;
             if (pc != null)
             {
-                // Apply custom gravity for smoother arc
+
                 Vector2 currentVel = pc.GetVelocity();
                 currentVel.y -= arcKnockdownGravity * Time.deltaTime;
                 pc.SetVelocity(currentVel);
 
-                // End arc knockdown when landed
+
                 if (pc.IsGrounded)
                 {
                     isInArcKnockdown = false;
@@ -382,27 +386,29 @@ public class Health : MonoBehaviour
         }
     }
 
-    public void TestDamage()
-    {
-        TakeDamage(10f,Vector2.left);
-
-        if (isPlayer)
-        {
-            bool grounded = PlayerController.instance != null && PlayerController.instance.IsGrounded;
-            if (grounded)
-                ApplyStun(1.0f);
-            else
-                ApplyKnockdown(2.0f, true);
-        }
-        else
-        {
-            bool grounded = Mathf.Abs(rb.linearVelocity.y) < 0.1f;
-            if (grounded)
-                ApplyStun(1.0f);
-            else
-                ApplyKnockdown(2.0f, true);
-        }
-    }
+    // ==========================
+    // HOW TO CALL CC FUNCTIONS
+    // ==========================
+    //
+    // ApplyStun(duration, hitDirection)
+    //   - Puts target into Stun state for <duration> seconds
+    //   - Example: targetHealth.ApplyStun(1.5f, knockDir);
+    //
+    // ApplyKnockdown(duration, isAirborne, hitDirection)
+    //   - Puts target into Knockdown state for <duration> seconds
+    //   - If isAirborne = true then enemy can be juggled in the air
+    //   - Example: targetHealth.ApplyKnockdown(2.0f, true, knockDir);
+    //
+    // ApplySkillCC(health, knockDir, groundedCC, airborneCC, ccDuration)
+    //   - Unified helper to apply Stun/Knockdown depending on target state
+    //   - health = target's Health component
+    //   - knockDir = knockback direction
+    //   - groundedCC = what to apply if enemy is on the ground (Stunned / None)
+    //   - airborneCC = what to apply if enemy is in the air (Knockdown / None)
+    //   - ccDuration = how long the effect lasts
+    //   - Example: ApplySkillCC(h, knockDir, CrowdControlState.Stunned, CrowdControlState.Knockdown, 2.0f);
+    //
+    // ==========================
 
 
 }

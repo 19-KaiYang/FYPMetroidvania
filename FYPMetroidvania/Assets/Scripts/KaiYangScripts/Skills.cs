@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Unity.Collections.AllocatorManager;
 
 public class Skills : MonoBehaviour
 {
@@ -31,6 +32,10 @@ public class Skills : MonoBehaviour
     public Vector2 dashBoxSize = new Vector2(1.4f, 1.0f);
     public Vector2 dashBoxOffset = new Vector2(0.7f, 0f);
 
+    public CrowdControlState swordDashGroundedCC = CrowdControlState.Stunned;
+    public CrowdControlState swordDashAirborneCC = CrowdControlState.Knockdown;
+    public float swordDashCCDuration = 1.5f;
+
     [Header("Lunging Strike Cooldown")]
     public float swordDashCooldown = 2f;
     private float swordDashCooldownTimer = 0f;
@@ -50,6 +55,10 @@ public class Skills : MonoBehaviour
     public Vector2 uppercutBoxSize = new Vector2(1.2f, 2.0f);
     public Vector2 uppercutBoxOffset = new Vector2(0.6f, 1f);
 
+    public CrowdControlState swordUppercutGroundedCC = CrowdControlState.Knockdown; 
+    public CrowdControlState swordUppercutAirborneCC = CrowdControlState.Knockdown;
+    public float swordUppercutCCDuration = 2.0f;
+
     [Header("Ascending Slash Cost")]
     public float swordUppercutCooldown = 3f;
     private float swordUppercutCooldownTimer = 0f;
@@ -65,11 +74,15 @@ public class Skills : MonoBehaviour
     //COST EDIT IN SWORDPROJECTILE.CS
 
     // ===================== GAUNTLET SHOCKWAVE =====================
-    [Header("Gauntlet Shockwave (Ground)")]
+    [Header("Gauntlet Shockwave")]
     public float shockwaveRadius = 2.5f;
     public float shockwaveFlatDamage = 0f;
     public float shockwaveKnockForce = 12f;
     public float shockwaveUpwardBoost = 6f;
+
+    public CrowdControlState gauntletShockwaveGroundedCC = CrowdControlState.Knockdown;
+    public CrowdControlState gauntletShockwaveAirborneCC = CrowdControlState.Knockdown;
+    public float gauntletShockwaveCCDuration = 2.5f;
 
     [Header("Gauntlet Shockwave (Air to Plunge)")]
     public float plungeSpeed = 28f;
@@ -481,7 +494,8 @@ public class Skills : MonoBehaviour
                     hit.Add(h);
                     float dmg = dashFlatDamage;
                     Vector2 knockDir = (h.transform.position - transform.position).normalized;
-                    h.TakeDamage(dmg, knockDir);
+                    h.TakeDamage(dmg, knockDir, false, CrowdControlState.None, 0f); 
+                    ApplySkillCC(h, knockDir, swordDashGroundedCC, swordDashAirborneCC, swordDashCCDuration);
 
                     if (!h.isPlayer)
                     {
@@ -583,7 +597,8 @@ public class Skills : MonoBehaviour
                 hit.Add(h);
                 float dmg = uppercutFlatDamage;
                 Vector2 knockDir = (h.transform.position - transform.position).normalized;
-                h.TakeDamage(dmg, knockDir);
+                h.TakeDamage(dmg, knockDir, false, CrowdControlState.None, 0f); // No forced CC
+                ApplySkillCC(h, knockDir, swordUppercutGroundedCC, swordUppercutAirborneCC, swordUppercutCCDuration);
 
                 if (!h.isPlayer)
                 {
@@ -668,7 +683,8 @@ public class Skills : MonoBehaviour
                         hit.Add(h);
                         float dmg = shockwaveFlatDamage;
                         Vector2 knockDir = (h.transform.position - transform.position).normalized;
-                        h.TakeDamage(dmg, knockDir);
+                        h.TakeDamage(dmg, knockDir.normalized, false, CrowdControlState.None, 0f); // No forced CC
+                        ApplySkillCC(h, knockDir.normalized, gauntletShockwaveGroundedCC, gauntletShockwaveAirborneCC, gauntletShockwaveCCDuration);
 
                         if (hitstop > 0f)
                         {
@@ -890,6 +906,22 @@ public class Skills : MonoBehaviour
         int index = 0;
         while ((v >>= 1) != 0) index++;
         return index;
+    }
+
+    private void ApplySkillCC(Health targetHealth, Vector2 knockDir, CrowdControlState groundedCC, CrowdControlState airborneCC, float duration)
+    {
+        if (targetHealth == null || targetHealth.isPlayer) return;
+
+        // Check if target is airborne
+        Rigidbody2D targetRb = targetHealth.GetComponent<Rigidbody2D>();
+        bool isAirborne = targetRb != null && Mathf.Abs(targetRb.linearVelocity.y) > 0.5f;
+
+        CrowdControlState ccToApply = isAirborne ? airborneCC : groundedCC;
+
+        if (ccToApply == CrowdControlState.Stunned)
+            targetHealth.ApplyStun(duration);
+        else if (ccToApply == CrowdControlState.Knockdown)
+            targetHealth.ApplyKnockdown(duration, isAirborne, knockDir);
     }
     #endregion
 
