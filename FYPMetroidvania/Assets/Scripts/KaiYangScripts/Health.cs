@@ -381,9 +381,6 @@ public class Health : MonoBehaviour
         Debug.Log($"{gameObject.name} knockdown for {duration} sec");
     }
 
-    /// <summary>
-    /// Apply knockdown using the default duration set in inspector
-    /// </summary>
     public void ApplyKnockdown(bool isAirborne = false, Vector2? hitDirection = null)
     {
         ApplyKnockdown(defaultKnockdownDuration, isAirborne, hitDirection);
