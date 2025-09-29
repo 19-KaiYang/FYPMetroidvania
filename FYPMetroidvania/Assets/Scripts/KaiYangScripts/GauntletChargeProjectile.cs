@@ -104,16 +104,19 @@ public class GauntletChargeProjectile : ProjectileBase
                     {
                         // Stun only (skip knockback)
                         skills.ApplySkillCC(h, knockDir, groundedCC, airborneCC, ccDuration);
+                        skills.GainSpirit(skills.spiritGainPerHit);
                     }
                     else
                     {
                         // Normal knockback + CC
                         ApplyKnockback(h, knockDir);
                         skills.ApplySkillCC(h, knockDir, groundedCC, airborneCC, ccDuration);
+                        skills.GainSpirit(skills.spiritGainPerHit);
                     }
                 }
                 else
                 {
+
                     ApplyKnockback(h, knockDir);
                 }
             }
