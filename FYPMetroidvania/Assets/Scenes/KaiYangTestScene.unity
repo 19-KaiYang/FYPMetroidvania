@@ -2980,7 +2980,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0, g: 0.107948065, b: 1, a: 1}
+  m_Color: {r: 0.27420092, g: 0, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -4412,6 +4412,14 @@ PrefabInstance:
     - target: {fileID: 902111682683510145, guid: 13775344399b2974daca82989c71d56e, type: 3}
       propertyPath: m_SortingOrder
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4365569239843828954, guid: 13775344399b2974daca82989c71d56e, type: 3}
+      propertyPath: spiritGainPerHit
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4365569239843828954, guid: 13775344399b2974daca82989c71d56e, type: 3}
+      propertyPath: spiritGainPerSkill
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 4365569239843828954, guid: 13775344399b2974daca82989c71d56e, type: 3}
       propertyPath: chargeStages.Array.data[1].ccDuration
