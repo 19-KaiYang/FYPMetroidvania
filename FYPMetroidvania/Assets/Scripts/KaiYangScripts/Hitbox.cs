@@ -62,12 +62,16 @@ public class Hitbox : MonoBehaviour
 
                 Vector2 dir;
                 bool useRawForce = false;
+                CrowdControlState forceCC = CrowdControlState.None;
+                float forceDuration = 0f;
 
                 if (isSweepHitbox)
                 {
-                    // Sweep = always knock straight up, strong raw force
+                    // sweep = always knock straight up with knockdown
                     dir = Vector2.up * sweepKnockbackForce;
                     useRawForce = true;
+                    forceCC = CrowdControlState.Knockdown;  
+                    forceDuration = 2.0f; 
                 }
                 else if (forceUpKnockback)
                 {
@@ -78,8 +82,8 @@ public class Hitbox : MonoBehaviour
                     dir = (other.transform.position - owner.transform.position).normalized;
                 }
 
-                // Apply damage + knockback
-                h.TakeDamage(totalDamage, dir, useRawForce);
+                // Apply damage + knockback with forced CC
+                h.TakeDamage(totalDamage, dir, useRawForce, forceCC, forceDuration);
 
                 if (!h.isPlayer)
                 {
