@@ -19,16 +19,25 @@ public class GauntletChargeProjectile : ProjectileBase
     public float midExplosionRadius = 2f;
     public float maxExplosionRadius = 3f;
 
+    private CrowdControlState groundedCC;
+    private CrowdControlState airborneCC;
+    private float ccDuration;
+
+
     public LayerMask enemyMask;
 
-    public void Init(Vector2 dir, float dmg, float kb, float ratio)
+    public void Init(Vector2 dir, float dmg, float kb, float ratio,
+                   CrowdControlState groundedCC, CrowdControlState airborneCC, float ccDuration)
     {
-        // Reset state for pooling
         hasExploded = false;
 
         damage = dmg;
         knockback = kb;
         chargeRatio = ratio;
+
+        this.groundedCC = groundedCC;
+        this.airborneCC = airborneCC;
+        this.ccDuration = ccDuration;
 
         if (rb)
             rb.linearVelocity = dir * speed * Mathf.Lerp(1f, 1.5f, ratio);
@@ -43,14 +52,13 @@ public class GauntletChargeProjectile : ProjectileBase
                 spriteRenderer.sprite = strongSprite;
         }
 
-        // Cancel any existing invokes before scheduling a new one
         CancelInvoke();
         Invoke(nameof(Explode), lifeTime);
     }
 
+
     protected override void Move()
     {
-        // Empty - projectile moves via physics
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -66,10 +74,9 @@ public class GauntletChargeProjectile : ProjectileBase
 
     private void Explode()
     {
-        if (hasExploded) return; // Prevent multiple explosions
+        if (hasExploded) return; 
         hasExploded = true;
 
-        // Cancel the lifetime invoke since we're exploding early
         CancelInvoke();
 
         float radius = (chargeRatio < 0.33f) ? minExplosionRadius :
@@ -83,11 +90,31 @@ public class GauntletChargeProjectile : ProjectileBase
             {
                 h.TakeDamage(damage);
 
-                Rigidbody2D trb = h.GetComponent<Rigidbody2D>();
-                if (trb != null)
+                Vector2 knockDir = (h.transform.position - transform.position).normalized;
+
+                // Determine what CC will be applied
+                Skills skills = PlayerController.instance.GetComponent<Skills>();
+                if (skills != null)
                 {
-                    Vector2 dir = (trb.transform.position - transform.position).normalized;
-                    ApplyKnockback(h, dir);
+                    Rigidbody2D targetRb = h.GetComponent<Rigidbody2D>();
+                    bool isAirborne = targetRb != null && Mathf.Abs(targetRb.linearVelocity.y) > 0.5f;
+                    CrowdControlState ccToApply = isAirborne ? airborneCC : groundedCC;
+
+                    if (ccToApply == CrowdControlState.Stunned)
+                    {
+                        // Stun only (skip knockback)
+                        skills.ApplySkillCC(h, knockDir, groundedCC, airborneCC, ccDuration);
+                    }
+                    else
+                    {
+                        // Normal knockback + CC
+                        ApplyKnockback(h, knockDir);
+                        skills.ApplySkillCC(h, knockDir, groundedCC, airborneCC, ccDuration);
+                    }
+                }
+                else
+                {
+                    ApplyKnockback(h, knockDir);
                 }
             }
         }

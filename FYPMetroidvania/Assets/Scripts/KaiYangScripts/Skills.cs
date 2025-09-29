@@ -155,6 +155,10 @@ public class Skills : MonoBehaviour
         public float startSize = 0.2f;
         public float startSpeed = -2f;
         public float rateOverTime = 20f;
+
+        public CrowdControlState groundedCC = CrowdControlState.Stunned;
+        public CrowdControlState airborneCC = CrowdControlState.Knockdown;
+        public float ccDuration = 1.0f;
     }
 
     #endregion
@@ -833,12 +837,21 @@ public class Skills : MonoBehaviour
         float knockback = Mathf.Lerp(gauntletChargeMinKnockback, gauntletChargeMaxKnockback, ratio);
 
         Vector2 dir = controller.facingRight ? Vector2.right : Vector2.left;
-
         GauntletChargeProjectile chargeProj = ProjectileManager.instance.SpawnGauntletCharge(
             gauntletChargeSpawnPoint.position, Quaternion.identity
         );
+
         if (chargeProj != null)
-            chargeProj.Init(dir, damage, knockback, ratio);
+        {
+            int stageIndex = Mathf.Clamp(lastStage - 1, 0, chargeStages.Length - 1);
+            var stageSettings = chargeStages[stageIndex];
+
+            chargeProj.Init(dir, damage, knockback, ratio,
+                            stageSettings.groundedCC,
+                            stageSettings.airborneCC,
+                            stageSettings.ccDuration);
+        }
+
 
         if (overheat != null)
         {
@@ -910,7 +923,7 @@ public class Skills : MonoBehaviour
         return index;
     }
 
-    private void ApplySkillCC(Health targetHealth, Vector2 knockDir, CrowdControlState groundedCC, CrowdControlState airborneCC, float duration)
+    public void ApplySkillCC(Health targetHealth, Vector2 knockDir, CrowdControlState groundedCC, CrowdControlState airborneCC, float duration)
     {
         if (targetHealth == null || targetHealth.isPlayer) return;
 
