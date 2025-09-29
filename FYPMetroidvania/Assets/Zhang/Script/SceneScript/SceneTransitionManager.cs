@@ -2,6 +2,8 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using NUnit.Framework;
+using System.Collections.Generic;
 
 public class SceneTransitionManager : MonoBehaviour
 {
@@ -16,6 +18,7 @@ public class SceneTransitionManager : MonoBehaviour
     [SerializeField] private Image fadeImage;
 
     [Header("Room Handling")]
+    public List<string> rooms;
     [SerializeField] ProgressionData progressionData;
     public int roomIndex = 0;
     public static System.Action<string> roomLoaded;
@@ -37,6 +40,8 @@ public class SceneTransitionManager : MonoBehaviour
     void Start()
     {
         currentSceneName = SceneManager.GetActiveScene().name;
+        roomIndex = 0;
+        ShuffleRooms();
     }
 
     void Update()
@@ -50,8 +55,13 @@ public class SceneTransitionManager : MonoBehaviour
     public IEnumerator FadeAndLoadScene(FadeDirection _fadeDir, string _sceneName)
     {
         fadeImage.enabled = true;
-        string random = GetRandomRoom();
-        if (random != null) _sceneName = random;
+        //string random = GetRandomRoom();
+        //if (random != null) _sceneName = random;
+        if (roomIndex < rooms.Count)
+        {
+            _sceneName = rooms[roomIndex];
+            roomIndex++;
+        }
         if (_sceneName != null)
         {
             yield return Fade(_fadeDir);
@@ -136,6 +146,23 @@ public class SceneTransitionManager : MonoBehaviour
             {
                 return scene;
             }
+        }
+    }
+
+    void ShuffleRooms()
+    {
+        rooms = new List<string>(progressionData.rooms);
+        for (int i = 0; i < rooms.Count; i++)
+        {
+            string temp = rooms[i];
+            if (temp == currentSceneName)
+            {
+                rooms.Remove(temp);
+                continue;
+            }
+            int randomIndex = Random.Range(i, rooms.Count);
+            rooms[i] = rooms[randomIndex];
+            rooms[randomIndex] = temp;
         }
     }
 
