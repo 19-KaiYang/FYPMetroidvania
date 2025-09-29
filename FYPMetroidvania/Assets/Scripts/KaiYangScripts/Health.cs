@@ -84,7 +84,6 @@ public class Health : MonoBehaviour
                 }
                 else
                 {
-                    // Adjustable ray length (uses inspector value, fallback 0.5f)
                     float rayDist = groundCheckValue > 0 ? groundCheckValue : 0.5f;
                     LayerMask groundMask = LayerMask.GetMask("Ground") | LayerMask.GetMask("Platform");
                     RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, rayDist, groundMask);
@@ -92,19 +91,17 @@ public class Health : MonoBehaviour
                     bool touchingGround = hit.collider != null;
                     bool stoppedFalling = rb != null && Mathf.Abs(rb.linearVelocity.y) < 0.1f;
 
-                    // Must be both on ground AND no longer falling
                     landed = touchingGround && stoppedFalling;
 
                     Debug.Log($"{gameObject.name} - TouchingGround: {touchingGround}, StoppedFalling: {stoppedFalling}, Y velocity: {(rb ? rb.linearVelocity.y : 0f)}");
                 }
 
 
-                // If in air knockdown, don't count down timer until landed
+                // if in air knockdown, don't count down timer 
                 if (isInArcKnockdown)
                 {
                     if (landed)
                     {
-                        // Just landed, start the recovery timer
                         ccTimer = knockdownRecoveryTime;
                         isInArcKnockdown = false;
                         Debug.Log($"{gameObject.name} landed from air knockdown, starting recovery timer ({knockdownRecoveryTime}s)");
@@ -113,7 +110,7 @@ public class Health : MonoBehaviour
                     {
                         Debug.Log($"{gameObject.name} still in air knockdown");
                     }
-                    // Don't count down timer while airborne
+                   
                     return;
                 }
 
@@ -174,7 +171,8 @@ public class Health : MonoBehaviour
         if (spriteRenderer != null)
             StartCoroutine(FlashRed());
 
-        // Knockback
+        bool shouldPreserveVelocity = (forceCC == CrowdControlState.Knockdown && useRawForce);
+
         if (rb != null && hitDirection.HasValue)
         {
             if (useRawForce)
@@ -191,7 +189,7 @@ public class Health : MonoBehaviour
                 if (forceCC == CrowdControlState.Stunned)
                     ApplyStun(forceCCDuration > 0 ? forceCCDuration : defaultStunDuration);
                 else if (forceCC == CrowdControlState.Knockdown)
-                    ApplyKnockdown(forceCCDuration > 0 ? forceCCDuration : defaultKnockdownDuration, true, hitDirection);
+                    ApplyKnockdown(forceCCDuration > 0 ? forceCCDuration : defaultKnockdownDuration, true, hitDirection, shouldPreserveVelocity);
             }
             else
             {
@@ -337,16 +335,12 @@ public class Health : MonoBehaviour
 
         Debug.Log($"{gameObject.name} stunned for {duration} sec");
     }
-
-    /// <summary>
-    /// Apply stun using the default duration set in inspector
-    /// </summary>
     public void ApplyStun(Vector2? hitDirection = null)
     {
         ApplyStun(defaultStunDuration, hitDirection);
     }
 
-    public void ApplyKnockdown(float duration, bool isAirborne = false, Vector2? hitDirection = null)
+    public void ApplyKnockdown(float duration, bool isAirborne = false, Vector2? hitDirection = null, bool preserveVelocity = false)
     {
         currentCCState = CrowdControlState.Knockdown;
         ccTimer = duration;
@@ -367,7 +361,7 @@ public class Health : MonoBehaviour
         }
         else
         {
-            if (rb != null)
+            if (rb != null && !preserveVelocity)
             {
                 rb.linearVelocity = Vector2.zero;
 
@@ -379,7 +373,6 @@ public class Health : MonoBehaviour
                 }
                 else if (PlayerController.instance != null)
                 {
-                    // Fallback: calculate from positions
                     Vector2 playerPos = PlayerController.instance.transform.position;
                     Vector2 enemyPos = transform.position;
                     xDir = (enemyPos.x > playerPos.x) ? 1f : -1f;
@@ -389,6 +382,11 @@ public class Health : MonoBehaviour
                 rb.AddForce(arcKnockback, ForceMode2D.Impulse);
                 isInArcKnockdown = true;
             }
+            else if (preserveVelocity)
+            {
+                isInArcKnockdown = true;
+                Debug.Log($"{gameObject.name} knockdown with preserved velocity (sweep attack)");
+            }
 
             if (isAirborne)
                 Debug.Log($"{gameObject.name} launched into air knockdown (can be juggled)");
@@ -397,12 +395,9 @@ public class Health : MonoBehaviour
         Debug.Log($"{gameObject.name} knockdown for {duration} sec");
     }
 
-    /// <summary>
-    /// Apply knockdown using the default duration set in inspector
-    /// </summary>
     public void ApplyKnockdown(bool isAirborne = false, Vector2? hitDirection = null)
     {
-        ApplyKnockdown(defaultKnockdownDuration, isAirborne, hitDirection);
+        ApplyKnockdown(defaultKnockdownDuration, isAirborne, hitDirection, false);
     }
 
     private void HandleArcKnockdown()
@@ -418,10 +413,8 @@ public class Health : MonoBehaviour
                 currentVel.y -= arcKnockdownGravity * Time.deltaTime;
                 pc.SetVelocity(currentVel);
 
-                // Landing is handled in Update() method now
                 if (pc.IsGrounded && isInArcKnockdown)
                 {
-                    // The timer handling is done in Update(), just stop external velocity override
                     pc.externalVelocityOverride = false;
                 }
             }
@@ -436,8 +429,6 @@ public class Health : MonoBehaviour
                 currentVel.y -= arcKnockdownGravity * Time.deltaTime;
                 rb.linearVelocity = currentVel;
 
-                // Landing detection is now handled in Update() method
-                // Don't change CC state here - let Update() handle the transition
             }
         }
     }
