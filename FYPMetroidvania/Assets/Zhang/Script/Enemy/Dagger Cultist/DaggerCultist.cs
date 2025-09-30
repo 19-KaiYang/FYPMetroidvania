@@ -20,8 +20,12 @@ public class DaggerCultist : Enemy
     [SerializeField] private LineRenderer line;
     [SerializeField] private Transform startPoint;
     [SerializeField] private Transform targetPoint;
-    [SerializeField] private bool isAming;
-
+    [SerializeField] private bool isAiming;
+    private float dCooldown;
+    [SerializeField] private Vector2 daggerCooldown;
+    [SerializeField] private float aimingTime;
+    [SerializeField] private GameObject daggerPrefab;
+    [SerializeField] private Transform throwPoint;
 
     protected override void Awake()
     {
@@ -131,35 +135,54 @@ public class DaggerCultist : Enemy
     public class DaggerCultistAttackState : IState
     {
         private DaggerCultist enemy;
-        public DaggerCultistAttackState(DaggerCultist _enemy)
+        private Coroutine attackRoutine;
+        public DaggerCultistAttackState(DaggerCultist _enemy) 
         {
             enemy = _enemy;
         }
 
         public void OnEnter()
         {
-
+            attackRoutine = enemy.StartCoroutine(ThrowDagger());
         }
         public void OnUpdate()
         {
-            AmingLine();
+            AimingLine();
+
+            if (!enemy.playerDetected)
+            {
+                enemy.stateMachine.ChangeState(new DaggerCultistIdleState(enemy));
+            }
         }
         public void OnExit()
         {
-
+            if (attackRoutine != null)
+            {
+                enemy.StopCoroutine(attackRoutine);
+                attackRoutine = null;
+            }
+            enemy.isAiming = false;
         }
-        private void AmingLine()
+        private void AimingLine()
         {
             enemy.line.SetPosition(0, enemy.transform.position);
             enemy.line.SetPosition(1, enemy.player.transform.position);
 
-            if (enemy.isAming && enemy.playerDetected) enemy.line.enabled = true;
+            if (enemy.isAiming && enemy.playerDetected) enemy.line.enabled = true;
             else enemy.line.enabled = false;
         }
-        private IEnumerator Aming()
+        private IEnumerator ThrowDagger()
         {
-
-            yield return new WaitForSeconds(1);
+            while (true)
+            {
+                enemy.dCooldown = Random.Range((float)enemy.daggerCooldown.x, (float)enemy.daggerCooldown.y);
+                enemy.isAiming = true;
+                yield return new WaitForSeconds(enemy.aimingTime);
+                //throw dagger
+                Instantiate(enemy.daggerPrefab, enemy.throwPoint.position, enemy.throwPoint.rotation);
+                enemy.isAiming = false;
+                yield return new WaitForSeconds(enemy.dCooldown);
+            }
         }
     }
 }

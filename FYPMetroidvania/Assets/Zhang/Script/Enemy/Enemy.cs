@@ -26,7 +26,8 @@ public class Enemy : MonoBehaviour, IDamageable
     //[Space]
     //[SerializeField] private float groundCheckSize;
     //[SerializeField] private Vector2 groundCheckOffset;
-
+    [Header("CC")]
+    protected Health health;
 
 
     protected virtual void Awake()
@@ -34,6 +35,7 @@ public class Enemy : MonoBehaviour, IDamageable
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         player = FindFirstObjectByType<PlayerController>();
+        health = GetComponent<Health>();
     }
 
     void Start()

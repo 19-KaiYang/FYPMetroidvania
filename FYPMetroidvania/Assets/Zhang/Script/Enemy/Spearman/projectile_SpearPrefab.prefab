@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4197124269757285658}
   - component: {fileID: -6873604439056532173}
   m_Layer: 10
-  m_Name: SpearPrefab
+  m_Name: projectile_SpearPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -150,7 +150,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -182,7 +182,6 @@ MonoBehaviour:
   speed: 0
   knockback: 0
   rb: {fileID: 0}
-  player: {fileID: 0}
   forceY: 9
   destroyTime: 2
   offSet: {x: -3, y: 3}

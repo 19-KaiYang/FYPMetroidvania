@@ -214,6 +214,11 @@ public class MeleeEnemy : Enemy
         }
         public void OnUpdate()
         {
+            if (enemy.health.currentCCState == CrowdControlState.Stunned)
+            {
+                enemy.stateMachine.ChangeState(new MeleeEnemyCCState(enemy));
+            }
+
             if (enemy.playerDetected)
             {
                 if (Mathf.Abs(enemy.distanceToPlayer.x) >= Mathf.Abs(enemy.attackAreaOffset.x))
@@ -374,5 +379,29 @@ public class MeleeEnemy : Enemy
         {
 
         }
+    }
+    public class MeleeEnemyCCState : IState
+    {
+        private MeleeEnemy enemy;
+        public MeleeEnemyCCState(MeleeEnemy _enemy)
+        {
+            enemy = _enemy;
+        }
+
+        public void OnEnter()
+        {
+            //enemy.rb.linearVelocity = Vector2.zero;
+            //enemy.animator.SetTrigger("Stunned");
+        }
+
+        public void OnUpdate()
+        {
+            if (enemy.health.currentCCState == CrowdControlState.None)
+            {
+                enemy.stateMachine.ChangeState(new MeleeEnemyChaseState(enemy));
+            }
+        }
+
+        public void OnExit() { }
     }
 }

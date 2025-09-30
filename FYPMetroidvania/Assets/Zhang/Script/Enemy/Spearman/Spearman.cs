@@ -5,6 +5,7 @@ public class Spearman : Enemy
 {
     [SerializeField] private string currentState;
 
+
     [Header("Detect")]
     [SerializeField] private Vector2 detectSize;
     [SerializeField] private Vector2 detectOffset;
@@ -31,10 +32,13 @@ public class Spearman : Enemy
     [SerializeField] private GameObject spearPrefab;
     [SerializeField] private Transform throwPoint;
 
+    
+
     protected override void Awake()
     {
         base.Awake();
         stateMachine = new StateMachine();
+        
         stateMachine.stateChanged += OnStateChanged;
     }
 
@@ -87,6 +91,7 @@ public class Spearman : Enemy
     private void ThrowSpear()
     {
         Instantiate(spearPrefab,throwPoint.position, throwPoint.rotation);
+        //Spear spear = ProjectileManager.instance.SpawnSpear(throwPoint.position, Quaternion.identity);
     }
 
     private void OnDrawGizmosSelected()
@@ -154,6 +159,11 @@ public class Spearman : Enemy
         }
         public void OnUpdate()
         {
+            if (enemy.health.currentCCState == CrowdControlState.Stunned)
+            {
+                enemy.stateMachine.ChangeState(new SpearmanCCState(enemy));
+            }
+
             if (enemy.playerDetected)
             {
                 enemy.FaceToPlayer();
@@ -244,4 +254,30 @@ public class Spearman : Enemy
 
         }
     }
+
+    public class SpearmanCCState : IState
+    {
+        private Spearman enemy;
+        public SpearmanCCState(Spearman _enemy) 
+        { 
+            enemy = _enemy; 
+        }
+
+        public void OnEnter()
+        {
+            //enemy.rb.linearVelocity = Vector2.zero;
+            //enemy.animator.SetTrigger("Stunned");
+        }
+
+        public void OnUpdate()
+        {
+            if (enemy.health.currentCCState == CrowdControlState.None)
+            {
+                enemy.stateMachine.ChangeState(new SpearmanChaseState(enemy));
+            }
+        }
+
+        public void OnExit() { }
+    }
+
 }

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Spear : ProjectileBase
 {
-    public PlayerController player;
+    private PlayerController player;
     [SerializeField] private float forceY;
     [SerializeField] private float destroyTime;
     private float offset;
@@ -55,12 +55,7 @@ public class Spear : ProjectileBase
 
         _rb.linearVelocity = new Vector2(velocitX, velocityY);
     }
-    public override void Despawn()
-    {
-        base.Despawn();
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
@@ -71,7 +66,6 @@ public class Spear : ProjectileBase
             StartCoroutine(Destroy());
         }
     }
-
     private IEnumerator Destroy()
     {
         Color c = matetial.color;
