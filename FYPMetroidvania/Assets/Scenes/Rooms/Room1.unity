@@ -194,6 +194,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 20810703}
   m_CullTransparentMesh: 1
+--- !u!1 &69039412 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8674008685807846289, guid: 13775344399b2974daca82989c71d56e, type: 3}
+  m_PrefabInstance: {fileID: 2381348969454044361}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &87710250
 GameObject:
   m_ObjectHideFlags: 0
@@ -8906,6 +8911,22 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 765506815025312801, guid: 13775344399b2974daca82989c71d56e, type: 3}
   m_PrefabInstance: {fileID: 2381348969454044361}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1387305399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 69039412}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da0739f9832287e42b250c7ec38dd4ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UpgradeManager
+  AttackUpgrade: {fileID: 11400000, guid: 5f9c7c6967109e34bb16431948564691, type: 2}
+  SkillUpgrade: {fileID: 0}
+  SpiritUpgrade: {fileID: 0}
+  MiscUpgrades: []
 --- !u!1 &1388339499
 GameObject:
   m_ObjectHideFlags: 0
@@ -9398,6 +9419,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c5614658b95f0440a69ff4c2881ab2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeManager
+  AttackUpgrade: {fileID: 0}
+  SkillUpgrade: {fileID: 0}
+  SpiritUpgrade: {fileID: 0}
+  MiscUpgrades: []
 --- !u!1 &1618878103
 GameObject:
   m_ObjectHideFlags: 0
@@ -10794,7 +10819,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8674008685807846289, guid: 13775344399b2974daca82989c71d56e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1387305399}
   m_SourcePrefab: {fileID: 100100000, guid: 13775344399b2974daca82989c71d56e, type: 3}
 --- !u!81 &4294503883500359241
 AudioListener:

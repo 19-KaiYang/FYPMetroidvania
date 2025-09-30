@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
@@ -75,6 +76,10 @@ public class CombatSystem : MonoBehaviour
 
     //Skills 
     private Skills skills;
+
+    // Events
+    public static Action<Hitbox> basicAttackStart;
+    public static Action basicAttackEnd;
 
     public int CurrentComboStep => comboStep;
 
@@ -429,16 +434,15 @@ public class CombatSystem : MonoBehaviour
         Debug.Log($"Performing Combo Step {comboStep} with {currentWeapon}");
     }
 
-
-
-
-
     // === HITBOX HELPERS ===
     public void EnableHitbox(int index)
     {
         Debug.Log($"[EnableHitbox] index {index}");
         if (activeHitboxes != null && index >= 0 && index < activeHitboxes.Count)
+        {
             activeHitboxes[index].SetActive(true);
+            basicAttackStart?.Invoke(activeHitboxes[index].GetComponent<Hitbox>());
+        }
     }
 
 
