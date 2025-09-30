@@ -53,6 +53,7 @@ public class Health : MonoBehaviour
     public float bloodMarkHealAmount = 10f;
     public GameObject bloodMarkIcon;
 
+    public System.Action<GameObject> enemyDeath;
 
     private AudioSource audioSource;
     private Rigidbody2D rb;
@@ -231,6 +232,8 @@ public class Health : MonoBehaviour
     private void Die()
     {
         Debug.Log($"{gameObject.name} has died!");
+
+        if (!isPlayer) enemyDeath?.Invoke(this.gameObject);
 
         if (!isPlayer && isBloodMarked)
         {

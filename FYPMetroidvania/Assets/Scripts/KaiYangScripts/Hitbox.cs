@@ -7,6 +7,9 @@ public class Hitbox : MonoBehaviour
     private CombatSystem owner;
     private Skills skills;
 
+    [Header("Damage")]
+    public float damage;
+
     [Header("Hitstop Settings")]
     public float hitstopDuration = 0.08f;
     public bool applyHitstopToEnemy = true;
@@ -33,6 +36,7 @@ public class Hitbox : MonoBehaviour
     private void OnEnable()
     {
         hitEnemies.Clear();
+        damage = owner.GetAttackDamage(owner.CurrentComboStep);
     }
 
     public void EnableCollider(float duration)
@@ -57,8 +61,6 @@ public class Hitbox : MonoBehaviour
             if (h != null && !hitEnemies.Contains(h))
             {
                 hitEnemies.Add(h);
-
-                float totalDamage = owner.GetAttackDamage(owner.CurrentComboStep);
 
                 Vector2 dir;
                 bool useRawForce = false;

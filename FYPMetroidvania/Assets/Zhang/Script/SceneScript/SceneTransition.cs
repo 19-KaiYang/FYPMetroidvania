@@ -13,8 +13,6 @@ public class SceneTransition : MonoBehaviour
     [SerializeField] private bool isTriggered = false;
     [SerializeField] private bool dir = true;
 
-
-
     private void Start()
     {
         if (nextSceneName == SceneTransitionManager.instance.lastSceneName && SceneTransitionManager.instance.isTrasition == true)
@@ -28,6 +26,15 @@ public class SceneTransition : MonoBehaviour
             StartCoroutine(SceneTransitionManager.instance.MoveToNewScene(exitDirection, jumpForce, exitTime, dir));
             StartCoroutine(SceneTransitionManager.instance.Fade(SceneTransitionManager.FadeDirection.OUT));
         }
+    }
+
+    private void OnEnable()
+    {
+        SceneTransitionManager.roomLoaded += SetPlayerSpawnPos;
+    }
+    private void OnDisable()
+    {
+        SceneTransitionManager.roomLoaded -= SetPlayerSpawnPos;
     }
 
     private void Update()
@@ -47,7 +54,15 @@ public class SceneTransition : MonoBehaviour
             StartCoroutine(SceneTransitionManager.instance.FadeAndLoadScene(SceneTransitionManager.FadeDirection.IN, nextSceneName));
         }
     }
+    void SetPlayerSpawnPos(string sceneName)
+    {
+        SceneTransitionManager.instance.isTrasition = false;
 
+        PlayerController.instance.transform.position = startPoint.position;
+
+        StartCoroutine(SceneTransitionManager.instance.MoveToNewScene(exitDirection, jumpForce, exitTime, dir));
+        StartCoroutine(SceneTransitionManager.instance.Fade(SceneTransitionManager.FadeDirection.OUT));
+    }
     private void OnTriggerEnter2D(Collider2D _other)
     {
         if (!needPress)
@@ -63,7 +78,6 @@ public class SceneTransition : MonoBehaviour
             }
         }
     }
-
     private void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
