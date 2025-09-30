@@ -2,6 +2,8 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using NUnit.Framework;
+using System.Collections.Generic;
 
 public class SceneTransitionManager : MonoBehaviour
 {
@@ -15,12 +17,19 @@ public class SceneTransitionManager : MonoBehaviour
     [SerializeField] private float fadeTime;
     [SerializeField] private Image fadeImage;
 
+    [Header("Room Handling")]
+    public List<string> rooms;
+    [SerializeField] ProgressionData progressionData;
+    public int roomIndex = 0;
+    public static System.Action<string> roomLoaded;
+
     private void Awake()
     {
         if (instance == null)
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
         else
         {
@@ -31,6 +40,8 @@ public class SceneTransitionManager : MonoBehaviour
     void Start()
     {
         currentSceneName = SceneManager.GetActiveScene().name;
+        roomIndex = 0;
+        ShuffleRooms();
     }
 
     void Update()
@@ -44,8 +55,18 @@ public class SceneTransitionManager : MonoBehaviour
     public IEnumerator FadeAndLoadScene(FadeDirection _fadeDir, string _sceneName)
     {
         fadeImage.enabled = true;
-        yield return Fade(_fadeDir);
-        SceneManager.LoadScene(_sceneName);
+        //string random = GetRandomRoom();
+        //if (random != null) _sceneName = random;
+        if (roomIndex < rooms.Count)
+        {
+            _sceneName = rooms[roomIndex];
+            roomIndex++;
+        }
+        if (_sceneName != null)
+        {
+            yield return Fade(_fadeDir);
+            SceneManager.LoadScene(_sceneName);
+        }
     }
     public IEnumerator Fade(FadeDirection _fadeDir)
     {
@@ -111,6 +132,39 @@ public class SceneTransitionManager : MonoBehaviour
         player.moveInput.x = 0;
     }
 
+    private string GetRandomRoom()
+    {
+
+        if(progressionData == null) return null;
+        if (progressionData.rooms.Count < 2) return null;
+
+        //string sceneName = "";
+        while (true)
+        {
+            string scene = progressionData.rooms[Random.Range(0, progressionData.rooms.Count)];
+            if(scene != SceneManager.GetActiveScene().name)
+            {
+                return scene;
+            }
+        }
+    }
+
+    void ShuffleRooms()
+    {
+        rooms = new List<string>(progressionData.rooms);
+        for (int i = 0; i < rooms.Count; i++)
+        {
+            string temp = rooms[i];
+            if (temp == currentSceneName)
+            {
+                rooms.Remove(temp);
+                continue;
+            }
+            int randomIndex = Random.Range(i, rooms.Count);
+            rooms[i] = rooms[randomIndex];
+            rooms[randomIndex] = temp;
+        }
+    }
 
     #region get current scene
     private void OnEnable()
@@ -126,6 +180,7 @@ public class SceneTransitionManager : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         currentSceneName = scene.name;
+        roomLoaded.Invoke(currentSceneName);
     }
     #endregion
 }

@@ -155,6 +155,10 @@ public class Skills : MonoBehaviour
         public float startSize = 0.2f;
         public float startSpeed = -2f;
         public float rateOverTime = 20f;
+
+        public CrowdControlState groundedCC = CrowdControlState.Stunned;
+        public CrowdControlState airborneCC = CrowdControlState.Knockdown;
+        public float ccDuration = 1.0f;
     }
 
     #endregion
@@ -167,6 +171,11 @@ public class Skills : MonoBehaviour
     public float spiritSlashHealthCost = 10f;
 
     private SpiritGauge spirit;
+
+
+    [Header("Spirit Gain")]
+    public float spiritGainPerHit = 5f;   
+    public float spiritGainPerSkill = 10f; 
 
     #endregion
 
@@ -495,6 +504,7 @@ public class Skills : MonoBehaviour
                 {
                     hit.Add(h);
                     float dmg = dashFlatDamage;
+                    GainSpirit(spiritGainPerHit);
                     Vector2 knockDir = (h.transform.position - transform.position).normalized;
                     h.TakeDamage(dmg, knockDir, false, CrowdControlState.None, 0f); 
                     ApplySkillCC(h, knockDir, swordDashGroundedCC, swordDashAirborneCC, swordDashCCDuration);
@@ -605,6 +615,7 @@ public class Skills : MonoBehaviour
                 if (!h.isPlayer)
                 {
                     h.ApplyBloodMark();
+                    GainSpirit(spiritGainPerHit);
                     if (health != null && swordUppercutHealthCost > 0f)
                     {
                         float safeCost = Mathf.Min(swordUppercutHealthCost, health.CurrentHealth - 1f);
@@ -684,6 +695,7 @@ public class Skills : MonoBehaviour
                     {
                         hit.Add(h);
                         float dmg = shockwaveFlatDamage;
+                        GainSpirit(spiritGainPerHit);
                         Vector2 knockDir = (h.transform.position - transform.position).normalized;
                         h.TakeDamage(dmg, knockDir.normalized, false, CrowdControlState.None, 0f); // No forced CC
                         ApplySkillCC(h, knockDir.normalized, gauntletShockwaveGroundedCC, gauntletShockwaveAirborneCC, gauntletShockwaveCCDuration);
@@ -833,12 +845,21 @@ public class Skills : MonoBehaviour
         float knockback = Mathf.Lerp(gauntletChargeMinKnockback, gauntletChargeMaxKnockback, ratio);
 
         Vector2 dir = controller.facingRight ? Vector2.right : Vector2.left;
-
         GauntletChargeProjectile chargeProj = ProjectileManager.instance.SpawnGauntletCharge(
             gauntletChargeSpawnPoint.position, Quaternion.identity
         );
+
         if (chargeProj != null)
-            chargeProj.Init(dir, damage, knockback, ratio);
+        {
+            int stageIndex = Mathf.Clamp(lastStage - 1, 0, chargeStages.Length - 1);
+            var stageSettings = chargeStages[stageIndex];
+
+            chargeProj.Init(dir, damage, knockback, ratio,
+                            stageSettings.groundedCC,
+                            stageSettings.airborneCC,
+                            stageSettings.ccDuration);
+        }
+
 
         if (overheat != null)
         {
@@ -896,10 +917,6 @@ public class Skills : MonoBehaviour
 
         if (targetRb) targetRb.simulated = true;
     }
-
-
-
-
     private int SingleLayerIndex(LayerMask mask)
     {
         int v = mask.value;
@@ -910,7 +927,14 @@ public class Skills : MonoBehaviour
         return index;
     }
 
-    private void ApplySkillCC(Health targetHealth, Vector2 knockDir, CrowdControlState groundedCC, CrowdControlState airborneCC, float duration)
+    public void GainSpirit(float amount)
+    {
+        if (spirit != null && amount > 0f)
+            spirit.Refill(amount);
+    }
+
+
+    public void ApplySkillCC(Health targetHealth, Vector2 knockDir, CrowdControlState groundedCC, CrowdControlState airborneCC, float duration)
     {
         if (targetHealth == null || targetHealth.isPlayer) return;
 
