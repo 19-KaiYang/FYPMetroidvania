@@ -4413,6 +4413,22 @@ PrefabInstance:
       propertyPath: m_SortingOrder
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2293236046963178490, guid: 13775344399b2974daca82989c71d56e, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2293236046963178490, guid: 13775344399b2974daca82989c71d56e, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2293236046963178490, guid: 13775344399b2974daca82989c71d56e, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2293236046963178490, guid: 13775344399b2974daca82989c71d56e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.182
+      objectReference: {fileID: 0}
     - target: {fileID: 4365569239843828954, guid: 13775344399b2974daca82989c71d56e, type: 3}
       propertyPath: spiritGainPerHit
       value: 10
