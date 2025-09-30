@@ -757,7 +757,7 @@ public class Skills : MonoBehaviour
     {
         usingSkill = true;
 
-        Vector2 dir = controller.facingRight ? Vector2.right : Vector2.left;
+        Vector2 dir = Get8DirectionalAim();
 
         activeGauntlet = ProjectileManager.instance.SpawnGauntlet(transform.position,Quaternion.identity);
         activeGauntlet.speed = gauntletLaunchSpeed;
@@ -766,6 +766,30 @@ public class Skills : MonoBehaviour
 
         usingSkill = false;
         yield return null;
+    }
+
+    private Vector2 Get8DirectionalAim()
+    {
+        Vector2 input = controller.moveInput;
+
+
+        if (input.sqrMagnitude < 0.1f)
+        {
+            return controller.facingRight ? Vector2.right : Vector2.left;
+        }
+
+        // Normalize to get clean 8 directions
+        float x = Mathf.Round(input.x);
+        float y = Mathf.Round(input.y);
+
+        Vector2 direction = new Vector2(x, y);
+
+        if (direction.sqrMagnitude > 1.1f)
+        {
+            direction.Normalize();
+        }
+
+        return direction;
     }
 
     public void RetractGauntlet()
