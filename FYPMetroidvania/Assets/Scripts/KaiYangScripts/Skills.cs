@@ -173,6 +173,15 @@ public class Skills : MonoBehaviour
     private SpiritGauge spirit;
 
 
+    [Header("Gauntlet Ultimate")]
+    public GameObject gauntletCannonPrefab;
+    public float gauntletBeamDamage = 10f;
+    public float gauntletBeamTickRate = 0.5f;
+    public Vector2 gauntletBeamSize = new Vector2(6f, 2f);
+    public float gauntletBeamChargeTime = 2f;
+
+
+
     [Header("Spirit Gain")]
     public float spiritGainPerHit = 5f;   
     public float spiritGainPerSkill = 10f; 
@@ -435,6 +444,24 @@ public class Skills : MonoBehaviour
         spirit.StopDrain();
         usingSkill = false;
     }
+
+    public void TryUseGauntletUltimate()
+    {
+        if (usingSkill) return;
+        if (spirit == null || spirit.IsEmpty) return;
+
+        usingSkill = true;
+
+        var cannon = Instantiate(gauntletCannonPrefab,PlayerController.instance.transform.position,Quaternion.identity);
+
+        // Pass direction + spirit reference to cannon
+        cannon.GetComponent<GauntletCannon>().Init(PlayerController.instance.facingRight,spirit,enemyMask);
+
+        usingSkill = false;
+    }
+
+
+
 
     #endregion
 

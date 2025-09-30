@@ -251,6 +251,9 @@ public class CombatSystem : MonoBehaviour
                 case WeaponType.Sword:
                     skills.TryUseSwordUltimate();
                     break;
+                case WeaponType.Gauntlet:
+                    skills.TryUseGauntletUltimate();
+                    break;
 
             }
         }
