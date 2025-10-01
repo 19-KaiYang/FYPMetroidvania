@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class Hitbox : MonoBehaviour
 {
@@ -26,11 +27,14 @@ public class Hitbox : MonoBehaviour
     private Collider2D col;
     private HashSet<Health> hitEnemies = new HashSet<Health>();
 
+    // Events
+    public static Action<Hitbox, Health> OnHit;
+
     private void Awake()
     {
         owner = GetComponentInParent<CombatSystem>();
         col = GetComponent<Collider2D>();
-        skills = Object.FindFirstObjectByType<Skills>();
+        skills = UnityEngine.Object.FindFirstObjectByType<Skills>();
     }
 
     private void OnEnable()
@@ -85,7 +89,8 @@ public class Hitbox : MonoBehaviour
                 }
 
                 // Apply damage + knockback with forced CC
-                h.TakeDamage(totalDamage, dir, useRawForce, forceCC, forceDuration);
+                h.TakeDamage(damage, dir, useRawForce, forceCC, forceDuration);
+                OnHit?.Invoke(this, h);
 
                 if (!h.isPlayer)
                 {

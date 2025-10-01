@@ -11,5 +11,4 @@ public class DamageEffect : UpgradeEffect
             context.hitbox.damage *= damageMult;
         }
     }
-
 }

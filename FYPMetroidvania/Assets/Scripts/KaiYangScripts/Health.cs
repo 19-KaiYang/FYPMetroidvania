@@ -1,4 +1,7 @@
+using NUnit.Framework;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum CrowdControlState
@@ -13,10 +16,11 @@ public class Health : MonoBehaviour
     public float maxHealth = 100f;
     public bool destroyOnDeath = true;
     public bool isPlayer = false;
-    private float currentHealth;
+    public float currentHealth;
 
     [Header("Feedback")]
     public SpriteRenderer spriteRenderer;
+    public Color originalColor;
     public float flashDuration = 0.1f;
     public AudioClip hitSound;
     public AudioClip deathSound;
@@ -53,6 +57,12 @@ public class Health : MonoBehaviour
     public float bloodMarkHealAmount = 10f;
     public GameObject bloodMarkIcon;
 
+    [Header("Debuffs")]
+    public List<DebuffInstance> debuffs = new();
+    public List<GameObject> debuffVFXs = new();
+
+    // Events
+    public Action<Health> damageTaken;
     public System.Action<GameObject> enemyDeath;
 
     private AudioSource audioSource;
@@ -67,11 +77,16 @@ public class Health : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         audioSource = GetComponent<AudioSource>();
         if (spriteRenderer == null)
+        {
             spriteRenderer = GetComponent<SpriteRenderer>();
+        }
+        originalColor = spriteRenderer.color;
     }
 
     private void Update()
     {
+        UpdateDebuffs();
+
         // === CC TIMERS ===
         if (currentCCState != CrowdControlState.None)
         {
@@ -160,13 +175,13 @@ public class Health : MonoBehaviour
         HandleArcKnockdown();
     }
 
-
-
-    public void TakeDamage(float amount, Vector2? hitDirection = null, bool useRawForce = false, CrowdControlState forceCC = CrowdControlState.None, float forceCCDuration = 0f)
+    public void TakeDamage(float amount, Vector2? hitDirection = null, bool useRawForce = false, CrowdControlState forceCC = CrowdControlState.None, float forceCCDuration = 0f, bool isFromDebuff = false)
     {
         if (isPlayer && invincible) return;
 
         currentHealth -= amount;
+
+        if (!isFromDebuff) damageTaken?.Invoke(this);
 
         // Visual feedback
         if (spriteRenderer != null)
@@ -218,7 +233,31 @@ public class Health : MonoBehaviour
         Debug.Log($"{gameObject.name} took {amount} damage! Remaining HP: {currentHealth}/{maxHealth}");
     }
 
+    private void UpdateDebuffs()
+    {
+        if(debuffs.Count == 0) return;
+        for (int i = 0; i < debuffs.Count; i++)
+        {
+            debuffs[i].UpdateTime(this, Time.time);
+            if (debuffs[i].duration <= 0)
+            {
+                RemoveDebuff(debuffs[i]);
+            }
+        }
 
+    }
+    public void RemoveDebuff(DebuffInstance debuffInstance)
+    {
+        int index = debuffs.IndexOf(debuffInstance);
+        debuffInstance.OnRemove(this);
+        debuffs.Remove(debuffInstance);
+        GameObject vfxObject = debuffVFXs[index];
+        if (vfxObject != null)
+        {
+            debuffVFXs.RemoveAt(index);
+            Destroy(vfxObject);
+        }
+    }
 
     public void Heal(float healAmount)
     {
@@ -234,6 +273,11 @@ public class Health : MonoBehaviour
         Debug.Log($"{gameObject.name} has died!");
 
         if (!isPlayer) enemyDeath?.Invoke(this.gameObject);
+
+        for(int i = debuffs.Count - 1; i >= 0; i--)
+        {
+            RemoveDebuff(debuffs[i]);
+        }
 
         if (!isPlayer && isBloodMarked)
         {
@@ -300,7 +344,6 @@ public class Health : MonoBehaviour
 
     private IEnumerator FlashRed()
     {
-        Color originalColor = spriteRenderer.color;
         spriteRenderer.color = Color.red;
         yield return new WaitForSeconds(flashDuration);
         spriteRenderer.color = originalColor;

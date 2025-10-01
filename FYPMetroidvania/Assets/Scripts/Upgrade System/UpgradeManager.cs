@@ -28,6 +28,7 @@ public class UpgradeManager : MonoBehaviour
     {
         CombatSystem.basicAttackStart += OnBasicAttackStart;
         CombatSystem.basicAttackEnd += OnBasicAttackEnd;
+        Hitbox.OnHit += OnBasicAttackHit;
     }
 
     #region Processing Events
@@ -35,7 +36,7 @@ public class UpgradeManager : MonoBehaviour
     void OnBasicAttackStart(Hitbox hitbox)
     {
         if (AttackUpgrade == null) return;
-
+        Debug.Log("Received attack upgrade event: " + hitbox.name);
         ActionContext context = new ActionContext(this, player, health, combatSystem, hb: hitbox);
         AttackUpgrade.TryEffects(Trigger.OnStart, context);
     }
@@ -48,6 +49,7 @@ public class UpgradeManager : MonoBehaviour
     }
     void OnBasicAttackHit(Hitbox hitbox, Health hit)
     {
+        Debug.Log("Hit!");
         if (AttackUpgrade == null) return;
 
         ActionContext context = new ActionContext(this, player, health, combatSystem, hb: hitbox, enemy: hit);
@@ -90,5 +92,6 @@ public class UpgradeManager : MonoBehaviour
     {
         CombatSystem.basicAttackStart -= OnBasicAttackStart;
         CombatSystem.basicAttackEnd -= OnBasicAttackEnd;
+        Hitbox.OnHit -= OnBasicAttackHit;
     }
 }
