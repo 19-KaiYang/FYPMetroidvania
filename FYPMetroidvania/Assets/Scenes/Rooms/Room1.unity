@@ -1247,7 +1247,7 @@ GameObject:
   - component: {fileID: 536782218}
   - component: {fileID: 536782217}
   - component: {fileID: 536782216}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Door
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8923,7 +8923,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da0739f9832287e42b250c7ec38dd4ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeManager
-  AttackUpgrade: {fileID: 11400000, guid: 5f9c7c6967109e34bb16431948564691, type: 2}
+  AttackUpgrade: {fileID: 11400000, guid: a9a155d7083b5224a95c6ca440ba9ad6, type: 2}
   SkillUpgrade: {fileID: 0}
   SpiritUpgrade: {fileID: 0}
   MiscUpgrades: []
@@ -10719,6 +10719,10 @@ PrefabInstance:
     - target: {fileID: 836184617106885652, guid: 13775344399b2974daca82989c71d56e, type: 3}
       propertyPath: gauntletPrefab
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053184107465113680, guid: 13775344399b2974daca82989c71d56e, type: 3}
+      propertyPath: weaponStatsList.Array.data[1].attackCooldown
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 2546219347988187822, guid: 13775344399b2974daca82989c71d56e, type: 3}
       propertyPath: dashSpeed
