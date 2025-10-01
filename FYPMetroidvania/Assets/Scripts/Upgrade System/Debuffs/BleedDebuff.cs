@@ -6,6 +6,7 @@ public class BleedDebuff : Debuff
     public float damage = 3f;
     public override void TriggerDebuff(Health owner, DebuffInstance instance)
     {
+        if (owner.CurrentHealth <= 0) return;
         float finalDamage = damage;
         DebuffInstance match = owner.debuffs.Find(s => s.debuff.debuffName == debuffName);
         if (match != null)
