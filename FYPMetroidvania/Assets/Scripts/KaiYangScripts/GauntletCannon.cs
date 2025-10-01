@@ -10,7 +10,7 @@ public class GauntletCannon : MonoBehaviour
     public float tickRate = 0.1f;
     public Vector2 beamSize = new Vector2(20f, 2f);
     public float beamVisualLength = 20f;
-    public float cannonOffsetX = 0.5f; // Distance from cannon center to where beam starts
+    public float cannonOffsetX = 0.5f;
 
     [Header("Visual")]
     public SpriteRenderer cannonSprite;
@@ -22,59 +22,60 @@ public class GauntletCannon : MonoBehaviour
     private bool isCharging = true;
     private bool isFiring = false;
     private float chargeTimer = 0f;
+    private float drainRate;
 
-    // Track enemies hit this tick to prevent multi-hits
     private HashSet<int> hitThisTick = new HashSet<int>();
+
+    public System.Action OnFinished; 
 
     private void Awake()
     {
-        // Hide beam when spawned
         if (beamVisual != null)
-        {
             beamVisual.SetActive(false);
-        }
     }
 
     public void Init(bool playerFacingRight, SpiritGauge spiritGauge, LayerMask enemyLayer,
-                     float charge, float damage, float tick, Vector2 size)
+                     float charge, float damage, float tick, Vector2 size, float drain)
     {
         facingRight = playerFacingRight;
         spirit = spiritGauge;
         enemyMask = enemyLayer;
 
-        // Apply settings from Skills.cs
         chargeTime = charge;
         damagePerTick = damage;
         tickRate = tick;
         beamSize = size;
-        beamVisualLength = size.x; // Match visual length to collider X size
+        beamVisualLength = size.x;
+        drainRate = drain;
 
-        // Flip cannon sprite if needed
-        if (cannonSprite != null)
-        {
-            cannonSprite.flipX = !facingRight;
-        }
+        isCharging = true;
+        isFiring = false;
+        chargeTimer = 0f;
 
-        // Hide beam initially
         if (beamVisual != null)
-        {
             beamVisual.SetActive(false);
-        }
 
         StartCoroutine(ChargeSequence());
     }
 
     private IEnumerator ChargeSequence()
     {
-        // Charge phase
+        chargeTimer = 0f;
         while (chargeTimer < chargeTime)
         {
             chargeTimer += Time.deltaTime;
             yield return null;
         }
-
-        // Auto-fire after charging
         FireBeam();
+    }
+
+    public void ManualOverrideFire()
+    {
+        if (isCharging && !isFiring)
+        {
+            StopAllCoroutines();
+            FireBeam();
+        }
     }
 
     public void FireBeam()
@@ -84,21 +85,17 @@ public class GauntletCannon : MonoBehaviour
         isFiring = true;
         isCharging = false;
 
-        // Show beam visual
         if (beamVisual != null)
         {
             beamVisual.SetActive(true);
 
             float direction = facingRight ? 1f : -1f;
-
-            // Position visual at half-length (matches collider + gizmo)
             beamVisual.transform.localPosition = new Vector3(
                 (cannonOffsetX + beamVisualLength * 0.5f) * direction,
                 0f,
                 0f
             );
 
-            // Always positive scale
             beamVisual.transform.localScale = new Vector3(
                 beamVisualLength,
                 beamSize.y,
@@ -106,7 +103,6 @@ public class GauntletCannon : MonoBehaviour
             );
         }
 
-        // Start draining spirit
         if (spirit != null)
             spirit.StartDrain();
 
@@ -120,22 +116,27 @@ public class GauntletCannon : MonoBehaviour
             hitThisTick.Clear();
             DamageEnemiesInBeam();
 
+            float drainAmount = drainRate * tickRate;
+            if (spirit.GetCurrentSpirit() > 0f)
+            {
+                float newValue = Mathf.Max(0f, spirit.GetCurrentSpirit() - drainAmount);
+                typeof(SpiritGauge).GetField("currentSpirit",
+                    System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+                    ?.SetValue(spirit, newValue);
+            }
+
             yield return new WaitForSeconds(tickRate);
         }
 
-        // End beam
         Cleanup();
     }
 
     private void DamageEnemiesInBeam()
     {
         Vector2 direction = facingRight ? Vector2.right : Vector2.left;
-
-        // Hitbox center = cannon + offset + half length
         Vector2 beamCenter = (Vector2)transform.position + direction * (cannonOffsetX + beamSize.x * 0.5f);
-        Vector2 hitboxSize = beamSize;
 
-        Collider2D[] hits = Physics2D.OverlapBoxAll(beamCenter, hitboxSize, 0f, enemyMask);
+        Collider2D[] hits = Physics2D.OverlapBoxAll(beamCenter, beamSize, 0f, enemyMask);
 
         foreach (var col in hits)
         {
@@ -146,48 +147,28 @@ public class GauntletCannon : MonoBehaviour
             if (hitThisTick.Contains(id)) continue;
 
             hitThisTick.Add(id);
-
             h.TakeDamage(damagePerTick, direction, false, CrowdControlState.None, 0f);
-            Debug.Log($"[GauntletCannon] Dealt {damagePerTick} damage to {h.name}");
         }
     }
 
     private void Cleanup()
     {
         if (spirit != null)
-        {
             spirit.StopDrain();
-        }
 
         if (beamVisual != null)
-        {
             beamVisual.SetActive(false);
-        }
 
+        OnFinished?.Invoke();
         Destroy(gameObject);
-    }
-
-    // Allow manual fire if player presses R again
-    private void Update()
-    {
-        if (isCharging && Input.GetKeyDown(KeyCode.R))
-        {
-            StopAllCoroutines();
-            FireBeam();
-        }
     }
 
     private void OnDrawGizmos()
     {
         if (!isFiring) return;
-
         Gizmos.color = Color.cyan;
         Vector2 direction = facingRight ? Vector2.right : Vector2.left;
-
-        // Gizmo center matches hitbox + visual
         Vector2 beamCenter = (Vector2)transform.position + direction * (cannonOffsetX + beamSize.x * 0.5f);
-        Vector2 hitboxSize = beamSize;
-
-        Gizmos.DrawWireCube(beamCenter, hitboxSize);
+        Gizmos.DrawWireCube(beamCenter, beamSize);
     }
 }

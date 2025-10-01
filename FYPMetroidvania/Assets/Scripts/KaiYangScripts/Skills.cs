@@ -179,7 +179,7 @@ public class Skills : MonoBehaviour
     public float gauntletBeamTickRate = 0.5f;
     public Vector2 gauntletBeamSize = new Vector2(6f, 2f);
     public float gauntletBeamChargeTime = 2f;
-
+    public float gauntletBeamDrainPerSecond = 15f;
 
 
     [Header("Spirit Gain")]
@@ -444,29 +444,41 @@ public class Skills : MonoBehaviour
         spirit.StopDrain();
         usingSkill = false;
     }
+    private GauntletCannon activeCannon;
+
     public void TryUseGauntletUltimate()
     {
-        if (usingSkill) return;
         if (spirit == null || spirit.IsEmpty) return;
+
+        if (activeCannon != null)
+        {
+            activeCannon.ManualOverrideFire();
+            return;
+        }
+
+        if (usingSkill) return;
 
         usingSkill = true;
 
         var cannon = Instantiate(gauntletCannonPrefab, PlayerController.instance.transform.position, Quaternion.identity);
-
-        // Pass ALL the settings from Skills.cs to the cannon
-        cannon.GetComponent<GauntletCannon>().Init(
+        activeCannon = cannon.GetComponent<GauntletCannon>();
+        activeCannon.Init(
             PlayerController.instance.facingRight,
             spirit,
             enemyMask,
-            gauntletBeamChargeTime,    // charge time
-            gauntletBeamDamage,        // damage per tick
-            gauntletBeamTickRate,      // tick rate
-            gauntletBeamSize           // beam size (x,y)
+            gauntletBeamChargeTime,
+            gauntletBeamDamage,
+            gauntletBeamTickRate,
+            gauntletBeamSize,
+            gauntletBeamDrainPerSecond
         );
 
-        usingSkill = false;
+        activeCannon.OnFinished += () =>
+        {
+            activeCannon = null;
+            usingSkill = false;
+        };
     }
-
 
 
 

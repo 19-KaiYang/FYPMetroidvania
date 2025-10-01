@@ -4894,12 +4894,20 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 474803960277985138, guid: 672fec89a7c09674eb5a76e6637f1cea, type: 3}
     - target: {fileID: 4365569239843828954, guid: 13775344399b2974daca82989c71d56e, type: 3}
+      propertyPath: gauntletBeamDrainPerSecond
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 4365569239843828954, guid: 13775344399b2974daca82989c71d56e, type: 3}
       propertyPath: chargeStages.Array.data[1].ccDuration
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4365569239843828954, guid: 13775344399b2974daca82989c71d56e, type: 3}
       propertyPath: chargeStages.Array.data[2].ccDuration
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359027140308036340, guid: 13775344399b2974daca82989c71d56e, type: 3}
+      propertyPath: drainPerSecond
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6591940185303097559, guid: 13775344399b2974daca82989c71d56e, type: 3}
       propertyPath: m_BodyType
