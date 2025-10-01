@@ -444,7 +444,6 @@ public class Skills : MonoBehaviour
         spirit.StopDrain();
         usingSkill = false;
     }
-
     public void TryUseGauntletUltimate()
     {
         if (usingSkill) return;
@@ -452,10 +451,18 @@ public class Skills : MonoBehaviour
 
         usingSkill = true;
 
-        var cannon = Instantiate(gauntletCannonPrefab,PlayerController.instance.transform.position,Quaternion.identity);
+        var cannon = Instantiate(gauntletCannonPrefab, PlayerController.instance.transform.position, Quaternion.identity);
 
-        // Pass direction + spirit reference to cannon
-        cannon.GetComponent<GauntletCannon>().Init(PlayerController.instance.facingRight,spirit,enemyMask);
+        // Pass ALL the settings from Skills.cs to the cannon
+        cannon.GetComponent<GauntletCannon>().Init(
+            PlayerController.instance.facingRight,
+            spirit,
+            enemyMask,
+            gauntletBeamChargeTime,    // charge time
+            gauntletBeamDamage,        // damage per tick
+            gauntletBeamTickRate,      // tick rate
+            gauntletBeamSize           // beam size (x,y)
+        );
 
         usingSkill = false;
     }
