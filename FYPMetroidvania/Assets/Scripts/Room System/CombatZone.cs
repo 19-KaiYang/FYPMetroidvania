@@ -98,7 +98,9 @@ public class CombatZone : MonoBehaviour
 
     public void OnEnemyDeath(GameObject enemy)
     {
-        enemyObjects[currWave].Remove(enemy);
+        if(enemy == null) return;
+        int index = enemyObjects[currWave].IndexOf(enemy);
+        enemyObjects[currWave].RemoveAt(index);
         if (enemyObjects[currWave].Count <= 0) StartCoroutine(NewWaveCoroutine());
     }
 

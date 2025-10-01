@@ -20,6 +20,7 @@ public class Health : MonoBehaviour
 
     [Header("Feedback")]
     public SpriteRenderer spriteRenderer;
+    public Color originalColor;
     public float flashDuration = 0.1f;
     public AudioClip hitSound;
     public AudioClip deathSound;
@@ -76,7 +77,10 @@ public class Health : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         audioSource = GetComponent<AudioSource>();
         if (spriteRenderer == null)
+        {
             spriteRenderer = GetComponent<SpriteRenderer>();
+        }
+        originalColor = spriteRenderer.color;
     }
 
     private void Update()
@@ -171,11 +175,13 @@ public class Health : MonoBehaviour
         HandleArcKnockdown();
     }
 
-    public void TakeDamage(float amount, Vector2? hitDirection = null, bool useRawForce = false, CrowdControlState forceCC = CrowdControlState.None, float forceCCDuration = 0f)
+    public void TakeDamage(float amount, Vector2? hitDirection = null, bool useRawForce = false, CrowdControlState forceCC = CrowdControlState.None, float forceCCDuration = 0f, bool isFromDebuff = false)
     {
         if (isPlayer && invincible) return;
 
         currentHealth -= amount;
+
+        if (!isFromDebuff) damageTaken?.Invoke(this);
 
         // Visual feedback
         if (spriteRenderer != null)
@@ -268,6 +274,11 @@ public class Health : MonoBehaviour
 
         if (!isPlayer) enemyDeath?.Invoke(this.gameObject);
 
+        for(int i = debuffs.Count - 1; i >= 0; i--)
+        {
+            RemoveDebuff(debuffs[i]);
+        }
+
         if (!isPlayer && isBloodMarked)
         {
             var player = PlayerController.instance;
@@ -333,7 +344,6 @@ public class Health : MonoBehaviour
 
     private IEnumerator FlashRed()
     {
-        Color originalColor = spriteRenderer.color;
         spriteRenderer.color = Color.red;
         yield return new WaitForSeconds(flashDuration);
         spriteRenderer.color = originalColor;
