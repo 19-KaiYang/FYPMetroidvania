@@ -15,8 +15,8 @@ public class Skills : MonoBehaviour
     private EnergySystem energy;
     private Health health;
     private OverheatSystem overheat;
+    private GauntletCannon activeCannon;
 
- 
 
     // global skill gate
     private bool usingSkill = false;
@@ -384,10 +384,9 @@ public class Skills : MonoBehaviour
             yield return null;
         }
 
-        // Only auto-fire if we reached max charge AND still charging
         if (isCharging && currentChargeTime >= gauntletChargeMaxTime)
         {
-            chargeRoutine = null; // Clear the reference
+            chargeRoutine = null; 
             FireGauntletChargeShot();
         }
     }
@@ -420,7 +419,6 @@ public class Skills : MonoBehaviour
             yield return null;
         }
 
-        // Spawn ONE persistent spirit slash that will bounce between enemies
         GameObject slash = Instantiate(spiritSlashPrefab, transform.position, Quaternion.identity);
         SpiritSlash slashComp = slash.GetComponent<SpiritSlash>();
 
@@ -435,7 +433,6 @@ public class Skills : MonoBehaviour
             yield return null;
         }
 
-        // Cleanup - destroy the slash when spirit is empty
         if (slash != null)
         {
             Destroy(slash);
@@ -444,7 +441,7 @@ public class Skills : MonoBehaviour
         spirit.StopDrain();
         usingSkill = false;
     }
-    private GauntletCannon activeCannon;
+ 
 
     public void TryUseGauntletUltimate()
     {

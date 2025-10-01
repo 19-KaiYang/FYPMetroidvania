@@ -122,7 +122,11 @@ public class GauntletCannon : MonoBehaviour
                 float newValue = Mathf.Max(0f, spirit.GetCurrentSpirit() - drainAmount);
                 typeof(SpiritGauge).GetField("currentSpirit",
                     System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-                    ?.SetValue(spirit, newValue);
+                    ?.SetValue(spirit, newValue); // use reflection to directly modify the private 'currentSpirit' field in SpiritGauge if you understand
+                                                  //basically its just  drain spirit gauge every tick.
+                                                  // because SpiritGauge.currentSpirit is private,  use reflection to set it directly.
+                                                  // (drainRate * tickRate = how much spirit is consumed per tick).
+
             }
 
             yield return new WaitForSeconds(tickRate);
