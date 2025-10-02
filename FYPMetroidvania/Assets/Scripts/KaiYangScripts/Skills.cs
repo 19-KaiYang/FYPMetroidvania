@@ -1032,7 +1032,7 @@ public class Skills : MonoBehaviour
         CrowdControlState ccToApply = isAirborne ? airborneCC : groundedCC;
 
         if (ccToApply == CrowdControlState.Stunned)
-            targetHealth.ApplyStun(duration);
+            targetHealth.ApplyStun(duration, knockDir);
         else if (ccToApply == CrowdControlState.Knockdown)
             targetHealth.ApplyKnockdown(duration, isAirborne, knockDir);
     }
