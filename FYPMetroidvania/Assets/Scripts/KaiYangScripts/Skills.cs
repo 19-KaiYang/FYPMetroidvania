@@ -1037,6 +1037,7 @@ public class Skills : MonoBehaviour
             targetHealth.ApplyKnockdown(duration, isAirborne, knockDir);
     }
 
+    #region InvokeSkillsStartHitEnd
     public static void InvokeSkillStart(Hitbox hitbox)
     {
         skillStart?.Invoke(hitbox);
@@ -1051,6 +1052,22 @@ public class Skills : MonoBehaviour
     {
         skillEnd?.Invoke();
     }
+
+    public static void InvokeUltimateStart(Hitbox hitbox)
+    {
+        OnUltimateStart?.Invoke(hitbox);
+    }
+
+    public static void InvokeUltimateHit(Hitbox hitbox, Health enemy)
+    {
+        OnUltimateHit?.Invoke(hitbox, enemy);
+    }
+
+    public static void InvokeUltimateEnd()
+    {
+        OnUltimateEnd?.Invoke();
+    }
+    #endregion
 
     #endregion
 
