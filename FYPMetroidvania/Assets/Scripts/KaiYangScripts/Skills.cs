@@ -41,7 +41,7 @@ public class Skills : MonoBehaviour
 
     [Header("Skill Hitboxes")]
     public GameObject swordDashHitbox;
-
+    public GameObject swordUppercutHitbox;
 
 
     // ===================== LUNGING STRIKE =====================
@@ -627,7 +627,7 @@ public class Skills : MonoBehaviour
 
         if (controller) controller.externalVelocityOverride = true;
 
-        // temporarily disable collisions with enemies
+        // Disable collisions with enemies temporarily
         int playerLayer = gameObject.layer;
         int enemyLayer = SingleLayerIndex(enemyMask);
         bool collisionToggled = false;
@@ -637,18 +637,19 @@ public class Skills : MonoBehaviour
             collisionToggled = true;
         }
 
-        HashSet<Health> hit = new HashSet<Health>();
         float elapsed = 0f;
-
         float forward = controller.facingRight ? uppercutForwardSpeed : -uppercutForwardSpeed;
 
-        // --- Phase 1: short forward dash (little upward) ---
+        // --- Phase 1: short forward dash ---
         controller.SetVelocity(new Vector2(forward, uppercutUpSpeed * 0.25f));
-        float dashPhase = 0.12f; // tweak: how long forward dash lasts
+        float dashPhase = 0.12f;
+
+        // Activate hitbox during dash phase
+        Coroutine hitboxRoutine = StartCoroutine(ActivateSkillHitbox(swordUppercutHitbox, uppercutDuration));
+
         while (elapsed < dashPhase)
         {
             elapsed += Time.deltaTime;
-            DoUppercutHitDetection(hit);
             yield return null;
         }
 
@@ -657,17 +658,21 @@ public class Skills : MonoBehaviour
         while (elapsed < uppercutDuration)
         {
             elapsed += Time.deltaTime;
-            DoUppercutHitDetection(hit);
             yield return null;
         }
 
-        // restore collisions
+        // Wait for hitbox to finish
+        if (hitboxRoutine != null)
+            yield return hitboxRoutine;
+
+        // Restore collisions
         if (collisionToggled)
             Physics2D.IgnoreLayerCollision(playerLayer, enemyLayer, false);
 
         if (controller) controller.externalVelocityOverride = false;
         usingSkill = false;
     }
+
     private void DoUppercutHitDetection(HashSet<Health> hit)
     {
         Vector2 offset = new Vector2(
