@@ -547,6 +547,7 @@ public class Skills : MonoBehaviour
         }
 
         Hitbox.OnHit += OnDashHit;
+        //SKILL START, SKILL HIT, SKILL END
         Coroutine hitboxRoutine = StartCoroutine(ActivateSkillHitbox(swordDashHitbox, dashDuration));
 
         // --- Dash loop ---
@@ -977,7 +978,7 @@ public class Skills : MonoBehaviour
         if (spirit != null && amount > 0f)
             spirit.Refill(amount);
     }
-
+    // SKILL START END AND HIT
     private IEnumerator ActivateSkillHitbox(GameObject hitbox, float duration)
     {
         Hitbox hb = hitbox.GetComponent<Hitbox>();
