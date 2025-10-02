@@ -515,16 +515,49 @@ public class Skills : MonoBehaviour
             collisionToggled = true;
         }
 
-        HashSet<Health> hit = new HashSet<Health>();
         Vector2 dir = controller.facingRight ? Vector2.right : Vector2.left;
         float t = 0f;
 
+        // --- Hook into hitbox for Sword Dash specific logic ---
+        void OnDashHit(Hitbox hb, Health h)
+        {
+            if (h == null || h.isPlayer) return;
+
+            Vector2 knockDir = (h.transform.position - transform.position).normalized;
+
+            // Apply Sword Dash CC
+            ApplySkillCC(h, knockDir, swordDashGroundedCC, swordDashAirborneCC, swordDashCCDuration);
+
+            // Spirit + BloodMark + HealthCost (only Sword)
+            h.ApplyBloodMark();
+            GainSpirit(spiritGainPerHit);
+
+            if (health != null && swordDashHealthCost > 0f)
+            {
+                float safeCost = Mathf.Min(swordDashHealthCost, health.CurrentHealth - 1f);
+                if (safeCost > 0f) health.TakeDamage(safeCost);
+            }
+
+            // Local hitstop
+            if (hitstop > 0f)
+            {
+                StartCoroutine(LocalHitstop(h.GetComponent<Rigidbody2D>(), hitstop));
+                StartCoroutine(LocalHitstop(rb, hitstop));
+            }
+        }
+
+        Hitbox.OnHit += OnDashHit;
+        Coroutine hitboxRoutine = StartCoroutine(ActivateSkillHitbox(swordDashHitbox, dashDuration));
+
+        // --- Dash loop ---
         while (t < dashDuration)
         {
             t += Time.deltaTime;
             controller.SetVelocity(Vector2.zero);
 
             Vector2 moveStep = dir * dashSpeed * Time.deltaTime;
+
+            // Stop if wall ahead
             RaycastHit2D wallHit = Physics2D.BoxCast(
                 transform.position,
                 controller.colliderSize,
@@ -545,66 +578,14 @@ public class Skills : MonoBehaviour
                 transform.Translate(moveStep);
             }
 
-            // Use the hitbox position if available, otherwise use old method
-            Vector2 center;
-            Vector2 boxSize;
-
-            if (swordDashHitbox != null)
-            {
-                BoxCollider2D hitboxCol = swordDashHitbox.GetComponent<BoxCollider2D>();
-                if (hitboxCol != null)
-                {
-                    center = (Vector2)swordDashHitbox.transform.position + hitboxCol.offset;
-                    boxSize = hitboxCol.size;
-                }
-                else
-                {
-                    center = (Vector2)transform.position + new Vector2(0.7f * (controller.facingRight ? 1f : -1f), 0f);
-                    boxSize = new Vector2(1.4f, 1.0f);
-                }
-            }
-            else
-            {
-                center = (Vector2)transform.position + new Vector2(0.7f * (controller.facingRight ? 1f : -1f), 0f);
-                boxSize = new Vector2(1.4f, 1.0f);
-            }
-
-            var cols = Physics2D.OverlapBoxAll(center, boxSize, 0f, enemyMask);
-            foreach (var c in cols)
-            {
-                var h = c.GetComponentInParent<Health>();
-                if (h != null && !hit.Contains(h))
-                {
-                    hit.Add(h);
-
-                    Hitbox hb = swordDashHitbox?.GetComponent<Hitbox>();
-                    float dmg = (hb != null && hb.isSkillHitbox) ? hb.damage : dashFlatDamage;
-
-                    Vector2 knockDir = (h.transform.position - transform.position).normalized;
-                    h.TakeDamage(dmg, knockDir, false, CrowdControlState.None, 0f);
-                    ApplySkillCC(h, knockDir, swordDashGroundedCC, swordDashAirborneCC, swordDashCCDuration);
-
-                    if (!h.isPlayer)
-                    {
-                        h.ApplyBloodMark();
-                        GainSpirit(spiritGainPerHit);
-                        if (health != null && swordDashHealthCost > 0f)
-                        {
-                            float safeCost = Mathf.Min(swordDashHealthCost, health.CurrentHealth - 1f);
-                            if (safeCost > 0f) health.TakeDamage(safeCost);
-                        }
-                    }
-
-                    if (hitstop > 0f)
-                    {
-                        StartCoroutine(LocalHitstop(h.GetComponent<Rigidbody2D>(), hitstop));
-                        StartCoroutine(LocalHitstop(rb, hitstop));
-                    }
-                }
-            }
-
             yield return null;
         }
+
+        // --- Cleanup ---
+        if (hitboxRoutine != null)
+            yield return hitboxRoutine; 
+
+        Hitbox.OnHit -= OnDashHit;
 
         if (collisionToggled)
             Physics2D.IgnoreLayerCollision(playerLayer, enemyLayer, false);
@@ -617,6 +598,8 @@ public class Skills : MonoBehaviour
 
         usingSkill = false;
     }
+
+
 
     private IEnumerator Skill_SwordUppercut()
     {

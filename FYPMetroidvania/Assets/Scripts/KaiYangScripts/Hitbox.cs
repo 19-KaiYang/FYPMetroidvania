@@ -93,8 +93,6 @@ public class Hitbox : MonoBehaviour
                     Vector3 sourcePos = (owner != null) ? owner.transform.position : transform.position;
                     dir = (other.transform.position - sourcePos).normalized;
 
-                    // For skill hitboxes, pass Stunned with duration 0 to prevent default knockback
-                    // The skill's event handler will apply the actual CC
                     if (isSkillHitbox)
                     {
                         h.TakeDamage(damage, dir, false, CrowdControlState.Stunned, 0f);
