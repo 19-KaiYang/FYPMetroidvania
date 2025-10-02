@@ -22,6 +22,9 @@ public class Skills : MonoBehaviour
     private bool usingSkill = false;
     public bool IsUsingSkill => usingSkill;
 
+    private bool usingUltimate = false;
+    public bool IsUsingUltimate => usingUltimate;
+
     #region Skills Variables
     // ===================== LUNGING STRIKE =====================
     [Header("Lunging Strike")]
@@ -179,7 +182,7 @@ public class Skills : MonoBehaviour
     public float gauntletBeamTickRate = 0.5f;
     public Vector2 gauntletBeamSize = new Vector2(6f, 2f);
     public float gauntletBeamChargeTime = 2f;
-    public float gauntletBeamDrainPerSecond = 15f;
+    public float gauntletBeamDuration = 3f;
 
 
     [Header("Spirit Gain")]
@@ -395,7 +398,7 @@ public class Skills : MonoBehaviour
 
     public void TryUseSwordUltimate()
     {
-        if (usingSkill) return;
+        if (usingUltimate) return;
         if (spirit == null || spirit.IsEmpty) return;
 
         StartCoroutine(Skill_SwordUltimate());
@@ -404,7 +407,7 @@ public class Skills : MonoBehaviour
 
     private IEnumerator Skill_SwordUltimate()
     {
-        usingSkill = true;
+        usingUltimate = true;
         spirit.StartDrain();
 
         // Find first enemy in range
@@ -415,7 +418,7 @@ public class Skills : MonoBehaviour
         {
             Debug.Log("No enemies in range for ultimate!");
             spirit.StopDrain();
-            usingSkill = false;
+            usingUltimate = false;
             yield return null;
         }
 
@@ -439,7 +442,7 @@ public class Skills : MonoBehaviour
         }
 
         spirit.StopDrain();
-        usingSkill = false;
+        usingUltimate = false;
     }
  
 
@@ -453,9 +456,9 @@ public class Skills : MonoBehaviour
             return;
         }
 
-        if (usingSkill) return;
+        if (usingUltimate) return;
 
-        usingSkill = true;
+        usingUltimate = true;
 
         var cannon = Instantiate(gauntletCannonPrefab, PlayerController.instance.transform.position, Quaternion.identity);
         activeCannon = cannon.GetComponent<GauntletCannon>();
@@ -467,13 +470,13 @@ public class Skills : MonoBehaviour
             gauntletBeamDamage,
             gauntletBeamTickRate,
             gauntletBeamSize,
-            gauntletBeamDrainPerSecond
+            gauntletBeamDuration
         );
 
         activeCannon.OnFinished += () =>
         {
             activeCannon = null;
-            usingSkill = false;
+            usingUltimate = false;
         };
     }
 

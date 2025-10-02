@@ -1894,7 +1894,9 @@ MonoBehaviour:
   maxHealth: 100
   destroyOnDeath: 1
   isPlayer: 0
+  currentHealth: 0
   spriteRenderer: {fileID: 0}
+  originalColor: {r: 0, g: 0, b: 0, a: 0}
   flashDuration: 0.1
   hitSound: {fileID: 0}
   deathSound: {fileID: 0}
@@ -1911,6 +1913,7 @@ MonoBehaviour:
   isBloodMarked: 1
   bloodMarkHealAmount: 10
   bloodMarkIcon: {fileID: 1307254490}
+  debuffVFXs: []
 --- !u!4 &798601803 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3028555955052376274, guid: 661d681f9ba0a8e4d921f22fa1b08741, type: 3}
@@ -3923,6 +3926,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c5614658b95f0440a69ff4c2881ab2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeManager
+  AttackUpgrade: {fileID: 0}
+  SkillUpgrade: {fileID: 0}
+  SpiritUpgrade: {fileID: 0}
+  MiscUpgrades: []
 --- !u!1 &1760359534
 GameObject:
   m_ObjectHideFlags: 0
@@ -4907,7 +4914,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6359027140308036340, guid: 13775344399b2974daca82989c71d56e, type: 3}
       propertyPath: drainPerSecond
-      value: 0
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6591940185303097559, guid: 13775344399b2974daca82989c71d56e, type: 3}
       propertyPath: m_BodyType

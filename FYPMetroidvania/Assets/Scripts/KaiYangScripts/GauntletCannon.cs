@@ -22,7 +22,7 @@ public class GauntletCannon : MonoBehaviour
     private bool isCharging = true;
     private bool isFiring = false;
     private float chargeTimer = 0f;
-    private float drainRate;
+    private float beamDuration;
 
     private HashSet<int> hitThisTick = new HashSet<int>();
 
@@ -35,7 +35,7 @@ public class GauntletCannon : MonoBehaviour
     }
 
     public void Init(bool playerFacingRight, SpiritGauge spiritGauge, LayerMask enemyLayer,
-                     float charge, float damage, float tick, Vector2 size, float drain)
+                  float charge, float damage, float tick, Vector2 size, float duration)
     {
         facingRight = playerFacingRight;
         spirit = spiritGauge;
@@ -46,7 +46,8 @@ public class GauntletCannon : MonoBehaviour
         tickRate = tick;
         beamSize = size;
         beamVisualLength = size.x;
-        drainRate = drain;
+        beamDuration = duration;
+
 
         isCharging = true;
         isFiring = false;
@@ -104,31 +105,26 @@ public class GauntletCannon : MonoBehaviour
         }
 
         if (spirit != null)
-            spirit.StartDrain();
+        {
+            typeof(SpiritGauge).GetField("currentSpirit",
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+                ?.SetValue(spirit, 0f);
+        }
 
         StartCoroutine(BeamDamageLoop());
     }
 
+
     private IEnumerator BeamDamageLoop()
     {
-        while (spirit != null && !spirit.IsEmpty)
+        float elapsed = 0f;
+
+        while (elapsed < beamDuration)
         {
             hitThisTick.Clear();
             DamageEnemiesInBeam();
 
-            float drainAmount = drainRate * tickRate;
-            if (spirit.GetCurrentSpirit() > 0f)
-            {
-                float newValue = Mathf.Max(0f, spirit.GetCurrentSpirit() - drainAmount);
-                typeof(SpiritGauge).GetField("currentSpirit",
-                    System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-                    ?.SetValue(spirit, newValue); // use reflection to directly modify the private 'currentSpirit' field in SpiritGauge if you understand
-                                                  //basically its just  drain spirit gauge every tick.
-                                                  // because SpiritGauge.currentSpirit is private,  use reflection to set it directly.
-                                                  // (drainRate * tickRate = how much spirit is consumed per tick).
-
-            }
-
+            elapsed += tickRate;
             yield return new WaitForSeconds(tickRate);
         }
 
