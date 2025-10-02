@@ -10,6 +10,7 @@ public class Hitbox : MonoBehaviour
 
     [Header("Damage")]
     public float damage;
+    public bool isSkillHitbox = false;
 
     [Header("Hitstop Settings")]
     public float hitstopDuration = 0.08f;
@@ -21,8 +22,8 @@ public class Hitbox : MonoBehaviour
     public Vector2 customKnockback = Vector2.zero;
 
     [Header("Special Sweep Knockback")]
-    public bool isSweepHitbox = false;       
-    public float sweepKnockbackForce = 12f;  
+    public bool isSweepHitbox = false;
+    public float sweepKnockbackForce = 12f;
 
     private Collider2D col;
     private HashSet<Health> hitEnemies = new HashSet<Health>();
@@ -40,7 +41,10 @@ public class Hitbox : MonoBehaviour
     private void OnEnable()
     {
         hitEnemies.Clear();
-        damage = owner.GetAttackDamage(owner.CurrentComboStep);
+        if (!isSkillHitbox && owner != null)
+        {
+            damage = owner.GetAttackDamage(owner.CurrentComboStep);
+        }
     }
 
     public void EnableCollider(float duration)
@@ -69,27 +73,34 @@ public class Hitbox : MonoBehaviour
                 Vector2 dir;
                 bool useRawForce = false;
                 CrowdControlState forceCC = CrowdControlState.None;
-                float forceDuration = 0f;
 
                 if (isSweepHitbox)
                 {
-                    // sweep = always knock straight up with knockdown
                     dir = Vector2.up * sweepKnockbackForce;
                     useRawForce = true;
-                    forceCC = CrowdControlState.Knockdown;  
-                    forceDuration = 2.0f; 
+                    h.TakeDamage(damage, dir, useRawForce, CrowdControlState.Knockdown, 2.0f);
                 }
                 else if (forceUpKnockback)
                 {
                     dir = customKnockback;
+                    h.TakeDamage(damage, dir, useRawForce, CrowdControlState.None, 0f);
                 }
                 else
                 {
                     dir = (other.transform.position - owner.transform.position).normalized;
+
+                    // For skill hitboxes, pass Stunned with duration 0 to prevent default knockback
+                    // The skill's event handler will apply the actual CC
+                    if (isSkillHitbox)
+                    {
+                        h.TakeDamage(damage, dir, false, CrowdControlState.Stunned, 0f);
+                    }
+                    else
+                    {
+                        h.TakeDamage(damage, dir, false, CrowdControlState.None, 0f);
+                    }
                 }
 
-                // Apply damage + knockback with forced CC
-                h.TakeDamage(damage, dir, useRawForce, forceCC, forceDuration);
                 OnHit?.Invoke(this, h);
 
                 if (!h.isPlayer)
@@ -97,7 +108,7 @@ public class Hitbox : MonoBehaviour
                     h.ApplyBloodMark();
                 }
 
-                // hit stop activates
+                // hitstop
                 if (skills != null)
                 {
                     if (applyHitstopToEnemy)

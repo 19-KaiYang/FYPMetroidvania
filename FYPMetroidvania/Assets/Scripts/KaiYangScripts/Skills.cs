@@ -25,15 +25,31 @@ public class Skills : MonoBehaviour
     private bool usingUltimate = false;
     public bool IsUsingUltimate => usingUltimate;
 
+
+    public static event System.Action<Hitbox> skillStart;
+    public static event System.Action skillEnd;
+    public static event System.Action<Hitbox, Health> skillHit;
+
+
+    public static event System.Action<Hitbox> OnUltimateStart;
+    public static event System.Action OnUltimateEnd;
+    public static event System.Action<Hitbox, Health> OnUltimateHit;
+
     #region Skills Variables
+
+    // ===================== Skills Prefab =====================
+
+    [Header("Skill Hitboxes")]
+    public GameObject swordDashHitbox;
+
+
+
     // ===================== LUNGING STRIKE =====================
     [Header("Lunging Strike")]
     public float dashSpeed = 22f;
     public float dashDuration = 0.18f;
     public float dashFlatDamage = 0f;
     public float swordDashHealthCost = 5f;
-    public Vector2 dashBoxSize = new Vector2(1.4f, 1.0f);
-    public Vector2 dashBoxOffset = new Vector2(0.7f, 0f);
 
     public CrowdControlState swordDashGroundedCC = CrowdControlState.Stunned;
     public CrowdControlState swordDashAirborneCC = CrowdControlState.Knockdown;
@@ -492,7 +508,6 @@ public class Skills : MonoBehaviour
 
         if (controller) controller.externalVelocityOverride = true;
 
-        // temporarily disable collisions between player and enemies
         int playerLayer = gameObject.layer;
         int enemyLayer = SingleLayerIndex(enemyMask);
         bool collisionToggled = false;
@@ -504,18 +519,14 @@ public class Skills : MonoBehaviour
 
         HashSet<Health> hit = new HashSet<Health>();
         Vector2 dir = controller.facingRight ? Vector2.right : Vector2.left;
-
         float t = 0f;
+
         while (t < dashDuration)
         {
             t += Time.deltaTime;
-
             controller.SetVelocity(Vector2.zero);
 
-            // movement step
             Vector2 moveStep = dir * dashSpeed * Time.deltaTime;
-
-            // check terrain walls (not enemies)
             RaycastHit2D wallHit = Physics2D.BoxCast(
                 transform.position,
                 controller.colliderSize,
@@ -527,7 +538,6 @@ public class Skills : MonoBehaviour
 
             if (wallHit.collider != null)
             {
-                // stop at wall
                 float dist = wallHit.distance - 0.01f;
                 transform.Translate(dir * dist);
                 break;
@@ -537,58 +547,78 @@ public class Skills : MonoBehaviour
                 transform.Translate(moveStep);
             }
 
-            // enemy hit detection
-            Vector2 center = (Vector2)transform.position +
-                             new Vector2(dashBoxOffset.x * (controller.facingRight ? 1f : -1f),
-                                         dashBoxOffset.y);
+            // Use the hitbox position if available, otherwise use old method
+            Vector2 center;
+            Vector2 boxSize;
 
-            var cols = Physics2D.OverlapBoxAll(center, dashBoxSize, 0f, enemyMask);
+            if (swordDashHitbox != null)
+            {
+                BoxCollider2D hitboxCol = swordDashHitbox.GetComponent<BoxCollider2D>();
+                if (hitboxCol != null)
+                {
+                    center = (Vector2)swordDashHitbox.transform.position + hitboxCol.offset;
+                    boxSize = hitboxCol.size;
+                }
+                else
+                {
+                    center = (Vector2)transform.position + new Vector2(0.7f * (controller.facingRight ? 1f : -1f), 0f);
+                    boxSize = new Vector2(1.4f, 1.0f);
+                }
+            }
+            else
+            {
+                center = (Vector2)transform.position + new Vector2(0.7f * (controller.facingRight ? 1f : -1f), 0f);
+                boxSize = new Vector2(1.4f, 1.0f);
+            }
+
+            var cols = Physics2D.OverlapBoxAll(center, boxSize, 0f, enemyMask);
             foreach (var c in cols)
             {
                 var h = c.GetComponentInParent<Health>();
                 if (h != null && !hit.Contains(h))
                 {
                     hit.Add(h);
-                    float dmg = dashFlatDamage;
-                    GainSpirit(spiritGainPerHit);
+
+                    Hitbox hb = swordDashHitbox?.GetComponent<Hitbox>();
+                    float dmg = (hb != null && hb.isSkillHitbox) ? hb.damage : dashFlatDamage;
+
                     Vector2 knockDir = (h.transform.position - transform.position).normalized;
-                    h.TakeDamage(dmg, knockDir, false, CrowdControlState.None, 0f); 
+                    h.TakeDamage(dmg, knockDir, false, CrowdControlState.None, 0f);
                     ApplySkillCC(h, knockDir, swordDashGroundedCC, swordDashAirborneCC, swordDashCCDuration);
 
                     if (!h.isPlayer)
                     {
                         h.ApplyBloodMark();
+                        GainSpirit(spiritGainPerHit);
                         if (health != null && swordDashHealthCost > 0f)
                         {
                             float safeCost = Mathf.Min(swordDashHealthCost, health.CurrentHealth - 1f);
-                            if (safeCost > 0f)
-                                health.TakeDamage(safeCost);
+                            if (safeCost > 0f) health.TakeDamage(safeCost);
                         }
                     }
 
                     if (hitstop > 0f)
                     {
-                        // Enemy hitstop
                         StartCoroutine(LocalHitstop(h.GetComponent<Rigidbody2D>(), hitstop));
-                        // Player hitstop
                         StartCoroutine(LocalHitstop(rb, hitstop));
                     }
-
                 }
             }
 
             yield return null;
         }
 
-        // restore collisions
         if (collisionToggled)
             Physics2D.IgnoreLayerCollision(playerLayer, enemyLayer, false);
 
-        if (controller) controller.externalVelocityOverride = false;
+        if (controller)
+        {
+            controller.externalVelocityOverride = false;
+            controller.SetHitstop(false);
+        }
+
         usingSkill = false;
     }
-
-
 
     private IEnumerator Skill_SwordUppercut()
     {
@@ -1003,14 +1033,52 @@ public class Skills : MonoBehaviour
             spirit.Refill(amount);
     }
 
+    private IEnumerator ActivateSkillHitbox(GameObject hitbox, float duration)
+    {
+        Hitbox hb = hitbox.GetComponent<Hitbox>();
+        if (hb == null) yield break;
+
+        
+        System.Action<Hitbox, Health> onHit = (h, enemy) =>
+        {
+            skillHit?.Invoke(h, enemy);  
+        };
+        Hitbox.OnHit += onHit;
+
+        skillStart?.Invoke(hb);
+
+        // Activate
+        hitbox.SetActive(true);
+        yield return new WaitForSeconds(duration);
+
+        // Deactivate
+        hitbox.SetActive(false);
+
+        // Fire end event
+        skillEnd?.Invoke();
+
+        // Unsubscribe
+        Hitbox.OnHit -= onHit;
+    }
+
+
 
     public void ApplySkillCC(Health targetHealth, Vector2 knockDir, CrowdControlState groundedCC, CrowdControlState airborneCC, float duration)
     {
         if (targetHealth == null || targetHealth.isPlayer) return;
 
-        // Check if target is airborne
-        Rigidbody2D targetRb = targetHealth.GetComponent<Rigidbody2D>();
-        bool isAirborne = targetRb != null && Mathf.Abs(targetRb.linearVelocity.y) > 0.5f;
+        bool isAirborne = false;
+
+        // Use the enemy's own ground check distance
+        float checkDist = targetHealth.groundCheckValue > 0 ? targetHealth.groundCheckValue : 1.0f;
+        RaycastHit2D hit = Physics2D.Raycast(
+            targetHealth.transform.position,
+            Vector2.down,
+            checkDist,
+            controller.groundLayer
+        );
+
+        isAirborne = (hit.collider == null);
 
         CrowdControlState ccToApply = isAirborne ? airborneCC : groundedCC;
 
@@ -1019,17 +1087,12 @@ public class Skills : MonoBehaviour
         else if (ccToApply == CrowdControlState.Knockdown)
             targetHealth.ApplyKnockdown(duration, isAirborne, knockDir);
     }
+
     #endregion
 
     #region Gizmos
     private void OnDrawGizmosSelected()
     {
-        // --- Sword Dash Box ---
-        Gizmos.color = Color.red;
-        Vector2 dashCenter = (Vector2)transform.position +
-                             new Vector2(dashBoxOffset.x * (controller != null && controller.facingRight ? 1f : -1f),
-                                         dashBoxOffset.y);
-        Gizmos.DrawWireCube(dashCenter, dashBoxSize); 
 
         // --- Sword Uppercut Box ---
         Gizmos.color = Color.blue;
