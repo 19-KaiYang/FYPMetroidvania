@@ -175,13 +175,13 @@ public class Health : MonoBehaviour
         HandleArcKnockdown();
     }
 
-    public void TakeDamage(float amount, Vector2? hitDirection = null, bool useRawForce = false, CrowdControlState forceCC = CrowdControlState.None, float forceCCDuration = 0f, bool isFromDebuff = false)
+    public void TakeDamage(float amount, Vector2? hitDirection = null, bool useRawForce = false, CrowdControlState forceCC = CrowdControlState.None, float forceCCDuration = 0f, bool triggerEffects = true)
     {
         if (isPlayer && invincible) return;
 
         currentHealth -= amount;
 
-        if (!isFromDebuff) damageTaken?.Invoke(this);
+        if (triggerEffects) damageTaken?.Invoke(this);
 
         // Visual feedback
         if (spriteRenderer != null)
@@ -230,7 +230,7 @@ public class Health : MonoBehaviour
                 Die();
         }
 
-        Debug.Log($"{gameObject.name} took {amount} damage! Remaining HP: {currentHealth}/{maxHealth}");
+        //Debug.Log($"{gameObject.name} took {amount} damage! Remaining HP: {currentHealth}/{maxHealth}");
     }
 
     private void UpdateDebuffs()

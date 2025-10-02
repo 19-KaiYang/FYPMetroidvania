@@ -81,7 +81,7 @@ public class CombatZone : MonoBehaviour
         Debug.Log("Combat zone completed! Opening door...");
 
         areaTrigger.enabled = false;
-        door.SetActive(false);
+        if(door != null) door.SetActive(false);
     }
 
     IEnumerator SpawnEnemyCoroutine(EnemySpawn spawn, GameObject enemyObj)

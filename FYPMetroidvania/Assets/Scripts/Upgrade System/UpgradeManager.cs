@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem.XR;
 using static UnityEngine.Rendering.DebugUI;
 
 public class UpgradeManager : MonoBehaviour
@@ -88,6 +89,17 @@ public class UpgradeManager : MonoBehaviour
 
     #endregion
 
+    public void SpawnEffectProjectile(GameObject projectile)
+    {
+        Vector2 dir = player.facingRight ? Vector2.right : Vector2.left;
+        GameObject proj = Instantiate(projectile, transform.position + (Vector3)(dir * 0.7f), Quaternion.identity);
+        ProjectileBase projectilebase = proj.GetComponent<ProjectileBase>();
+        if (projectilebase != null)
+        {
+            projectilebase.direction = dir;
+            projectile.GetComponent<SpriteRenderer>().flipX = player.facingRight ? false : true;
+        }
+    }
     private void OnDestroy()
     {
         CombatSystem.basicAttackStart -= OnBasicAttackStart;
