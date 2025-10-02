@@ -25,6 +25,9 @@ public class Hitbox : MonoBehaviour
     public bool isSweepHitbox = false;
     public float sweepKnockbackForce = 12f;
 
+    [Header("Special Settings")]
+    public bool applyBloodMark = false;
+
     private Collider2D col;
     private HashSet<Health> hitEnemies = new HashSet<Health>();
 
@@ -87,7 +90,8 @@ public class Hitbox : MonoBehaviour
                 }
                 else
                 {
-                    dir = (other.transform.position - owner.transform.position).normalized;
+                    Vector3 sourcePos = (owner != null) ? owner.transform.position : transform.position;
+                    dir = (other.transform.position - sourcePos).normalized;
 
                     // For skill hitboxes, pass Stunned with duration 0 to prevent default knockback
                     // The skill's event handler will apply the actual CC
@@ -103,7 +107,7 @@ public class Hitbox : MonoBehaviour
 
                 OnHit?.Invoke(this, h);
 
-                if (!h.isPlayer)
+                if (!h.isPlayer && applyBloodMark)
                 {
                     h.ApplyBloodMark();
                 }

@@ -72,8 +72,6 @@ public class Skills : MonoBehaviour
     public float uppercutDuration = 0.35f;
     public float uppercutFlatDamage = 10f;
     public float swordUppercutHealthCost = 8f;
-    public Vector2 uppercutBoxSize = new Vector2(1.2f, 2.0f);
-    public Vector2 uppercutBoxOffset = new Vector2(0.6f, 1f);
 
     public CrowdControlState swordUppercutGroundedCC = CrowdControlState.Knockdown; 
     public CrowdControlState swordUppercutAirborneCC = CrowdControlState.Knockdown;
@@ -673,47 +671,6 @@ public class Skills : MonoBehaviour
         usingSkill = false;
     }
 
-    private void DoUppercutHitDetection(HashSet<Health> hit)
-    {
-        Vector2 offset = new Vector2(
-            controller.facingRight ? uppercutBoxOffset.x : -uppercutBoxOffset.x,
-            uppercutBoxOffset.y
-        );
-        Vector2 center = (Vector2)transform.position + offset;
-
-        var cols = Physics2D.OverlapBoxAll(center, uppercutBoxSize, 0f, enemyMask);
-        foreach (var c in cols)
-        {
-            var h = c.GetComponentInParent<Health>();
-            if (h != null && !hit.Contains(h))
-            {
-                hit.Add(h);
-                float dmg = uppercutFlatDamage;
-                Vector2 knockDir = (h.transform.position - transform.position).normalized;
-                h.TakeDamage(dmg, knockDir, false, CrowdControlState.None, 0f); // No forced CC
-                ApplySkillCC(h, knockDir, swordUppercutGroundedCC, swordUppercutAirborneCC, swordUppercutCCDuration);
-
-                if (!h.isPlayer)
-                {
-                    h.ApplyBloodMark();
-                    GainSpirit(spiritGainPerHit);
-                    if (health != null && swordUppercutHealthCost > 0f)
-                    {
-                        float safeCost = Mathf.Min(swordUppercutHealthCost, health.CurrentHealth - 1f);
-                        if (safeCost > 0f)
-                            health.TakeDamage(safeCost);
-                    }
-                }
-
-                if (hitstop > 0f)
-                {
-                    StartCoroutine(LocalHitstop(h.GetComponent<Rigidbody2D>(), hitstop));
-                    StartCoroutine(LocalHitstop(rb, hitstop));
-                }
-            }
-        }
-    }
-
 
 
     #endregion
@@ -1099,15 +1056,7 @@ public class Skills : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
 
-        // --- Sword Uppercut Box ---
-        Gizmos.color = Color.blue;
-        if (controller != null)
-        {
-            Vector2 upOffset = new Vector2(controller.facingRight ? uppercutBoxOffset.x : -uppercutBoxOffset.x,
-                                           uppercutBoxOffset.y);
-            Vector2 upCenter = (Vector2)transform.position + upOffset;
-            Gizmos.DrawWireCube(upCenter, uppercutBoxSize);
-        }
+    
 
         // --- Gauntlet Shockwave Radius ---
         Gizmos.color = Color.green;

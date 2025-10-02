@@ -1578,6 +1578,107 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 524007254}
   m_CullTransparentMesh: 1
+--- !u!1 &584375930
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 584375931}
+  - component: {fileID: 584375933}
+  - component: {fileID: 584375932}
+  m_Layer: 0
+  m_Name: SwordUppercutHitbox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &584375931
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 584375930}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1.03, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 425033969}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &584375932
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 584375930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85f2735b1d4274748ae03c2735e0e881, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Hitbox
+  damage: 0
+  isSkillHitbox: 1
+  hitstopDuration: 0.08
+  applyHitstopToEnemy: 1
+  applyHitstopToPlayer: 1
+  forceUpKnockback: 0
+  customKnockback: {x: 0, y: 0}
+  isSweepHitbox: 1
+  sweepKnockbackForce: 10
+  applyBloodMark: 0
+--- !u!61 &584375933
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 584375930}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: -0.6243288, y: 0.37705866}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 0.42039526, y: 0.89429396}
+  m_EdgeRadius: 0
 --- !u!1 &638992590
 GameObject:
   m_ObjectHideFlags: 0
@@ -3590,7 +3691,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hitbox
   damage: 0
-  isSkillHitbox: 0
+  isSkillHitbox: 1
   hitstopDuration: 0.08
   applyHitstopToEnemy: 1
   applyHitstopToPlayer: 1
@@ -3598,6 +3699,7 @@ MonoBehaviour:
   customKnockback: {x: 0, y: 0}
   isSweepHitbox: 1
   sweepKnockbackForce: 10
+  applyBloodMark: 0
 --- !u!61 &1452241146
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4953,6 +5055,10 @@ PrefabInstance:
       propertyPath: m_SortingOrder
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1169627588144201476, guid: 13775344399b2974daca82989c71d56e, type: 3}
+      propertyPath: isSkillHitbox
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2252264229362219372, guid: 13775344399b2974daca82989c71d56e, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -4998,6 +5104,10 @@ PrefabInstance:
       value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 4365569239843828954, guid: 13775344399b2974daca82989c71d56e, type: 3}
+      propertyPath: swordUppercutHitbox
+      value: 
+      objectReference: {fileID: 584375930}
+    - target: {fileID: 4365569239843828954, guid: 13775344399b2974daca82989c71d56e, type: 3}
       propertyPath: gauntletBeamDuration
       value: 4
       objectReference: {fileID: 0}
@@ -5029,6 +5139,14 @@ PrefabInstance:
       propertyPath: chargeStages.Array.data[2].ccDuration
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 4426184710424298186, guid: 13775344399b2974daca82989c71d56e, type: 3}
+      propertyPath: isSkillHitbox
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6165832633645789992, guid: 13775344399b2974daca82989c71d56e, type: 3}
+      propertyPath: isSkillHitbox
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6359027140308036340, guid: 13775344399b2974daca82989c71d56e, type: 3}
       propertyPath: drainPerSecond
       value: 10
@@ -5051,6 +5169,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 9028898936043044018, guid: 13775344399b2974daca82989c71d56e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1452241144}
+    - targetCorrespondingSourceObject: {fileID: 9028898936043044018, guid: 13775344399b2974daca82989c71d56e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 584375931}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 13775344399b2974daca82989c71d56e, type: 3}
 --- !u!114 &3185754151600921027 stripped
