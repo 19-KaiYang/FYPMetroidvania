@@ -952,7 +952,7 @@ public class Skills : MonoBehaviour
 
         // freeze
         if (pc != null) pc.SetHitstop(true);
-        if (targetRb) targetRb.simulated = false;
+        //if (targetRb) targetRb.simulated = false;
 
         yield return new WaitForSecondsRealtime(duration);
 
