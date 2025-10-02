@@ -19,8 +19,17 @@ public class GauntletProjectile : ProjectileBase
     private Vector2 launchOrigin;
 
     private Transform owner;
-    private Transform grabbedEnemy = null; // track the grabbed enemy
-    private Vector2 grabbedEnemyOffset; // offset from gauntlet to enemy
+    private Transform grabbedEnemy = null;
+    private Vector2 grabbedEnemyOffset;
+
+    private Hitbox hitbox;
+    private bool hasInvokedStart = false;
+
+    private void OnEnable()
+    {
+        hitbox = GetComponent<Hitbox>();
+        hasInvokedStart = false;
+    }
 
     public void Init(
         Transform owner,
@@ -59,6 +68,13 @@ public class GauntletProjectile : ProjectileBase
             lineRenderer.enabled = true;
             lineRenderer.positionCount = 2;
         }
+
+        // Fire skill start event
+        if (hitbox != null && !hasInvokedStart)
+        {
+            hasInvokedStart = true;
+            Skills.InvokeSkillStart(hitbox);
+        }
     }
 
     protected override void Move()
@@ -80,7 +96,6 @@ public class GauntletProjectile : ProjectileBase
             // Update grabbed enemy position continuously during return
             if (grabbedEnemy != null)
             {
-                // Keep enemy at the same offset from the gauntlet
                 grabbedEnemy.position = transform.position + (Vector3)grabbedEnemyOffset;
             }
 
@@ -91,12 +106,11 @@ public class GauntletProjectile : ProjectileBase
                 {
                     grabbedEnemy.SetParent(null);
 
-                    // Re-enable enemy physics when releasing
                     var enemyRb = grabbedEnemy.GetComponent<Rigidbody2D>();
                     if (enemyRb != null)
                     {
-                        enemyRb.simulated = true; // Re-enable physics
-                        enemyRb.linearVelocity = Vector2.zero; // Stop the enemy
+                        enemyRb.simulated = true;
+                        enemyRb.linearVelocity = Vector2.zero;
                     }
 
                     grabbedEnemy = null;
@@ -106,11 +120,10 @@ public class GauntletProjectile : ProjectileBase
                 hitThisFlight.Clear();
                 if (lineRenderer) lineRenderer.enabled = false;
 
-                // Notify skills the gauntlet is done
                 var skills = owner.GetComponent<Skills>();
                 if (skills) skills.ClearGauntlet();
 
-                Despawn(); // return to pool
+                Despawn();
             }
         }
         else
@@ -135,24 +148,25 @@ public class GauntletProjectile : ProjectileBase
             if (h != null && !hitThisFlight.Contains(h))
             {
                 hitThisFlight.Add(h);
+
+                // Fire skill hit event
+                if (hitbox != null)
+                {
+                    Skills.InvokeSkillHit(hitbox, h);
+                }
+
                 h.TakeDamage(damage);
 
                 // Attach enemy to gauntlet
                 grabbedEnemy = h.transform;
-
-                // Calculate and store the offset from gauntlet to enemy
                 grabbedEnemyOffset = (Vector2)(grabbedEnemy.position - transform.position);
-
-                // Parent the enemy to the gauntlet for easier management
                 grabbedEnemy.SetParent(transform);
 
-                // Retract after grabbing
                 Retract();
             }
         }
         else if ((terrainMask.value & layerBit) != 0)
         {
-            // Immediately retract on terrain hit
             Retract();
         }
     }
@@ -164,15 +178,22 @@ public class GauntletProjectile : ProjectileBase
             isReturning = true;
             rb.gravityScale = 0f;
 
-            // Only disable enemy physics when we start retracting (if we have an enemy)
             if (grabbedEnemy != null)
             {
                 var enemyRb = grabbedEnemy.GetComponent<Rigidbody2D>();
                 if (enemyRb != null)
                 {
-                    enemyRb.simulated = false; // Disable physics during drag
+                    enemyRb.simulated = false;
                 }
             }
         }
+    }
+
+    public override void Despawn()
+    {
+        // Fire skill end event
+        Skills.InvokeSkillEnd();
+
+        base.Despawn();
     }
 }
