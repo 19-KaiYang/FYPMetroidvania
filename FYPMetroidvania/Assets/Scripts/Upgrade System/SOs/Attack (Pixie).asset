@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ca0ae3af53f5c44c8d7cb25239b4a93, type: 3}
+  m_Name: Attack (Pixie)
+  m_EditorClassIdentifier: Assembly-CSharp::AttackPixie
+  effects:
+  - {fileID: 11400000, guid: e352909e820ed6c4ba799616a63b3418, type: 2}

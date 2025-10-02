@@ -153,10 +153,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SceneTransition
   nextSceneName: 
   startPoint: {fileID: 3380913005201831871}
-  exitDirection: {x: 0, y: 0}
-  exitTime: 0.2
+  exitDirection: {x: 1, y: 0}
+  exitTime: 0.3
+  jumpForce: 0
   needPress: 0
   isTriggered: 0
+  dir: 1
 --- !u!1 &1639757959132262362
 GameObject:
   m_ObjectHideFlags: 0
