@@ -85,7 +85,7 @@ public class Hitbox : MonoBehaviour
                 }
 
                 // Apply damage + knockback with forced CC
-                h.TakeDamage(totalDamage, dir, useRawForce, forceCC, forceDuration);
+                h.TakeDamage(damage, dir, useRawForce, forceCC, forceDuration);
 
                 if (!h.isPlayer)
                 {

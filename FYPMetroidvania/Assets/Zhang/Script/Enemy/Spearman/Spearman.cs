@@ -217,6 +217,11 @@ public class Spearman : Enemy
         }
         public void OnUpdate()
         {
+            if (enemy.health.currentCCState == CrowdControlState.Stunned)
+            {
+                enemy.stateMachine.ChangeState(new SpearmanCCState(enemy));
+            }
+
             if (enemy.isThrustFinished)
             {
                 enemy.stateMachine.ChangeState(new SpearmanChaseState(enemy));
@@ -266,7 +271,7 @@ public class Spearman : Enemy
         public void OnEnter()
         {
             //enemy.rb.linearVelocity = Vector2.zero;
-            //enemy.animator.SetTrigger("Stunned");
+            enemy.animator.SetTrigger("Stun");
         }
 
         public void OnUpdate()

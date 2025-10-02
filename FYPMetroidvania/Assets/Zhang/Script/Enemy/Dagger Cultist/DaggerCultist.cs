@@ -185,4 +185,29 @@ public class DaggerCultist : Enemy
             }
         }
     }
+
+    public class DaggerCultistCCState : IState
+    {
+        private DaggerCultist enemy;
+        public DaggerCultistCCState(DaggerCultist _enemy)
+        {
+            enemy = _enemy;
+        }
+
+        public void OnEnter()
+        {
+            //enemy.rb.linearVelocity = Vector2.zero;
+            enemy.animator.SetTrigger("Stun");
+        }
+
+        public void OnUpdate()
+        {
+            if (enemy.health.currentCCState == CrowdControlState.None)
+            {
+                enemy.stateMachine.ChangeState(new DaggerCultistIdleState(enemy));
+            }
+        }
+
+        public void OnExit() { }
+    }
 }
