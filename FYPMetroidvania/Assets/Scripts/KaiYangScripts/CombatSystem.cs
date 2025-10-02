@@ -116,7 +116,7 @@ public class CombatSystem : MonoBehaviour
         int playerLayer = gameObject.layer;
         int enemyLayer = LayerMask.NameToLayer("EnemyLayer");
         if (enemyLayer >= 0)
-            Physics2D.IgnoreLayerCollision(playerLayer, enemyLayer, false);
+            Physics2D.IgnoreLayerCollision(playerLayer, enemyLayer, true);
 
         currentWeapon = WeaponType.None;
         ApplyWeaponStats(currentWeapon);
@@ -124,6 +124,10 @@ public class CombatSystem : MonoBehaviour
 
     private void Update()
     {
+        int playerLayer = gameObject.layer;
+        int enemyLayer = LayerMask.NameToLayer("EnemyLayer");
+        Physics2D.IgnoreLayerCollision(playerLayer, enemyLayer, true);
+
         if (attackCooldownTimer > 0f)
             attackCooldownTimer -= Time.deltaTime;
 

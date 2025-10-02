@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Attack Pixie Dust
   m_EditorClassIdentifier: Assembly-CSharp::PixieDustEffect
   trigger: 2
-  PixieDustDebuff: {fileID: 11400000, guid: 7bd94a70827cc06468d1240278486ef4, type: 2}
+  Debuff: {fileID: 11400000, guid: 7bd94a70827cc06468d1240278486ef4, type: 2}
   stacks: 1
   duration: 10
