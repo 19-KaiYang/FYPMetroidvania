@@ -490,6 +490,8 @@ MonoBehaviour:
   defaultKnockdownDuration: 2
   knockdownRecoveryTime: 1
   currentCCState: 0
+  stunImmune: 0
+  knockdownImmune: 1
   invincibilityDuration: 0.3
   isBloodMarked: 0
   bloodMarkHealAmount: 10

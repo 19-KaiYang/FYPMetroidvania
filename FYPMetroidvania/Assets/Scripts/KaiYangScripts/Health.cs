@@ -44,6 +44,8 @@ public class Health : MonoBehaviour
 
     [Header("Combat States")]
     public CrowdControlState currentCCState = CrowdControlState.None;
+    public bool stunImmune = false;
+    public bool knockdownImmune = false;
 
     private float ccTimer = 0f;
 
@@ -175,7 +177,7 @@ public class Health : MonoBehaviour
         HandleArcKnockdown();
     }
 
-    public void TakeDamage(float amount, Vector2? hitDirection = null, bool useRawForce = false, CrowdControlState forceCC = CrowdControlState.None, float forceCCDuration = 0f, bool triggerEffects = true)
+    public void TakeDamage(float amount, Vector2? hitDirection = null, bool useRawForce = false, CrowdControlState forceCC = CrowdControlState.None, float forceCCDuration = 0f, bool triggerEffects = true, bool isDebuff = false)
     {
         if (isPlayer && invincible) return;
 
@@ -197,15 +199,20 @@ public class Health : MonoBehaviour
                 rb.AddForce(hitDirection.Value.normalized * knockbackForce, ForceMode2D.Impulse);
         }
 
-        if (!isPlayer)
+        if (!isPlayer && !isDebuff)
         {
             if (forceCC != CrowdControlState.None)
             {
                 // Skill specified exact CC type
-                if (forceCC == CrowdControlState.Stunned)
+                if (forceCC == CrowdControlState.Stunned && !stunImmune)
                     ApplyStun(forceCCDuration > 0 ? forceCCDuration : defaultStunDuration);
                 else if (forceCC == CrowdControlState.Knockdown)
-                    ApplyKnockdown(forceCCDuration > 0 ? forceCCDuration : defaultKnockdownDuration, true, hitDirection, shouldPreserveVelocity);
+                {
+                    if(!knockdownImmune)
+                        ApplyKnockdown(forceCCDuration > 0 ? forceCCDuration : defaultKnockdownDuration, true, hitDirection, shouldPreserveVelocity);
+                    else
+                        ApplyStun(forceCCDuration > 0 ? forceCCDuration : defaultStunDuration);
+                }
             }
             else
             {
@@ -213,10 +220,11 @@ public class Health : MonoBehaviour
                 RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, groundCheckValue, LayerMask.GetMask("Ground"));
                 bool grounded = hit.collider != null;
 
-                if (grounded)
-                    ApplyStun(defaultStunDuration, hitDirection);
-                else
+                if(!grounded && !knockdownImmune)
                     ApplyKnockdown(defaultKnockdownDuration, true, hitDirection);
+                else if(!stunImmune)
+                    ApplyStun(defaultStunDuration, hitDirection);
+                    
             }
         }
 

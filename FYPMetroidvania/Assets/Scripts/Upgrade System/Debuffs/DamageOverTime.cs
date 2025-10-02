@@ -8,7 +8,7 @@ public class DamageOverTime : Debuff
     {
         if (owner.CurrentHealth <= 0) return;
         float damage = damagePerStack * instance.stacks;
-        owner.TakeDamage(damage, triggerEffects: false);
+        owner.TakeDamage(damage, triggerEffects: false, isDebuff: true);
         Debug.Log("DoT ticked at: " + Time.time + " on target: " + owner.name);
     }
 }
