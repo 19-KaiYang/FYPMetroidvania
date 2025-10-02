@@ -110,14 +110,14 @@ public class Hitbox : MonoBehaviour
                     h.ApplyBloodMark();
                 }
 
-                // hitstop
+                // hitstop 
                 if (skills != null)
                 {
                     if (applyHitstopToEnemy)
-                        StartCoroutine(skills.LocalHitstop(h.GetComponent<Rigidbody2D>(), hitstopDuration));
+                        skills.StartCoroutine(skills.LocalHitstop(h.GetComponent<Rigidbody2D>(), hitstopDuration));
 
                     if (applyHitstopToPlayer)
-                        StartCoroutine(skills.LocalHitstop(skills.GetComponent<Rigidbody2D>(), hitstopDuration));
+                        skills.StartCoroutine(skills.LocalHitstop(skills.GetComponent<Rigidbody2D>(), hitstopDuration));
                 }
             }
         }

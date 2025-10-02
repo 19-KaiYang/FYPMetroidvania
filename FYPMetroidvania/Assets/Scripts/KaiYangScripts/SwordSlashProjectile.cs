@@ -7,11 +7,24 @@ public class SwordSlashProjectile : ProjectileBase
 
     private Vector3 startPos;
     private Health playerHealth;
+    private Hitbox hitbox;
+    private bool hasInvokedStart = false;
 
     private void OnEnable()
     {
         startPos = transform.position;
         playerHealth = PlayerController.instance.GetComponent<Health>();
+        hitbox = GetComponent<Hitbox>();
+        hasInvokedStart = false;
+    }
+
+    private void Start()
+    {
+        if (hitbox != null && !hasInvokedStart)
+        {
+            hasInvokedStart = true;
+            Skills.InvokeSkillStart(hitbox);
+        }
     }
 
     protected override void Move()
@@ -24,6 +37,12 @@ public class SwordSlashProjectile : ProjectileBase
     {
         if (!rb) rb = GetComponent<Rigidbody2D>();
         rb.linearVelocity = dir.normalized * speed;
+
+        if (hitbox != null && !hasInvokedStart)
+        {
+            hasInvokedStart = true;
+            Skills.InvokeSkillStart(hitbox);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -31,6 +50,11 @@ public class SwordSlashProjectile : ProjectileBase
         Health enemy = collision.GetComponent<Health>();
         if (enemy != null && !enemy.isPlayer)
         {
+            if (hitbox != null)
+            {
+                Skills.InvokeSkillHit(hitbox, enemy);
+            }
+
             enemy.TakeDamage(damage);
             enemy.ApplyBloodMark();
 
@@ -50,5 +74,12 @@ public class SwordSlashProjectile : ProjectileBase
 
             Despawn();
         }
+    }
+
+    public override void Despawn()
+    {
+        Skills.InvokeSkillEnd();
+
+        base.Despawn();
     }
 }

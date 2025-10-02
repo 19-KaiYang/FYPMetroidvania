@@ -42,6 +42,7 @@ public class Skills : MonoBehaviour
     [Header("Skill Hitboxes")]
     public GameObject swordDashHitbox;
     public GameObject swordUppercutHitbox;
+    public GameObject gauntletShockwaveHitbox;
 
 
     // ===================== LUNGING STRIKE =====================
@@ -679,13 +680,13 @@ public class Skills : MonoBehaviour
                 collisionToggled = true;
             }
 
-            HashSet<Health> hit = new HashSet<Health>();
+            HashSet<Health> plungeHits = new HashSet<Health>();
 
+            // Plunge downward
             while (true)
             {
                 Vector2 moveStep = Vector2.down * plungeSpeed * Time.deltaTime;
 
-                //stop going thru ground
                 RaycastHit2D hitGround = Physics2D.BoxCast(
                     transform.position,
                     controller.colliderSize,
@@ -697,29 +698,28 @@ public class Skills : MonoBehaviour
 
                 if (hitGround.collider != null)
                 {
-                    //hit ground
                     float dist = hitGround.distance - 0.01f;
                     transform.Translate(Vector2.down * dist);
-                    break; 
+                    break;
                 }
                 else
                 {
                     transform.Translate(moveStep);
                 }
 
-                // enemy hit detection mid-plunge
+                // Mid-plunge hit detection
                 Vector2 center = transform.position;
                 Collider2D[] cols = Physics2D.OverlapCircleAll(center, 0.6f, enemyMask);
                 foreach (var c in cols)
                 {
                     var h = c.GetComponentInParent<Health>();
-                    if (h != null && !hit.Contains(h))
+                    if (h != null && !plungeHits.Contains(h))
                     {
-                        hit.Add(h);
+                        plungeHits.Add(h);
                         float dmg = shockwaveFlatDamage;
                         GainSpirit(spiritGainPerHit);
                         Vector2 knockDir = (h.transform.position - transform.position).normalized;
-                        h.TakeDamage(dmg, knockDir.normalized, false, CrowdControlState.None, 0f); // No forced CC
+                        h.TakeDamage(dmg, knockDir.normalized, false, CrowdControlState.None, 0f);
                         ApplySkillCC(h, knockDir.normalized, gauntletShockwaveGroundedCC, gauntletShockwaveAirborneCC, gauntletShockwaveCCDuration);
 
                         if (hitstop > 0f)
@@ -727,7 +727,6 @@ public class Skills : MonoBehaviour
                             StartCoroutine(LocalHitstop(h.GetComponent<Rigidbody2D>(), hitstop));
                             StartCoroutine(LocalHitstop(rb, hitstop * 0.75f));
                         }
-
                     }
                 }
 
@@ -737,42 +736,46 @@ public class Skills : MonoBehaviour
             if (controller) controller.externalVelocityOverride = false;
             if (collisionToggled)
                 Physics2D.IgnoreLayerCollision(playerLayer, enemyLayer, false);
+        }
 
-            DoShockwave();
-        }
-        else
-        {
-            DoShockwave();
-        }
+        // Now use hitbox for the actual shockwave impact
+        yield return StartCoroutine(DoShockwaveWithHitbox());
 
         usingSkill = false;
     }
 
-
-    private void DoShockwave()
+    private IEnumerator DoShockwaveWithHitbox()
     {
-        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, shockwaveRadius, enemyMask);
-        HashSet<Health> hit = new HashSet<Health>();
-
-        foreach (var c in cols)
+        // Hook into hitbox for Shockwave specific logic
+        void OnShockwaveHit(Hitbox hb, Health h)
         {
-            var h = c.GetComponentInParent<Health>();
-            if (h == null) continue;
-            if (hit.Contains(h)) continue;
-            hit.Add(h);
+            if (h == null || h.isPlayer) return;
 
-            float dmg = shockwaveFlatDamage;
-            Vector2 away = ((Vector2)h.transform.position - (Vector2)transform.position).normalized;
-            Vector2 knock = away * shockwaveKnockForce + Vector2.up * shockwaveUpwardBoost;
+            Vector2 knockDir = (h.transform.position - transform.position).normalized;
 
-            h.TakeDamage(dmg, knock.normalized);
+            // Apply Shockwave CC
+            ApplySkillCC(h, knockDir, gauntletShockwaveGroundedCC, gauntletShockwaveAirborneCC, gauntletShockwaveCCDuration);
 
+            // Spirit gain
+            GainSpirit(spiritGainPerHit);
+
+            // Local hitstop
             if (hitstop > 0f)
             {
                 StartCoroutine(LocalHitstop(h.GetComponent<Rigidbody2D>(), hitstop));
                 StartCoroutine(LocalHitstop(rb, hitstop * 0.75f));
             }
         }
+
+        Hitbox.OnHit += OnShockwaveHit;
+
+        // Activate the shockwave hitbox briefly (like 0.1-0.2 seconds)
+        float shockwaveDuration = 0.15f;
+        Coroutine hitboxRoutine = StartCoroutine(ActivateSkillHitbox(gauntletShockwaveHitbox, shockwaveDuration));
+
+        yield return hitboxRoutine;
+
+        Hitbox.OnHit -= OnShockwaveHit;
     }
 
     private IEnumerator Skill_GauntletLaunch()
@@ -1032,6 +1035,21 @@ public class Skills : MonoBehaviour
             targetHealth.ApplyStun(duration);
         else if (ccToApply == CrowdControlState.Knockdown)
             targetHealth.ApplyKnockdown(duration, isAirborne, knockDir);
+    }
+
+    public static void InvokeSkillStart(Hitbox hitbox)
+    {
+        skillStart?.Invoke(hitbox);
+    }
+
+    public static void InvokeSkillHit(Hitbox hitbox, Health enemy)
+    {
+        skillHit?.Invoke(hitbox, enemy);
+    }
+
+    public static void InvokeSkillEnd()
+    {
+        skillEnd?.Invoke();
     }
 
     #endregion
