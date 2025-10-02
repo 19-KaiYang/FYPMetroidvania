@@ -29,7 +29,7 @@ public class RespawnManager : MonoBehaviour
     {
         if(Input.GetKeyUp(KeyCode.R))
         {
-            Respawn();
+            //Respawn();
         }
     }
 

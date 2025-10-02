@@ -167,7 +167,7 @@ public class SpiritSlash : MonoBehaviour
         }
         else if (available.Count > 0)
         {
-            // All have been hit — reset the set and start a new cycle
+            // All have been hit ?reset the set and start a new cycle
             hitEnemyIds.Clear();
 
             float closest = float.MaxValue;
