@@ -52,11 +52,12 @@ public class Skills : MonoBehaviour
 
 
     [Header("Gauntlet Shockwave Knockback")]
-    public float gauntletShockwaveKnockbackMultiplier = 1f;
-    [Header("Rocket Hand Knockback")]
-    public float gauntletLaunchKnockbackMultiplier = 1f;
+    public float gauntletShockwaveStunKnockbackMultiplier = 1f;
+    public float gauntletShockwaveKnockdownKnockbackMultiplier = 1f;
+
     [Header("Gauntlet Charge Shot Knockback")]
-    public float gauntletChargeKnockbackMultiplier = 1f;
+    public float gauntletChargeStunKnockbackMultiplier = 1f;
+    public float gauntletChargeKnockdownKnockbackMultiplier = 1f;
 
 
     // ===================== Skills Prefab =====================
@@ -824,14 +825,11 @@ public class Skills : MonoBehaviour
 
             Vector2 knockDir = (h.transform.position - transform.position).normalized;
 
-            h.TakeDamage(shockwaveFlatDamage,
-             knockDir,
-             false,
-             CrowdControlState.None,
-             0f,
-             true,
-             false,
-             gauntletShockwaveKnockbackMultiplier);
+            // Apply Shockwave CC with separate multipliers
+            ApplySkillCC(h, knockDir, gauntletShockwaveGroundedCC, gauntletShockwaveAirborneCC,
+                gauntletShockwaveCCDuration,
+                gauntletShockwaveStunKnockbackMultiplier,
+                gauntletShockwaveKnockdownKnockbackMultiplier);
 
 
             // Apply Shockwave CC
@@ -985,9 +983,11 @@ public class Skills : MonoBehaviour
             var stageSettings = chargeStages[stageIndex];
 
             chargeProj.Init(dir, damage, knockback, ratio,
-                            stageSettings.groundedCC,
-                            stageSettings.airborneCC,
-                            stageSettings.ccDuration);
+                   stageSettings.groundedCC,
+                   stageSettings.airborneCC,
+                   stageSettings.ccDuration,
+                   gauntletChargeStunKnockbackMultiplier,      
+                   gauntletChargeKnockdownKnockbackMultiplier); 
         }
 
 
