@@ -4,7 +4,12 @@ public class SwordSlashProjectile : ProjectileBase
 {
     public float maxDistance = 10f;
     public float bloodCost;
-    public float knockbackMultiplier = 1f;
+
+    public CrowdControlState groundedCC = CrowdControlState.Stunned;
+    public CrowdControlState airborneCC = CrowdControlState.Knockdown;
+    public float ccDuration = 1.0f;
+    public float stunKnockbackMultiplier = 1f;
+    public float knockdownKnockbackMultiplier = 1f;
 
     private Vector3 startPos;
     private Health playerHealth;
@@ -56,17 +61,21 @@ public class SwordSlashProjectile : ProjectileBase
                 Skills.InvokeSkillHit(hitbox, enemy);
             }
 
-            enemy.TakeDamage(damage);
+            Vector2 knockDir = (enemy.transform.position - transform.position).normalized;
+
+            // Damage without knockback (CC handles it)
+            enemy.TakeDamage(damage, knockDir, false, CrowdControlState.None, 0f, true, false, 0f);
             enemy.ApplyBloodMark();
 
-            Rigidbody2D rbEnemy = enemy.GetComponent<Rigidbody2D>();
-            if (rbEnemy != null)
+            // Apply CC with separate multipliers
+            var skills = PlayerController.instance.GetComponent<Skills>();
+            if (skills != null)
             {
-                Vector2 knockDir = (enemy.transform.position - transform.position).normalized;
-                enemy.TakeDamage(damage, knockDir, false, CrowdControlState.None, 0f, true, false, knockbackMultiplier);
-
+                skills.ApplySkillCC(enemy, knockDir, groundedCC, airborneCC, ccDuration,
+                                   stunKnockbackMultiplier, knockdownKnockbackMultiplier);
             }
 
+            // Blood cost
             if (playerHealth != null && bloodCost > 0f)
             {
                 float safeCost = Mathf.Min(bloodCost, playerHealth.CurrentHealth - 1f);
@@ -81,7 +90,6 @@ public class SwordSlashProjectile : ProjectileBase
     public override void Despawn()
     {
         Skills.InvokeSkillEnd();
-
         base.Despawn();
     }
 }

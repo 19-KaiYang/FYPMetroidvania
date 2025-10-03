@@ -46,9 +46,11 @@ public class Skills : MonoBehaviour
     public float swordUppercutStunKnockbackMultiplier = 1f;
     public float swordUppercutKnockdownKnockbackMultiplier = 1f;
 
-
     [Header("Crimson Wave Knockback")]
-    public float crimsonWaveKnockbackMultiplier = 1f;
+    public float crimsonWaveStunKnockbackMultiplier = 1f;
+    public float crimsonWaveKnockdownKnockbackMultiplier = 1f;
+
+
     [Header("Gauntlet Shockwave Knockback")]
     public float gauntletShockwaveKnockbackMultiplier = 1f;
     [Header("Rocket Hand Knockback")]
@@ -105,10 +107,15 @@ public class Skills : MonoBehaviour
 
     // ===================== CRIMSON WAVE =====================
 
+
+
     [Header("Crimson Wave")]
-    public Transform projectileSpawnPoint; 
+    public Transform projectileSpawnPoint;
     public float swordSlashBloodCost = 5f;
     public float swordSlashEnergyCost;
+    public CrowdControlState crimsonWaveGroundedCC = CrowdControlState.Stunned;
+    public CrowdControlState crimsonWaveAirborneCC = CrowdControlState.Knockdown;
+    public float crimsonWaveCCDuration = 1.0f;
 
     //COST EDIT IN SWORDPROJECTILE.CS
 
@@ -315,10 +322,12 @@ public class Skills : MonoBehaviour
         SwordSlashProjectile proj = ProjectileManager.instance.SpawnSwordSlash(spawnPos, Quaternion.identity);
         if (proj != null)
         {
-            // assign only what’s needed
             proj.bloodCost = swordSlashBloodCost;
-
-            // initialize movement
+            proj.groundedCC = crimsonWaveGroundedCC;
+            proj.airborneCC = crimsonWaveAirborneCC;
+            proj.ccDuration = crimsonWaveCCDuration;
+            proj.stunKnockbackMultiplier = crimsonWaveStunKnockbackMultiplier;
+            proj.knockdownKnockbackMultiplier = crimsonWaveKnockdownKnockbackMultiplier;
             proj.Init(dir);
         }
     }
