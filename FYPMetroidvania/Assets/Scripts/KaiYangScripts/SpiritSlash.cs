@@ -13,8 +13,15 @@ public class SpiritSlash : MonoBehaviour
 
     [Header("Hitbox")]
     public GameObject hitboxObject;
+
     [Header("Knockback Settings")]
-    public float knockbackMultiplier = 0f;
+    public float stunKnockbackMultiplier = 1f;
+    public float knockdownKnockbackMultiplier = 1f;
+
+    [Header("Crowd Control")]
+    public CrowdControlState groundedCC = CrowdControlState.Stunned;
+    public CrowdControlState airborneCC = CrowdControlState.Knockdown;
+    public float ccDuration = 1.5f;
 
     private Transform player;
     private Transform currentTarget;
@@ -100,7 +107,6 @@ public class SpiritSlash : MonoBehaviour
         }
         else
         {
-            // No valid target context -> ignore
             return;
         }
 
@@ -115,8 +121,16 @@ public class SpiritSlash : MonoBehaviour
 
             Vector2 knockDir = (h.transform.position - transform.position).normalized;
 
-           h.TakeDamage(spiritSlashBloodCost,knockDir,false,CrowdControlState.None, 0f, true,false,knockbackMultiplier);
+            // Damage without knockback (CC handles it)
+            h.TakeDamage(spiritSlashBloodCost, knockDir, false, CrowdControlState.None, 0f, true, false, 0f);
 
+            // Apply CC with separate multipliers
+            Skills skills = player.GetComponent<Skills>();
+            if (skills != null)
+            {
+                skills.ApplySkillCC(h, knockDir, groundedCC, airborneCC, ccDuration,
+                                   stunKnockbackMultiplier, knockdownKnockbackMultiplier);
+            }
 
             // Apply blood mark
             h.ApplyBloodMark();
@@ -157,20 +171,17 @@ public class SpiritSlash : MonoBehaviour
 
         hitbox.ClearHitEnemies();
 
-
         yield return null;
 
         col.enabled = true;
         yield return new WaitForFixedUpdate();
         col.enabled = false;
 
-
         Vector3 overshootPosition = targetPos + (Vector3)(lastMovementDirection * overshootDistance);
         transform.position = overshootPosition;
 
         pendingTargetHealth = null;
     }
-
 
     private IEnumerator EnableHitboxTemporarily(float duration)
     {
@@ -239,12 +250,9 @@ public class SpiritSlash : MonoBehaviour
         }
         else if (available.Count == 1)
         {
-           
-            hitEnemyIds.Clear();  
+            hitEnemyIds.Clear();
             best = available[0];
         }
-
-
 
         if (best != null) { currentTarget = best; waiting = false; }
         else { currentTarget = null; }

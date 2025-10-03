@@ -275,7 +275,11 @@ MonoBehaviour:
   hitCooldown: 0.3
   spiritSlashBloodCost: 0
   hitboxObject: {fileID: 6504239084146648602}
-  knockbackMultiplier: 1
+  stunKnockbackMultiplier: 1
+  knockdownKnockbackMultiplier: 1
+  groundedCC: 1
+  airborneCC: 2
+  ccDuration: 1.5
 --- !u!96 &6553343887951831201
 TrailRenderer:
   serializedVersion: 3
