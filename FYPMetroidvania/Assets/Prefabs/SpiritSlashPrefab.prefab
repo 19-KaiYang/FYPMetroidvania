@@ -104,7 +104,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85f2735b1d4274748ae03c2735e0e881, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hitbox
-  damage: 0
+  damage: 30
   hitstopDuration: 0.08
   applyHitstopToEnemy: 1
   applyHitstopToPlayer: 1
@@ -268,11 +268,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e486a116bc99c0c42b7bc49f873df3d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpiritSlash
-  speed: 30
+  speed: 50
   bounceRange: 6
   overshootDistance: 1
-  hitDelay: 0.6
-  hitCooldown: 0.6
+  hitDelay: 0.3
+  hitCooldown: 0.3
   spiritSlashBloodCost: 0
   hitboxObject: {fileID: 6504239084146648602}
 --- !u!96 &6553343887951831201
