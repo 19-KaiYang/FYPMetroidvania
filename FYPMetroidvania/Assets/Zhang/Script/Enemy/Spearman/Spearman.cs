@@ -32,8 +32,10 @@ public class Spearman : Enemy
     [SerializeField] private GameObject spearPrefab;
     [SerializeField] private Transform throwPoint;
 
+    [Header("Collider")]
+    [SerializeField] private GameObject thrustCollider;
+    [SerializeField] private GameObject thrustCollider2;
     
-
     protected override void Awake()
     {
         base.Awake();
@@ -88,6 +90,8 @@ public class Spearman : Enemy
         else if (attack == null) inAttackArea = false;
     }
 
+    
+
     private void ThrowSpear()
     {
         Instantiate(spearPrefab,throwPoint.position, throwPoint.rotation);
@@ -115,10 +119,44 @@ public class Spearman : Enemy
             Gizmos.DrawLine(transform.position, player.transform.position);
         }
     }
+    private void OnDrawGizmos()
+    {
+        if (!thrustCollider.activeInHierarchy) return;
+
+        Gizmos.color = Color.cyan;
+        Gizmos.matrix = thrustCollider.transform.localToWorldMatrix;
+
+        var col = thrustCollider.GetComponent<Collider2D>();
+
+        if (col is BoxCollider2D box)
+        {
+            Gizmos.DrawWireCube(box.offset, box.size);
+        }
+        else if (col is CircleCollider2D circle)
+        {
+            Gizmos.DrawWireSphere(circle.offset, circle.radius);
+        }
+        else if (col is PolygonCollider2D poly)
+        {
+            for (int p = 0; p < poly.pathCount; p++)
+            {
+                Vector2[] points = poly.GetPath(p);
+                for (int i = 0; i < points.Length; i++)
+                {
+                    Vector3 p1 = poly.transform.TransformPoint(points[i]);
+                    Vector3 p2 = poly.transform.TransformPoint(points[(i + 1) % points.Length]);
+                    Gizmos.DrawLine(p1, p2);
+                }
+            }
+        }
+    }
     void OnStateChanged(IState _state)
     {
         currentState = _state.GetType().Name;
     }
+    public void EnableThrustCollider() => thrustCollider.SetActive(true);
+    public void DisableThrustCollider() => thrustCollider.SetActive(false);
+
     public class SpearmanIdleState : IState
     {
         private Spearman enemy;

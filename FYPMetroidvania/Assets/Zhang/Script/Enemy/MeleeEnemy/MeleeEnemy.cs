@@ -349,7 +349,12 @@ public class MeleeEnemy : Enemy
         }
         public void OnUpdate()
         {
-            if(enemy.isAttackFinished)
+            if (enemy.health.currentCCState == CrowdControlState.Stunned)
+            {
+                enemy.stateMachine.ChangeState(new MeleeEnemyCCState(enemy));
+            }
+
+            if (enemy.isAttackFinished)
             {
                 enemy.stateMachine.ChangeState(new MeleeEnemyChaseState(enemy));
             }
@@ -370,6 +375,7 @@ public class MeleeEnemy : Enemy
         public void OnEnter()
         {
             //enemy.animator.SetTrigger("Stunned");
+            enemy.animator.SetBool("isStun", true);
         }
 
         public void OnUpdate()
@@ -380,6 +386,9 @@ public class MeleeEnemy : Enemy
             }
         }
 
-        public void OnExit() { }
+        public void OnExit()
+        {
+            enemy.animator.SetBool("isStun", false);
+        }
     }
 }

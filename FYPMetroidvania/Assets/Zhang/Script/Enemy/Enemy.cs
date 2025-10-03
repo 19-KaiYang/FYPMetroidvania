@@ -18,6 +18,7 @@ public class Enemy : MonoBehaviour, IDamageable
     [SerializeField] public float currentHealth;
     [SerializeField] public bool isDead = false;
     [SerializeField] public float moveSpeed;
+    [SerializeField] public float attackDamage;
 
     [Header("-")]
     [SerializeField] public bool isFacingRight;
@@ -42,7 +43,6 @@ public class Enemy : MonoBehaviour, IDamageable
     {
         currentHealth = maxHealth;
     }
-
 
     protected virtual void Update()
     {
@@ -82,5 +82,15 @@ public class Enemy : MonoBehaviour, IDamageable
     public virtual void Die()
     {
 
+    }
+    protected virtual void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            var p = player.GetComponent<Health>();
+            Debug.Log("Player take damage");
+            Vector2 dir = (player.transform.position - transform.position).normalized;
+            p.TakeDamage(attackDamage, dir, false, CrowdControlState.None, 0f);
+        }
     }
 }
