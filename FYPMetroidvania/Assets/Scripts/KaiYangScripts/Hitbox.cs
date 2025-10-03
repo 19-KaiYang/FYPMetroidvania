@@ -59,9 +59,9 @@ public class Hitbox : MonoBehaviour
     }
 
     public void ClearHitEnemies()
-{
-    hitEnemies.Clear();
-}
+    {
+         hitEnemies.Clear();
+    }
 
     private IEnumerator EnableTemporarily(float duration)
     {
