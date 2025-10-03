@@ -10,6 +10,7 @@ public class Hitbox : MonoBehaviour
 
     [Header("Damage")]
     public float damage;
+    public bool isCritical = false;
 
     [Header("Hitstop Settings")]
     public float hitstopDuration = 0.08f;
@@ -88,9 +89,11 @@ public class Hitbox : MonoBehaviour
                     dir = (other.transform.position - owner.transform.position).normalized;
                 }
 
+                isCritical = false;
+                OnHit?.Invoke(this, h);
+
                 // Apply damage + knockback with forced CC
                 h.TakeDamage(damage, dir, useRawForce, forceCC, forceDuration);
-                OnHit?.Invoke(this, h);
 
                 if (!h.isPlayer)
                 {

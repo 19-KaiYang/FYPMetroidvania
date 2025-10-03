@@ -27,6 +27,10 @@ public class UpgradeManager : MonoBehaviour
 
         // Temp for testing
         if (MobilityUpgrade != null) MobilityUpgrade.OnApply(this);
+        foreach(Upgrade upgrade in MiscUpgrades)
+        {
+            upgrade.OnApply(this);
+        }
     }
     private void Update()
     {
@@ -119,5 +123,10 @@ public class UpgradeManager : MonoBehaviour
         CombatSystem.basicAttackStart -= OnBasicAttackStart;
         CombatSystem.basicAttackEnd -= OnBasicAttackEnd;
         Hitbox.OnHit -= OnBasicAttackHit;
+
+        foreach(Upgrade upgrade in MiscUpgrades)
+        {
+            upgrade.OnRemove(this);
+        }
     }
 }
