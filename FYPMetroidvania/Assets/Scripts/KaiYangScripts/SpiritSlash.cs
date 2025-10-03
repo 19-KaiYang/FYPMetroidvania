@@ -13,6 +13,8 @@ public class SpiritSlash : MonoBehaviour
 
     [Header("Hitbox")]
     public GameObject hitboxObject;
+    [Header("Knockback Settings")]
+    public float knockbackMultiplier = 0f;
 
     private Transform player;
     private Transform currentTarget;
@@ -85,9 +87,6 @@ public class SpiritSlash : MonoBehaviour
         if (hb != hitbox) return;
         if (h == null || h.isPlayer) return;
 
-        // ONLY accept hits on the intended target:
-        // - If we're currently tracking a flying target (currentTarget), only accept if it's that target
-        // - Otherwise, if we're in the "enable hitbox at target" phase, only accept hits matching pendingTargetHealth
         if (currentTarget != null)
         {
             Health currentTargetHealth = currentTarget.GetComponent<Health>();
@@ -113,6 +112,11 @@ public class SpiritSlash : MonoBehaviour
             hitEnemyIds.Add(id);
 
             Skills.InvokeUltimateHit(hitbox, h);
+
+            Vector2 knockDir = (h.transform.position - transform.position).normalized;
+
+           h.TakeDamage(spiritSlashBloodCost,knockDir,false,CrowdControlState.None, 0f, true,false,knockbackMultiplier);
+
 
             // Apply blood mark
             h.ApplyBloodMark();
@@ -148,21 +152,22 @@ public class SpiritSlash : MonoBehaviour
         Collider2D col = hitboxObject.GetComponent<Collider2D>();
         if (col == null) yield break;
 
-        transform.position = targetPos;
+        Vector3 offsetPos = targetPos - (Vector3)(lastMovementDirection * 0.3f);
+        transform.position = offsetPos;
 
-        // clear hit list and enable collider
         hitbox.ClearHitEnemies();
+
+
+        yield return null;
+
         col.enabled = true;
-
-        // Small wait to ensure physics detects the collision
         yield return new WaitForFixedUpdate();
-
         col.enabled = false;
+
 
         Vector3 overshootPosition = targetPos + (Vector3)(lastMovementDirection * overshootDistance);
         transform.position = overshootPosition;
 
-        // done with pending target
         pendingTargetHealth = null;
     }
 
@@ -234,9 +239,12 @@ public class SpiritSlash : MonoBehaviour
         }
         else if (available.Count == 1)
         {
-            // do not retarget the single enemy 
-            best = null;
+           
+            hitEnemyIds.Clear();  
+            best = available[0];
         }
+
+
 
         if (best != null) { currentTarget = best; waiting = false; }
         else { currentTarget = null; }

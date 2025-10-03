@@ -4,6 +4,7 @@ public class SwordSlashProjectile : ProjectileBase
 {
     public float maxDistance = 10f;
     public float bloodCost;
+    public float knockbackMultiplier = 1f;
 
     private Vector3 startPos;
     private Health playerHealth;
@@ -62,7 +63,8 @@ public class SwordSlashProjectile : ProjectileBase
             if (rbEnemy != null)
             {
                 Vector2 knockDir = (enemy.transform.position - transform.position).normalized;
-                ApplyKnockback(enemy, knockDir);
+                enemy.TakeDamage(damage, knockDir, false, CrowdControlState.None, 0f, true, false, knockbackMultiplier);
+
             }
 
             if (playerHealth != null && bloodCost > 0f)

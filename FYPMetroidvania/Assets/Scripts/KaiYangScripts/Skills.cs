@@ -38,6 +38,20 @@ public class Skills : MonoBehaviour
 
     #region Skills Variables
 
+    [Header("Lunging Strike Knockback")]
+    public float swordDashKnockbackMultiplier = 1f;
+    [Header("Ascending Slash Knockback")]
+    public float swordUppercutKnockbackMultiplier = 1f;
+    [Header("Crimson Wave Knockback")]
+    public float crimsonWaveKnockbackMultiplier = 1f;
+    [Header("Gauntlet Shockwave Knockback")]
+    public float gauntletShockwaveKnockbackMultiplier = 1f;
+    [Header("Rocket Hand Knockback")]
+    public float gauntletLaunchKnockbackMultiplier = 1f;
+    [Header("Gauntlet Charge Shot Knockback")]
+    public float gauntletChargeKnockbackMultiplier = 1f;
+
+
     // ===================== Skills Prefab =====================
 
     [Header("Skill Hitboxes")]
@@ -527,8 +541,13 @@ public class Skills : MonoBehaviour
 
             Vector2 knockDir = (h.transform.position - transform.position).normalized;
 
+            h.TakeDamage(dashFlatDamage, knockDir, false, CrowdControlState.None, 0f, true, false, swordDashKnockbackMultiplier);
+
+
+
             // Apply Sword Dash CC
-            ApplySkillCC(h, knockDir, swordDashGroundedCC, swordDashAirborneCC, swordDashCCDuration);
+            ApplySkillCC(h, knockDir, swordDashGroundedCC, swordDashAirborneCC, swordDashCCDuration, swordDashKnockbackMultiplier);
+
 
             // Spirit + BloodMark + HealthCost (only Sword)
             h.ApplyBloodMark();
@@ -624,6 +643,38 @@ public class Skills : MonoBehaviour
         float elapsed = 0f;
         float forward = controller.facingRight ? uppercutForwardSpeed : -uppercutForwardSpeed;
 
+        // --- Hook into hitbox for Uppercut specific logic ---
+        void OnUppercutHit(Hitbox hb, Health h)
+        {
+            if (h == null || h.isPlayer) return;
+
+            Vector2 knockDir = (h.transform.position - transform.position).normalized;
+
+            h.TakeDamage(uppercutFlatDamage, knockDir, false, CrowdControlState.None, 0f, true, false, swordUppercutKnockbackMultiplier);
+
+            // Apply Uppercut CC
+            ApplySkillCC(h, knockDir, swordUppercutGroundedCC, swordUppercutAirborneCC, swordUppercutCCDuration, swordUppercutKnockbackMultiplier);
+
+            // Spirit + BloodMark + HealthCost
+            h.ApplyBloodMark();
+            GainSpirit(spiritGainPerHit);
+
+            if (health != null && swordUppercutHealthCost > 0f)
+            {
+                float safeCost = Mathf.Min(swordUppercutHealthCost, health.CurrentHealth - 1f);
+                if (safeCost > 0f) health.TakeDamage(safeCost);
+            }
+
+            // Local hitstop
+            if (hitstop > 0f)
+            {
+                StartCoroutine(LocalHitstop(h.GetComponent<Rigidbody2D>(), hitstop));
+                StartCoroutine(LocalHitstop(rb, hitstop));
+            }
+        }
+
+        Hitbox.OnHit += OnUppercutHit;
+
         // --- Phase 1: short forward dash ---
         controller.SetVelocity(new Vector2(forward, uppercutUpSpeed * 0.25f));
         float dashPhase = 0.12f;
@@ -648,6 +699,9 @@ public class Skills : MonoBehaviour
         // Wait for hitbox to finish
         if (hitboxRoutine != null)
             yield return hitboxRoutine;
+
+        // Cleanup
+        Hitbox.OnHit -= OnUppercutHit;
 
         // Restore collisions
         if (collisionToggled)
@@ -753,6 +807,16 @@ public class Skills : MonoBehaviour
             if (h == null || h.isPlayer) return;
 
             Vector2 knockDir = (h.transform.position - transform.position).normalized;
+
+            h.TakeDamage(shockwaveFlatDamage,
+             knockDir,
+             false,
+             CrowdControlState.None,
+             0f,
+             true,
+             false,
+             gauntletShockwaveKnockbackMultiplier);
+
 
             // Apply Shockwave CC
             ApplySkillCC(h, knockDir, gauntletShockwaveGroundedCC, gauntletShockwaveAirborneCC, gauntletShockwaveCCDuration);
@@ -1013,30 +1077,31 @@ public class Skills : MonoBehaviour
 
 
 
-    public void ApplySkillCC(Health targetHealth, Vector2 knockDir, CrowdControlState groundedCC, CrowdControlState airborneCC, float duration)
+    public void ApplySkillCC(Health target, Vector2 knockDir,
+      CrowdControlState groundedCC, CrowdControlState airborneCC,
+      float ccDuration = 0f, float knockbackMultiplier = 1f)
     {
-        if (targetHealth == null || targetHealth.isPlayer) return;
+        if (!target) return;
 
-        bool isAirborne = false;
+        RaycastHit2D hit = Physics2D.Raycast(target.transform.position, Vector2.down, target.groundCheckValue, LayerMask.GetMask("Ground"));
+        bool grounded = hit.collider != null;
 
-        // Use the enemy's own ground check distance
-        float checkDist = targetHealth.groundCheckValue > 0 ? targetHealth.groundCheckValue : 1.0f;
-        RaycastHit2D hit = Physics2D.Raycast(
-            targetHealth.transform.position,
-            Vector2.down,
-            checkDist,
-            controller.groundLayer
-        );
-
-        isAirborne = (hit.collider == null);
-
-        CrowdControlState ccToApply = isAirborne ? airborneCC : groundedCC;
-
-        if (ccToApply == CrowdControlState.Stunned)
-            targetHealth.ApplyStun(duration, knockDir);
-        else if (ccToApply == CrowdControlState.Knockdown)
-            targetHealth.ApplyKnockdown(duration, isAirborne, knockDir);
+        if (grounded)
+        {
+            if (groundedCC == CrowdControlState.Stunned)
+                target.ApplyStun(ccDuration > 0 ? ccDuration : target.defaultStunDuration, knockDir, knockbackMultiplier);
+            else if (groundedCC == CrowdControlState.Knockdown)
+                target.ApplyKnockdown(ccDuration > 0 ? ccDuration : target.defaultKnockdownDuration, false, knockDir, false, knockbackMultiplier);
+        }
+        else
+        {
+            if (airborneCC == CrowdControlState.Stunned)
+                target.ApplyStun(ccDuration > 0 ? ccDuration : target.defaultStunDuration, knockDir, knockbackMultiplier);
+            else if (airborneCC == CrowdControlState.Knockdown)
+                target.ApplyKnockdown(ccDuration > 0 ? ccDuration : target.defaultKnockdownDuration, true, knockDir, false, knockbackMultiplier);
+        }
     }
+
 
 
     //INVOKES ARE HERE
