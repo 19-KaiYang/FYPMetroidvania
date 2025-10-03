@@ -309,7 +309,8 @@ public class Spearman : Enemy
         public void OnEnter()
         {
             //enemy.rb.linearVelocity = Vector2.zero;
-            enemy.animator.SetTrigger("Stun");
+            //enemy.animator.SetTrigger("Stun");
+            enemy.animator.SetBool("isStun", true);
         }
 
         public void OnUpdate()
@@ -320,7 +321,10 @@ public class Spearman : Enemy
             }
         }
 
-        public void OnExit() { }
+        public void OnExit()
+        {
+            enemy.animator.SetBool("isStun", false);
+        }
     }
 
 }
