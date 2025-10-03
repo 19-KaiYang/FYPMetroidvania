@@ -27,6 +27,9 @@ public class SpiritSlash : MonoBehaviour
 
     private HashSet<int> hitEnemyIds = new HashSet<int>();
 
+    // NEW: keep track of the Health of the target we're enabling the hitbox for
+    private Health pendingTargetHealth = null;
+
     public void Init(Transform playerTransform, Transform target, LayerMask enemyMask)
     {
         player = playerTransform;
@@ -82,6 +85,26 @@ public class SpiritSlash : MonoBehaviour
         if (hb != hitbox) return;
         if (h == null || h.isPlayer) return;
 
+        // ONLY accept hits on the intended target:
+        // - If we're currently tracking a flying target (currentTarget), only accept if it's that target
+        // - Otherwise, if we're in the "enable hitbox at target" phase, only accept hits matching pendingTargetHealth
+        if (currentTarget != null)
+        {
+            Health currentTargetHealth = currentTarget.GetComponent<Health>();
+            if (currentTargetHealth == null || h != currentTargetHealth)
+                return; // ignore hits on other enemies while flying to the target
+        }
+        else if (pendingTargetHealth != null)
+        {
+            if (h != pendingTargetHealth)
+                return; // ignore hits on other enemies while hitbox is briefly enabled at the target
+        }
+        else
+        {
+            // No valid target context -> ignore
+            return;
+        }
+
         int id = h.GetInstanceID();
 
         // Track hit enemies
@@ -108,9 +131,12 @@ public class SpiritSlash : MonoBehaviour
     {
         if (hitboxObject != null)
         {
+            // store the target's Health so the hit handler knows which enemy is valid
+            pendingTargetHealth = target.GetComponent<Health>();
             StartCoroutine(EnableHitboxAtTarget(target.position));
         }
 
+        // Clear currentTarget right away (movement finished)
         currentTarget = null;
         StartCoroutine(DelayBeforeNextTarget());
     }
@@ -128,12 +154,16 @@ public class SpiritSlash : MonoBehaviour
         hitbox.ClearHitEnemies();
         col.enabled = true;
 
+        // Small wait to ensure physics detects the collision
         yield return new WaitForFixedUpdate();
 
         col.enabled = false;
 
         Vector3 overshootPosition = targetPos + (Vector3)(lastMovementDirection * overshootDistance);
         transform.position = overshootPosition;
+
+        // done with pending target
+        pendingTargetHealth = null;
     }
 
 
