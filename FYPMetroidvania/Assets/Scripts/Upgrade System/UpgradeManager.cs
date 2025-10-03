@@ -16,6 +16,7 @@ public class UpgradeManager : MonoBehaviour
     public Upgrade AttackUpgrade;
     public Upgrade SkillUpgrade;
     public Upgrade SpiritUpgrade;
+    public Upgrade MobilityUpgrade;
     public List<Upgrade> MiscUpgrades = new();
 
     private void Start()
@@ -23,8 +24,21 @@ public class UpgradeManager : MonoBehaviour
         player = GetComponent<PlayerController>();
         combatSystem = GetComponent<CombatSystem>();
         skillManager = GetComponent<Skills>();
-    }
 
+        // Temp for testing
+        if (MobilityUpgrade != null) MobilityUpgrade.OnApply(this);
+    }
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            if(MobilityUpgrade != null)
+            {
+                MobilityUpgrade.OnRemove(this);
+                MobilityUpgrade = null;
+            }
+        }   
+    }
     private void OnEnable()
     {
         CombatSystem.basicAttackStart += OnBasicAttackStart;
