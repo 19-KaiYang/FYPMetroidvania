@@ -260,6 +260,9 @@ public class CombatSystem : MonoBehaviour
                 case WeaponType.Sword:
                     skills.TryUseSwordUltimate();
                     break;
+                case WeaponType.Gauntlet:
+                    skills.TryUseGauntletUltimate();
+                    break;
 
             }
         }
@@ -329,7 +332,7 @@ public class CombatSystem : MonoBehaviour
             return;
 
         if (skills != null && skills.IsChargeLocked) return;
-        if (skills != null && skills.IsUsingSkill) return;
+        if (skills != null && skills.IsUsingSkill && !skills.IsUsingUltimate) return;
         if (currentWeapon == WeaponType.None) return;
         if (attackCooldownTimer > 0f) return;
 

@@ -15,22 +15,65 @@ public class Skills : MonoBehaviour
     private EnergySystem energy;
     private Health health;
     private OverheatSystem overheat;
+    private GauntletCannon activeCannon;
 
- 
 
     // global skill gate
     private bool usingSkill = false;
     public bool IsUsingSkill => usingSkill;
 
+    private bool usingUltimate = false;
+    public bool IsUsingUltimate => usingUltimate;
+
+
+    // SKILL EVENTS - for ian
+    public static event System.Action<Hitbox> skillStart;
+    public static event System.Action skillEnd;
+    public static event System.Action<Hitbox, Health> skillHit;
+
+    // ULTIMATE EVENTS - for ian
+    public static event System.Action<Hitbox> OnUltimateStart;
+    public static event System.Action OnUltimateEnd;
+    public static event System.Action<Hitbox, Health> OnUltimateHit;
+
     #region Skills Variables
+
+    [Header("Lunging Strike Knockback")]
+    public float swordDashStunKnockbackMultiplier = 1f;
+    public float swordDashKnockdownKnockbackMultiplier = 1f;
+
+    [Header("Ascending Slash Knockback")]
+    public float swordUppercutStunKnockbackMultiplier = 1f;
+    public float swordUppercutKnockdownKnockbackMultiplier = 1f;
+
+    [Header("Crimson Wave Knockback")]
+    public float crimsonWaveStunKnockbackMultiplier = 1f;
+    public float crimsonWaveKnockdownKnockbackMultiplier = 1f;
+
+
+    [Header("Gauntlet Shockwave Knockback")]
+    public float gauntletShockwaveStunKnockbackMultiplier = 1f;
+    public float gauntletShockwaveKnockdownKnockbackMultiplier = 1f;
+
+    [Header("Gauntlet Charge Shot Knockback")]
+    public float gauntletChargeStunKnockbackMultiplier = 1f;
+    public float gauntletChargeKnockdownKnockbackMultiplier = 1f;
+
+
+    // ===================== Skills Prefab =====================
+
+    [Header("Skill Hitboxes")]
+    public GameObject swordDashHitbox;
+    public GameObject swordUppercutHitbox;
+    public GameObject gauntletShockwaveHitbox;
+
+
     // ===================== LUNGING STRIKE =====================
     [Header("Lunging Strike")]
     public float dashSpeed = 22f;
     public float dashDuration = 0.18f;
     public float dashFlatDamage = 0f;
     public float swordDashHealthCost = 5f;
-    public Vector2 dashBoxSize = new Vector2(1.4f, 1.0f);
-    public Vector2 dashBoxOffset = new Vector2(0.7f, 0f);
 
     public CrowdControlState swordDashGroundedCC = CrowdControlState.Stunned;
     public CrowdControlState swordDashAirborneCC = CrowdControlState.Knockdown;
@@ -53,8 +96,6 @@ public class Skills : MonoBehaviour
     public float uppercutDuration = 0.35f;
     public float uppercutFlatDamage = 10f;
     public float swordUppercutHealthCost = 8f;
-    public Vector2 uppercutBoxSize = new Vector2(1.2f, 2.0f);
-    public Vector2 uppercutBoxOffset = new Vector2(0.6f, 1f);
 
     public CrowdControlState swordUppercutGroundedCC = CrowdControlState.Knockdown; 
     public CrowdControlState swordUppercutAirborneCC = CrowdControlState.Knockdown;
@@ -67,10 +108,15 @@ public class Skills : MonoBehaviour
 
     // ===================== CRIMSON WAVE =====================
 
+
+
     [Header("Crimson Wave")]
-    public Transform projectileSpawnPoint; 
+    public Transform projectileSpawnPoint;
     public float swordSlashBloodCost = 5f;
     public float swordSlashEnergyCost;
+    public CrowdControlState crimsonWaveGroundedCC = CrowdControlState.Stunned;
+    public CrowdControlState crimsonWaveAirborneCC = CrowdControlState.Knockdown;
+    public float crimsonWaveCCDuration = 1.0f;
 
     //COST EDIT IN SWORDPROJECTILE.CS
 
@@ -173,6 +219,15 @@ public class Skills : MonoBehaviour
     private SpiritGauge spirit;
 
 
+    [Header("Gauntlet Ultimate")]
+    public GameObject gauntletCannonPrefab;
+    public float gauntletBeamDamage = 10f;
+    public float gauntletBeamTickRate = 0.5f;
+    public Vector2 gauntletBeamSize = new Vector2(6f, 2f);
+    public float gauntletBeamChargeTime = 2f;
+    public float gauntletBeamDuration = 3f;
+
+
     [Header("Spirit Gain")]
     public float spiritGainPerHit = 5f;   
     public float spiritGainPerSkill = 10f; 
@@ -268,10 +323,12 @@ public class Skills : MonoBehaviour
         SwordSlashProjectile proj = ProjectileManager.instance.SpawnSwordSlash(spawnPos, Quaternion.identity);
         if (proj != null)
         {
-            // assign only what’s needed
             proj.bloodCost = swordSlashBloodCost;
-
-            // initialize movement
+            proj.groundedCC = crimsonWaveGroundedCC;
+            proj.airborneCC = crimsonWaveAirborneCC;
+            proj.ccDuration = crimsonWaveCCDuration;
+            proj.stunKnockbackMultiplier = crimsonWaveStunKnockbackMultiplier;
+            proj.knockdownKnockbackMultiplier = crimsonWaveKnockdownKnockbackMultiplier;
             proj.Init(dir);
         }
     }
@@ -375,10 +432,9 @@ public class Skills : MonoBehaviour
             yield return null;
         }
 
-        // Only auto-fire if we reached max charge AND still charging
         if (isCharging && currentChargeTime >= gauntletChargeMaxTime)
         {
-            chargeRoutine = null; // Clear the reference
+            chargeRoutine = null; 
             FireGauntletChargeShot();
         }
     }
@@ -387,7 +443,7 @@ public class Skills : MonoBehaviour
 
     public void TryUseSwordUltimate()
     {
-        if (usingSkill) return;
+        if (usingUltimate) return;
         if (spirit == null || spirit.IsEmpty) return;
 
         StartCoroutine(Skill_SwordUltimate());
@@ -396,7 +452,7 @@ public class Skills : MonoBehaviour
 
     private IEnumerator Skill_SwordUltimate()
     {
-        usingSkill = true;
+        usingUltimate = true;
         spirit.StartDrain();
 
         // Find first enemy in range
@@ -407,11 +463,10 @@ public class Skills : MonoBehaviour
         {
             Debug.Log("No enemies in range for ultimate!");
             spirit.StopDrain();
-            usingSkill = false;
+            usingUltimate = false;
             yield return null;
         }
 
-        // Spawn ONE persistent spirit slash that will bounce between enemies
         GameObject slash = Instantiate(spiritSlashPrefab, transform.position, Quaternion.identity);
         SpiritSlash slashComp = slash.GetComponent<SpiritSlash>();
 
@@ -426,15 +481,51 @@ public class Skills : MonoBehaviour
             yield return null;
         }
 
-        // Cleanup - destroy the slash when spirit is empty
         if (slash != null)
         {
             Destroy(slash);
         }
 
         spirit.StopDrain();
-        usingSkill = false;
+        usingUltimate = false;
     }
+ 
+
+    public void TryUseGauntletUltimate()
+    {
+        if (spirit == null || spirit.IsEmpty) return;
+
+        if (activeCannon != null)
+        {
+            activeCannon.ManualOverrideFire();
+            return;
+        }
+
+        if (usingUltimate) return;
+
+        usingUltimate = true;
+
+        var cannon = Instantiate(gauntletCannonPrefab, PlayerController.instance.transform.position, Quaternion.identity);
+        activeCannon = cannon.GetComponent<GauntletCannon>();
+        activeCannon.Init(
+            PlayerController.instance.facingRight,
+            spirit,
+            enemyMask,
+            gauntletBeamChargeTime,
+            gauntletBeamDamage,
+            gauntletBeamTickRate,
+            gauntletBeamSize,
+            gauntletBeamDuration
+        );
+
+        activeCannon.OnFinished += () =>
+        {
+            activeCannon = null;
+            usingUltimate = false;
+        };
+    }
+
+
 
     #endregion
 
@@ -446,7 +537,6 @@ public class Skills : MonoBehaviour
 
         if (controller) controller.externalVelocityOverride = true;
 
-        // temporarily disable collisions between player and enemies
         int playerLayer = gameObject.layer;
         int enemyLayer = SingleLayerIndex(enemyMask);
         bool collisionToggled = false;
@@ -456,20 +546,56 @@ public class Skills : MonoBehaviour
             collisionToggled = true;
         }
 
-        HashSet<Health> hit = new HashSet<Health>();
         Vector2 dir = controller.facingRight ? Vector2.right : Vector2.left;
-
         float t = 0f;
+
+        // --- Hook into hitbox for Sword Dash specific logic ---
+        void OnDashHit(Hitbox hb, Health h)
+        {
+            if (h == null || h.isPlayer) return;
+
+            Vector2 knockDir = (h.transform.position - transform.position).normalized;
+
+            h.TakeDamage(dashFlatDamage, knockDir, false, CrowdControlState.None, 0f, true, false, 0f);
+
+
+
+            // Apply Sword Dash CC
+            ApplySkillCC(h, knockDir, swordDashGroundedCC, swordDashAirborneCC, swordDashCCDuration,
+              swordDashStunKnockbackMultiplier, swordDashKnockdownKnockbackMultiplier);
+
+
+            // Spirit + BloodMark + HealthCost (only Sword)
+            h.ApplyBloodMark();
+            GainSpirit(spiritGainPerHit);
+
+            if (health != null && swordDashHealthCost > 0f)
+            {
+                float safeCost = Mathf.Min(swordDashHealthCost, health.CurrentHealth - 1f);
+                if (safeCost > 0f) health.TakeDamage(safeCost);
+            }
+
+            // Local hitstop
+            if (hitstop > 0f)
+            {
+                StartCoroutine(LocalHitstop(h.GetComponent<Rigidbody2D>(), hitstop));
+                StartCoroutine(LocalHitstop(rb, hitstop));
+            }
+        }
+
+        Hitbox.OnHit += OnDashHit;
+        //SKILL START, SKILL HIT, SKILL END
+        Coroutine hitboxRoutine = StartCoroutine(ActivateSkillHitbox(swordDashHitbox, dashDuration));
+
+        // --- Dash loop ---
         while (t < dashDuration)
         {
             t += Time.deltaTime;
-
             controller.SetVelocity(Vector2.zero);
 
-            // movement step
             Vector2 moveStep = dir * dashSpeed * Time.deltaTime;
 
-            // check terrain walls (not enemies)
+            // Stop if wall ahead
             RaycastHit2D wallHit = Physics2D.BoxCast(
                 transform.position,
                 controller.colliderSize,
@@ -481,7 +607,6 @@ public class Skills : MonoBehaviour
 
             if (wallHit.collider != null)
             {
-                // stop at wall
                 float dist = wallHit.distance - 0.01f;
                 transform.Translate(dir * dist);
                 break;
@@ -491,54 +616,24 @@ public class Skills : MonoBehaviour
                 transform.Translate(moveStep);
             }
 
-            // enemy hit detection
-            Vector2 center = (Vector2)transform.position +
-                             new Vector2(dashBoxOffset.x * (controller.facingRight ? 1f : -1f),
-                                         dashBoxOffset.y);
-
-            var cols = Physics2D.OverlapBoxAll(center, dashBoxSize, 0f, enemyMask);
-            foreach (var c in cols)
-            {
-                var h = c.GetComponentInParent<Health>();
-                if (h != null && !hit.Contains(h))
-                {
-                    hit.Add(h);
-                    float dmg = dashFlatDamage;
-                    GainSpirit(spiritGainPerHit);
-                    Vector2 knockDir = (h.transform.position - transform.position).normalized;
-                    h.TakeDamage(dmg, knockDir, false, CrowdControlState.None, 0f); 
-                    ApplySkillCC(h, knockDir, swordDashGroundedCC, swordDashAirborneCC, swordDashCCDuration);
-
-                    if (!h.isPlayer)
-                    {
-                        h.ApplyBloodMark();
-                        if (health != null && swordDashHealthCost > 0f)
-                        {
-                            float safeCost = Mathf.Min(swordDashHealthCost, health.CurrentHealth - 1f);
-                            if (safeCost > 0f)
-                                health.TakeDamage(safeCost);
-                        }
-                    }
-
-                    if (hitstop > 0f)
-                    {
-                        // Enemy hitstop
-                        StartCoroutine(LocalHitstop(h.GetComponent<Rigidbody2D>(), hitstop));
-                        // Player hitstop
-                        StartCoroutine(LocalHitstop(rb, hitstop));
-                    }
-
-                }
-            }
-
             yield return null;
         }
 
-        // restore collisions
+        // --- Cleanup ---
+        if (hitboxRoutine != null)
+            yield return hitboxRoutine; 
+
+        Hitbox.OnHit -= OnDashHit;
+
         if (collisionToggled)
             Physics2D.IgnoreLayerCollision(playerLayer, enemyLayer, false);
 
-        if (controller) controller.externalVelocityOverride = false;
+        if (controller)
+        {
+            controller.externalVelocityOverride = false;
+            controller.SetHitstop(false);
+        }
+
         usingSkill = false;
     }
 
@@ -551,7 +646,7 @@ public class Skills : MonoBehaviour
 
         if (controller) controller.externalVelocityOverride = true;
 
-        // temporarily disable collisions with enemies
+        // Disable collisions with enemies temporarily
         int playerLayer = gameObject.layer;
         int enemyLayer = SingleLayerIndex(enemyMask);
         bool collisionToggled = false;
@@ -561,18 +656,52 @@ public class Skills : MonoBehaviour
             collisionToggled = true;
         }
 
-        HashSet<Health> hit = new HashSet<Health>();
         float elapsed = 0f;
-
         float forward = controller.facingRight ? uppercutForwardSpeed : -uppercutForwardSpeed;
 
-        // --- Phase 1: short forward dash (little upward) ---
+        // --- Hook into hitbox for Uppercut specific logic ---
+        void OnUppercutHit(Hitbox hb, Health h)
+        {
+            if (h == null || h.isPlayer) return;
+
+            Vector2 knockDir = (h.transform.position - transform.position).normalized;
+
+            h.TakeDamage(uppercutFlatDamage, knockDir, false, CrowdControlState.None, 0f, true, false, 0f);
+
+            // Apply Uppercut CC
+            ApplySkillCC(h, knockDir, swordUppercutGroundedCC, swordUppercutAirborneCC, swordUppercutCCDuration,
+              swordUppercutStunKnockbackMultiplier, swordUppercutKnockdownKnockbackMultiplier);
+
+            // Spirit + BloodMark + HealthCost
+            h.ApplyBloodMark();
+            GainSpirit(spiritGainPerHit);
+
+            if (health != null && swordUppercutHealthCost > 0f)
+            {
+                float safeCost = Mathf.Min(swordUppercutHealthCost, health.CurrentHealth - 1f);
+                if (safeCost > 0f) health.TakeDamage(safeCost);
+            }
+
+            // Local hitstop
+            if (hitstop > 0f)
+            {
+                StartCoroutine(LocalHitstop(h.GetComponent<Rigidbody2D>(), hitstop));
+                StartCoroutine(LocalHitstop(rb, hitstop));
+            }
+        }
+
+        Hitbox.OnHit += OnUppercutHit;
+
+        // --- Phase 1: short forward dash ---
         controller.SetVelocity(new Vector2(forward, uppercutUpSpeed * 0.25f));
-        float dashPhase = 0.12f; // tweak: how long forward dash lasts
+        float dashPhase = 0.12f;
+
+        // Activate hitbox during dash phase
+        Coroutine hitboxRoutine = StartCoroutine(ActivateSkillHitbox(swordUppercutHitbox, uppercutDuration));
+
         while (elapsed < dashPhase)
         {
             elapsed += Time.deltaTime;
-            DoUppercutHitDetection(hit);
             yield return null;
         }
 
@@ -581,56 +710,22 @@ public class Skills : MonoBehaviour
         while (elapsed < uppercutDuration)
         {
             elapsed += Time.deltaTime;
-            DoUppercutHitDetection(hit);
             yield return null;
         }
 
-        // restore collisions
+        // Wait for hitbox to finish
+        if (hitboxRoutine != null)
+            yield return hitboxRoutine;
+
+        // Cleanup
+        Hitbox.OnHit -= OnUppercutHit;
+
+        // Restore collisions
         if (collisionToggled)
             Physics2D.IgnoreLayerCollision(playerLayer, enemyLayer, false);
 
         if (controller) controller.externalVelocityOverride = false;
         usingSkill = false;
-    }
-    private void DoUppercutHitDetection(HashSet<Health> hit)
-    {
-        Vector2 offset = new Vector2(
-            controller.facingRight ? uppercutBoxOffset.x : -uppercutBoxOffset.x,
-            uppercutBoxOffset.y
-        );
-        Vector2 center = (Vector2)transform.position + offset;
-
-        var cols = Physics2D.OverlapBoxAll(center, uppercutBoxSize, 0f, enemyMask);
-        foreach (var c in cols)
-        {
-            var h = c.GetComponentInParent<Health>();
-            if (h != null && !hit.Contains(h))
-            {
-                hit.Add(h);
-                float dmg = uppercutFlatDamage;
-                Vector2 knockDir = (h.transform.position - transform.position).normalized;
-                h.TakeDamage(dmg, knockDir, false, CrowdControlState.None, 0f); // No forced CC
-                ApplySkillCC(h, knockDir, swordUppercutGroundedCC, swordUppercutAirborneCC, swordUppercutCCDuration);
-
-                if (!h.isPlayer)
-                {
-                    h.ApplyBloodMark();
-                    GainSpirit(spiritGainPerHit);
-                    if (health != null && swordUppercutHealthCost > 0f)
-                    {
-                        float safeCost = Mathf.Min(swordUppercutHealthCost, health.CurrentHealth - 1f);
-                        if (safeCost > 0f)
-                            health.TakeDamage(safeCost);
-                    }
-                }
-
-                if (hitstop > 0f)
-                {
-                    StartCoroutine(LocalHitstop(h.GetComponent<Rigidbody2D>(), hitstop));
-                    StartCoroutine(LocalHitstop(rb, hitstop));
-                }
-            }
-        }
     }
 
 
@@ -657,13 +752,13 @@ public class Skills : MonoBehaviour
                 collisionToggled = true;
             }
 
-            HashSet<Health> hit = new HashSet<Health>();
+            HashSet<Health> plungeHits = new HashSet<Health>();
 
+            // Plunge downward
             while (true)
             {
                 Vector2 moveStep = Vector2.down * plungeSpeed * Time.deltaTime;
 
-                //stop going thru ground
                 RaycastHit2D hitGround = Physics2D.BoxCast(
                     transform.position,
                     controller.colliderSize,
@@ -675,29 +770,28 @@ public class Skills : MonoBehaviour
 
                 if (hitGround.collider != null)
                 {
-                    //hit ground
                     float dist = hitGround.distance - 0.01f;
                     transform.Translate(Vector2.down * dist);
-                    break; 
+                    break;
                 }
                 else
                 {
                     transform.Translate(moveStep);
                 }
 
-                // enemy hit detection mid-plunge
+                // Mid-plunge hit detection
                 Vector2 center = transform.position;
                 Collider2D[] cols = Physics2D.OverlapCircleAll(center, 0.6f, enemyMask);
                 foreach (var c in cols)
                 {
                     var h = c.GetComponentInParent<Health>();
-                    if (h != null && !hit.Contains(h))
+                    if (h != null && !plungeHits.Contains(h))
                     {
-                        hit.Add(h);
+                        plungeHits.Add(h);
                         float dmg = shockwaveFlatDamage;
                         GainSpirit(spiritGainPerHit);
                         Vector2 knockDir = (h.transform.position - transform.position).normalized;
-                        h.TakeDamage(dmg, knockDir.normalized, false, CrowdControlState.None, 0f); // No forced CC
+                        h.TakeDamage(dmg, knockDir.normalized, false, CrowdControlState.None, 0f);
                         ApplySkillCC(h, knockDir.normalized, gauntletShockwaveGroundedCC, gauntletShockwaveAirborneCC, gauntletShockwaveCCDuration);
 
                         if (hitstop > 0f)
@@ -705,7 +799,6 @@ public class Skills : MonoBehaviour
                             StartCoroutine(LocalHitstop(h.GetComponent<Rigidbody2D>(), hitstop));
                             StartCoroutine(LocalHitstop(rb, hitstop * 0.75f));
                         }
-
                     }
                 }
 
@@ -715,49 +808,60 @@ public class Skills : MonoBehaviour
             if (controller) controller.externalVelocityOverride = false;
             if (collisionToggled)
                 Physics2D.IgnoreLayerCollision(playerLayer, enemyLayer, false);
+        }
 
-            DoShockwave();
-        }
-        else
-        {
-            DoShockwave();
-        }
+        // Now use hitbox for the actual shockwave impact
+        yield return StartCoroutine(DoShockwaveWithHitbox());
 
         usingSkill = false;
     }
 
-
-    private void DoShockwave()
+    private IEnumerator DoShockwaveWithHitbox()
     {
-        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, shockwaveRadius, enemyMask);
-        HashSet<Health> hit = new HashSet<Health>();
-
-        foreach (var c in cols)
+        // Hook into hitbox for Shockwave specific logic
+        void OnShockwaveHit(Hitbox hb, Health h)
         {
-            var h = c.GetComponentInParent<Health>();
-            if (h == null) continue;
-            if (hit.Contains(h)) continue;
-            hit.Add(h);
+            if (h == null || h.isPlayer) return;
 
-            float dmg = shockwaveFlatDamage;
-            Vector2 away = ((Vector2)h.transform.position - (Vector2)transform.position).normalized;
-            Vector2 knock = away * shockwaveKnockForce + Vector2.up * shockwaveUpwardBoost;
+            Vector2 knockDir = (h.transform.position - transform.position).normalized;
 
-            h.TakeDamage(dmg, knock.normalized);
+            // Apply Shockwave CC with separate multipliers
+            ApplySkillCC(h, knockDir, gauntletShockwaveGroundedCC, gauntletShockwaveAirborneCC,
+                gauntletShockwaveCCDuration,
+                gauntletShockwaveStunKnockbackMultiplier,
+                gauntletShockwaveKnockdownKnockbackMultiplier);
 
+
+            // Apply Shockwave CC
+            ApplySkillCC(h, knockDir, gauntletShockwaveGroundedCC, gauntletShockwaveAirborneCC, gauntletShockwaveCCDuration);
+
+            // Spirit gain
+            GainSpirit(spiritGainPerHit);
+
+            // Local hitstop
             if (hitstop > 0f)
             {
                 StartCoroutine(LocalHitstop(h.GetComponent<Rigidbody2D>(), hitstop));
                 StartCoroutine(LocalHitstop(rb, hitstop * 0.75f));
             }
         }
+
+        Hitbox.OnHit += OnShockwaveHit;
+
+        // Activate the shockwave hitbox briefly (like 0.1-0.2 seconds)
+        float shockwaveDuration = 0.15f;
+        Coroutine hitboxRoutine = StartCoroutine(ActivateSkillHitbox(gauntletShockwaveHitbox, shockwaveDuration));
+
+        yield return hitboxRoutine;
+
+        Hitbox.OnHit -= OnShockwaveHit;
     }
 
     private IEnumerator Skill_GauntletLaunch()
     {
         usingSkill = true;
 
-        Vector2 dir = controller.facingRight ? Vector2.right : Vector2.left;
+        Vector2 dir = Get8DirectionalAim();
 
         activeGauntlet = ProjectileManager.instance.SpawnGauntlet(transform.position,Quaternion.identity);
         activeGauntlet.speed = gauntletLaunchSpeed;
@@ -766,6 +870,30 @@ public class Skills : MonoBehaviour
 
         usingSkill = false;
         yield return null;
+    }
+
+    private Vector2 Get8DirectionalAim()
+    {
+        Vector2 input = controller.moveInput;
+
+
+        if (input.sqrMagnitude < 0.1f)
+        {
+            return controller.facingRight ? Vector2.right : Vector2.left;
+        }
+
+        // Normalize to get clean 8 directions
+        float x = Mathf.Round(input.x);
+        float y = Mathf.Round(input.y);
+
+        Vector2 direction = new Vector2(x, y);
+
+        if (direction.sqrMagnitude > 1.1f)
+        {
+            direction.Normalize();
+        }
+
+        return direction;
     }
 
     public void RetractGauntlet()
@@ -855,9 +983,11 @@ public class Skills : MonoBehaviour
             var stageSettings = chargeStages[stageIndex];
 
             chargeProj.Init(dir, damage, knockback, ratio,
-                            stageSettings.groundedCC,
-                            stageSettings.airborneCC,
-                            stageSettings.ccDuration);
+                   stageSettings.groundedCC,
+                   stageSettings.airborneCC,
+                   stageSettings.ccDuration,
+                   gauntletChargeStunKnockbackMultiplier,      
+                   gauntletChargeKnockdownKnockbackMultiplier); 
         }
 
 
@@ -932,44 +1062,104 @@ public class Skills : MonoBehaviour
         if (spirit != null && amount > 0f)
             spirit.Refill(amount);
     }
-
-
-    public void ApplySkillCC(Health targetHealth, Vector2 knockDir, CrowdControlState groundedCC, CrowdControlState airborneCC, float duration)
+    // SKILL START END AND HIT
+    private IEnumerator ActivateSkillHitbox(GameObject hitbox, float duration)
     {
-        if (targetHealth == null || targetHealth.isPlayer) return;
+        Hitbox hb = hitbox.GetComponent<Hitbox>();
+        if (hb == null) yield break;
 
-        // Check if target is airborne
-        Rigidbody2D targetRb = targetHealth.GetComponent<Rigidbody2D>();
-        bool isAirborne = targetRb != null && Mathf.Abs(targetRb.linearVelocity.y) > 0.5f;
+        
+        System.Action<Hitbox, Health> onHit = (h, enemy) =>
+        {
+            skillHit?.Invoke(h, enemy);  
+        };
+        Hitbox.OnHit += onHit;
 
-        CrowdControlState ccToApply = isAirborne ? airborneCC : groundedCC;
+        skillStart?.Invoke(hb);
 
-        if (ccToApply == CrowdControlState.Stunned)
-            targetHealth.ApplyStun(duration);
-        else if (ccToApply == CrowdControlState.Knockdown)
-            targetHealth.ApplyKnockdown(duration, isAirborne, knockDir);
+        // Activate
+        hitbox.SetActive(true);
+        yield return new WaitForSeconds(duration);
+
+        // Deactivate
+        hitbox.SetActive(false);
+
+        // Fire end event
+        skillEnd?.Invoke();
+
+        // Unsubscribe
+        Hitbox.OnHit -= onHit;
     }
+
+
+
+    public void ApplySkillCC(Health target, Vector2 knockDir,
+   CrowdControlState groundedCC, CrowdControlState airborneCC,
+   float ccDuration = 0f, float stunKnockbackMultiplier = 1f, float knockdownKnockbackMultiplier = 1f)
+    {
+        if (!target) return;
+
+        RaycastHit2D hit = Physics2D.Raycast(target.transform.position, Vector2.down, target.groundCheckValue, LayerMask.GetMask("Ground"));
+        bool grounded = hit.collider != null;
+
+        if (grounded)
+        {
+            if (groundedCC == CrowdControlState.Stunned)
+                target.ApplyStun(ccDuration > 0 ? ccDuration : target.defaultStunDuration, knockDir, stunKnockbackMultiplier);
+            else if (groundedCC == CrowdControlState.Knockdown)
+                target.ApplyKnockdown(ccDuration > 0 ? ccDuration : target.defaultKnockdownDuration, false, knockDir, false, knockdownKnockbackMultiplier);
+        }
+        else
+        {
+            if (airborneCC == CrowdControlState.Stunned)
+                target.ApplyStun(ccDuration > 0 ? ccDuration : target.defaultStunDuration, knockDir, stunKnockbackMultiplier);
+            else if (airborneCC == CrowdControlState.Knockdown)
+                target.ApplyKnockdown(ccDuration > 0 ? ccDuration : target.defaultKnockdownDuration, true, knockDir, false, knockdownKnockbackMultiplier);
+        }
+    }
+
+
+
+    //INVOKES ARE HERE
+    #region InvokeSkillsStartHitEnd
+    public static void InvokeSkillStart(Hitbox hitbox)
+    {
+        skillStart?.Invoke(hitbox);
+    }
+
+    public static void InvokeSkillHit(Hitbox hitbox, Health enemy)
+    {
+        skillHit?.Invoke(hitbox, enemy);
+    }
+
+    public static void InvokeSkillEnd()
+    {
+        skillEnd?.Invoke();
+    }
+
+    public static void InvokeUltimateStart(Hitbox hitbox)
+    {
+        OnUltimateStart?.Invoke(hitbox);
+    }
+
+    public static void InvokeUltimateHit(Hitbox hitbox, Health enemy)
+    {
+        OnUltimateHit?.Invoke(hitbox, enemy);
+    }
+
+    public static void InvokeUltimateEnd()
+    {
+        OnUltimateEnd?.Invoke();
+    }
+    #endregion
+
     #endregion
 
     #region Gizmos
     private void OnDrawGizmosSelected()
     {
-        // --- Sword Dash Box ---
-        Gizmos.color = Color.red;
-        Vector2 dashCenter = (Vector2)transform.position +
-                             new Vector2(dashBoxOffset.x * (controller != null && controller.facingRight ? 1f : -1f),
-                                         dashBoxOffset.y);
-        Gizmos.DrawWireCube(dashCenter, dashBoxSize); 
 
-        // --- Sword Uppercut Box ---
-        Gizmos.color = Color.blue;
-        if (controller != null)
-        {
-            Vector2 upOffset = new Vector2(controller.facingRight ? uppercutBoxOffset.x : -uppercutBoxOffset.x,
-                                           uppercutBoxOffset.y);
-            Vector2 upCenter = (Vector2)transform.position + upOffset;
-            Gizmos.DrawWireCube(upCenter, uppercutBoxSize);
-        }
+    
 
         // --- Gauntlet Shockwave Radius ---
         Gizmos.color = Color.green;

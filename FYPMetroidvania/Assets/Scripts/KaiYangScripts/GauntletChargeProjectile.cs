@@ -3,7 +3,7 @@ using UnityEngine;
 public class GauntletChargeProjectile : ProjectileBase
 {
     private float chargeRatio;
-    private bool hasExploded = false; 
+    private bool hasExploded = false;
 
     [Header("Visuals")]
     public SpriteRenderer spriteRenderer;
@@ -19,15 +19,28 @@ public class GauntletChargeProjectile : ProjectileBase
     public float midExplosionRadius = 2f;
     public float maxExplosionRadius = 3f;
 
+    [Header("Knockback Multipliers")]
+    public float stunKnockbackMultiplier = 1f;
+    public float knockdownKnockbackMultiplier = 1f;
+
     private CrowdControlState groundedCC;
     private CrowdControlState airborneCC;
     private float ccDuration;
 
-
     public LayerMask enemyMask;
 
+    private Hitbox hitbox;
+    private bool hasInvokedStart = false;
+
+    private void OnEnable()
+    {
+        hitbox = GetComponent<Hitbox>();
+        hasInvokedStart = false;
+    }
+
     public void Init(Vector2 dir, float dmg, float kb, float ratio,
-                   CrowdControlState groundedCC, CrowdControlState airborneCC, float ccDuration)
+                   CrowdControlState groundedCC, CrowdControlState airborneCC, float ccDuration,
+                   float stunKBMultiplier, float knockdownKBMultiplier)
     {
         hasExploded = false;
 
@@ -38,6 +51,8 @@ public class GauntletChargeProjectile : ProjectileBase
         this.groundedCC = groundedCC;
         this.airborneCC = airborneCC;
         this.ccDuration = ccDuration;
+        this.stunKnockbackMultiplier = stunKBMultiplier;
+        this.knockdownKnockbackMultiplier = knockdownKBMultiplier;
 
         if (rb)
             rb.linearVelocity = dir * speed * Mathf.Lerp(1f, 1.5f, ratio);
@@ -52,10 +67,16 @@ public class GauntletChargeProjectile : ProjectileBase
                 spriteRenderer.sprite = strongSprite;
         }
 
+        // Fire skill start event
+        if (hitbox != null && !hasInvokedStart)
+        {
+            hasInvokedStart = true;
+            Skills.InvokeSkillStart(hitbox);
+        }
+
         CancelInvoke();
         Invoke(nameof(Explode), lifeTime);
     }
-
 
     protected override void Move()
     {
@@ -63,7 +84,7 @@ public class GauntletChargeProjectile : ProjectileBase
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (hasExploded) return; // Prevent multiple explosions
+        if (hasExploded) return;
 
         Health target = other.GetComponent<Health>();
         if (target != null && !target.isPlayer)
@@ -74,7 +95,7 @@ public class GauntletChargeProjectile : ProjectileBase
 
     private void Explode()
     {
-        if (hasExploded) return; 
+        if (hasExploded) return;
         hasExploded = true;
 
         CancelInvoke();
@@ -88,35 +109,27 @@ public class GauntletChargeProjectile : ProjectileBase
             Health h = hit.GetComponent<Health>();
             if (h != null && !h.isPlayer)
             {
-                h.TakeDamage(damage);
+                // Fire skill hit event
+                if (hitbox != null)
+                {
+                    Skills.InvokeSkillHit(hitbox, h);
+                }
 
                 Vector2 knockDir = (h.transform.position - transform.position).normalized;
 
-                // Determine what CC will be applied
+                // Damage without knockback (CC handles it)
+                h.TakeDamage(damage, knockDir, false, CrowdControlState.None, 0f, true, false, 0f);
+
+                // Apply CC with separate multipliers
                 Skills skills = PlayerController.instance.GetComponent<Skills>();
                 if (skills != null)
                 {
-                    Rigidbody2D targetRb = h.GetComponent<Rigidbody2D>();
-                    bool isAirborne = targetRb != null && Mathf.Abs(targetRb.linearVelocity.y) > 0.5f;
-                    CrowdControlState ccToApply = isAirborne ? airborneCC : groundedCC;
-
-                    if (ccToApply == CrowdControlState.Stunned)
-                    {
-                        // Stun only (skip knockback)
-                        skills.ApplySkillCC(h, knockDir, groundedCC, airborneCC, ccDuration);
-                        skills.GainSpirit(skills.spiritGainPerHit);
-                    }
-                    else
-                    {
-                        // Normal knockback + CC
-                        ApplyKnockback(h, knockDir);
-                        skills.ApplySkillCC(h, knockDir, groundedCC, airborneCC, ccDuration);
-                        skills.GainSpirit(skills.spiritGainPerHit);
-                    }
+                    skills.ApplySkillCC(h, knockDir, groundedCC, airborneCC, ccDuration,
+                                       stunKnockbackMultiplier, knockdownKnockbackMultiplier);
+                    skills.GainSpirit(skills.spiritGainPerHit);
                 }
                 else
                 {
-
                     ApplyKnockback(h, knockDir);
                 }
             }
@@ -125,19 +138,20 @@ public class GauntletChargeProjectile : ProjectileBase
         Despawn();
     }
 
-    // Clean up when object is disabled (returned to pool)
     private void OnDisable()
     {
         CancelInvoke();
         hasExploded = false;
 
-        // Reset velocity
         if (rb != null)
             rb.linearVelocity = Vector2.zero;
     }
 
     public override void Despawn()
     {
+        // Fire skill end event
+        Skills.InvokeSkillEnd();
+
         // Clean up before returning to pool
         CancelInvoke();
         hasExploded = false;

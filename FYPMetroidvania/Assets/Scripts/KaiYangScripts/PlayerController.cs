@@ -127,6 +127,8 @@ public class PlayerController : MonoBehaviour
             return; 
         }
 
+        animator.SetFloat("Speed", Mathf.Abs(velocity.x));
+
         // Dash timers
         if (isDashing)
         {
@@ -314,6 +316,9 @@ public class PlayerController : MonoBehaviour
                 velocity.y = jumpForce;
                 jumpLocked = true;
                 airJumpsDone = 0;
+
+
+                animator.SetTrigger("Jump");
             }
         }
         else if (!IsGrounded)
