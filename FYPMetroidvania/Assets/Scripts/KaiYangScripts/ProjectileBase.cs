@@ -6,7 +6,7 @@ public abstract class ProjectileBase : MonoBehaviour
     public float speed;
     public float knockback;
     public Rigidbody2D rb;
-
+    public Vector2 direction;
 
     protected virtual void Awake()
     {

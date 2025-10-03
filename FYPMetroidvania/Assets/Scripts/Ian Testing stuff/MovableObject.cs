@@ -4,7 +4,7 @@ public class MovableObject : MonoBehaviour
 {
     private Rigidbody2D rb;
     public float force = 10f;
-    bool checkPlayer = false;
+    //bool checkPlayer = false;
 
     public PlayerController player;
     void Start()

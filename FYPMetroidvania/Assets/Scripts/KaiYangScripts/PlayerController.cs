@@ -15,7 +15,14 @@ public class PlayerController : MonoBehaviour
     public float jumpForce = 8f;
     public float gravity = -20f;
     public float jumpBufferTime = 0.15f;
+    public int airJumpCount = 0;
+    private int airJumpsDone;
     private float jumpBufferCounter;
+
+    [Header("Float")]
+    public bool canFloat = false;
+    private bool isFloating = false;
+    public float floatGravity = -5f;
 
     [Header("Platform dropping")]
     public bool platformDropping;
@@ -31,6 +38,7 @@ public class PlayerController : MonoBehaviour
     public float dashSpeed = 15f;
     public float dashDuration = 0.2f;
     public float dashCooldown = 1f;
+    public int dashCount = 1;
 
     [Header("Wall Jump")]
     public float wallCheckDistance = 0.3f;
@@ -119,6 +127,8 @@ public class PlayerController : MonoBehaviour
             return; 
         }
 
+        animator.SetFloat("Speed", Mathf.Abs(velocity.x));
+
         // Dash timers
         if (isDashing)
         {
@@ -147,6 +157,8 @@ public class PlayerController : MonoBehaviour
             IsOnPlatform = false;
         }
 
+        isFloating = false;
+
         if (IsGrounded)
         {
             jumpLocked = false;
@@ -164,6 +176,11 @@ public class PlayerController : MonoBehaviour
                 jumpLocked = true;
                 jumpBufferCounter = 0f;
             }
+        }
+        else if(velocity.y < 0f)
+        {
+            if (canFloat && Input.GetKey(KeyCode.Space)) 
+                isFloating = true;
         }
 
         if (platformDropping)
@@ -218,7 +235,7 @@ public class PlayerController : MonoBehaviour
         bool inArcKnockdown = health != null && health.isInArcKnockdown;
         // Apply gravity
         if (!isDashing)
-            velocity.y += gravity * Time.fixedDeltaTime;
+            velocity.y += Time.fixedDeltaTime * (isFloating ? floatGravity : gravity);
 
         // Move the character
         Move(velocity * Time.fixedDeltaTime);
@@ -260,7 +277,7 @@ public class PlayerController : MonoBehaviour
             }
             if (dir.y < 0 && !platformDropping) // check platform collision seperately
             {
-                hit = Physics2D.BoxCast(groundCheck.position, new Vector2(colliderSize.x, 0.01f), 0f, Vector2.down, Mathf.Abs(moveAmount.y), platformLayer);
+                hit = Physics2D.BoxCast(groundCheck.position, new Vector2(colliderSize.x, 0.01f), 0f, Vector2.down, 0f, platformLayer);
                 if (hit.collider != null)
                 {
                     float dist = hit.distance - 0.01f;
@@ -286,7 +303,7 @@ public class PlayerController : MonoBehaviour
 
         jumpBufferCounter = jumpBufferTime;
 
-        if (IsGrounded && !jumpLocked)
+        if (IsGrounded)
         {
             if (IsOnPlatform && moveInput.y < 0)
             {
@@ -294,46 +311,59 @@ public class PlayerController : MonoBehaviour
                 platformDropTimer = platformDropDuration;
                 velocity.y = -platformDropSpeed;
             }
-            else
+            else if (!jumpLocked)
             {
                 velocity.y = jumpForce;
                 jumpLocked = true;
+                airJumpsDone = 0;
+
+
+                animator.SetTrigger("Jump");
             }
         }
-        else if (!IsGrounded && IsTouchingWall())
+        else if (!IsGrounded)
         {
-            bool wallOnRight = IsWallOnRight();
-            bool wallOnLeft = IsWallOnLeft();
-
-            float jumpDirection = 0f;
-            bool canWallJump = false;
-
-            // determine jump direction based on wall
-            if (wallOnRight && !wallOnLeft)
+            if (IsTouchingWall())
             {
-                jumpDirection = -1f; // jump left from right wall
+                bool wallOnRight = IsWallOnRight();
+                bool wallOnLeft = IsWallOnLeft();
+
+                float jumpDirection = 0f;
+                bool canWallJump = false;
+
+                // determine jump direction based on wall
+                if (wallOnRight && !wallOnLeft)
+                {
+                    jumpDirection = -1f; // jump left from right wall
+                }
+                else if (wallOnLeft && !wallOnRight)
+                {
+                    jumpDirection = 1f; // jump right from left wall
+                }
+
+                if (jumpDirection != 0f && (!hasWallJumped || jumpDirection != lastWallJumpDirection))
+                {
+                    canWallJump = true;
+                }
+
+                if (canWallJump)
+                {
+                    hasWallJumped = true;
+                    lastWallJumpDirection = jumpDirection;
+
+                    velocity = new Vector2(
+                        jumpDirection * wallJumpDirection.x * wallJumpForce,
+                        wallJumpDirection.y * wallJumpForce
+                    );
+
+                    StartCoroutine(WallJumpBuffer());
+                }
             }
-            else if (wallOnLeft && !wallOnRight)
+            else if(airJumpsDone < airJumpCount)
             {
-                jumpDirection = 1f; // jump right from left wall
-            }
-
-            if (jumpDirection != 0f && (!hasWallJumped || jumpDirection != lastWallJumpDirection))
-            {
-                canWallJump = true;
-            }
-
-            if (canWallJump)
-            {
-                hasWallJumped = true;
-                lastWallJumpDirection = jumpDirection;
-
-                velocity = new Vector2(
-                    jumpDirection * wallJumpDirection.x * wallJumpForce,
-                    wallJumpDirection.y * wallJumpForce
-                );
-
-                StartCoroutine(WallJumpBuffer());
+                velocity.y = jumpForce;
+                jumpLocked = true;
+                airJumpsDone++;
             }
         }
     }

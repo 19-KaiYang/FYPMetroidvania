@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78b8e35afe186e046a4e3dd1d0c77653, type: 3}
   m_Name: Bleed
   m_EditorClassIdentifier: Assembly-CSharp::BleedDebuff
-  debuffName: 
-  triggerType: 0
+  debuffName: Bleed
+  triggerType: 3
   maxStacks: 1
-  tickRate: 0
-  VFX: {fileID: 0}
+  tickRate: 1
+  VFX: {fileID: 7491483922786118386, guid: 294520a16b5359a4b9324314b1a032d5, type: 3}
   damage: 3

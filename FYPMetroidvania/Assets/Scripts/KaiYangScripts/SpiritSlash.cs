@@ -5,25 +5,38 @@ using System.Collections.Generic;
 public class SpiritSlash : MonoBehaviour
 {
     public float speed = 15f;
-    public float damage = 15f;
     public float bounceRange = 6f;
     public float overshootDistance = 1f;
     public float hitDelay = 0.3f;
     public float hitCooldown = 0.5f;
     public float spiritSlashBloodCost = 10f;
 
+    [Header("Hitbox")]
+    public GameObject hitboxObject;
+
+    [Header("Knockback Settings")]
+    public float stunKnockbackMultiplier = 1f;
+    public float knockdownKnockbackMultiplier = 1f;
+
+    [Header("Crowd Control")]
+    public CrowdControlState groundedCC = CrowdControlState.Stunned;
+    public CrowdControlState airborneCC = CrowdControlState.Knockdown;
+    public float ccDuration = 1.5f;
+
     private Transform player;
     private Transform currentTarget;
     private LayerMask enemyMask;
     private SpiritGauge spirit;
+    private Hitbox hitbox;
 
     private bool waiting = false;
     private bool isDelaying = false;
     private float lastHitTime = 0f;
     private Vector2 lastMovementDirection;
 
-    // Track enemies we've damaged (by Health component id), not by collider Transform
     private HashSet<int> hitEnemyIds = new HashSet<int>();
+
+    private Health pendingTargetHealth = null;
 
     public void Init(Transform playerTransform, Transform target, LayerMask enemyMask)
     {
@@ -35,6 +48,16 @@ public class SpiritSlash : MonoBehaviour
         {
             spirit = player.GetComponent<SpiritGauge>();
         }
+
+        if (hitboxObject != null)
+        {
+            hitbox = hitboxObject.GetComponent<Hitbox>();
+        }
+
+        // event subscribe
+        Hitbox.OnHit += OnSpiritSlashHit;
+
+        Skills.InvokeUltimateStart(hitbox);
     }
 
     private void Update()
@@ -53,85 +76,137 @@ public class SpiritSlash : MonoBehaviour
             return;
         }
 
-        // Move toward current target
         Vector2 dir = (currentTarget.position - transform.position).normalized;
         lastMovementDirection = dir;
         transform.position += (Vector3)dir * speed * Time.deltaTime;
 
-        // Single hit check (AFTER moving)
         if (Vector2.Distance(transform.position, currentTarget.position) < 0.5f &&
             Time.time - lastHitTime >= hitCooldown)
         {
-            HitTarget(currentTarget);
+            ReachTarget(currentTarget);
             lastHitTime = Time.time;
         }
     }
 
-    private void HitTarget(Transform target)
+    private void OnSpiritSlashHit(Hitbox hb, Health h)
     {
-        // Always resolve to root enemy via Health
-        var h = target ? target.GetComponentInParent<Health>() : null;
-        if (h != null)
+        if (hb != hitbox) return;
+        if (h == null || h.isPlayer) return;
+
+        if (currentTarget != null)
         {
-            int id = h.GetInstanceID();
-
-            if (!hitEnemyIds.Contains(id))
-            {
-                h.TakeDamage(damage, (h.transform.position - player.position).normalized);
-                hitEnemyIds.Add(id);
-                Debug.Log($"[SpiritSlash] DEALT damage once to {h.name} (id {id})");
-
-                // --- Apply Blood Mark + Health Cost ---
-                if (!h.isPlayer) // only apply to enemies
-                {
-                    h.ApplyBloodMark();
-
-                    Health playerHealth = player.GetComponent<Health>();
-                    if (playerHealth != null && spiritSlashBloodCost > 0f)
-                    {
-                        float safeCost = Mathf.Min(spiritSlashBloodCost, playerHealth.CurrentHealth - 1f);
-                        if (safeCost > 0f)
-                            playerHealth.TakeDamage(safeCost);
-                    }
-                }
-            }
-            else
-            {
-                Debug.Log($"[SpiritSlash] Skipped duplicate on {h.name} (id {id})");
-            }
+            Health currentTargetHealth = currentTarget.GetComponent<Health>();
+            if (currentTargetHealth == null || h != currentTargetHealth)
+                return; // ignore hits on other enemies while flying to the target
+        }
+        else if (pendingTargetHealth != null)
+        {
+            if (h != pendingTargetHealth)
+                return; // ignore hits on other enemies while hitbox is briefly enabled at the target
         }
         else
         {
-            Debug.Log($"[SpiritSlash] No Health found on/above {target?.name}");
+            return;
         }
 
-        // Overshoot a bit past the enemy
-        Vector3 overshootPosition = (h ? h.transform.position : target.position) +
-                                    (Vector3)(lastMovementDirection * overshootDistance);
-        transform.position = overshootPosition;
+        int id = h.GetInstanceID();
 
-        // Clear current target so we won’t re-hit this frame
+        // Track hit enemies
+        if (!hitEnemyIds.Contains(id))
+        {
+            hitEnemyIds.Add(id);
+
+            Skills.InvokeUltimateHit(hitbox, h);
+
+            Vector2 knockDir = (h.transform.position - transform.position).normalized;
+
+            // Damage without knockback (CC handles it)
+            h.TakeDamage(spiritSlashBloodCost, knockDir, false, CrowdControlState.None, 0f, true, false, 0f);
+
+            // Apply CC with separate multipliers
+            Skills skills = player.GetComponent<Skills>();
+            if (skills != null)
+            {
+                skills.ApplySkillCC(h, knockDir, groundedCC, airborneCC, ccDuration,
+                                   stunKnockbackMultiplier, knockdownKnockbackMultiplier);
+            }
+
+            // Apply blood mark
+            h.ApplyBloodMark();
+
+            Health playerHealth = player.GetComponent<Health>();
+            if (playerHealth != null && spiritSlashBloodCost > 0f)
+            {
+                float safeCost = Mathf.Min(spiritSlashBloodCost, playerHealth.CurrentHealth - 1f);
+                if (safeCost > 0f)
+                    playerHealth.TakeDamage(safeCost);
+            }
+        }
+    }
+
+    private void ReachTarget(Transform target)
+    {
+        if (hitboxObject != null)
+        {
+            // store the target's Health so the hit handler knows which enemy is valid
+            pendingTargetHealth = target.GetComponent<Health>();
+            StartCoroutine(EnableHitboxAtTarget(target.position));
+        }
+
+        // Clear currentTarget right away (movement finished)
         currentTarget = null;
-
-        // Short pause before selecting the next enemy
         StartCoroutine(DelayBeforeNextTarget());
     }
 
+    private IEnumerator EnableHitboxAtTarget(Vector3 targetPos)
+    {
+        if (hitbox == null) yield break;
+
+        Collider2D col = hitboxObject.GetComponent<Collider2D>();
+        if (col == null) yield break;
+
+        Vector3 offsetPos = targetPos - (Vector3)(lastMovementDirection * 0.3f);
+        transform.position = offsetPos;
+
+        hitbox.ClearHitEnemies();
+
+        yield return null;
+
+        col.enabled = true;
+        yield return new WaitForFixedUpdate();
+        col.enabled = false;
+
+        Vector3 overshootPosition = targetPos + (Vector3)(lastMovementDirection * overshootDistance);
+        transform.position = overshootPosition;
+
+        pendingTargetHealth = null;
+    }
+
+    private IEnumerator EnableHitboxTemporarily(float duration)
+    {
+        if (hitboxObject == null) yield break;
+
+        hitboxObject.SetActive(true);
+
+        if (hitbox != null)
+            hitbox.ClearHitEnemies();
+
+        yield return new WaitForSeconds(duration);
+
+        hitboxObject.SetActive(false);
+    }
 
     private IEnumerator DelayBeforeNextTarget()
     {
         isDelaying = true;
         yield return new WaitForSeconds(hitDelay);
         isDelaying = false;
-
         FindNextTarget();
     }
 
     private void FindNextTarget()
     {
         Collider2D[] hits = Physics2D.OverlapCircleAll(player.position, bounceRange, enemyMask);
-
-        // Deduplicate by root enemy (Health.transform)
         var available = new List<Transform>();
         var unhit = new List<Transform>();
         var seenRoots = new HashSet<Transform>();
@@ -142,7 +217,7 @@ public class SpiritSlash : MonoBehaviour
             if (h == null) continue;
 
             Transform root = h.transform;
-            if (!seenRoots.Add(root)) continue; // skip duplicate colliders of same enemy
+            if (!seenRoots.Add(root)) continue;
 
             available.Add(root);
             if (!hitEnemyIds.Contains(h.GetInstanceID()))
@@ -151,47 +226,35 @@ public class SpiritSlash : MonoBehaviour
 
         Transform best = null;
 
-        // Prefer enemies we haven't damaged yet
+        // prior unhit enemies
         if (unhit.Count > 0)
         {
             float closest = float.MaxValue;
             foreach (var t in unhit)
             {
                 float d = Vector2.Distance(transform.position, t.position);
-                if (d < closest)
-                {
-                    closest = d;
-                    best = t;
-                }
+                if (d < closest) { closest = d; best = t; }
             }
         }
-        else if (available.Count > 0)
+        else if (available.Count > 1)
         {
-            // All have been hit ?reset the set and start a new cycle
             hitEnemyIds.Clear();
 
             float closest = float.MaxValue;
             foreach (var t in available)
             {
                 float d = Vector2.Distance(transform.position, t.position);
-                if (d < closest)
-                {
-                    closest = d;
-                    best = t;
-                }
+                if (d < closest) { closest = d; best = t; }
             }
         }
+        else if (available.Count == 1)
+        {
+            hitEnemyIds.Clear();
+            best = available[0];
+        }
 
-        if (best != null)
-        {
-            currentTarget = best;
-            waiting = false;
-        }
-        else
-        {
-            currentTarget = null;
-            hitEnemyIds.Clear(); // clean slate if no enemies
-        }
+        if (best != null) { currentTarget = best; waiting = false; }
+        else { currentTarget = null; }
     }
 
     private IEnumerator WaitForEnemy()
@@ -203,5 +266,12 @@ public class SpiritSlash : MonoBehaviour
             yield return new WaitForSeconds(0.2f);
         }
         waiting = false;
+    }
+
+    private void OnDestroy()
+    {
+        // Unsubscribe from events
+        Hitbox.OnHit -= OnSpiritSlashHit;
+        Skills.InvokeUltimateEnd();
     }
 }
