@@ -5,17 +5,20 @@ using System.Collections.Generic;
 public class SpiritSlash : MonoBehaviour
 {
     public float speed = 15f;
-    public float damage = 15f;
     public float bounceRange = 6f;
     public float overshootDistance = 1f;
     public float hitDelay = 0.3f;
     public float hitCooldown = 0.5f;
     public float spiritSlashBloodCost = 10f;
 
+    [Header("Hitbox")]
+    public GameObject hitboxObject; // Assign in prefab
+
     private Transform player;
     private Transform currentTarget;
     private LayerMask enemyMask;
     private SpiritGauge spirit;
+    private Hitbox hitbox;
 
     private bool waiting = false;
     private bool isDelaying = false;
@@ -35,7 +38,16 @@ public class SpiritSlash : MonoBehaviour
             spirit = player.GetComponent<SpiritGauge>();
         }
 
-        Skills.InvokeUltimateStart(null);
+        // Get the hitbox component
+        if (hitboxObject != null)
+        {
+            hitbox = hitboxObject.GetComponent<Hitbox>();
+        }
+
+        // Subscribe to hit events
+        Hitbox.OnHit += OnSpiritSlashHit;
+
+        Skills.InvokeUltimateStart(hitbox);
     }
 
     private void Update()
@@ -62,46 +74,70 @@ public class SpiritSlash : MonoBehaviour
         if (Vector2.Distance(transform.position, currentTarget.position) < 0.5f &&
             Time.time - lastHitTime >= hitCooldown)
         {
-            HitTarget(currentTarget);
+            ReachTarget(currentTarget);
             lastHitTime = Time.time;
         }
     }
 
-    private void HitTarget(Transform target)
+    private void OnSpiritSlashHit(Hitbox hb, Health h)
     {
-        var h = target ? target.GetComponentInParent<Health>() : null;
-        if (h != null)
+        // Only respond to our own hitbox
+        if (hb != hitbox) return;
+        if (h == null || h.isPlayer) return;
+
+        int id = h.GetInstanceID();
+
+        // Track hit enemies
+        if (!hitEnemyIds.Contains(id))
         {
-            int id = h.GetInstanceID();
+            hitEnemyIds.Add(id);
 
-            if (!hitEnemyIds.Contains(id))
+            // Invoke ultimate hit event
+            Skills.InvokeUltimateHit(hitbox, h);
+
+            // Apply blood mark
+            h.ApplyBloodMark();
+
+            // Apply health cost to player
+            Health playerHealth = player.GetComponent<Health>();
+            if (playerHealth != null && spiritSlashBloodCost > 0f)
             {
-                h.TakeDamage(damage, (h.transform.position - player.position).normalized);
-                hitEnemyIds.Add(id);
-
-                Skills.InvokeUltimateHit(null, h);
-
-                if (!h.isPlayer)
-                {
-                    h.ApplyBloodMark();
-
-                    Health playerHealth = player.GetComponent<Health>();
-                    if (playerHealth != null && spiritSlashBloodCost > 0f)
-                    {
-                        float safeCost = Mathf.Min(spiritSlashBloodCost, playerHealth.CurrentHealth - 1f);
-                        if (safeCost > 0f)
-                            playerHealth.TakeDamage(safeCost);
-                    }
-                }
+                float safeCost = Mathf.Min(spiritSlashBloodCost, playerHealth.CurrentHealth - 1f);
+                if (safeCost > 0f)
+                    playerHealth.TakeDamage(safeCost);
             }
         }
+    }
 
-        Vector3 overshootPosition = (h ? h.transform.position : target.position) +
-                                    (Vector3)(lastMovementDirection * overshootDistance);
+    private void ReachTarget(Transform target)
+    {
+        // Enable hitbox briefly when reaching target
+        if (hitboxObject != null)
+        {
+            StartCoroutine(EnableHitboxTemporarily(0.1f));
+        }
+
+        // Overshoot past the target
+        Vector3 overshootPosition = target.position + (Vector3)(lastMovementDirection * overshootDistance);
         transform.position = overshootPosition;
 
         currentTarget = null;
         StartCoroutine(DelayBeforeNextTarget());
+    }
+
+    private IEnumerator EnableHitboxTemporarily(float duration)
+    {
+        if (hitboxObject == null) yield break;
+
+        hitboxObject.SetActive(true);
+
+        // Clear hit list so the hitbox can detect this enemy
+        if (hitbox != null)
+            hitbox.ClearHitEnemies();
+
+        yield return new WaitForSeconds(duration);
+
+        hitboxObject.SetActive(false);
     }
 
     private IEnumerator DelayBeforeNextTarget()
@@ -172,6 +208,8 @@ public class SpiritSlash : MonoBehaviour
 
     private void OnDestroy()
     {
+        // Unsubscribe from events
+        Hitbox.OnHit -= OnSpiritSlashHit;
         Skills.InvokeUltimateEnd();
     }
 }

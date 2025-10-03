@@ -10,7 +10,7 @@ public class Hitbox : MonoBehaviour
 
     [Header("Damage")]
     public float damage;
-    public bool isSkillHitbox = false;
+
 
     [Header("Hitstop Settings")]
     public float hitstopDuration = 0.08f;
@@ -27,6 +27,8 @@ public class Hitbox : MonoBehaviour
 
     [Header("Special Settings")]
     public bool applyBloodMark = false;
+    public bool isSkillHitbox = false;
+    public bool isUltimateHitbox = false;
 
     private Collider2D col;
     private HashSet<Health> hitEnemies = new HashSet<Health>();
@@ -55,6 +57,11 @@ public class Hitbox : MonoBehaviour
         if (col == null) return;
         StartCoroutine(EnableTemporarily(duration));
     }
+
+    public void ClearHitEnemies()
+{
+    hitEnemies.Clear();
+}
 
     private IEnumerator EnableTemporarily(float duration)
     {
@@ -96,6 +103,10 @@ public class Hitbox : MonoBehaviour
                     if (isSkillHitbox)
                     {
                         h.TakeDamage(damage, dir, false, CrowdControlState.Stunned, 0f);
+                    }
+                    else if (isUltimateHitbox)
+                    {
+                        h.TakeDamage(damage, dir, false, CrowdControlState.Stunned, 1.5f);
                     }
                     else
                     {
