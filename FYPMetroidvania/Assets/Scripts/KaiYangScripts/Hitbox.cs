@@ -42,6 +42,7 @@ public class Hitbox : MonoBehaviour
     {
         hitEnemies.Clear();
         damage = owner.GetAttackDamage(owner.CurrentComboStep);
+        isCritical = false;
     }
 
     public void EnableCollider(float duration)
@@ -89,7 +90,6 @@ public class Hitbox : MonoBehaviour
                     dir = (other.transform.position - owner.transform.position).normalized;
                 }
 
-                isCritical = false;
                 OnHit?.Invoke(this, h);
 
                 // Apply damage + knockback with forced CC

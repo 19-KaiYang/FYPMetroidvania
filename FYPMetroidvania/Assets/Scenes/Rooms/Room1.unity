@@ -9388,12 +9388,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da0739f9832287e42b250c7ec38dd4ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeManager
-  AttackUpgrade: {fileID: 11400000, guid: dadb0cc08b4c9df4cb62c01e6b4331ca, type: 2}
+  AttackUpgrade: {fileID: 11400000, guid: 5f9c7c6967109e34bb16431948564691, type: 2}
   SkillUpgrade: {fileID: 0}
   SpiritUpgrade: {fileID: 0}
   MobilityUpgrade: {fileID: 11400000, guid: f53a9646dc259f248a675437faa1dc56, type: 2}
   MiscUpgrades:
-  - {fileID: 11400000, guid: dadb0cc08b4c9df4cb62c01e6b4331ca, type: 2}
+  - {fileID: 11400000, guid: a98b89e41cac33c4498865c22ad46db2, type: 2}
 --- !u!1 &1388339499
 GameObject:
   m_ObjectHideFlags: 0
@@ -11629,6 +11629,10 @@ PrefabInstance:
     - target: {fileID: 7202174868536862745, guid: 13775344399b2974daca82989c71d56e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7464358523408845771, guid: 13775344399b2974daca82989c71d56e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.182
       objectReference: {fileID: 0}
     - target: {fileID: 8422515176913305975, guid: 13775344399b2974daca82989c71d56e, type: 3}
       propertyPath: canFloat

@@ -275,7 +275,7 @@ public class PlayerController : MonoBehaviour
             }
             if (dir.y < 0 && !platformDropping) // check platform collision seperately
             {
-                hit = Physics2D.BoxCast(groundCheck.position, new Vector2(colliderSize.x, 0.01f), 0f, Vector2.down, Mathf.Abs(moveAmount.y), platformLayer);
+                hit = Physics2D.BoxCast(groundCheck.position, new Vector2(colliderSize.x, 0.01f), 0f, Vector2.down, 0f, platformLayer);
                 if (hit.collider != null)
                 {
                     float dist = hit.distance - 0.01f;
