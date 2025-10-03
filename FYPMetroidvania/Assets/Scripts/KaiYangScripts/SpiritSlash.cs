@@ -12,7 +12,7 @@ public class SpiritSlash : MonoBehaviour
     public float spiritSlashBloodCost = 10f;
 
     [Header("Hitbox")]
-    public GameObject hitboxObject; // Assign in prefab
+    public GameObject hitboxObject;
 
     private Transform player;
     private Transform currentTarget;
@@ -38,13 +38,12 @@ public class SpiritSlash : MonoBehaviour
             spirit = player.GetComponent<SpiritGauge>();
         }
 
-        // Get the hitbox component
         if (hitboxObject != null)
         {
             hitbox = hitboxObject.GetComponent<Hitbox>();
         }
 
-        // Subscribe to hit events
+        // event subscribe
         Hitbox.OnHit += OnSpiritSlashHit;
 
         Skills.InvokeUltimateStart(hitbox);
@@ -66,7 +65,6 @@ public class SpiritSlash : MonoBehaviour
             return;
         }
 
-        // Move toward target
         Vector2 dir = (currentTarget.position - transform.position).normalized;
         lastMovementDirection = dir;
         transform.position += (Vector3)dir * speed * Time.deltaTime;
@@ -81,7 +79,6 @@ public class SpiritSlash : MonoBehaviour
 
     private void OnSpiritSlashHit(Hitbox hb, Health h)
     {
-        // Only respond to our own hitbox
         if (hb != hitbox) return;
         if (h == null || h.isPlayer) return;
 
@@ -92,13 +89,11 @@ public class SpiritSlash : MonoBehaviour
         {
             hitEnemyIds.Add(id);
 
-            // Invoke ultimate hit event
             Skills.InvokeUltimateHit(hitbox, h);
 
             // Apply blood mark
             h.ApplyBloodMark();
 
-            // Apply health cost to player
             Health playerHealth = player.GetComponent<Health>();
             if (playerHealth != null && spiritSlashBloodCost > 0f)
             {
@@ -111,7 +106,6 @@ public class SpiritSlash : MonoBehaviour
 
     private void ReachTarget(Transform target)
     {
-        // Enable hitbox briefly AT THE TARGET POSITION (not during travel)
         if (hitboxObject != null)
         {
             StartCoroutine(EnableHitboxAtTarget(target.position));
@@ -136,7 +130,6 @@ public class SpiritSlash : MonoBehaviour
 
         yield return new WaitForFixedUpdate();
 
-        // Disable immediately
         col.enabled = false;
 
         Vector3 overshootPosition = targetPos + (Vector3)(lastMovementDirection * overshootDistance);
@@ -188,7 +181,7 @@ public class SpiritSlash : MonoBehaviour
 
         Transform best = null;
 
-        // Prioritize unhit enemies
+        // prior unhit enemies
         if (unhit.Count > 0)
         {
             float closest = float.MaxValue;
@@ -198,7 +191,6 @@ public class SpiritSlash : MonoBehaviour
                 if (d < closest) { closest = d; best = t; }
             }
         }
-        // Only clear and cycle if ALL enemies in range have been hit AND there's more than 1
         else if (available.Count > 1)
         {
             hitEnemyIds.Clear();
@@ -210,10 +202,9 @@ public class SpiritSlash : MonoBehaviour
                 if (d < closest) { closest = d; best = t; }
             }
         }
-        // Only 1 enemy left - wait for new enemies instead of re-hitting
         else if (available.Count == 1)
         {
-            // Don't retarget the single enemy - wait for more
+            // do not retarget the single enemy 
             best = null;
         }
 

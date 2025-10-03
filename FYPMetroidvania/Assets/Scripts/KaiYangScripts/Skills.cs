@@ -26,11 +26,12 @@ public class Skills : MonoBehaviour
     public bool IsUsingUltimate => usingUltimate;
 
 
+    // SKILL EVENTS - for ian
     public static event System.Action<Hitbox> skillStart;
     public static event System.Action skillEnd;
     public static event System.Action<Hitbox, Health> skillHit;
 
-
+    // ULTIMATE EVENTS - for ian
     public static event System.Action<Hitbox> OnUltimateStart;
     public static event System.Action OnUltimateEnd;
     public static event System.Action<Hitbox, Health> OnUltimateHit;
@@ -1037,6 +1038,8 @@ public class Skills : MonoBehaviour
             targetHealth.ApplyKnockdown(duration, isAirborne, knockDir);
     }
 
+
+    //INVOKES ARE HERE
     #region InvokeSkillsStartHitEnd
     public static void InvokeSkillStart(Hitbox hitbox)
     {
