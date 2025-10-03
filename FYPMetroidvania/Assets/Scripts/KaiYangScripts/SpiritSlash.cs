@@ -111,19 +111,38 @@ public class SpiritSlash : MonoBehaviour
 
     private void ReachTarget(Transform target)
     {
-        // Enable hitbox briefly when reaching target
+        // Enable hitbox briefly AT THE TARGET POSITION (not during travel)
         if (hitboxObject != null)
         {
-            StartCoroutine(EnableHitboxTemporarily(0.1f));
+            StartCoroutine(EnableHitboxAtTarget(target.position));
         }
-
-        // Overshoot past the target
-        Vector3 overshootPosition = target.position + (Vector3)(lastMovementDirection * overshootDistance);
-        transform.position = overshootPosition;
 
         currentTarget = null;
         StartCoroutine(DelayBeforeNextTarget());
     }
+
+    private IEnumerator EnableHitboxAtTarget(Vector3 targetPos)
+    {
+        if (hitbox == null) yield break;
+
+        Collider2D col = hitboxObject.GetComponent<Collider2D>();
+        if (col == null) yield break;
+
+        transform.position = targetPos;
+
+        // clear hit list and enable collider
+        hitbox.ClearHitEnemies();
+        col.enabled = true;
+
+        yield return new WaitForFixedUpdate();
+
+        // Disable immediately
+        col.enabled = false;
+
+        Vector3 overshootPosition = targetPos + (Vector3)(lastMovementDirection * overshootDistance);
+        transform.position = overshootPosition;
+    }
+
 
     private IEnumerator EnableHitboxTemporarily(float duration)
     {
@@ -131,7 +150,6 @@ public class SpiritSlash : MonoBehaviour
 
         hitboxObject.SetActive(true);
 
-        // Clear hit list so the hitbox can detect this enemy
         if (hitbox != null)
             hitbox.ClearHitEnemies();
 
@@ -170,6 +188,7 @@ public class SpiritSlash : MonoBehaviour
 
         Transform best = null;
 
+        // Prioritize unhit enemies
         if (unhit.Count > 0)
         {
             float closest = float.MaxValue;
@@ -179,7 +198,8 @@ public class SpiritSlash : MonoBehaviour
                 if (d < closest) { closest = d; best = t; }
             }
         }
-        else if (available.Count > 0)
+        // Only clear and cycle if ALL enemies in range have been hit AND there's more than 1
+        else if (available.Count > 1)
         {
             hitEnemyIds.Clear();
 
@@ -190,9 +210,15 @@ public class SpiritSlash : MonoBehaviour
                 if (d < closest) { closest = d; best = t; }
             }
         }
+        // Only 1 enemy left - wait for new enemies instead of re-hitting
+        else if (available.Count == 1)
+        {
+            // Don't retarget the single enemy - wait for more
+            best = null;
+        }
 
         if (best != null) { currentTarget = best; waiting = false; }
-        else { currentTarget = null; hitEnemyIds.Clear(); }
+        else { currentTarget = null; }
     }
 
     private IEnumerator WaitForEnemy()
