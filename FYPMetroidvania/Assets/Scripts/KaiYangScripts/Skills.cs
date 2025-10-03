@@ -39,9 +39,14 @@ public class Skills : MonoBehaviour
     #region Skills Variables
 
     [Header("Lunging Strike Knockback")]
-    public float swordDashKnockbackMultiplier = 1f;
+    public float swordDashStunKnockbackMultiplier = 1f;
+    public float swordDashKnockdownKnockbackMultiplier = 1f;
+
     [Header("Ascending Slash Knockback")]
-    public float swordUppercutKnockbackMultiplier = 1f;
+    public float swordUppercutStunKnockbackMultiplier = 1f;
+    public float swordUppercutKnockdownKnockbackMultiplier = 1f;
+
+
     [Header("Crimson Wave Knockback")]
     public float crimsonWaveKnockbackMultiplier = 1f;
     [Header("Gauntlet Shockwave Knockback")]
@@ -541,12 +546,13 @@ public class Skills : MonoBehaviour
 
             Vector2 knockDir = (h.transform.position - transform.position).normalized;
 
-            h.TakeDamage(dashFlatDamage, knockDir, false, CrowdControlState.None, 0f, true, false, swordDashKnockbackMultiplier);
+            h.TakeDamage(dashFlatDamage, knockDir, false, CrowdControlState.None, 0f, true, false, 0f);
 
 
 
             // Apply Sword Dash CC
-            ApplySkillCC(h, knockDir, swordDashGroundedCC, swordDashAirborneCC, swordDashCCDuration, swordDashKnockbackMultiplier);
+            ApplySkillCC(h, knockDir, swordDashGroundedCC, swordDashAirborneCC, swordDashCCDuration,
+              swordDashStunKnockbackMultiplier, swordDashKnockdownKnockbackMultiplier);
 
 
             // Spirit + BloodMark + HealthCost (only Sword)
@@ -650,10 +656,11 @@ public class Skills : MonoBehaviour
 
             Vector2 knockDir = (h.transform.position - transform.position).normalized;
 
-            h.TakeDamage(uppercutFlatDamage, knockDir, false, CrowdControlState.None, 0f, true, false, swordUppercutKnockbackMultiplier);
+            h.TakeDamage(uppercutFlatDamage, knockDir, false, CrowdControlState.None, 0f, true, false, 0f);
 
             // Apply Uppercut CC
-            ApplySkillCC(h, knockDir, swordUppercutGroundedCC, swordUppercutAirborneCC, swordUppercutCCDuration, swordUppercutKnockbackMultiplier);
+            ApplySkillCC(h, knockDir, swordUppercutGroundedCC, swordUppercutAirborneCC, swordUppercutCCDuration,
+              swordUppercutStunKnockbackMultiplier, swordUppercutKnockdownKnockbackMultiplier);
 
             // Spirit + BloodMark + HealthCost
             h.ApplyBloodMark();
@@ -1078,8 +1085,8 @@ public class Skills : MonoBehaviour
 
 
     public void ApplySkillCC(Health target, Vector2 knockDir,
-      CrowdControlState groundedCC, CrowdControlState airborneCC,
-      float ccDuration = 0f, float knockbackMultiplier = 1f)
+   CrowdControlState groundedCC, CrowdControlState airborneCC,
+   float ccDuration = 0f, float stunKnockbackMultiplier = 1f, float knockdownKnockbackMultiplier = 1f)
     {
         if (!target) return;
 
@@ -1089,16 +1096,16 @@ public class Skills : MonoBehaviour
         if (grounded)
         {
             if (groundedCC == CrowdControlState.Stunned)
-                target.ApplyStun(ccDuration > 0 ? ccDuration : target.defaultStunDuration, knockDir, knockbackMultiplier);
+                target.ApplyStun(ccDuration > 0 ? ccDuration : target.defaultStunDuration, knockDir, stunKnockbackMultiplier);
             else if (groundedCC == CrowdControlState.Knockdown)
-                target.ApplyKnockdown(ccDuration > 0 ? ccDuration : target.defaultKnockdownDuration, false, knockDir, false, knockbackMultiplier);
+                target.ApplyKnockdown(ccDuration > 0 ? ccDuration : target.defaultKnockdownDuration, false, knockDir, false, knockdownKnockbackMultiplier);
         }
         else
         {
             if (airborneCC == CrowdControlState.Stunned)
-                target.ApplyStun(ccDuration > 0 ? ccDuration : target.defaultStunDuration, knockDir, knockbackMultiplier);
+                target.ApplyStun(ccDuration > 0 ? ccDuration : target.defaultStunDuration, knockDir, stunKnockbackMultiplier);
             else if (airborneCC == CrowdControlState.Knockdown)
-                target.ApplyKnockdown(ccDuration > 0 ? ccDuration : target.defaultKnockdownDuration, true, knockDir, false, knockbackMultiplier);
+                target.ApplyKnockdown(ccDuration > 0 ? ccDuration : target.defaultKnockdownDuration, true, knockDir, false, knockdownKnockbackMultiplier);
         }
     }
 
