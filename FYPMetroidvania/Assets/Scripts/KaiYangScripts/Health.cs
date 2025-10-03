@@ -191,7 +191,7 @@ public class Health : MonoBehaviour
 
         bool shouldPreserveVelocity = (forceCC == CrowdControlState.Knockdown && useRawForce);
 
-        // Apply knockback only if no CC is specified
+        // Apply knockback only if no CC is specified (basically none)
         if (rb != null && hitDirection.HasValue && forceCC == CrowdControlState.None)
         {
             float finalForce = knockbackForce * knockbackMultiplier;
@@ -201,7 +201,7 @@ public class Health : MonoBehaviour
                 rb.AddForce(hitDirection.Value.normalized * finalForce, ForceMode2D.Impulse);
         }
 
-        // Apply CC effects (these handle their own knockback internally)
+        // Apply CC effects 
         if (!isPlayer && !isDebuff)
         {
             if (forceCC != CrowdControlState.None)
@@ -387,6 +387,7 @@ public class Health : MonoBehaviour
             rb.linearVelocity = Vector2.zero;
 
             Vector2 pushDirection = new Vector2(hitDirection.Value.x, 0f).normalized;
+
             // Scale by stunPushbackForce * knockbackMultiplier
             float finalForce = stunPushbackForce * knockbackMultiplier;
             rb.AddForce(pushDirection * finalForce, ForceMode2D.Impulse);

@@ -36,7 +36,6 @@ public class SpiritSlash : MonoBehaviour
 
     private HashSet<int> hitEnemyIds = new HashSet<int>();
 
-    // NEW: keep track of the Health of the target we're enabling the hitbox for
     private Health pendingTargetHealth = null;
 
     public void Init(Transform playerTransform, Transform target, LayerMask enemyMask)
