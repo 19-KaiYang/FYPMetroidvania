@@ -5,12 +5,12 @@ public class SimpleUpgrade : Upgrade
 {
     public override void OnApply(UpgradeManager upgradeManager)
     {
-        throw new System.NotImplementedException();
+        Debug.Log($"{name} applied.");
     }
 
     public override void OnRemove(UpgradeManager upgradeManager)
     {
-        throw new System.NotImplementedException();
+        Debug.Log($"{name} removed.");
     }
 }
 

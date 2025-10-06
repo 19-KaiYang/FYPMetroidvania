@@ -76,17 +76,23 @@ public class UpgradeManager : MonoBehaviour
     }
 
     // Skills
-    void OnSkillStart()
+    void OnSkillStart(Hitbox hitbox)
     {
-
+        if (SkillUpgrade == null) return;
+        ActionContext ctx = new ActionContext(this, player, health, combatSystem, skillManager, hitbox);
+        SkillUpgrade.TryEffects(Trigger.OnStart, ctx);
     }
     void OnSkillEnd()
     {
-
+        if (SkillUpgrade == null) return;
+        ActionContext ctx = new ActionContext(this, player, health, combatSystem, skillManager);
+        SkillUpgrade.TryEffects(Trigger.OnEnd, ctx);
     }
-    void OnSkillHit()
+    void OnSkillHit(Hitbox hitbox, Health enemy)
     {
-
+        if (SkillUpgrade == null) return;
+        ActionContext ctx = new ActionContext(this, player, health, combatSystem, skillManager, hitbox, enemy);
+        SkillUpgrade.TryEffects(Trigger.OnHit, ctx);
     }
 
     // Ultimate
