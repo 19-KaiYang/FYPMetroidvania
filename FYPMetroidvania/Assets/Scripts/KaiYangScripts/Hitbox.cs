@@ -10,6 +10,7 @@ public class Hitbox : MonoBehaviour
 
     [Header("Damage")]
     public float damage;
+    public bool isCritical = false;
 
 
     [Header("Hitstop Settings")]
@@ -46,6 +47,7 @@ public class Hitbox : MonoBehaviour
     private void OnEnable()
     {
         hitEnemies.Clear();
+        isCritical = false;
         if (!isSkillHitbox && owner != null)
         {
             damage = owner.GetAttackDamage(owner.CurrentComboStep);
@@ -84,6 +86,8 @@ public class Hitbox : MonoBehaviour
                 bool useRawForce = false;
                 CrowdControlState forceCC = CrowdControlState.None;
 
+                OnHit?.Invoke(this, h);
+
                 if (isSweepHitbox)
                 {
                     dir = Vector2.up * sweepKnockbackForce;
@@ -113,8 +117,6 @@ public class Hitbox : MonoBehaviour
                         h.TakeDamage(damage, dir, false, CrowdControlState.None, 0f);
                     }
                 }
-
-                OnHit?.Invoke(this, h);
 
                 if (!h.isPlayer && applyBloodMark)
                 {

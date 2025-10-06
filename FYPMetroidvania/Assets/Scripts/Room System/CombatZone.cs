@@ -16,7 +16,7 @@ public class CombatZone : MonoBehaviour
     public float waveWaitTime = 1f;
 
     [Header("Level Triggers")]
-    public GameObject door;
+    public List<GameObject> doors = new();
 
     // Private trackers
     private int currWave;
@@ -56,6 +56,7 @@ public class CombatZone : MonoBehaviour
     {
         currWave = -1;
         SpawnNextWave();
+        foreach (GameObject d in doors) d.SetActive(true);
     }
     void SpawnNextWave()
     {
@@ -81,7 +82,7 @@ public class CombatZone : MonoBehaviour
         Debug.Log("Combat zone completed! Opening door...");
 
         areaTrigger.enabled = false;
-        if(door != null) door.SetActive(false);
+        foreach(GameObject d in doors) d.SetActive(false);
     }
 
     IEnumerator SpawnEnemyCoroutine(EnemySpawn spawn, GameObject enemyObj)

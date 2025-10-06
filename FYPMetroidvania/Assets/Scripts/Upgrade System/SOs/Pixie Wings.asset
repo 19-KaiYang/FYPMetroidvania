@@ -9,8 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ebda3246b4d97524b9295f4575bfc7bd, type: 3}
-  m_Name: Pixie Attacks
-  m_EditorClassIdentifier: Assembly-CSharp::AttackPixie
-  effects:
-  - {fileID: 11400000, guid: e65dbcfa4a5b6ed42bd71019bfe5deec, type: 2}
+  m_Script: {fileID: 11500000, guid: 7c0430302e311d94f993b6c4a3a2faaa, type: 3}
+  m_Name: Pixie Wings
+  m_EditorClassIdentifier: Assembly-CSharp::PixieWingsUpgrade
+  effects: []
+  airJumps: 2
+  floatGravity: -5
