@@ -4632,14 +4632,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5e401c02c98e15448aeded5300c2523, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeSelectionUI
-  optionButtons:
-  - {fileID: 1527467178}
-  - {fileID: 1290936530}
-  - {fileID: 1774985542}
   optionLabels:
   - {fileID: 265459127}
   - {fileID: 583135600}
   - {fileID: 193307306}
+  optionButtons:
+  - {fileID: 1527467178}
+  - {fileID: 1290936530}
+  - {fileID: 1774985542}
   allUpgrades:
   - {fileID: 11400000, guid: 5f9c7c6967109e34bb16431948564691, type: 2}
   - {fileID: 11400000, guid: a98b89e41cac33c4498865c22ad46db2, type: 2}
@@ -4648,7 +4648,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f53a9646dc259f248a675437faa1dc56, type: 2}
   - {fileID: 11400000, guid: ce103831bf465f94e8ffc90fa81c5e74, type: 2}
   - {fileID: 11400000, guid: dadb0cc08b4c9df4cb62c01e6b4331ca, type: 2}
-  allUpgradeEffects: []
+  - {fileID: 11400000, guid: e2a88b3e4478ac244b5788b53b1caab4, type: 2}
 --- !u!1 &1204364676
 GameObject:
   m_ObjectHideFlags: 0
@@ -5563,6 +5563,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c5614658b95f0440a69ff4c2881ab2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeManager
+  AttackUpgrade: {fileID: 0}
+  SkillUpgrade: {fileID: 0}
+  SpiritUpgrade: {fileID: 0}
+  MobilityUpgrade: {fileID: 0}
+  MiscUpgrades: []
 --- !u!1 &1760359534
 GameObject:
   m_ObjectHideFlags: 0

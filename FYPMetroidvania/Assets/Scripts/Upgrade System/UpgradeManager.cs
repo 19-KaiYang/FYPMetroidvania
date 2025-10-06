@@ -48,6 +48,11 @@ public class UpgradeManager : MonoBehaviour
         CombatSystem.basicAttackStart += OnBasicAttackStart;
         CombatSystem.basicAttackEnd += OnBasicAttackEnd;
         Hitbox.OnHit += OnBasicAttackHit;
+
+        Skills.skillStart += OnSkillStart;
+        Skills.skillHit += OnSkillHit;
+        Skills.skillEnd += OnSkillEnd;
+
     }
 
     #region Processing Events
@@ -130,7 +135,12 @@ public class UpgradeManager : MonoBehaviour
         CombatSystem.basicAttackEnd -= OnBasicAttackEnd;
         Hitbox.OnHit -= OnBasicAttackHit;
 
-        foreach(Upgrade upgrade in MiscUpgrades)
+        Skills.skillStart -= OnSkillStart;
+        Skills.skillHit -= OnSkillHit;
+        Skills.skillEnd -= OnSkillEnd;
+
+
+        foreach (Upgrade upgrade in MiscUpgrades)
         {
             upgrade.OnRemove(this);
         }

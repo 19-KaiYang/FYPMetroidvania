@@ -47,20 +47,48 @@ public class UpgradeSelectionUI : MonoBehaviour
 
     void SelectUpgrade(Upgrade upgrade)
     {
+        // Decide where this upgrade belongs
         if (upgrade is PixieWingsUpgrade)
         {
+            // Mobility (only one)
             upgradeManager.MobilityUpgrade = upgrade;
             Debug.Log("Selected Mobility Upgrade: " + upgrade.name);
         }
+        else if (upgrade is PixieDustAmp
+                 || upgrade.name.Contains("Dust Devil")
+                 || upgrade.name.Contains("Malicious Magic")
+                 || upgrade.name.Contains("Exploit Wounds")
+                 || upgrade.name.Contains("Rising Precision"))
+        {
+            // Misc (multiple allowed)
+            upgradeManager.MiscUpgrades.Add(upgrade);
+            Debug.Log("Selected Misc Upgrade: " + upgrade.name);
+        }
+        else if (upgrade.name.Contains("Skill"))
+        {
+            // Skills (only one)
+            upgradeManager.SkillUpgrade = upgrade;
+            Debug.Log("Selected Skill Upgrade: " + upgrade.name);
+        }
+        else if (upgrade.name.Contains("Spirit"))
+        {
+            // Spirit Attacks (only one)
+            upgradeManager.SpiritUpgrade = upgrade;
+            Debug.Log("Selected Spirit Upgrade: " + upgrade.name);
+        }
         else
         {
+            // Default to Attack
             upgradeManager.AttackUpgrade = upgrade;
             Debug.Log("Selected Attack Upgrade: " + upgrade.name);
         }
 
+        // Apply it
         upgrade.OnApply(upgradeManager);
 
-        // Hide the UI after picking
+        // Hide the UI
         gameObject.SetActive(false);
     }
+
+
 }

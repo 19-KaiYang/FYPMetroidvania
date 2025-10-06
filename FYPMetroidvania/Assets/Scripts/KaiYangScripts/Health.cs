@@ -191,6 +191,8 @@ public class Health : MonoBehaviour
 
         bool shouldPreserveVelocity = (forceCC == CrowdControlState.Knockdown && useRawForce);
 
+        Debug.Log($"{gameObject.name} took {amount} damage. Current HP = {currentHealth}");
+
         // Apply knockback only if no CC is specified (basically none)
         if (rb != null && hitDirection.HasValue && forceCC == CrowdControlState.None)
         {
