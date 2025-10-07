@@ -1,16 +1,20 @@
 using UnityEngine;
 
-public class FleetOfFootUpgrade : MonoBehaviour
+[CreateAssetMenu(fileName = "Fleet of Foot", menuName = "Upgrades/Mobility/Fleet of Foot", order = 1)]
+public class FleetOfFootUpgrade : Upgrade
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public float dashSpeedMultiplier = 1.25f; 
+    public int extraDashes = 1;               
+
+    public override void OnApply(UpgradeManager upgradeManager)
     {
-        
+        PlayerController.instance.dashSpeed *= dashSpeedMultiplier;
+        PlayerController.instance.dashCount += extraDashes;
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void OnRemove(UpgradeManager upgradeManager)
     {
-        
+        PlayerController.instance.dashSpeed /= dashSpeedMultiplier;
+        PlayerController.instance.dashCount -= extraDashes;
     }
 }

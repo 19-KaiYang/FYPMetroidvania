@@ -66,7 +66,8 @@ public class UpgradeSelectionUI : MonoBehaviour
 
     private void SelectUpgrade(Upgrade upgrade)
     {
-        if (upgrade is PixieWingsUpgrade)
+        // Apply the upgrade based on type
+        if (upgrade is PixieWingsUpgrade || upgrade is FleetOfFootUpgrade)
         {
             upgradeManager.MobilityUpgrade = upgrade;
             upgrade.OnApply(upgradeManager);
@@ -92,12 +93,13 @@ public class UpgradeSelectionUI : MonoBehaviour
             upgradeManager.AttackUpgrade = upgrade;
         }
 
-        // Resume
+        // Resume game - THIS NOW RUNS FOR ALL UPGRADES
         Time.timeScale = 1f;
 
         // Fire event so SceneTransition can continue
         OnUpgradeChosen?.Invoke();
 
+        // Close the UI
         Destroy(gameObject);
     }
 }
