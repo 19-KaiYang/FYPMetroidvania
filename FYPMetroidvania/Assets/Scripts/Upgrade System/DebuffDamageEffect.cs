@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Effects/DebuffDamageEffect")]
+[CreateAssetMenu(fileName = "DebuffDamage", menuName = "Effects/Debuff Damage")]
 public class DebuffDamageEffect : UpgradeEffect
 {
     public float damageMultiplier = 1.15f;
