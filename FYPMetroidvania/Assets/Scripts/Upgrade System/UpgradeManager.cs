@@ -59,10 +59,13 @@ public class UpgradeManager : MonoBehaviour
     // Basic Attack
     void OnBasicAttackStart(Hitbox hitbox)
     {
-        if (AttackUpgrade == null) return;
-        Debug.Log("Received attack upgrade event: " + hitbox.name);
         ActionContext context = new ActionContext(this, player, health, combatSystem, hb: hitbox);
-        AttackUpgrade.TryEffects(Trigger.OnStart, context);
+
+        if (AttackUpgrade != null)
+            AttackUpgrade.TryEffects(Trigger.OnStart, context);
+
+        foreach (Upgrade misc in MiscUpgrades)
+            misc.TryEffects(Trigger.OnStart, context);
     }
     void OnBasicAttackEnd()
     {
@@ -83,9 +86,13 @@ public class UpgradeManager : MonoBehaviour
     // Skills
     void OnSkillStart(Hitbox hitbox)
     {
-        if (SkillUpgrade == null) return;
-        ActionContext ctx = new ActionContext(this, player, health, combatSystem, skillManager, hitbox);
-        SkillUpgrade.TryEffects(Trigger.OnStart, ctx);
+        ActionContext context = new ActionContext(this, player, health, combatSystem, skillManager, hitbox);
+
+        if (SkillUpgrade != null)
+            SkillUpgrade.TryEffects(Trigger.OnStart, context);
+
+        foreach (Upgrade misc in MiscUpgrades)
+            misc.TryEffects(Trigger.OnStart, context);
     }
     void OnSkillEnd()
     {
