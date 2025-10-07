@@ -258,7 +258,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4490074815484616126, guid: 4a784ddfd22000c418f1725bb03ad141, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 317281746}
   m_SourcePrefab: {fileID: 100100000, guid: 4a784ddfd22000c418f1725bb03ad141, type: 3}
 --- !u!1 &87710250
 GameObject:
@@ -639,6 +642,28 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7032213864625655424, guid: 89a578ca472de19439c62d8383256cb9, type: 3}
   m_PrefabInstance: {fileID: 868048739}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &317281733 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4490074815484616126, guid: 4a784ddfd22000c418f1725bb03ad141, type: 3}
+  m_PrefabInstance: {fileID: 76839468}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &317281746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 317281733}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da0739f9832287e42b250c7ec38dd4ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UpgradeManager
+  AttackUpgrade: {fileID: 0}
+  SkillUpgrade: {fileID: 0}
+  SpiritUpgrade: {fileID: 0}
+  MobilityUpgrade: {fileID: 0}
+  MiscUpgrades: []
 --- !u!1 &329003068
 GameObject:
   m_ObjectHideFlags: 0
@@ -9952,11 +9977,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c5614658b95f0440a69ff4c2881ab2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeManager
-  AttackUpgrade: {fileID: 0}
-  SkillUpgrade: {fileID: 0}
-  SpiritUpgrade: {fileID: 0}
-  MobilityUpgrade: {fileID: 0}
-  MiscUpgrades: []
 --- !u!4 &1618878104 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1529716562217896946, guid: 89a578ca472de19439c62d8383256cb9, type: 3}
@@ -11491,6 +11511,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8780616739343995702, guid: d21725a38083a5440af0e2af387f94f3, type: 3}
+      propertyPath: upgradeMenuPrefab
+      value: 
+      objectReference: {fileID: 5554171416550155427, guid: 53b84a676ceca17438d8e97877c00356, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

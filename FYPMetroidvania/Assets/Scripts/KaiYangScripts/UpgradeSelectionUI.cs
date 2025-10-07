@@ -1,94 +1,103 @@
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections.Generic;
+using System;
 
 public class UpgradeSelectionUI : MonoBehaviour
 {
-    [Header("UI References")]
-    public TextMeshProUGUI[] optionLabels;   // Assign the 3 "New Text" TMP texts
-    public Button[] optionButtons;           // Assign the 3 "Select" buttons
+    public static event Action OnUpgradeChosen; 
 
-    [Header("Upgrade Pool")]
-    public Upgrade[] allUpgrades;            // Drag all your Upgrade assets here
+    public Button[] buttons;
+    public TextMeshProUGUI[] labels;
+    public List<Upgrade> upgradePool;
 
     private UpgradeManager upgradeManager;
-    private List<Upgrade> chosenUpgrades = new List<Upgrade>();
 
-    void Start()
+    void Awake()
     {
-        upgradeManager = PlayerController.instance.GetComponent<UpgradeManager>();
-        ShowRandomUpgrades();
-    }
-
-    void ShowRandomUpgrades()
-    {
-        chosenUpgrades.Clear();
-
-        // Pick 3 random upgrades
-        List<Upgrade> pool = new List<Upgrade>(allUpgrades);
-        for (int i = 0; i < 3 && pool.Count > 0; i++)
-        {
-            int idx = Random.Range(0, pool.Count);
-            Upgrade picked = pool[idx];
-            chosenUpgrades.Add(picked);
-            pool.RemoveAt(idx);
-
-            optionLabels[i].text = picked.name; // Show upgrade name
-
-            int capturedIndex = i; // capture for closure
-            optionButtons[i].onClick.RemoveAllListeners();
-            optionButtons[i].onClick.AddListener(() =>
-            {
-                SelectUpgrade(chosenUpgrades[capturedIndex]);
-            });
-        }
-    }
-
-    void SelectUpgrade(Upgrade upgrade)
-    {
-        // Decide where this upgrade belongs
-        if (upgrade is PixieWingsUpgrade)
-        {
-            // Mobility (only one)
-            upgradeManager.MobilityUpgrade = upgrade;
-            Debug.Log("Selected Mobility Upgrade: " + upgrade.name);
-        }
-        else if (upgrade is PixieDustAmp
-                 || upgrade.name.Contains("Dust Devil")
-                 || upgrade.name.Contains("Malicious Magic")
-                 || upgrade.name.Contains("Exploit Wounds")
-                 || upgrade.name.Contains("Rising Precision"))
-        {
-            // Misc (multiple allowed)
-            upgradeManager.MiscUpgrades.Add(upgrade);
-            Debug.Log("Selected Misc Upgrade: " + upgrade.name);
-        }
-        else if (upgrade.name.Contains("Skill"))
-        {
-            // Skills (only one)
-            upgradeManager.SkillUpgrade = upgrade;
-            Debug.Log("Selected Skill Upgrade: " + upgrade.name);
-        }
-        else if (upgrade.name.Contains("Spirit"))
-        {
-            // Spirit Attacks (only one)
-            upgradeManager.SpiritUpgrade = upgrade;
-            Debug.Log("Selected Spirit Upgrade: " + upgrade.name);
-        }
-        else
-        {
-            // Default to Attack
-            upgradeManager.AttackUpgrade = upgrade;
-            Debug.Log("Selected Attack Upgrade: " + upgrade.name);
-        }
-
-        // Apply it
-        upgrade.OnApply(upgradeManager);
-
-        // Hide the UI
+        upgradeManager = FindAnyObjectByType<UpgradeManager>();
         gameObject.SetActive(false);
     }
 
+    public void ShowMenu()
+    {
+        Time.timeScale = 0f;
+        gameObject.SetActive(true);
+        ShowRandomUpgrades();
+    }
 
+    private void ShowRandomUpgrades()
+    {
+        List<Upgrade> options = new List<Upgrade>(upgradePool);
+
+        if (upgradeManager.AttackUpgrade != null)
+            options.Remove(upgradeManager.AttackUpgrade);
+        if (upgradeManager.SkillUpgrade != null)
+            options.Remove(upgradeManager.SkillUpgrade);
+        if (upgradeManager.SpiritUpgrade != null)
+            options.Remove(upgradeManager.SpiritUpgrade);
+        if (upgradeManager.MobilityUpgrade != null)
+            options.Remove(upgradeManager.MobilityUpgrade);
+        foreach (var misc in upgradeManager.MiscUpgrades)
+            options.Remove(misc);
+
+        for (int i = 0; i < buttons.Length; i++)
+        {
+            if (options.Count == 0)
+            {
+                labels[i].text = "No More Upgrades";
+                buttons[i].onClick.RemoveAllListeners();
+                buttons[i].interactable = false;
+                continue;
+            }
+
+            int index = UnityEngine.Random.Range(0, options.Count);
+            Upgrade upgrade = options[index];
+            options.RemoveAt(index);
+
+            labels[i].text = upgrade.name;
+
+            buttons[i].onClick.RemoveAllListeners();
+            buttons[i].onClick.AddListener(() => SelectUpgrade(upgrade));
+            buttons[i].interactable = true;
+        }
+    }
+
+    private void SelectUpgrade(Upgrade upgrade)
+    {
+        if (upgrade is PixieWingsUpgrade)
+        {
+            upgradeManager.MobilityUpgrade = upgrade;
+            upgrade.OnApply(upgradeManager);
+        }
+        else if (upgrade.name.Contains("Skill"))
+        {
+            upgradeManager.SkillUpgrade = upgrade;
+        }
+        else if (upgrade.name.Contains("Spirit"))
+        {
+            upgradeManager.SpiritUpgrade = upgrade;
+        }
+        else if (upgrade.name.Contains("Dust Devil") ||
+                 upgrade.name.Contains("Malicious Magic") ||
+                 upgrade.name.Contains("Exploit Wounds") ||
+                 upgrade.name.Contains("Rising Precision"))
+        {
+            upgradeManager.MiscUpgrades.Add(upgrade);
+            upgrade.OnApply(upgradeManager);
+        }
+        else
+        {
+            upgradeManager.AttackUpgrade = upgrade;
+        }
+
+        // Resume
+        Time.timeScale = 1f;
+
+        // Fire event so SceneTransition can continue
+        OnUpgradeChosen?.Invoke();
+
+        Destroy(gameObject);
+    }
 }
