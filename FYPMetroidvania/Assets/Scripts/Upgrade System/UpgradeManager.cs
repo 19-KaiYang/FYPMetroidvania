@@ -53,6 +53,10 @@ public class UpgradeManager : MonoBehaviour
         Skills.skillHit += OnSkillHit;
         Skills.skillEnd += OnSkillEnd;
 
+        Skills.OnUltimateStart += OnUltimateStart;
+        Skills.OnUltimateHit += OnUltimateHit;
+        Skills.OnUltimateEnd += OnUltimateEnd;
+
     }
 
     #region Processing Events
@@ -108,17 +112,31 @@ public class UpgradeManager : MonoBehaviour
     }
 
     // Ultimate
-    void OnUltStart()
+    void OnUltimateStart(Hitbox hitbox)
     {
+        ActionContext context = new ActionContext(this, player, health, combatSystem, hb: hitbox);
 
+        if (SpiritUpgrade != null)
+            SpiritUpgrade.TryEffects(Trigger.OnStart, context);
+
+        foreach (Upgrade misc in MiscUpgrades)
+            misc.TryEffects(Trigger.OnStart, context);
     }
-    void OnUltEnd()
-    {
 
+    void OnUltimateHit(Hitbox hitbox, Health enemy)
+    {
+        if (SpiritUpgrade == null) return;
+
+        ActionContext context = new ActionContext(this, player, health, combatSystem, hb: hitbox, enemy: enemy);
+        SpiritUpgrade.TryEffects(Trigger.OnHit, context);
     }
-    void OnUltHit()
-    {
 
+    void OnUltimateEnd()
+    {
+        if (SpiritUpgrade == null) return;
+
+        ActionContext context = new ActionContext(this, player, health, combatSystem);
+        SpiritUpgrade.TryEffects(Trigger.OnEnd, context);
     }
 
     // Misc
@@ -145,6 +163,10 @@ public class UpgradeManager : MonoBehaviour
         Skills.skillStart -= OnSkillStart;
         Skills.skillHit -= OnSkillHit;
         Skills.skillEnd -= OnSkillEnd;
+
+        Skills.OnUltimateStart -= OnUltimateStart;
+        Skills.OnUltimateHit -= OnUltimateHit;
+        Skills.OnUltimateEnd -= OnUltimateEnd;
 
 
         foreach (Upgrade upgrade in MiscUpgrades)
