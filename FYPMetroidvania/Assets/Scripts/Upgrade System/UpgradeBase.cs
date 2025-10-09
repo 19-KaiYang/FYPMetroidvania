@@ -8,6 +8,12 @@ public enum Trigger
     OnStart,
     OnHit,
     OnEnd,
+    OnAttackStart,   
+    OnAttackHit,       
+    OnAttackEnd,       
+    OnSkillStart,      
+    OnSkillHit,       
+    OnSkillEnd,
 }
 public abstract class Upgrade : ScriptableObject
 {
