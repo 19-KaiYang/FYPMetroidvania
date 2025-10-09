@@ -66,7 +66,6 @@ public class UpgradeSelectionUI : MonoBehaviour
 
     private void SelectUpgrade(Upgrade upgrade)
     {
-        // Apply the upgrade based on type
         if (upgrade is PixieWingsUpgrade || upgrade is FleetOfFootUpgrade)
         {
             upgradeManager.MobilityUpgrade = upgrade;
@@ -83,7 +82,8 @@ public class UpgradeSelectionUI : MonoBehaviour
         else if (upgrade.name.Contains("Dust Devil") ||
                  upgrade.name.Contains("Malicious Magic") ||
                  upgrade.name.Contains("Exploit Wounds") ||
-                 upgrade.name.Contains("Rising Precision"))
+                 upgrade.name.Contains("Rising Precision") ||
+                 upgrade.name.Contains("Ferocious Fairy")) 
         {
             upgradeManager.MiscUpgrades.Add(upgrade);
             upgrade.OnApply(upgradeManager);
@@ -93,13 +93,10 @@ public class UpgradeSelectionUI : MonoBehaviour
             upgradeManager.AttackUpgrade = upgrade;
         }
 
-        // Resume game - THIS NOW RUNS FOR ALL UPGRADES
         Time.timeScale = 1f;
 
-        // Fire event so SceneTransition can continue
         OnUpgradeChosen?.Invoke();
 
-        // Close the UI
         Destroy(gameObject);
     }
 }
