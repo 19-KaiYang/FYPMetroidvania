@@ -30,6 +30,9 @@ public class CombatSystem : MonoBehaviour
 
     public OverheatSystem overheat;
 
+    [Header("Particle Effects")]
+    public Animator particleEffectAnimator;
+
     [Header("General Attack Settings")]
     public float baseAttackDamage = 10f;
     public float OverheatMultiplier;
@@ -55,6 +58,9 @@ public class CombatSystem : MonoBehaviour
     [Header("Melee Combo Hitboxes")]
     public List<GameObject> swordHitboxes;
     public List<GameObject> gauntletHitboxes;
+
+
+
 
     private List<GameObject> activeHitboxes;
 
@@ -435,6 +441,7 @@ public class CombatSystem : MonoBehaviour
         animator.SetTrigger("DoAttack");
         animator.SetInteger("ComboStep", comboStep);
 
+
         controller.externalVelocityOverride = false;
         controller.SetHitstop(false); // clear any leftover hitstop
 
@@ -494,6 +501,35 @@ public class CombatSystem : MonoBehaviour
         }
     }
 
+    //Particle Effect Animation Events
+    // Call these from Animation Events
+    public void PlayEffect1()
+    {
+        if (particleEffectAnimator != null)
+        {
+            particleEffectAnimator.SetTrigger("Effect1");
+            Debug.Log("Playing Effect1");
+        }
+    }
+
+    public void PlayEffect2()
+    {
+        if (particleEffectAnimator != null)
+        {
+            particleEffectAnimator.SetTrigger("Effect2");
+            Debug.Log("Playing Effect2");
+        }
+    }
+
+    public void PlayEffect3()
+    {
+        if (particleEffectAnimator != null)
+        {
+            particleEffectAnimator.SetTrigger("Effect3");
+            Debug.Log("Playing Effect3");
+        }
+    }
+
 
 
     // === DAMAGE MULTIPLIER ===
@@ -508,7 +544,6 @@ public class CombatSystem : MonoBehaviour
         };
     }
 
-
     private void ResetCombo()
     {
         comboStep = 0;
@@ -517,9 +552,11 @@ public class CombatSystem : MonoBehaviour
         if (animator != null)
             animator.SetInteger("ComboStep", 0);
 
+
         controller.externalVelocityOverride = false;
         controller.SetHitstop(false);
     }
+
 
 
     public float GetAttackDamage(int attackNumber)

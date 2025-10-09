@@ -26,4 +26,22 @@ public class AnimationEventRelay : MonoBehaviour
     public void EnableGauntletDownHitbox() => combatSystem?.gauntletDownHitbox?.SetActive(true);
     public void DisableGauntletDownHitbox() => combatSystem?.DisableGauntletDownHitbox();
 
+
+    public void PlayEffect1()
+    {
+        if (combatSystem != null)
+            combatSystem.PlayEffect1();
+    }
+
+    public void PlayEffect2()
+    {
+        if (combatSystem != null)
+            combatSystem.PlayEffect2();
+    }
+
+    public void PlayEffect3()
+    {
+        if (combatSystem != null)
+            combatSystem.PlayEffect3();
+    }
 }
