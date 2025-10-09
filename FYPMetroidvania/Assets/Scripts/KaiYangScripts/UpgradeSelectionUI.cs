@@ -84,7 +84,8 @@ public class UpgradeSelectionUI : MonoBehaviour
                  upgrade.name.Contains("Exploit Wounds") ||
                  upgrade.name.Contains("Rising Precision") ||
                  upgrade.name.Contains("Ferocious Fairy") ||
-                 upgrade.name.Contains("Pixie Pellet"))
+                 upgrade.name.Contains("Pixie Pellet") ||
+                 upgrade.name.Contains("Sharp Winds"))
         {
             upgradeManager.MiscUpgrades.Add(upgrade);
             upgrade.OnApply(upgradeManager);
