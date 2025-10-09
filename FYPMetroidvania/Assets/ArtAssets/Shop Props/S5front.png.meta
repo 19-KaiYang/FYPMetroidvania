@@ -1,13 +1,13 @@
 fileFormatVersion: 2
-guid: 81e8bdb9a238d854da4debd840a7eaad
+guid: 1620e709ce785424caab7f1c263aa176
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -3033972763378951029
-    second: S4front_0
+      213: -1575644740810710143
+    second: S5front_0
   - first:
-      213: 1785714381386972861
-    second: S4front_1
+      213: 3659503264869754447
+    second: S5front_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -103,13 +103,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: S4front_0
+      name: S5front_0
       rect:
         serializedVersion: 2
-        x: 484
-        y: 337
-        width: 541
-        height: 398
+        x: 900
+        y: 330
+        width: 1122
+        height: 627
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -118,20 +118,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: b8c569ca8d925e5d0800000000000000
-      internalID: -3033972763378951029
+      spriteID: 183e3c3d47f222ae0800000000000000
+      internalID: -1575644740810710143
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: S4front_1
+      name: S5front_1
       rect:
         serializedVersion: 2
-        x: 1814
-        y: 305
-        width: 811
-        height: 579
+        x: 2283
+        y: 330
+        width: 349
+        height: 317
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -140,8 +140,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: dbe70ecc4c128c810800000000000000
-      internalID: 1785714381386972861
+      spriteID: f46a1fc94da29c230800000000000000
+      internalID: 3659503264869754447
       vertices: []
       indices: 
       edges: []
@@ -160,8 +160,8 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      S4front_0: -3033972763378951029
-      S4front_1: 1785714381386972861
+      S5front_0: -1575644740810710143
+      S5front_1: 3659503264869754447
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
