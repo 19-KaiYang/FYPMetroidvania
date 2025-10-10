@@ -7999,86 +7999,6 @@ Tilemap:
       m_TileObjectToInstantiateIndex: 65535
       dummyAlignment: 0
       m_AllTileFlags: 1073741825
-  - first: {x: -1, y: 13, z: 0}
-    second:
-      serializedVersion: 2
-      m_TileIndex: 18
-      m_TileSpriteIndex: 18
-      m_TileMatrixIndex: 0
-      m_TileColorIndex: 0
-      m_TileObjectToInstantiateIndex: 65535
-      dummyAlignment: 0
-      m_AllTileFlags: 1073741825
-  - first: {x: 0, y: 13, z: 0}
-    second:
-      serializedVersion: 2
-      m_TileIndex: 18
-      m_TileSpriteIndex: 18
-      m_TileMatrixIndex: 0
-      m_TileColorIndex: 0
-      m_TileObjectToInstantiateIndex: 65535
-      dummyAlignment: 0
-      m_AllTileFlags: 1073741825
-  - first: {x: 1, y: 13, z: 0}
-    second:
-      serializedVersion: 2
-      m_TileIndex: 18
-      m_TileSpriteIndex: 18
-      m_TileMatrixIndex: 0
-      m_TileColorIndex: 0
-      m_TileObjectToInstantiateIndex: 65535
-      dummyAlignment: 0
-      m_AllTileFlags: 1073741825
-  - first: {x: 2, y: 13, z: 0}
-    second:
-      serializedVersion: 2
-      m_TileIndex: 18
-      m_TileSpriteIndex: 18
-      m_TileMatrixIndex: 0
-      m_TileColorIndex: 0
-      m_TileObjectToInstantiateIndex: 65535
-      dummyAlignment: 0
-      m_AllTileFlags: 1073741825
-  - first: {x: 3, y: 13, z: 0}
-    second:
-      serializedVersion: 2
-      m_TileIndex: 18
-      m_TileSpriteIndex: 18
-      m_TileMatrixIndex: 0
-      m_TileColorIndex: 0
-      m_TileObjectToInstantiateIndex: 65535
-      dummyAlignment: 0
-      m_AllTileFlags: 1073741825
-  - first: {x: 4, y: 13, z: 0}
-    second:
-      serializedVersion: 2
-      m_TileIndex: 18
-      m_TileSpriteIndex: 18
-      m_TileMatrixIndex: 0
-      m_TileColorIndex: 0
-      m_TileObjectToInstantiateIndex: 65535
-      dummyAlignment: 0
-      m_AllTileFlags: 1073741825
-  - first: {x: 5, y: 13, z: 0}
-    second:
-      serializedVersion: 2
-      m_TileIndex: 18
-      m_TileSpriteIndex: 18
-      m_TileMatrixIndex: 0
-      m_TileColorIndex: 0
-      m_TileObjectToInstantiateIndex: 65535
-      dummyAlignment: 0
-      m_AllTileFlags: 1073741825
-  - first: {x: 6, y: 13, z: 0}
-    second:
-      serializedVersion: 2
-      m_TileIndex: 18
-      m_TileSpriteIndex: 18
-      m_TileMatrixIndex: 0
-      m_TileColorIndex: 0
-      m_TileObjectToInstantiateIndex: 65535
-      dummyAlignment: 0
-      m_AllTileFlags: 1073741825
   - first: {x: 7, y: 13, z: 0}
     second:
       serializedVersion: 2
@@ -8717,7 +8637,7 @@ Tilemap:
     m_Data: {fileID: 11400000, guid: 02705234162a634428b1224aeb4e4c32, type: 2}
   - m_RefCount: 313
     m_Data: {fileID: 11400000, guid: 5c1ae36719230b14bae1e17f5bae4073, type: 2}
-  - m_RefCount: 155
+  - m_RefCount: 147
     m_Data: {fileID: 11400000, guid: 344cf4823725e604d9e1a1710c207351, type: 2}
   m_TileSpriteArray:
   - m_RefCount: 0
@@ -8756,10 +8676,10 @@ Tilemap:
     m_Data: {fileID: 381396441241331912, guid: 3cd8c98f07497bf478f8deb818412dbc, type: 3}
   - m_RefCount: 313
     m_Data: {fileID: 207627494, guid: 3cd8c98f07497bf478f8deb818412dbc, type: 3}
-  - m_RefCount: 155
+  - m_RefCount: 147
     m_Data: {fileID: 270315110, guid: 3cd8c98f07497bf478f8deb818412dbc, type: 3}
   m_TileMatrixArray:
-  - m_RefCount: 688
+  - m_RefCount: 680
     m_Data:
       e00: 1
       e01: 0
@@ -8778,7 +8698,7 @@ Tilemap:
       e32: 0
       e33: 1
   m_TileColorArray:
-  - m_RefCount: 687
+  - m_RefCount: 679
     m_Data: {r: 1, g: 1, b: 1, a: 1}
   - m_RefCount: 0
     m_Data: {r: 5e-44, g: 5e-44, b: 5e-44, a: 5e-44}
@@ -9974,7 +9894,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -10.120373, y: 1.5225339}
+  m_Offset: {x: -26.214846, y: 1.5225339}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -9984,7 +9904,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1.0895615, y: 6.1945276}
+  m_Size: {x: 33.278507, y: 6.1945276}
   m_EdgeRadius: 0
 --- !u!212 &1079298739
 SpriteRenderer:
@@ -21682,7 +21602,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.5756496, g: 0.59147835, b: 0.61635214, a: 0}
+  m_BackGroundColor: {r: 0.654902, g: 0.7607843, b: 0.91764706, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
