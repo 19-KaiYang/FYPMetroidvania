@@ -60,8 +60,6 @@ public class CombatSystem : MonoBehaviour
     public List<GameObject> gauntletHitboxes;
 
 
-
-
     private List<GameObject> activeHitboxes;
 
     private Animator animator;

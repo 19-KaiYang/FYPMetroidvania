@@ -97,12 +97,13 @@ public class UpgradeManager : MonoBehaviour
         ActionContext context = new ActionContext(this, player, health, combatSystem, hb: hitbox, enemy: hit);
 
         if (AttackUpgrade != null)
-            AttackUpgrade.TryEffects(Trigger.OnHit, context);
+            AttackUpgrade.TryEffects(Trigger.OnAttackHit, context);   
 
-        // Also check misc upgrades for OnAttackHit
+        // Misc upgrades that care about basic attack hits
         foreach (Upgrade misc in MiscUpgrades)
             misc.TryEffects(Trigger.OnAttackHit, context);
     }
+
 
     // Skills
     void OnSkillStart(Hitbox hitbox)
@@ -134,9 +135,8 @@ public class UpgradeManager : MonoBehaviour
         ActionContext ctx = new ActionContext(this, player, health, combatSystem, skillManager, hitbox, enemy);
 
         if (SkillUpgrade != null)
-            SkillUpgrade.TryEffects(Trigger.OnHit, ctx);
+            SkillUpgrade.TryEffects(Trigger.OnSkillHit, ctx);  
 
-        // Trigger OnSkillHit for misc upgrades
         foreach (Upgrade misc in MiscUpgrades)
             misc.TryEffects(Trigger.OnSkillHit, ctx);
     }
@@ -149,7 +149,6 @@ public class UpgradeManager : MonoBehaviour
         if (SpiritUpgrade != null)
             SpiritUpgrade.TryEffects(Trigger.OnStart, context);
 
-        // Use OnSkillStart for ultimates too (or create OnUltimateStart if you want)
         foreach (Upgrade misc in MiscUpgrades)
             misc.TryEffects(Trigger.OnSkillStart, context);
     }
