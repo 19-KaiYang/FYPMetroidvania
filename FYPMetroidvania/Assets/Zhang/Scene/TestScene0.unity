@@ -278,6 +278,10 @@ PrefabInstance:
       propertyPath: fadeOutTime
       value: 0.15
       objectReference: {fileID: 0}
+    - target: {fileID: 9102298203472074255, guid: ee182696bfe6fc841961ec2d6c8c5124, type: 3}
+      propertyPath: progressionData
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -401,11 +405,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1e1739c0903e8ec4d9d3327f37a4abe7, type: 3}
---- !u!4 &856767149 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7202174868536862745, guid: 13775344399b2974daca82989c71d56e, type: 3}
-  m_PrefabInstance: {fileID: 1425278525}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1004190506
 GameObject:
   m_ObjectHideFlags: 0
@@ -574,7 +573,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac24c21d60940b940b79d144e26c8882, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraFollow
-  target: {fileID: 856767149}
+  target: {fileID: 0}
   smoothSpeed: 5
   offset: {x: 0, y: 0, z: -10}
 --- !u!81 &1176691260

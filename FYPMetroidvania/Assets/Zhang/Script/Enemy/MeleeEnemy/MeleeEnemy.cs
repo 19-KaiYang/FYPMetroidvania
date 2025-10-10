@@ -32,7 +32,7 @@ public class MeleeEnemy : Enemy
 
     [SerializeField] private float meleeAttackCooldown;
     [SerializeField] private float meleeAttackTimer;
-    [SerializeField] private bool isAttackFinished;
+    [SerializeField] public bool isAttackFinished {  get;  set; }
 
     [SerializeField] private float jumpCooldown;
     [SerializeField] private float jumpTimer;
@@ -156,11 +156,9 @@ public class MeleeEnemy : Enemy
     {
         currentState = _state.GetType().Name;
     }
-
     public override void TakeDamage(float _damage, Vector2 _dir)
     {
         base.TakeDamage(_damage, _dir);
-
     }
 
     public class MeleeEnemyIdleState : IState
@@ -214,16 +212,21 @@ public class MeleeEnemy : Enemy
 
             if (enemy.playerDetected)
             {
-                if (Mathf.Abs(enemy.distanceToPlayer.x) >= Mathf.Abs(enemy.attackAreaOffset.x))
+                if (Mathf.Abs(enemy.distanceToPlayer.x) >= Mathf.Abs(enemy.attackAreaOffset.x) && enemy.health.currentCCState == CrowdControlState.None)
                 {
+                    enemy.animator.SetBool("isWalk", true);
                     enemy.FaceToPlayer();
-                    enemy.rb.linearVelocity = new Vector2(enemy.moveSpeed * enemy.transform.localScale.x, 0);
+                    enemy.rb.linearVelocity = new Vector2(enemy.moveSpeed * enemy.transform.localScale.x, enemy.rb.linearVelocityY);
+                }
+                else
+                {
+                    enemy.animator.SetBool("isWalk", false);
                 }
 
                 if (Mathf.Abs(enemy.distanceToPlayer.x) < 99 && Mathf.Abs(enemy.distanceToPlayer.x) > Mathf.Abs(enemy.attackAreaOffset.x * 2))
                 {
                     enemy.jumpTimer += Time.deltaTime;
-                    if(enemy.jumpTimer>= enemy.jumpCooldown)
+                    if (enemy.jumpTimer >= enemy.jumpCooldown)
                     {
                         enemy.stateMachine.ChangeState(new MeleeEnemyAttackState(enemy));
                     }
@@ -241,6 +244,7 @@ public class MeleeEnemy : Enemy
         }
         public void OnExit()
         {
+            
         }
     }
 
@@ -323,6 +327,7 @@ public class MeleeEnemy : Enemy
         public void OnExit()
         {
             enemy.distanceOffset = 0;
+            enemy.rb.linearVelocity = Vector2.zero;
         }
 
         private IEnumerator Wait(float _time)
@@ -343,7 +348,7 @@ public class MeleeEnemy : Enemy
 
         public void OnEnter()
         {
-            enemy.animator.SetTrigger("Attack");
+            enemy.animator.SetTrigger("attack");
             enemy.isAttackFinished = false;
             enemy.meleeAttackTimer = 0;
         }

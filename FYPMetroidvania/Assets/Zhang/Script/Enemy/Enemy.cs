@@ -1,6 +1,7 @@
+using System;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour, IDamageable
+public class Enemy : MonoBehaviour
 {
     //[Header("-")]
     protected Rigidbody2D rb;
@@ -35,18 +36,25 @@ public class Enemy : MonoBehaviour, IDamageable
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        animator = GetComponentInChildren<Animator>();
         player = FindFirstObjectByType<PlayerController>();
         health = GetComponent<Health>();
     }
 
     void Start()
     {
+        //health.damageTaken += SpawnParticle;
         currentHealth = maxHealth;
     }
 
     protected virtual void Update()
     {
         distanceToPlayer = transform.position - player.transform.position;
+    }
+
+    public void SpawnParticle(GameObject other)
+    {
+        
     }
 
     protected virtual void Flip()
@@ -82,15 +90,5 @@ public class Enemy : MonoBehaviour, IDamageable
     public virtual void Die()
     {
 
-    }
-    protected virtual void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Player"))
-        {
-            var p = player.GetComponent<Health>();
-            Debug.Log("Player take damage");
-            Vector2 dir = (player.transform.position - transform.position).normalized;
-            p.TakeDamage(attackDamage, dir, false, CrowdControlState.None, 0f);
-        }
     }
 }
