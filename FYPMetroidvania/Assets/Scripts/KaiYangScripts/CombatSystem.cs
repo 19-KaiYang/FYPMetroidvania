@@ -430,11 +430,11 @@ public class CombatSystem : MonoBehaviour
         if (comboStep > 3)
         {
             comboStep = 1;
-            comboTimer = 0.3f; 
+            comboTimer = 0.5f; 
         }
         else
         {
-            comboTimer = 0.6f;  
+            comboTimer = 0.8f;  
         }
 
         attackCooldownTimer = attackCooldown;

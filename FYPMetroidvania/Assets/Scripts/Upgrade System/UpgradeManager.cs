@@ -92,14 +92,20 @@ public class UpgradeManager : MonoBehaviour
 
     void OnBasicAttackHit(Hitbox hitbox, Health hit)
     {
+        if (hitbox.gameObject == skillManager.swordDashHitbox ||
+            hitbox.gameObject == skillManager.swordUppercutHitbox ||
+            hitbox.gameObject == skillManager.gauntletShockwaveHitbox)
+        {
+            return; 
+        }
+
         Debug.Log("Hit!");
 
         ActionContext context = new ActionContext(this, player, health, combatSystem, hb: hitbox, enemy: hit);
 
         if (AttackUpgrade != null)
-            AttackUpgrade.TryEffects(Trigger.OnAttackHit, context);   
+            AttackUpgrade.TryEffects(Trigger.OnAttackHit, context);
 
-        // Misc upgrades that care about basic attack hits
         foreach (Upgrade misc in MiscUpgrades)
             misc.TryEffects(Trigger.OnAttackHit, context);
     }
@@ -132,14 +138,15 @@ public class UpgradeManager : MonoBehaviour
 
     void OnSkillHit(Hitbox hitbox, Health enemy)
     {
-        ActionContext ctx = new ActionContext(this, player, health, combatSystem, skillManager, hitbox, enemy);
+        ActionContext ctx = new ActionContext(this, player, health, cs: null, skills: skillManager, hb: hitbox, enemy: enemy);
 
         if (SkillUpgrade != null)
-            SkillUpgrade.TryEffects(Trigger.OnSkillHit, ctx);  
+            SkillUpgrade.TryEffects(Trigger.OnSkillHit, ctx);
 
         foreach (Upgrade misc in MiscUpgrades)
             misc.TryEffects(Trigger.OnSkillHit, ctx);
     }
+
 
     // Ultimate
     void OnUltimateStart(Hitbox hitbox)
