@@ -416,10 +416,6 @@ public class CombatSystem : MonoBehaviour
         }
     }
 
-
-
-
-
     private void PerformAttack()
     {
         if (currentWeapon == WeaponType.Gauntlet && skills != null)
@@ -433,17 +429,23 @@ public class CombatSystem : MonoBehaviour
 
         // Normal flow
         comboStep++;
-        if (comboStep > 3) comboStep = 1;
+        if (comboStep > 3)
+        {
+            comboStep = 1;
+            comboTimer = 0.3f; 
+        }
+        else
+        {
+            comboTimer = 0.6f;  
+        }
 
-        comboTimer = 1f;
         attackCooldownTimer = attackCooldown;
 
         animator.SetTrigger("DoAttack");
         animator.SetInteger("ComboStep", comboStep);
 
-
         controller.externalVelocityOverride = false;
-        controller.SetHitstop(false); // clear any leftover hitstop
+        controller.SetHitstop(false);
 
         Debug.Log($"Performing Combo Step {comboStep} with {currentWeapon}");
     }
