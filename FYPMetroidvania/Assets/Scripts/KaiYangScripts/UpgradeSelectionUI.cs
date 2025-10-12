@@ -6,10 +6,18 @@ using System;
 
 public class UpgradeSelectionUI : MonoBehaviour
 {
-    public static event Action OnUpgradeChosen; 
+    public static event Action OnUpgradeChosen;
 
+    [Header("UI References")]
     public Button[] buttons;
-    public TextMeshProUGUI[] labels;
+
+    public TextMeshProUGUI[] nameLabels;
+
+    public TextMeshProUGUI[] descriptionLabels;
+
+    public Image[] icons;
+
+    [Header("Upgrades Pool")]
     public List<Upgrade> upgradePool;
 
     private UpgradeManager upgradeManager;
@@ -31,6 +39,7 @@ public class UpgradeSelectionUI : MonoBehaviour
     {
         List<Upgrade> options = new List<Upgrade>(upgradePool);
 
+        // Remove upgrades already chosen
         if (upgradeManager.AttackUpgrade != null)
             options.Remove(upgradeManager.AttackUpgrade);
         if (upgradeManager.SkillUpgrade != null)
@@ -42,22 +51,35 @@ public class UpgradeSelectionUI : MonoBehaviour
         foreach (var misc in upgradeManager.MiscUpgrades)
             options.Remove(misc);
 
+        // Populate UI slots
         for (int i = 0; i < buttons.Length; i++)
         {
             if (options.Count == 0)
             {
-                labels[i].text = "No More Upgrades";
+                nameLabels[i].text = "No More Upgrades";
+                descriptionLabels[i].text = "";
+                icons[i].enabled = false;
+
                 buttons[i].onClick.RemoveAllListeners();
                 buttons[i].interactable = false;
                 continue;
             }
 
+            // Pick random upgrade
             int index = UnityEngine.Random.Range(0, options.Count);
             Upgrade upgrade = options[index];
             options.RemoveAt(index);
 
-            labels[i].text = upgrade.name;
+            // Assign UI visuals
+            nameLabels[i].text = !string.IsNullOrEmpty(upgrade.displayName) ? upgrade.displayName : upgrade.name;
+            descriptionLabels[i].text = upgrade.description;
+            if (icons != null && i < icons.Length && icons[i] != null)
+            {
+                icons[i].sprite = upgrade.icon;
+                icons[i].enabled = (upgrade.icon != null);
+            }
 
+            // Assign button listener
             buttons[i].onClick.RemoveAllListeners();
             buttons[i].onClick.AddListener(() => SelectUpgrade(upgrade));
             buttons[i].interactable = true;
@@ -66,6 +88,7 @@ public class UpgradeSelectionUI : MonoBehaviour
 
     private void SelectUpgrade(Upgrade upgrade)
     {
+        // Assign to correct category
         if (upgrade is PixieWingsUpgrade || upgrade is FleetOfFootUpgrade)
         {
             upgradeManager.MobilityUpgrade = upgrade;
@@ -96,9 +119,7 @@ public class UpgradeSelectionUI : MonoBehaviour
         }
 
         Time.timeScale = 1f;
-
         OnUpgradeChosen?.Invoke();
-
         Destroy(gameObject);
     }
 }

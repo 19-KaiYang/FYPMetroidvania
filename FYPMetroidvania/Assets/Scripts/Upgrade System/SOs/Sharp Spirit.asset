@@ -12,6 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d09bed38c1871447ba73ede8caaa730, type: 3}
   m_Name: Sharp Spirit
   m_EditorClassIdentifier: Assembly-CSharp::SharpSpiritUpgrade
+  displayName: Sharp Spirit
+  description: 'Spirit Attack deal 20% more damage and applies Bleed to enemies for
+    5 seconds
+
+'
+  icon: {fileID: 9172479352961240733, guid: db4678b8234ce884e8026f2d5062e648, type: 3}
   effects:
   - {fileID: 11400000, guid: 1dfd9ef4aba9c924d97a5b981b588895, type: 2}
   - {fileID: 11400000, guid: b29d98b5853477b418a04f2aa5c891a9, type: 2}

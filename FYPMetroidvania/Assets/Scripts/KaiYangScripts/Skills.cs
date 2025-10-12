@@ -253,12 +253,6 @@ public class Skills : MonoBehaviour
             chargeMain = sharedChargeParticles.main;
             chargeEmission = sharedChargeParticles.emission;
         }
-
-        Debug.Log($"<color=red>SKILLS AWAKE - Spirit component found: {(spirit != null ? "YES" : "NO")}</color>");
-        if (spirit != null)
-        {
-            Debug.Log($"<color=red>Spirit enabled: {spirit.enabled}, MaxSpirit: {spirit.maxSpirit}</color>");
-        }
     }
 
     private void Update()

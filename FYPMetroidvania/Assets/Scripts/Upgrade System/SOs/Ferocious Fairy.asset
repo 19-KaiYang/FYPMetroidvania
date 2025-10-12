@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db2154253fe995041a916eab0c75c479, type: 3}
   m_Name: Ferocious Fairy
   m_EditorClassIdentifier: Assembly-CSharp::PixieDustAmp
+  displayName: Ferocious Fairy
+  description: Pixie Dust now stacks up to 20 times instead of 10.
+  icon: {fileID: -7533562788530887314, guid: b73e9e1753a66514189918c5417efc4b, type: 3}
   effects: []
   pixieDust: {fileID: 11400000, guid: 7bd94a70827cc06468d1240278486ef4, type: 2}
   buffedmaxStacks: 20

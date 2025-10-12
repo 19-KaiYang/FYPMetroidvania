@@ -12,5 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebda3246b4d97524b9295f4575bfc7bd, type: 3}
   m_Name: Sharp Skills
   m_EditorClassIdentifier: Assembly-CSharp::SimpleUpgrade
+  displayName: Sharp Skills
+  description: Skills apply Bleed to enemies for 5 seconds
+  icon: {fileID: -5173710704314385747, guid: 3653d0463c02dca47b124868174a9ab3, type: 3}
   effects:
   - {fileID: 11400000, guid: 0c7e2381ac881294389cf4a9ae6db2f1, type: 2}
