@@ -9305,9 +9305,37 @@ PrefabInstance:
       value: -----SceneTransitionManager-----
       objectReference: {fileID: 0}
     - target: {fileID: 9102298203472074255, guid: ee182696bfe6fc841961ec2d6c8c5124, type: 3}
+      propertyPath: isTrasition
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9102298203472074255, guid: ee182696bfe6fc841961ec2d6c8c5124, type: 3}
       propertyPath: progressionData
       value: 
       objectReference: {fileID: 11400000, guid: 9a45de39abcecc9409f002adc8d96248, type: 2}
+    - target: {fileID: 9102298203472074255, guid: ee182696bfe6fc841961ec2d6c8c5124, type: 3}
+      propertyPath: currentSceneName
+      value: Room1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9102298203472074255, guid: ee182696bfe6fc841961ec2d6c8c5124, type: 3}
+      propertyPath: rooms.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 9102298203472074255, guid: ee182696bfe6fc841961ec2d6c8c5124, type: 3}
+      propertyPath: 'rooms.Array.data[0]'
+      value: Room1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9102298203472074255, guid: ee182696bfe6fc841961ec2d6c8c5124, type: 3}
+      propertyPath: 'rooms.Array.data[1]'
+      value: Room2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9102298203472074255, guid: ee182696bfe6fc841961ec2d6c8c5124, type: 3}
+      propertyPath: 'rooms.Array.data[2]'
+      value: Room3
+      objectReference: {fileID: 0}
+    - target: {fileID: 9102298203472074255, guid: ee182696bfe6fc841961ec2d6c8c5124, type: 3}
+      propertyPath: 'rooms.Array.data[3]'
+      value: Room4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -11341,6 +11369,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8780616739343995702, guid: d21725a38083a5440af0e2af387f94f3, type: 3}
+      propertyPath: nextSceneName
+      value: Room2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8780616739343995702, guid: d21725a38083a5440af0e2af387f94f3, type: 3}
       propertyPath: upgradeMenuPrefab
       value: 
       objectReference: {fileID: 5554171416550155427, guid: 53b84a676ceca17438d8e97877c00356, type: 3}
@@ -11594,7 +11626,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1971176727303227366, guid: 8aaf914212a591e4b83ee556297882c5, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.56
+      value: 3.36
       objectReference: {fileID: 0}
     - target: {fileID: 1971176727303227366, guid: 8aaf914212a591e4b83ee556297882c5, type: 3}
       propertyPath: m_LocalPosition.y
