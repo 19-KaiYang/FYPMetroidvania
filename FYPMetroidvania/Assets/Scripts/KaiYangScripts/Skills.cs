@@ -253,6 +253,12 @@ public class Skills : MonoBehaviour
             chargeMain = sharedChargeParticles.main;
             chargeEmission = sharedChargeParticles.emission;
         }
+
+        Debug.Log($"<color=red>SKILLS AWAKE - Spirit component found: {(spirit != null ? "YES" : "NO")}</color>");
+        if (spirit != null)
+        {
+            Debug.Log($"<color=red>Spirit enabled: {spirit.enabled}, MaxSpirit: {spirit.maxSpirit}</color>");
+        }
     }
 
     private void Update()
@@ -260,6 +266,8 @@ public class Skills : MonoBehaviour
         if (swordDashCooldownTimer > 0f) swordDashCooldownTimer -= Time.deltaTime;
         if (gauntletShockCooldownTimer > 0f) gauntletShockCooldownTimer -= Time.deltaTime;
         if (swordUppercutCooldownTimer > 0f) swordUppercutCooldownTimer -= Time.deltaTime;
+
+
 
      
     }
@@ -455,17 +463,8 @@ public class Skills : MonoBehaviour
         usingUltimate = true;
         spirit.StartDrain();
 
-        // Find first enemy in range
         Collider2D[] enemies = Physics2D.OverlapCircleAll(transform.position, spiritSlashRadius, enemyMask);
         Transform firstTarget = enemies.Length > 0 ? enemies[Random.Range(0, enemies.Length)].transform : null;
-
-        if (firstTarget == null)
-        {
-            Debug.Log("No enemies in range for ultimate!");
-            spirit.StopDrain();
-            usingUltimate = false;
-            yield return null;
-        }
 
         GameObject slash = Instantiate(spiritSlashPrefab, transform.position, Quaternion.identity);
         SpiritSlash slashComp = slash.GetComponent<SpiritSlash>();
@@ -475,7 +474,6 @@ public class Skills : MonoBehaviour
             slashComp.Init(transform, firstTarget, enemyMask);
         }
 
-        // Wait until spirit is fully drained
         while (!spirit.IsEmpty)
         {
             yield return null;
@@ -489,7 +487,6 @@ public class Skills : MonoBehaviour
         spirit.StopDrain();
         usingUltimate = false;
     }
- 
 
     public void TryUseGauntletUltimate()
     {
