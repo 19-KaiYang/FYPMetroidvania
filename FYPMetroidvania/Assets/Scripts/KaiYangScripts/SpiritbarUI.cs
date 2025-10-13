@@ -11,6 +11,8 @@ public class SpiritBarUI : MonoBehaviour
     {
         if (fillTransform != null)
             fullWidth = fillTransform.sizeDelta.x;
+
+        spiritGauge = PlayerController.instance.GetComponent<SpiritGauge>();
     }
 
     private void Update()

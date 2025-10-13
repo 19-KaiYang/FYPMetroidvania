@@ -62,6 +62,7 @@ public class SceneTransitionManager : MonoBehaviour
             _sceneName = rooms[roomIndex];
             roomIndex++;
         }
+        else _sceneName = progressionData.EndingScene;
         if (_sceneName != null)
         {
             yield return Fade(_fadeDir);
@@ -153,14 +154,15 @@ public class SceneTransitionManager : MonoBehaviour
     void ShuffleRooms()
     {
         rooms = new List<string>(progressionData.rooms);
+        rooms.RemoveAt(0);
         for (int i = 0; i < rooms.Count; i++)
         {
             string temp = rooms[i];
-            if (temp == currentSceneName)
-            {
-                rooms.Remove(temp);
-                continue;
-            }
+            //if (temp == currentSceneName)
+            //{
+            //    rooms.Remove(temp);
+            //    continue;
+            //}
             int randomIndex = Random.Range(i, rooms.Count);
             rooms[i] = rooms[randomIndex];
             rooms[randomIndex] = temp;
@@ -170,10 +172,14 @@ public class SceneTransitionManager : MonoBehaviour
     #region get current scene
     private void OnEnable()
     {
-        SceneManager.sceneLoaded += OnSceneLoaded;
+        //SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     private void OnDisable()
+    {
+        //SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+    private void OnDestroy()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
@@ -181,7 +187,7 @@ public class SceneTransitionManager : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         currentSceneName = scene.name;
-        roomLoaded.Invoke(currentSceneName);
+        roomLoaded?.Invoke(currentSceneName);
     }
     #endregion
 }
