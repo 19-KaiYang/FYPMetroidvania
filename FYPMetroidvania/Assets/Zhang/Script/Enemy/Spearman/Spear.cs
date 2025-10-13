@@ -94,7 +94,6 @@ public class Spear : ProjectileBase
             if (currentCCState == CrowdControlState.Stunned) p.ApplyStun(1, dir);
             else if (currentCCState == CrowdControlState.Knockdown) p.ApplyKnockdown(1, false, dir);
 
-            Debug.Log($"Player take {finalDamage} damage");
         }
     }
     private IEnumerator Destroy()
