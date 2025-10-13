@@ -336,6 +336,7 @@ MonoBehaviour:
   currentCCState: 1
   attackMultiplier: 2
   finalDamage: 0
+  attackDamage: 0
 --- !u!1 &4298579516614745451
 GameObject:
   m_ObjectHideFlags: 0
@@ -572,7 +573,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af196f38ea8868b40a61bf0922e5bf00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Health
-  maxHealth: 9999
+  maxHealth: 100
   destroyOnDeath: 1
   isPlayer: 0
   currentHealth: 0
@@ -586,6 +587,7 @@ MonoBehaviour:
   knockbackForce: 5
   stunPushbackForce: 5
   groundCheckValue: 1
+  knockbackMult: 1
   defaultStunDuration: 1
   defaultKnockdownDuration: 2
   knockdownRecoveryTime: 1
@@ -731,3 +733,4 @@ MonoBehaviour:
   currentCCState: 0
   attackMultiplier: 1
   finalDamage: 0
+  attackDamage: 0
