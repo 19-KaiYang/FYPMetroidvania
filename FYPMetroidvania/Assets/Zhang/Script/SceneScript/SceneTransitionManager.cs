@@ -91,15 +91,16 @@ public class SceneTransitionManager : MonoBehaviour
                                 fadeImage.color.g,
                                 fadeImage.color.b,
                                 endAlpha);
-        }
-        void SetColorImage(ref float _alpha, FadeDirection _fadeDir)
-        {
-            fadeImage.color = new Color(fadeImage.color.r,
-                                        fadeImage.color.g,
-                                        fadeImage.color.b, _alpha);
+        
+    }
+    void SetColorImage(ref float _alpha, FadeDirection _fadeDir)
+    {
+        fadeImage.color = new Color(fadeImage.color.r,
+                                    fadeImage.color.g,
+                                    fadeImage.color.b, _alpha);
 
-            _alpha += Time.deltaTime * (1 / fadeTime) * (_fadeDir == FadeDirection.OUT ? -1 : 1);
-        }
+        _alpha += Time.deltaTime * (1 / fadeTime) * (_fadeDir == FadeDirection.OUT ? -1 : 1);
+    }
 
     public IEnumerator MoveToNewScene(Vector2 exitDir, float _jumpForce, float delay, bool _dir)
     {
@@ -180,7 +181,7 @@ public class SceneTransitionManager : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         currentSceneName = scene.name;
-        roomLoaded.Invoke(currentSceneName);
+        //roomLoaded.Invoke(currentSceneName);
     }
     #endregion
 }

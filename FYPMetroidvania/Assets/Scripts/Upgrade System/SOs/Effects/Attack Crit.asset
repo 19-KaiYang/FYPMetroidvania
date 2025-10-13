@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bff6f64807f165d4093f69f8ef0e1971, type: 3}
   m_Name: Attack Crit
   m_EditorClassIdentifier: Assembly-CSharp::CritEffect
-  trigger: 2
-  critChance: 0.2
+  trigger: 5
+  critChance: 1
   critDmgMultiplier: 1.5
   bleedCritBuff: {fileID: 11400000, guid: a98b89e41cac33c4498865c22ad46db2, type: 2}
   bleedDebuff: {fileID: 11400000, guid: fbfce1400c5cc8240ad2d3e3a0bf4ca1, type: 2}

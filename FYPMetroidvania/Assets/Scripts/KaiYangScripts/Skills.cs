@@ -693,7 +693,6 @@ public class Skills : MonoBehaviour
         Hitbox.OnHit += OnUppercutHit;
 
         // --- Phase 1: short forward dash ---
-        controller.SetVelocity(new Vector2(forward, uppercutUpSpeed * 0.25f));
         float dashPhase = 0.12f;
 
         // Activate hitbox during dash phase
@@ -701,14 +700,15 @@ public class Skills : MonoBehaviour
 
         while (elapsed < dashPhase)
         {
+            controller.SetVelocity(new Vector2(forward, uppercutUpSpeed * 0.25f));
             elapsed += Time.deltaTime;
             yield return null;
         }
 
         // --- Phase 2: rising slash (forward + strong upward) ---
-        controller.SetVelocity(new Vector2(forward * 0.7f, uppercutUpSpeed));
         while (elapsed < uppercutDuration)
         {
+            controller.SetVelocity(new Vector2(forward * 0.7f, uppercutUpSpeed));  
             elapsed += Time.deltaTime;
             yield return null;
         }

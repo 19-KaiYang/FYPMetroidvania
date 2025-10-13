@@ -13,6 +13,9 @@ public class SceneTransition : MonoBehaviour
     [SerializeField] private bool isTriggered = false;
     [SerializeField] private bool dir = true;
 
+    [Header("Upgrade Menu")]
+    [SerializeField] private GameObject upgradeMenuPrefab;
+
     private void Start()
     {
         if (nextSceneName == SceneTransitionManager.instance.lastSceneName && SceneTransitionManager.instance.isTrasition == true)
@@ -63,18 +66,38 @@ public class SceneTransition : MonoBehaviour
         StartCoroutine(SceneTransitionManager.instance.MoveToNewScene(exitDirection, jumpForce, exitTime, dir));
         StartCoroutine(SceneTransitionManager.instance.Fade(SceneTransitionManager.FadeDirection.OUT));
     }
+
+    private void HandleUpgradeChosen()
+    {
+        UpgradeSelectionUI.OnUpgradeChosen -= HandleUpgradeChosen;
+
+        SceneTransitionManager.instance.isTrasition = true;
+        SceneTransitionManager.instance.lastSceneName = SceneManager.GetActiveScene().name;
+
+        StartCoroutine(SceneTransitionManager.instance.FadeAndLoadScene(SceneTransitionManager.FadeDirection.IN, nextSceneName));
+    }
+
     private void OnTriggerEnter2D(Collider2D _other)
     {
         if (!needPress)
         {
             if (_other.CompareTag("Player"))
             {
-                SceneTransitionManager.instance.isTrasition = true;
+                //SceneTransitionManager.instance.isTrasition = true;
 
-                SceneTransitionManager.instance.lastSceneName = SceneManager.GetActiveScene().name;
+                //SceneTransitionManager.instance.lastSceneName = SceneManager.GetActiveScene().name;
 
-                //SceneManager.LoadScene(nextSceneName);
-                StartCoroutine(SceneTransitionManager.instance.FadeAndLoadScene(SceneTransitionManager.FadeDirection.IN, nextSceneName));
+                ////SceneManager.LoadScene(nextSceneName);
+                //StartCoroutine(SceneTransitionManager.instance.FadeAndLoadScene(SceneTransitionManager.FadeDirection.IN, nextSceneName));
+
+                if (!needPress && _other.CompareTag("Player"))
+                {
+                    GameObject menuObj = Instantiate(upgradeMenuPrefab);
+                    UpgradeSelectionUI ui = menuObj.GetComponent<UpgradeSelectionUI>();
+                    ui.ShowMenu();
+
+                    UpgradeSelectionUI.OnUpgradeChosen += HandleUpgradeChosen;
+                }
             }
         }
     }

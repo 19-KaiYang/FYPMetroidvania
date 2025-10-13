@@ -48,59 +48,140 @@ public class UpgradeManager : MonoBehaviour
         CombatSystem.basicAttackStart += OnBasicAttackStart;
         CombatSystem.basicAttackEnd += OnBasicAttackEnd;
         Hitbox.OnHit += OnBasicAttackHit;
+
+        Skills.skillStart += OnSkillStart;
+        Skills.skillHit += OnSkillHit;
+        Skills.skillEnd += OnSkillEnd;
+
+        Skills.OnUltimateStart += OnUltimateStart;
+        Skills.OnUltimateHit += OnUltimateHit;
+        Skills.OnUltimateEnd += OnUltimateEnd;
+
     }
 
     #region Processing Events
-    // Basic Attack
     void OnBasicAttackStart(Hitbox hitbox)
     {
-        if (AttackUpgrade == null) return;
-        Debug.Log("Received attack upgrade event: " + hitbox.name);
         ActionContext context = new ActionContext(this, player, health, combatSystem, hb: hitbox);
-        AttackUpgrade.TryEffects(Trigger.OnStart, context);
+
+        if (AttackUpgrade != null)
+            AttackUpgrade.TryEffects(Trigger.OnStart, context);
+
+        // Trigger both OnStart (for backwards compatibility) and OnAttackStart for misc upgrades
+        foreach (Upgrade misc in MiscUpgrades)
+        {
+            misc.TryEffects(Trigger.OnStart, context);      // Keep old behavior
+            misc.TryEffects(Trigger.OnAttackStart, context); // New specific trigger
+        }
     }
+
     void OnBasicAttackEnd()
     {
-        if (AttackUpgrade == null) return;
-
         ActionContext context = new ActionContext(this, player, health, combatSystem);
-        AttackUpgrade.TryEffects(Trigger.OnEnd, context);
+
+        if (AttackUpgrade != null)
+            AttackUpgrade.TryEffects(Trigger.OnEnd, context);
+
+        // Trigger for misc upgrades
+        foreach (Upgrade misc in MiscUpgrades)
+        {
+            misc.TryEffects(Trigger.OnEnd, context);
+            misc.TryEffects(Trigger.OnAttackEnd, context);
+        }
     }
+
     void OnBasicAttackHit(Hitbox hitbox, Health hit)
     {
+        if (hitbox.gameObject == skillManager.swordDashHitbox ||
+            hitbox.gameObject == skillManager.swordUppercutHitbox ||
+            hitbox.gameObject == skillManager.gauntletShockwaveHitbox)
+        {
+            return; 
+        }
+
         Debug.Log("Hit!");
-        if (AttackUpgrade == null) return;
 
         ActionContext context = new ActionContext(this, player, health, combatSystem, hb: hitbox, enemy: hit);
-        AttackUpgrade.TryEffects(Trigger.OnHit, context);
+
+        if (AttackUpgrade != null)
+            AttackUpgrade.TryEffects(Trigger.OnAttackHit, context);
+
+        foreach (Upgrade misc in MiscUpgrades)
+            misc.TryEffects(Trigger.OnAttackHit, context);
     }
+
 
     // Skills
-    void OnSkillStart()
+    void OnSkillStart(Hitbox hitbox)
     {
+        ActionContext context = new ActionContext(this, player, health, combatSystem, skillManager, hitbox);
 
+        if (SkillUpgrade != null)
+            SkillUpgrade.TryEffects(Trigger.OnStart, context);
+
+        // Use ONLY OnSkillStart for misc upgrades - do NOT use OnStart
+        foreach (Upgrade misc in MiscUpgrades)
+            misc.TryEffects(Trigger.OnSkillStart, context);
     }
+
     void OnSkillEnd()
     {
+        ActionContext ctx = new ActionContext(this, player, health, combatSystem, skillManager);
 
+        if (SkillUpgrade != null)
+            SkillUpgrade.TryEffects(Trigger.OnEnd, ctx);
+
+        // Trigger OnSkillEnd for misc upgrades
+        foreach (Upgrade misc in MiscUpgrades)
+            misc.TryEffects(Trigger.OnSkillEnd, ctx);
     }
-    void OnSkillHit()
+
+    void OnSkillHit(Hitbox hitbox, Health enemy)
     {
+        ActionContext ctx = new ActionContext(this, player, health, cs: null, skills: skillManager, hb: hitbox, enemy: enemy);
 
+        if (SkillUpgrade != null)
+            SkillUpgrade.TryEffects(Trigger.OnSkillHit, ctx);
+
+        foreach (Upgrade misc in MiscUpgrades)
+            misc.TryEffects(Trigger.OnSkillHit, ctx);
     }
+
 
     // Ultimate
-    void OnUltStart()
+    void OnUltimateStart(Hitbox hitbox)
     {
+        ActionContext context = new ActionContext(this, player, health, combatSystem, hb: hitbox);
 
+        if (SpiritUpgrade != null)
+            SpiritUpgrade.TryEffects(Trigger.OnStart, context);
+
+        foreach (Upgrade misc in MiscUpgrades)
+            misc.TryEffects(Trigger.OnSkillStart, context);
     }
-    void OnUltEnd()
-    {
 
+    void OnUltimateHit(Hitbox hitbox, Health enemy)
+    {
+        ActionContext context = new ActionContext(this, player, health, combatSystem, hb: hitbox, enemy: enemy);
+
+        if (SpiritUpgrade != null)
+            SpiritUpgrade.TryEffects(Trigger.OnHit, context);
+
+        // Trigger for misc upgrades
+        foreach (Upgrade misc in MiscUpgrades)
+            misc.TryEffects(Trigger.OnSkillHit, context);
     }
-    void OnUltHit()
-    {
 
+    void OnUltimateEnd()
+    {
+        ActionContext context = new ActionContext(this, player, health, combatSystem);
+
+        if (SpiritUpgrade != null)
+            SpiritUpgrade.TryEffects(Trigger.OnEnd, context);
+
+        // Trigger for misc upgrades
+        foreach (Upgrade misc in MiscUpgrades)
+            misc.TryEffects(Trigger.OnSkillEnd, context);
     }
 
     // Misc
@@ -124,7 +205,16 @@ public class UpgradeManager : MonoBehaviour
         CombatSystem.basicAttackEnd -= OnBasicAttackEnd;
         Hitbox.OnHit -= OnBasicAttackHit;
 
-        foreach(Upgrade upgrade in MiscUpgrades)
+        Skills.skillStart -= OnSkillStart;
+        Skills.skillHit -= OnSkillHit;
+        Skills.skillEnd -= OnSkillEnd;
+
+        Skills.OnUltimateStart -= OnUltimateStart;
+        Skills.OnUltimateHit -= OnUltimateHit;
+        Skills.OnUltimateEnd -= OnUltimateEnd;
+
+
+        foreach (Upgrade upgrade in MiscUpgrades)
         {
             upgrade.OnRemove(this);
         }

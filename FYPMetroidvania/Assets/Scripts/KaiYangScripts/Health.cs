@@ -111,7 +111,7 @@ public class Health : MonoBehaviour
 
                     landed = touchingGround && stoppedFalling;
 
-                    Debug.Log($"{gameObject.name} - TouchingGround: {touchingGround}, StoppedFalling: {stoppedFalling}, Y velocity: {(rb ? rb.linearVelocity.y : 0f)}");
+                    //Debug.Log($"{gameObject.name} - TouchingGround: {touchingGround}, StoppedFalling: {stoppedFalling}, Y velocity: {(rb ? rb.linearVelocity.y : 0f)}");
                 }
 
 
@@ -122,11 +122,11 @@ public class Health : MonoBehaviour
                     {
                         ccTimer = knockdownRecoveryTime;
                         isInArcKnockdown = false;
-                        Debug.Log($"{gameObject.name} landed from air knockdown, starting recovery timer ({knockdownRecoveryTime}s)");
+                        //Debug.Log($"{gameObject.name} landed from air knockdown, starting recovery timer ({knockdownRecoveryTime}s)");
                     }
                     else
                     {
-                        Debug.Log($"{gameObject.name} still in air knockdown");
+                        //Debug.Log($"{gameObject.name} still in air knockdown");
                     }
                    
                     return;
@@ -136,11 +136,11 @@ public class Health : MonoBehaviour
                 if (ccTimer > 0f)
                 {
                     ccTimer -= Time.deltaTime;
-                    Debug.Log($"{gameObject.name} knockdown recovery timer: {ccTimer:F2}s remaining");
+                    //Debug.Log($"{gameObject.name} knockdown recovery timer: {ccTimer:F2}s remaining");
                     if (ccTimer <= 0f)
                     {
                         currentCCState = CrowdControlState.None;
-                        Debug.Log($"{gameObject.name} recovered from knockdown - can move again!");
+                        //Debug.Log($"{gameObject.name} recovered from knockdown - can move again!");
                     }
                 }
             }
@@ -153,7 +153,7 @@ public class Health : MonoBehaviour
                     if (ccTimer <= 0f)
                     {
                         currentCCState = CrowdControlState.None;
-                        Debug.Log($"{gameObject.name} recovered from CC state");
+                       // Debug.Log($"{gameObject.name} recovered from CC state");
                     }
                 }
             }
@@ -190,6 +190,8 @@ public class Health : MonoBehaviour
             StartCoroutine(FlashRed());
 
         bool shouldPreserveVelocity = (forceCC == CrowdControlState.Knockdown && useRawForce);
+
+        Debug.Log($"{gameObject.name} took {amount} damage. Current HP = {currentHealth}");
 
         // Apply knockback only if no CC is specified (basically none)
         if (rb != null && hitDirection.HasValue && forceCC == CrowdControlState.None)
@@ -393,7 +395,7 @@ public class Health : MonoBehaviour
             rb.AddForce(pushDirection * finalForce, ForceMode2D.Impulse);
         }
 
-        Debug.Log($"{gameObject.name} stunned for {duration} sec (KBx{knockbackMultiplier})");
+        //Debug.Log($"{gameObject.name} stunned for {duration} sec (KBx{knockbackMultiplier})");
     }
 
     public void ApplyStun(Vector2? hitDirection = null)

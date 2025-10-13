@@ -1,0 +1,56 @@
+using UnityEngine;
+
+public class EnemyHitBox : MonoBehaviour
+{
+    public CrowdControlState currentCCState = CrowdControlState.None;
+    private Enemy enemy;
+    [SerializeField] private float attackMultiplier;
+    [SerializeField] private float finalDamage;
+
+    private void Awake()
+    {
+        enemy = GetComponentInParent<Enemy>();
+    }
+    private void OnEnable()
+    {
+        finalDamage = attackMultiplier * enemy.attackDamage;
+    }
+    public void Update()
+    {
+    }
+    public void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            Health p = collision.GetComponent<Health>();
+            Vector2 dir = (collision.transform.position - enemy.transform.position).normalized;
+            p.TakeDamage(finalDamage, dir, true, CrowdControlState.Knockdown, 0f);
+
+            if (currentCCState == CrowdControlState.Stunned) p.ApplyStun(1, dir);
+            else if (currentCCState == CrowdControlState.Knockdown) p.ApplyStun(1, dir);
+
+            Debug.Log($"Player take {finalDamage} damage");
+        }
+    }
+    private void OnDrawGizmos()
+    {
+        if (!this.gameObject.activeInHierarchy) return;
+
+        PolygonCollider2D polygon = GetComponent<PolygonCollider2D>();
+        if (polygon == null) return;
+
+        Gizmos.color = Color.red;
+
+        for (int p = 0; p < polygon.pathCount; p++)
+        {
+            Vector2[] points = polygon.GetPath(p);
+
+            for (int i = 0; i < points.Length; i++)
+            {
+                Vector2 start = polygon.transform.TransformPoint(points[i]);
+                Vector2 end = polygon.transform.TransformPoint(points[(i + 1) % points.Length]);
+                Gizmos.DrawLine(start, end);
+            }
+        }
+    }
+}

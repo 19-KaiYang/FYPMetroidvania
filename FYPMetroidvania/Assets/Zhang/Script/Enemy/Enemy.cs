@@ -1,6 +1,7 @@
+using System;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour, IDamageable
+public class Enemy : MonoBehaviour
 {
     //[Header("-")]
     protected Rigidbody2D rb;
@@ -18,6 +19,7 @@ public class Enemy : MonoBehaviour, IDamageable
     [SerializeField] public float currentHealth;
     [SerializeField] public bool isDead = false;
     [SerializeField] public float moveSpeed;
+    [SerializeField] public float attackDamage;
 
     [Header("-")]
     [SerializeField] public bool isFacingRight;
@@ -34,19 +36,25 @@ public class Enemy : MonoBehaviour, IDamageable
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        animator = GetComponentInChildren<Animator>();
         player = FindFirstObjectByType<PlayerController>();
         health = GetComponent<Health>();
     }
 
     void Start()
     {
+        //health.damageTaken += SpawnParticle;
         currentHealth = maxHealth;
     }
-
 
     protected virtual void Update()
     {
         distanceToPlayer = transform.position - player.transform.position;
+    }
+
+    public void SpawnParticle(GameObject other)
+    {
+        
     }
 
     protected virtual void Flip()

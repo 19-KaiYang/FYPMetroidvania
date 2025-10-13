@@ -7,8 +7,10 @@ public class ProjectileEffect : UpgradeEffect
     public float shootChance = 1.0f;
     public override void DoEffect(ActionContext context)
     {
+
         if (context.upgradeManager != null)
         {
+            Debug.Log($"[ProjectileEffect] {name} triggered, chance={shootChance}");
             float random = Random.value;
             if (random <= shootChance)
             {
