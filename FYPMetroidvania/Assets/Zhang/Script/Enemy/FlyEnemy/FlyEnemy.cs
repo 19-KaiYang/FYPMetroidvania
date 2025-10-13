@@ -253,7 +253,7 @@ public class FlyEnemy : Enemy
             float angle = Mathf.Atan2(enemy.dashDir.y, enemy.dashDir.x) * Mathf.Rad2Deg;
 
             if (enemy.player.transform.position.x > enemy.transform.position.x)
-                enemy.rb.rotation = angle-90;
+                enemy.rb.rotation = angle + 90;
             else if (enemy.player.transform.position.x < enemy.transform.position.x)
                 enemy.rb.rotation = angle - 270;
         }

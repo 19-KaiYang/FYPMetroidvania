@@ -75,6 +75,26 @@ public class DaggerCultist : Enemy
         }
 
     }
+    private IEnumerator ThrowDagger()
+    {
+        while (true)
+        {
+            dCooldown = Random.Range((float)daggerCooldown.x, (float)daggerCooldown.y);
+            isAiming = true;
+            yield return new WaitForSeconds(aimingTime);
+            //throw dagger
+            GameObject daggerObj = Instantiate(daggerPrefab, throwPoint.position, Quaternion.identity);
+            Dagger spear = daggerObj.GetComponentInChildren<Dagger>();
+            spear.SetOwner(this);
+            spear.Init(attackDamage, this);
+
+            isAiming = false;
+            yield return new WaitForSeconds(dCooldown);
+
+            
+        }
+    }
+
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
@@ -143,7 +163,7 @@ public class DaggerCultist : Enemy
 
         public void OnEnter()
         {
-            attackRoutine = enemy.StartCoroutine(ThrowDagger());
+            attackRoutine = enemy.StartCoroutine(enemy.ThrowDagger());
         }
         public void OnUpdate()
         {
@@ -171,19 +191,19 @@ public class DaggerCultist : Enemy
             if (enemy.isAiming && enemy.playerDetected) enemy.line.enabled = true;
             else enemy.line.enabled = false;
         }
-        private IEnumerator ThrowDagger()
-        {
-            while (true)
-            {
-                enemy.dCooldown = Random.Range((float)enemy.daggerCooldown.x, (float)enemy.daggerCooldown.y);
-                enemy.isAiming = true;
-                yield return new WaitForSeconds(enemy.aimingTime);
-                //throw dagger
-                Instantiate(enemy.daggerPrefab, enemy.throwPoint.position, enemy.throwPoint.rotation);
-                enemy.isAiming = false;
-                yield return new WaitForSeconds(enemy.dCooldown);
-            }
-        }
+        //private IEnumerator ThrowDagger()
+        //{
+        //    while (true)
+        //    {
+        //        enemy.dCooldown = Random.Range((float)enemy.daggerCooldown.x, (float)enemy.daggerCooldown.y);
+        //        enemy.isAiming = true;
+        //        yield return new WaitForSeconds(enemy.aimingTime);
+        //        //throw dagger
+        //        Instantiate(enemy.daggerPrefab, enemy.throwPoint.position, enemy.throwPoint.rotation);
+        //        enemy.isAiming = false;
+        //        yield return new WaitForSeconds(enemy.dCooldown);
+        //    }
+        //}
     }
 
     public class DaggerCultistCCState : IState
