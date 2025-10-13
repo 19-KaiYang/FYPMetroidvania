@@ -44,7 +44,7 @@ public class MeleeEnemy : Enemy
 
         stateMachine.stateChanged += OnStateChanged;
     }
-    void Start()
+    protected override void Start()
     {
         stateMachine.Initialize(new MeleeEnemyIdleState(this));
     }
@@ -156,10 +156,10 @@ public class MeleeEnemy : Enemy
     {
         currentState = _state.GetType().Name;
     }
-    public override void TakeDamage(float _damage, Vector2 _dir)
-    {
-        base.TakeDamage(_damage, _dir);
-    }
+    //public override void TakeDamage(float _damage, Vector2 _dir)
+    //{
+    //    base.TakeDamage(_damage, _dir);
+    //}
 
     public class MeleeEnemyIdleState : IState
     {

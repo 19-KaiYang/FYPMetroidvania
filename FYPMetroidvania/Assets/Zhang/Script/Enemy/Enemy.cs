@@ -28,8 +28,27 @@ public class Enemy : MonoBehaviour
     //[Space]
     //[SerializeField] private float groundCheckSize;
     //[SerializeField] private Vector2 groundCheckOffset;
-    [Header("CC")]
+
+    //cc
     protected Health health;
+    [Header("Damaged effect")]
+    [SerializeField] protected GameObject damageParticle;
+    [SerializeField] protected Transform damageParticlePos;
+
+    protected virtual void OnEnable()
+    {
+        if (health == null)
+            health = GetComponentInChildren<Health>();
+
+        if (health != null)
+            health.damageTaken += SpawnParticle;
+    }
+
+    protected virtual void OnDisable()
+    {
+        if (health != null)
+            health.damageTaken -= SpawnParticle;
+    }
 
 
     protected virtual void Awake()
@@ -41,9 +60,8 @@ public class Enemy : MonoBehaviour
         health = GetComponent<Health>();
     }
 
-    void Start()
+    protected virtual void Start()
     {
-        //health.damageTaken += SpawnParticle;
         currentHealth = maxHealth;
     }
 
@@ -52,9 +70,25 @@ public class Enemy : MonoBehaviour
         distanceToPlayer = transform.position - player.transform.position;
     }
 
-    public void SpawnParticle(GameObject other)
+    protected virtual void SpawnParticle(Health health)
     {
-        
+        if (damageParticle == null) return;
+
+        Vector3 spawnPos = damageParticlePos.position;
+        Quaternion rotation;
+
+        if (distanceToPlayer.x >= 0)
+        {
+            rotation = Quaternion.Euler(-30f, 90f, -90f);
+        }
+        else
+        {
+            rotation = Quaternion.Euler(-150f, 90f, -90f);
+        }
+
+        GameObject particle = Instantiate(damageParticle, spawnPos, rotation);
+
+        Destroy(particle, 2.0f);
     }
 
     protected virtual void Flip()
@@ -77,15 +111,15 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public virtual void TakeDamage(float _damage, Vector2 _dir)
-    {
-        currentHealth -= _damage;
+    //public virtual void TakeDamage(float _damage, Vector2 _dir)
+    //{
+    //    currentHealth -= _damage;
 
-        if(currentHealth <= 0)
-        {
-            Die();
-        }
-    }
+    //    if(currentHealth <= 0)
+    //    {
+    //        Die();
+    //    }
+    //}
 
     public virtual void Die()
     {
