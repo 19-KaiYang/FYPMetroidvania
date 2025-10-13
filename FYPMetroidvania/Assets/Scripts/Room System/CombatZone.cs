@@ -19,7 +19,7 @@ public class CombatZone : MonoBehaviour
     public List<GameObject> doors = new();
 
     // Private trackers
-    private int currWave;
+    public int currWave;
     public List<List<GameObject>> enemyObjects = new();
 
     private void Start()
@@ -99,9 +99,13 @@ public class CombatZone : MonoBehaviour
 
     public void OnEnemyDeath(GameObject enemy)
     {
-        if(enemy == null) return;
-        int index = enemyObjects[currWave].IndexOf(enemy);
-        enemyObjects[currWave].RemoveAt(index);
+        if (enemy != null)
+        {
+            Health tracker = enemy.GetComponent<Health>();
+            if (tracker != null) tracker.enemyDeath -= OnEnemyDeath;
+            enemyObjects[currWave].Remove(enemy);
+            enemy.SetActive(false);
+        }
         if (enemyObjects[currWave].Count <= 0) StartCoroutine(NewWaveCoroutine());
     }
 

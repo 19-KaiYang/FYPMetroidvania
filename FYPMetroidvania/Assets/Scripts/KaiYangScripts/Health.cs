@@ -33,6 +33,7 @@ public class Health : MonoBehaviour
     public float knockbackForce = 5f;
     public float stunPushbackForce = 5f;
     public float groundCheckValue = 1f;
+    public float knockbackMult = 1f;
 
     [Header("Crowd Control Durations")]
     [Tooltip("Default stun duration when grounded")]
@@ -186,60 +187,51 @@ public class Health : MonoBehaviour
         currentHealth -= amount;
         if (triggerEffects) damageTaken?.Invoke(this);
 
-        if (spriteRenderer != null)
+        if (spriteRenderer != null && gameObject.activeInHierarchy)
             StartCoroutine(FlashRed());
 
         bool shouldPreserveVelocity = (forceCC == CrowdControlState.Knockdown && useRawForce);
 
         Debug.Log($"{gameObject.name} took {amount} damage. Current HP = {currentHealth}");
 
-        // Apply knockback only if no CC is specified (basically none)
-        if (rb != null && hitDirection.HasValue && forceCC == CrowdControlState.None)
+        // Apply knockback 
+        if (rb != null && hitDirection.HasValue)
         {
-            float finalForce = knockbackForce * knockbackMultiplier;
+            rb.linearVelocity = Vector2.zero;
+            Vector2 finalForce = hitDirection.Value * knockbackMult;
             if (useRawForce)
                 rb.AddForce(hitDirection.Value, ForceMode2D.Impulse);
             else
-                rb.AddForce(hitDirection.Value.normalized * finalForce, ForceMode2D.Impulse);
+                rb.AddForce(finalForce, ForceMode2D.Impulse);
         }
 
         // Apply CC effects 
-        if (!isPlayer && !isDebuff)
+        if (!isDebuff)
         {
             if (forceCC != CrowdControlState.None)
             {
                 if (forceCC == CrowdControlState.Stunned && !stunImmune)
                 {
-                    ApplyStun(forceCCDuration > 0 ? forceCCDuration : defaultStunDuration,
-                             hitDirection, knockbackMultiplier);
+                    ApplyStun(forceCCDuration, hitDirection);
                 }
                 else if (forceCC == CrowdControlState.Knockdown)
                 {
                     if (!knockdownImmune)
-                        ApplyKnockdown(forceCCDuration > 0 ? forceCCDuration : defaultKnockdownDuration,
-                                      true, hitDirection, shouldPreserveVelocity, knockbackMultiplier);
+                    {
+                        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, groundCheckValue, LayerMask.GetMask("Ground"));
+                        bool airborne = hit.collider == null;
+                        ApplyKnockdown(forceCCDuration, airborne, hitDirection, shouldPreserveVelocity);
+                    }
                     else
-                        ApplyStun(forceCCDuration > 0 ? forceCCDuration : defaultStunDuration,
-                                 hitDirection, knockbackMultiplier);
+                        ApplyStun(forceCCDuration, hitDirection);
                 }
-            }
-            else
-            {
-                // Default behavior based on grounded state
-                RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, groundCheckValue, LayerMask.GetMask("Ground"));
-                bool grounded = hit.collider != null;
-
-                if (!grounded && !knockdownImmune)
-                    ApplyKnockdown(defaultKnockdownDuration, true, hitDirection, false, knockbackMultiplier);
-                else if (!stunImmune)
-                    ApplyStun(defaultStunDuration, hitDirection, knockbackMultiplier);
             }
         }
 
         // Death handling
         if (currentHealth <= 0)
         {
-            currentHealth = 0;
+            //currentHealth = 0;
             if (isPlayer)
                 StartCoroutine(RespawnPlayer());
             else
@@ -286,7 +278,7 @@ public class Health : MonoBehaviour
     {
         Debug.Log($"{gameObject.name} has died!");
 
-        if (!isPlayer) enemyDeath?.Invoke(this.gameObject);
+        enemyDeath?.Invoke(gameObject);
 
         for(int i = debuffs.Count - 1; i >= 0; i--)
         {
@@ -314,14 +306,13 @@ public class Health : MonoBehaviour
         if (audioSource != null && deathSound != null)
             audioSource.PlayOneShot(deathSound);
 
-        if (destroyOnDeath)
-            Destroy(gameObject);
-        else
-            gameObject.SetActive(false);
+        //gameObject.SetActive(false);
+
+        //if (destroyOnDeath)
+        //    Destroy(gameObject);
+        //else
+        //    gameObject.SetActive(false);
     }
-
-
-
 
     private IEnumerator RespawnPlayer()
     {
@@ -383,25 +374,12 @@ public class Health : MonoBehaviour
     {
         currentCCState = CrowdControlState.Stunned;
         ccTimer = duration;
-
-        if (!isPlayer && rb != null && hitDirection.HasValue)
-        {
-            rb.linearVelocity = Vector2.zero;
-
-            Vector2 pushDirection = new Vector2(hitDirection.Value.x, 0f).normalized;
-
-            // Scale by stunPushbackForce * knockbackMultiplier
-            float finalForce = stunPushbackForce * knockbackMultiplier;
-            rb.AddForce(pushDirection * finalForce, ForceMode2D.Impulse);
-        }
-
-        //Debug.Log($"{gameObject.name} stunned for {duration} sec (KBx{knockbackMultiplier})");
     }
 
-    public void ApplyStun(Vector2? hitDirection = null)
-    {
-        ApplyStun(defaultStunDuration, hitDirection, 1f);
-    }
+    //public void ApplyStun(Vector2? hitDirection = null)
+    //{
+    //    ApplyStun(defaultStunDuration, hitDirection, 1f);
+    //}
 
     public void ApplyKnockdown(float duration, bool isAirborne = false,
      Vector2? hitDirection = null, bool preserveVelocity = false, float knockbackMultiplier = 1f)
@@ -416,7 +394,7 @@ public class Health : MonoBehaviour
             {
                 pc.SetVelocity(Vector2.zero);
                 float xDir = pc.facingRight ? -1f : 1f;
-                Vector2 arcKnockback = new Vector2(xDir * 10f, 8f) * knockbackMultiplier;
+                Vector2 arcKnockback = new Vector2(xDir * 10f, 8f) * knockbackMult;
                 pc.SetVelocity(arcKnockback);
                 isInArcKnockdown = true;
                 pc.externalVelocityOverride = true;
@@ -425,22 +403,35 @@ public class Health : MonoBehaviour
         }
         else
         {
-            if (rb != null && !preserveVelocity)
+            if (rb != null && !isAirborne)
             {
-                rb.linearVelocity = Vector2.zero;
+                // Override knockback if no upward knockback detected
+                if (!hitDirection.HasValue)
+                {
+                    rb.linearVelocity = Vector2.zero;
+                    float xDir = (transform.position.x > PlayerController.instance.transform.position.x) ? 1f : -1f;
+                    Vector2 arcKnockback = new Vector2(xDir * 8f, 6f) * knockbackMult;
+                    rb.AddForce(arcKnockback, ForceMode2D.Impulse);
+                }
+                else if(hitDirection.Value.y <= 0f)
+                {
+                    rb.linearVelocity = Vector2.zero;
+                    float xDir = (transform.position.x > PlayerController.instance.transform.position.x) ? 1f : -1f;
+                    Vector2 arcKnockback = new Vector2(xDir * 8f, 6f) * knockbackMult;
+                    rb.AddForce(arcKnockback, ForceMode2D.Impulse);
+                }
+                    //float xDir = -1f;
+                    //if (hitDirection.HasValue)
+                    //    xDir = hitDirection.Value.x > 0 ? 1f : -1f;
+                    //else if (PlayerController.instance != null)
+                    //    xDir = (transform.position.x > PlayerController.instance.transform.position.x) ? 1f : -1f;
 
-                float xDir = -1f;
-                if (hitDirection.HasValue)
-                    xDir = hitDirection.Value.x > 0 ? 1f : -1f;
-                else if (PlayerController.instance != null)
-                    xDir = (transform.position.x > PlayerController.instance.transform.position.x) ? 1f : -1f;
-
-                // Scale arc knockdown push by multiplier
-                Vector2 arcKnockback = new Vector2(xDir * 8f, 6f) * knockbackMultiplier;
-                rb.AddForce(arcKnockback, ForceMode2D.Impulse);
-                isInArcKnockdown = true;
+                    //// Scale arc knockdown push by multiplier
+                    //Vector2 arcKnockback = new Vector2(xDir * 8f, 6f) * knockbackMultiplier;
+                    //rb.AddForce(arcKnockback, ForceMode2D.Impulse);
+                    isInArcKnockdown = true;
             }
-            else if (preserveVelocity)
+            else
             {
                 isInArcKnockdown = true;
                 Debug.Log($"{gameObject.name} knockdown with preserved velocity (sweep attack)");
@@ -453,10 +444,10 @@ public class Health : MonoBehaviour
         Debug.Log($"{gameObject.name} knockdown for {duration} sec (KBx{knockbackMultiplier})");
     }
 
-    public void ApplyKnockdown(bool isAirborne = false, Vector2? hitDirection = null)
-    {
-        ApplyKnockdown(defaultKnockdownDuration, isAirborne, hitDirection, false, 1f);
-    }
+    //public void ApplyKnockdown(bool isAirborne = false, Vector2? hitDirection = null)
+    //{
+    //    ApplyKnockdown(defaultKnockdownDuration, isAirborne, hitDirection, false, 1f);
+    //}
 
     private void HandleArcKnockdown()
     {
