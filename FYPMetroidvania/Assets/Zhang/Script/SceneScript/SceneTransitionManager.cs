@@ -181,7 +181,7 @@ public class SceneTransitionManager : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         currentSceneName = scene.name;
-        //roomLoaded.Invoke(currentSceneName);
+        roomLoaded.Invoke(currentSceneName);
     }
     #endregion
 }

@@ -12,5 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebda3246b4d97524b9295f4575bfc7bd, type: 3}
   m_Name: Sharp Winds
   m_EditorClassIdentifier: Assembly-CSharp::SimpleUpgrade
+  displayName: Sharp Winds
+  description: 'Melee attacks have a 20% chance to fire out a Wind Slash on use.
+
+'
+  icon: {fileID: -8767769068462076049, guid: b9f6c65847fbcc44897d675f8e8a5ac9, type: 3}
   effects:
   - {fileID: 11400000, guid: 72874854bd000e440a7b25cee4f834ba, type: 2}

@@ -12,5 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebda3246b4d97524b9295f4575bfc7bd, type: 3}
   m_Name: Pixie Attacks
   m_EditorClassIdentifier: Assembly-CSharp::AttackPixie
+  displayName: Pixie Attacks
+  description: Basic attacks apply 1 stack of Pixie Dust to enemies for 5 seconds
+  icon: {fileID: 3344424571528673282, guid: 06995676f943c8843bb5c219294ab7a1, type: 3}
   effects:
   - {fileID: 11400000, guid: e65dbcfa4a5b6ed42bd71019bfe5deec, type: 2}

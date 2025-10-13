@@ -12,5 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebda3246b4d97524b9295f4575bfc7bd, type: 3}
   m_Name: Pixie Skill
   m_EditorClassIdentifier: Assembly-CSharp::SimpleUpgrade
+  displayName: Pixie Skill
+  description: 'Skills apply 3 stacks of Pixie Dust to enemies for 5 seconds
+
+'
+  icon: {fileID: -72194383149605223, guid: ec6f378d427720f45a2b27054c6671d5, type: 3}
   effects:
   - {fileID: 11400000, guid: 21ddfd218c9501e4ab20a4d2f0f7a7c6, type: 2}

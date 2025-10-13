@@ -12,5 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebda3246b4d97524b9295f4575bfc7bd, type: 3}
   m_Name: Sharp Attacks
   m_EditorClassIdentifier: Assembly-CSharp::SimpleUpgrade
+  displayName: Sharp Attack
+  description: 'Basic attacks apply Bleed to enemies for 3 seconds.
+
+'
+  icon: {fileID: 7108342541434238943, guid: 9e514e6b6c5757d4eaade90de8df0ef2, type: 3}
   effects:
   - {fileID: 11400000, guid: f3c29adbfac9a2642ae99086787ae4fc, type: 2}

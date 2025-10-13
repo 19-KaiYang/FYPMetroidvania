@@ -12,6 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebda3246b4d97524b9295f4575bfc7bd, type: 3}
   m_Name: Deadly Skills
   m_EditorClassIdentifier: Assembly-CSharp::SimpleUpgrade
+  displayName: Deadly Skills
+  description: 'Skills deal 20% more damage and have a 40% chance to be Critical
+    on-hit.
+
+'
+  icon: {fileID: 311622407002568141, guid: 08a4e53c57424844592ae32f722f6c27, type: 3}
   effects:
   - {fileID: 11400000, guid: 3f7ab3bd59cf58049966be0253a2ff10, type: 2}
   - {fileID: 11400000, guid: 02505c7656f75b8429330f3bb776da4d, type: 2}

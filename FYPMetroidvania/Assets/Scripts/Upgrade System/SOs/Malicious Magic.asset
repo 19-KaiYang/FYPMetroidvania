@@ -12,5 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebda3246b4d97524b9295f4575bfc7bd, type: 3}
   m_Name: Malicious Magic
   m_EditorClassIdentifier: Assembly-CSharp::SimpleUpgrade
+  displayName: Malicious Magic
+  description: Deal 15% more damage with attacks to enemies with debuffs
+  icon: {fileID: 6269258485448098669, guid: 7990ca6838a78e347a5df53370508d1b, type: 3}
   effects:
   - {fileID: 11400000, guid: f5033697aea36754ebb1b424e509d320, type: 2}
