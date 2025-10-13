@@ -104,7 +104,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85f2735b1d4274748ae03c2735e0e881, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hitbox
-  damage: 30
+  damage: 20
+  isCritical: 0
   hitstopDuration: 0.08
   applyHitstopToEnemy: 1
   applyHitstopToPlayer: 1

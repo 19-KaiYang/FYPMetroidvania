@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8622ae0074f954543b7226ea98f74fe0, type: 3}
   m_Name: Attack Bleed
   m_EditorClassIdentifier: Assembly-CSharp::DebuffEffect
-  trigger: 2
+  trigger: 5
   Debuff: {fileID: 11400000, guid: fbfce1400c5cc8240ad2d3e3a0bf4ca1, type: 2}
   stacks: 1
   duration: 3
+  maxStacks: 10

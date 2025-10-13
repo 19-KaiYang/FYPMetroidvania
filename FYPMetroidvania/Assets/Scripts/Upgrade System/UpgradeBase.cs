@@ -8,9 +8,20 @@ public enum Trigger
     OnStart,
     OnHit,
     OnEnd,
+    OnAttackStart,   
+    OnAttackHit,       
+    OnAttackEnd,       
+    OnSkillStart,      
+    OnSkillHit,       
+    OnSkillEnd,
 }
 public abstract class Upgrade : ScriptableObject
 {
+    [Header("UI Info")]
+    public string displayName;
+    [TextArea(2, 4)] public string description;
+    public Sprite icon;
+
     public List<UpgradeEffect> effects;
     public abstract void OnApply(UpgradeManager upgradeManager);
     public abstract void OnRemove(UpgradeManager upgradeManager);
@@ -21,6 +32,8 @@ public abstract class Upgrade : ScriptableObject
             if (effect.trigger == trigger) effect.DoEffect(context);
         }
     }
+
+
 }
 
 // struct for passing in all relevant action data for the upgrade to process

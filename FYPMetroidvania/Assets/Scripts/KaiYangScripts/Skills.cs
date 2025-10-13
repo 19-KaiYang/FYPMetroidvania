@@ -261,6 +261,8 @@ public class Skills : MonoBehaviour
         if (gauntletShockCooldownTimer > 0f) gauntletShockCooldownTimer -= Time.deltaTime;
         if (swordUppercutCooldownTimer > 0f) swordUppercutCooldownTimer -= Time.deltaTime;
 
+
+
      
     }
 
@@ -455,17 +457,8 @@ public class Skills : MonoBehaviour
         usingUltimate = true;
         spirit.StartDrain();
 
-        // Find first enemy in range
         Collider2D[] enemies = Physics2D.OverlapCircleAll(transform.position, spiritSlashRadius, enemyMask);
         Transform firstTarget = enemies.Length > 0 ? enemies[Random.Range(0, enemies.Length)].transform : null;
-
-        if (firstTarget == null)
-        {
-            Debug.Log("No enemies in range for ultimate!");
-            spirit.StopDrain();
-            usingUltimate = false;
-            yield return null;
-        }
 
         GameObject slash = Instantiate(spiritSlashPrefab, transform.position, Quaternion.identity);
         SpiritSlash slashComp = slash.GetComponent<SpiritSlash>();
@@ -475,7 +468,6 @@ public class Skills : MonoBehaviour
             slashComp.Init(transform, firstTarget, enemyMask);
         }
 
-        // Wait until spirit is fully drained
         while (!spirit.IsEmpty)
         {
             yield return null;
@@ -489,7 +481,6 @@ public class Skills : MonoBehaviour
         spirit.StopDrain();
         usingUltimate = false;
     }
- 
 
     public void TryUseGauntletUltimate()
     {
@@ -693,7 +684,6 @@ public class Skills : MonoBehaviour
         Hitbox.OnHit += OnUppercutHit;
 
         // --- Phase 1: short forward dash ---
-        controller.SetVelocity(new Vector2(forward, uppercutUpSpeed * 0.25f));
         float dashPhase = 0.12f;
 
         // Activate hitbox during dash phase
@@ -701,14 +691,15 @@ public class Skills : MonoBehaviour
 
         while (elapsed < dashPhase)
         {
+            controller.SetVelocity(new Vector2(forward, uppercutUpSpeed * 0.25f));
             elapsed += Time.deltaTime;
             yield return null;
         }
 
         // --- Phase 2: rising slash (forward + strong upward) ---
-        controller.SetVelocity(new Vector2(forward * 0.7f, uppercutUpSpeed));
         while (elapsed < uppercutDuration)
         {
+            controller.SetVelocity(new Vector2(forward * 0.7f, uppercutUpSpeed));  
             elapsed += Time.deltaTime;
             yield return null;
         }

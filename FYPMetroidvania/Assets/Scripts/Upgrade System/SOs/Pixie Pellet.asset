@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebda3246b4d97524b9295f4575bfc7bd, type: 3}
+  m_Name: Pixie Pellet
+  m_EditorClassIdentifier: Assembly-CSharp::SimpleUpgrade
+  displayName: Pixie Pellet
+  description: All attacks have a 10% chance to fire out a Pixie Bolt straight forwards
+  icon: {fileID: 8560864397955887024, guid: 3862b4d10f4a10841b4fb08f17c9dde4, type: 3}
+  effects:
+  - {fileID: 11400000, guid: 0a264c9223255b04892a6f6c150a377e, type: 2}

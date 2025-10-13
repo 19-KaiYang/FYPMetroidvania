@@ -39,13 +39,14 @@ public class PlayerController : MonoBehaviour
     public float dashDuration = 0.2f;
     public float dashCooldown = 1f;
     public int dashCount = 1;
+    public int dashesRemaining;
 
     [Header("Wall Jump")]
     public float wallCheckDistance = 0.3f;
     public float wallJumpForce = 8f;
     public Vector2 wallJumpDirection = new Vector2(1, 1);
     private bool hasWallJumped;
-    private float lastWallJumpDirection = 0f; 
+    private float lastWallJumpDirection = 0f;
 
     [Header("Ground Check")]
     public Transform groundCheck;
@@ -114,6 +115,9 @@ public class PlayerController : MonoBehaviour
             groundCheck.position = new Vector2(transform.position.x, transform.position.y - (colliderSize.y / 2));
         }
         GroundCheckLayer = groundLayer | platformLayer;
+
+        // Initialize dash count
+        dashesRemaining = dashCount;
     }
 
     private void Update()
@@ -123,8 +127,8 @@ public class PlayerController : MonoBehaviour
         var health = GetComponent<Health>();
         if (health != null && health.currentCCState != CrowdControlState.None)
         {
-            velocity.x = 0f; 
-            return; 
+            velocity.x = 0f;
+            return;
         }
 
         animator.SetFloat("Speed", Mathf.Abs(velocity.x));
@@ -142,7 +146,14 @@ public class PlayerController : MonoBehaviour
         }
 
         if (dashCooldownTimer > 0f)
+        {
             dashCooldownTimer -= Time.deltaTime;
+            // Reset dashes when cooldown finishes
+            if (dashCooldownTimer <= 0f)
+            {
+                dashesRemaining = dashCount;
+            }
+        }
 
         // Ground check
         RaycastHit2D ground = Physics2D.Raycast(groundCheck.position, Vector2.down, groundCheckRadius, GroundCheckLayer);
@@ -166,7 +177,8 @@ public class PlayerController : MonoBehaviour
             HasAirSwordDashed = false;
             HasAirUppercut = false;
             hasWallJumped = false;
-            lastWallJumpDirection = 0f; // Reset wall jump direction
+            lastWallJumpDirection = 0f;
+
 
             if (velocity.y < 0) velocity.y = -1f;
 
@@ -177,9 +189,9 @@ public class PlayerController : MonoBehaviour
                 jumpBufferCounter = 0f;
             }
         }
-        else if(velocity.y < 0f)
+        else if (velocity.y < 0f)
         {
-            if (canFloat && Input.GetKey(KeyCode.Space)) 
+            if (canFloat && Input.GetKey(KeyCode.Space))
                 isFloating = true;
         }
 
@@ -223,7 +235,7 @@ public class PlayerController : MonoBehaviour
         {
             if (wallCoyoteCounter > 0)
                 wallCoyoteCounter -= Time.deltaTime;
-          
+
         }
     }
 
@@ -359,7 +371,7 @@ public class PlayerController : MonoBehaviour
                     StartCoroutine(WallJumpBuffer());
                 }
             }
-            else if(airJumpsDone < airJumpCount)
+            else if (airJumpsDone < airJumpCount)
             {
                 velocity.y = jumpForce;
                 jumpLocked = true;
@@ -379,7 +391,7 @@ public class PlayerController : MonoBehaviour
     {
         if (skills != null && skills.IsChargeLocked) return;
         if (dashCooldownTimer > 0f) return;
-        if (!IsGrounded && hasAirDashed) return;
+        if (dashesRemaining <= 0) return;
 
         if (moveInput.sqrMagnitude > 0.1f)
             dashDirection = moveInput.normalized;
@@ -388,11 +400,15 @@ public class PlayerController : MonoBehaviour
 
         isDashing = true;
         dashTimer = dashDuration;
-        dashCooldownTimer = dashCooldown;
         velocity = dashDirection * dashSpeed;
 
-        if (!IsGrounded)
-            hasAirDashed = true;
+        dashesRemaining--;
+
+        // Start cooldown only when all dashes are used
+        if (dashesRemaining <= 0)
+        {
+            dashCooldownTimer = dashCooldown;
+        }
     }
 
     public void MarkAirSwordDash() => HasAirSwordDashed = true;
