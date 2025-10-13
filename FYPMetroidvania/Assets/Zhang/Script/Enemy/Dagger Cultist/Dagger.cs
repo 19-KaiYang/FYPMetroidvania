@@ -51,6 +51,7 @@ public class Dagger : ProjectileBase
             //    Vector2 knockDir = (player.transform.position - transform.position).normalized;
             //    ApplyKnockback(player, knockDir);
             //}
+
             Despawn();
         }
         if (!collision.CompareTag("Enemy") && !collision.CompareTag("Hurtbox"))
