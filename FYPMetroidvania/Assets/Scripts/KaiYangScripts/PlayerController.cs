@@ -58,6 +58,11 @@ public class PlayerController : MonoBehaviour
     [Header("Collider")]
     public Vector2 colliderSize = new Vector2(0.5f, 1f);
 
+    [Header("Knockback")]
+    public bool isInKnockback = false;
+    public float knockbackTimer = 0f;
+    public Vector2 knockbackVelocity;
+
     public Rigidbody2D rb;
     private Animator animator;
     private SpriteRenderer spriteRenderer;
@@ -224,7 +229,7 @@ public class PlayerController : MonoBehaviour
             Flip();
 
         // Apply movement manually
-        Move(velocity * Time.deltaTime);
+        //Move(velocity * Time.deltaTime);
 
         // Handle wall coyote timer
         if (IsTouchingWall() && !IsGrounded)
@@ -245,6 +250,18 @@ public class PlayerController : MonoBehaviour
 
         var health = GetComponent<Health>();
         bool inArcKnockdown = health != null && health.isInArcKnockdown;
+        if (isInKnockback)
+        {
+            velocity = knockbackVelocity;
+            knockbackTimer -= Time.deltaTime;
+            knockbackVelocity -= knockbackVelocity * Time.fixedDeltaTime;
+            if(knockbackTimer < 0)
+            {
+                isInKnockback = false;
+                externalVelocityOverride = false;
+                knockbackVelocity = Vector3.zero;
+            }
+        }
         // Apply gravity
         if (!isDashing)
             velocity.y += Time.fixedDeltaTime * (isFloating ? floatGravity : gravity);
@@ -444,6 +461,13 @@ public class PlayerController : MonoBehaviour
     public void SetVelocity(Vector2 newVel)
     {
         velocity = newVel;
+    }
+    public void SetKnockback(Vector2 knockback, float knockbackDuration)
+    {
+        isInKnockback = true;
+        knockbackTimer = knockbackDuration;
+        knockbackVelocity = knockback;
+        externalVelocityOverride = true;
     }
 
     //HIT STOP
