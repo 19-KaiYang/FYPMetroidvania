@@ -98,7 +98,7 @@ public class Spearman : Enemy
         //Spear spear = ProjectileManager.instance.SpawnSpear(throwPoint.position, Quaternion.identity);
 
         GameObject spearObj = Instantiate(spearPrefab, throwPoint.position, Quaternion.identity);
-        EnemyHitBox spear = spearObj.GetComponent<EnemyHitBox>();
+        Spear spear = spearObj.GetComponentInChildren<Spear>();
         spear.SetOwner(this);
         spear.Init(attackDamage, this);
     }

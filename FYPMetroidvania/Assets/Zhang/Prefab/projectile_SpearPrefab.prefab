@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 2139230836650948670}
   - component: {fileID: 4197124269757285658}
   - component: {fileID: -6873604439056532173}
-  - component: {fileID: 535359225923050487}
   m_Layer: 10
   m_Name: projectile_SpearPrefab
   m_TagString: Untagged
@@ -184,23 +183,11 @@ MonoBehaviour:
   knockback: 0
   rb: {fileID: 0}
   direction: {x: 0, y: 0}
+  currentCCState: 1
   forceY: 9
   destroyTime: 2
   offSet: {x: -3, y: 3}
   matetial: {fileID: 0}
---- !u!114 &535359225923050487
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5123925235219778073}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b95fea1b004c7247878e15342cdb73d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyHitBox
-  currentCCState: 1
-  attackMultiplier: 0
+  ownerAttackDamage: 0
+  attackMultiplier: 2
   finalDamage: 0
-  attackDamage: 0
