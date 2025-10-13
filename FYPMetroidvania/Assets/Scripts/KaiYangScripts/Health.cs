@@ -173,6 +173,9 @@ public class Health : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.Alpha4)) // press 4 to air knockdown self
                 ApplyKnockdown(defaultKnockdownDuration, true);
+
+            if (Input.GetKeyDown(KeyCode.Alpha5))
+                TakeDamage(0f, new Vector2(-10f, 5f), false, CrowdControlState.Stunned, 0.75f);
         }
 
         HandleArcKnockdown();
@@ -197,20 +200,29 @@ public class Health : MonoBehaviour
         // Apply knockback 
         if (rb != null && hitDirection.HasValue)
         {
-            rb.linearVelocity = Vector2.zero;
-            Vector2 finalForce = hitDirection.Value * knockbackMult;
-            if (useRawForce)
-                rb.AddForce(hitDirection.Value, ForceMode2D.Impulse);
+            if (isPlayer)
+            {
+                PlayerController pc = GetComponent<PlayerController>();
+                pc.SetKnockback(hitDirection.Value, forceCCDuration);
+            }
             else
-                rb.AddForce(finalForce, ForceMode2D.Impulse);
+            {
+                rb.linearVelocity = Vector2.zero;
+                Vector2 finalForce = hitDirection.Value * knockbackMult;
+                if (useRawForce)
+                    rb.AddForce(hitDirection.Value, ForceMode2D.Impulse);
+                else
+                    rb.AddForce(finalForce, ForceMode2D.Impulse);
+            }
         }
-
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, groundCheckValue, LayerMask.GetMask("Ground"));
+        bool airborne = hit.collider == null;
         // Apply CC effects 
         if (!isDebuff)
         {
             if (forceCC != CrowdControlState.None)
             {
-                if (forceCC == CrowdControlState.Stunned && !stunImmune)
+                if (forceCC == CrowdControlState.Stunned && !stunImmune && !airborne)
                 {
                     ApplyStun(forceCCDuration, hitDirection);
                 }
@@ -218,8 +230,6 @@ public class Health : MonoBehaviour
                 {
                     if (!knockdownImmune)
                     {
-                        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, groundCheckValue, LayerMask.GetMask("Ground"));
-                        bool airborne = hit.collider == null;
                         ApplyKnockdown(forceCCDuration, airborne, hitDirection, shouldPreserveVelocity);
                     }
                     else
