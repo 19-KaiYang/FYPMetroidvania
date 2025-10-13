@@ -4,15 +4,28 @@ using UnityEngine;
 
 public class Spear : ProjectileBase
 {
+    public CrowdControlState currentCCState = CrowdControlState.None;
     private PlayerController player;
     [SerializeField] private float forceY;
     [SerializeField] private float destroyTime;
     private float offset;
     [SerializeField] private Vector2 offSet;
     [SerializeField] private Material matetial;
-    
+    private Spearman owner;
+    [SerializeField] private float ownerAttackDamage;
 
-    
+    [SerializeField] private float attackMultiplier;
+    [SerializeField] private float finalDamage;
+
+    public void Init(float _attackDamage, Spearman _enemy)
+    {
+        ownerAttackDamage = _attackDamage;
+        owner = _enemy;
+    }
+    public void SetOwner(Spearman enemy)
+    {
+        owner = enemy;
+    }
     protected override void Awake()
     {
         base.Awake();
@@ -22,6 +35,7 @@ public class Spear : ProjectileBase
     {
         matetial = GetComponent<Renderer>().material;
         offset = Random.Range((float)offSet.x, (float)offSet.y);
+        finalDamage = attackMultiplier * owner.attackDamage;
         Move();
     }
     protected override void Update()
@@ -71,7 +85,16 @@ public class Spear : ProjectileBase
 
         if (collision.CompareTag("Player"))
         {
-            //player.
+            Health p = collision.GetComponent<Health>();
+            Vector2 dir;
+            dir = (collision.transform.position - this.transform.position).normalized;
+
+            p.TakeDamage(finalDamage, dir, true, CrowdControlState.Knockdown, 0f);
+
+            if (currentCCState == CrowdControlState.Stunned) p.ApplyStun(1, dir);
+            else if (currentCCState == CrowdControlState.Knockdown) p.ApplyKnockdown(1, false, dir);
+
+            Debug.Log($"Player take {finalDamage} damage");
         }
     }
     private IEnumerator Destroy()

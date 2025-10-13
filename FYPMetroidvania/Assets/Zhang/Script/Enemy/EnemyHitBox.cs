@@ -6,18 +6,7 @@ public class EnemyHitBox : MonoBehaviour
     private Enemy enemy;
     [SerializeField] private float attackMultiplier;
     [SerializeField] private float finalDamage;
-    private Spearman owner;
-    [SerializeField] private float attackDamage;
 
-    public void Init(float _attackDamage, Spearman _enemy)
-    {
-        attackDamage = _attackDamage;
-        owner = _enemy;
-    }
-    public void SetOwner(Spearman enemy)
-    {
-        owner = enemy;
-    }
 
     private void Awake()
     {
@@ -25,24 +14,24 @@ public class EnemyHitBox : MonoBehaviour
     }
     private void OnEnable()
     {
-        if (owner != null)
+        if(enemy != null)
         {
             finalDamage = attackMultiplier * enemy.attackDamage;
-        }
-        else
-        {
-            finalDamage = attackMultiplier * attackDamage;
+            Debug.Log("not projectile");
         }
     }
     public void Update()
     {
+
     }
     public void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
         {
             Health p = collision.GetComponent<Health>();
-            Vector2 dir = (collision.transform.position - enemy.transform.position).normalized;
+            Vector2 dir;
+            dir = (collision.transform.position - enemy.transform.position).normalized;
+
             p.TakeDamage(finalDamage, dir, true, CrowdControlState.Knockdown, 0f);
 
             if (currentCCState == CrowdControlState.Stunned) p.ApplyStun(1, dir);
