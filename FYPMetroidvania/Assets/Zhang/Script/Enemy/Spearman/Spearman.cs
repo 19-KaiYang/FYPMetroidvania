@@ -23,11 +23,12 @@ public class Spearman : Enemy
     [Header("Attack")]
     [SerializeField] private float thrustCooldown;
     [SerializeField] private float thrustTimer;
-    [SerializeField] private bool isThrustFinished;
+    [SerializeField] public bool isThrustFinished;
+    [SerializeField] public bool isThrowFinished;
 
     [SerializeField] private float throwCooldown;
     [SerializeField] private float throwTimer;
-    [SerializeField] private bool isThrowFinished;
+    
 
     [SerializeField] private GameObject spearPrefab;
     [SerializeField] private Transform throwPoint;
@@ -92,10 +93,14 @@ public class Spearman : Enemy
 
     
 
-    private void ThrowSpear()
+    public void ThrowSpear()
     {
-        Instantiate(spearPrefab,throwPoint.position, throwPoint.rotation);
         //Spear spear = ProjectileManager.instance.SpawnSpear(throwPoint.position, Quaternion.identity);
+
+        GameObject spearObj = Instantiate(spearPrefab, throwPoint.position, Quaternion.identity);
+        EnemyHitBox spear = spearObj.GetComponent<EnemyHitBox>();
+        spear.SetOwner(this);
+        spear.Init(attackDamage, this);
     }
 
     private void OnDrawGizmosSelected()
@@ -119,37 +124,37 @@ public class Spearman : Enemy
             Gizmos.DrawLine(transform.position, player.transform.position);
         }
     }
-    private void OnDrawGizmos()
-    {
-        if (!thrustCollider.activeInHierarchy) return;
+    //private void OnDrawGizmos()
+    //{
+    //    if (!thrustCollider.activeInHierarchy) return;
 
-        Gizmos.color = Color.cyan;
-        Gizmos.matrix = thrustCollider.transform.localToWorldMatrix;
+    //    Gizmos.color = Color.cyan;
+    //    Gizmos.matrix = thrustCollider.transform.localToWorldMatrix;
 
-        var col = thrustCollider.GetComponent<Collider2D>();
+    //    var col = thrustCollider.GetComponent<Collider2D>();
 
-        if (col is BoxCollider2D box)
-        {
-            Gizmos.DrawWireCube(box.offset, box.size);
-        }
-        else if (col is CircleCollider2D circle)
-        {
-            Gizmos.DrawWireSphere(circle.offset, circle.radius);
-        }
-        else if (col is PolygonCollider2D poly)
-        {
-            for (int p = 0; p < poly.pathCount; p++)
-            {
-                Vector2[] points = poly.GetPath(p);
-                for (int i = 0; i < points.Length; i++)
-                {
-                    Vector3 p1 = poly.transform.TransformPoint(points[i]);
-                    Vector3 p2 = poly.transform.TransformPoint(points[(i + 1) % points.Length]);
-                    Gizmos.DrawLine(p1, p2);
-                }
-            }
-        }
-    }
+    //    if (col is BoxCollider2D box)
+    //    {
+    //        Gizmos.DrawWireCube(box.offset, box.size);
+    //    }
+    //    else if (col is CircleCollider2D circle)
+    //    {
+    //        Gizmos.DrawWireSphere(circle.offset, circle.radius);
+    //    }
+    //    else if (col is PolygonCollider2D poly)
+    //    {
+    //        for (int p = 0; p < poly.pathCount; p++)
+    //        {
+    //            Vector2[] points = poly.GetPath(p);
+    //            for (int i = 0; i < points.Length; i++)
+    //            {
+    //                Vector3 p1 = poly.transform.TransformPoint(points[i]);
+    //                Vector3 p2 = poly.transform.TransformPoint(points[(i + 1) % points.Length]);
+    //                Gizmos.DrawLine(p1, p2);
+    //            }
+    //        }
+    //    }
+    //}
     void OnStateChanged(IState _state)
     {
         currentState = _state.GetType().Name;
@@ -206,10 +211,15 @@ public class Spearman : Enemy
             {
                 enemy.FaceToPlayer();
 
-                if (Mathf.Abs(enemy.distanceToPlayer.x) >= Mathf.Abs(enemy.attackAreaOffset.x))
+                if (Mathf.Abs(enemy.distanceToPlayer.x) >= Mathf.Abs(enemy.attackAreaOffset.x) && enemy.health.currentCCState == CrowdControlState.None)
                 {
-                    
-                    enemy.rb.linearVelocity = new Vector2(enemy.moveSpeed * enemy.transform.localScale.x, 0);
+                    enemy.animator.SetBool("isWalk", true);
+                    enemy.FaceToPlayer();
+                    enemy.rb.linearVelocity = new Vector2(enemy.moveSpeed * enemy.transform.localScale.x, enemy.rb.linearVelocityY);
+                }
+                else
+                {
+                    enemy.animator.SetBool("isWalk", false);
                 }
 
 
@@ -232,6 +242,7 @@ public class Spearman : Enemy
                     }
                 }
             }
+            else enemy.animator.SetBool("isWalk", false);
         }
         public void OnExit()
         {
@@ -249,7 +260,7 @@ public class Spearman : Enemy
         }
         public void OnEnter()
         {
-            enemy.animator.SetTrigger("Thrust");
+            enemy.animator.SetTrigger("thrust");
             enemy.isThrustFinished = false;
             enemy.thrustTimer = 0;
         }
@@ -281,7 +292,7 @@ public class Spearman : Enemy
         }
         public void OnEnter()
         {
-            enemy.animator.SetTrigger("Throw");
+            enemy.animator.SetTrigger("throw");
             enemy.isThrowFinished = false;
             enemy.throwTimer = 0;
         }

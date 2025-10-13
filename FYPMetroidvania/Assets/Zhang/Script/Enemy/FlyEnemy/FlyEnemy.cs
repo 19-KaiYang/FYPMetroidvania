@@ -189,6 +189,8 @@ public class FlyEnemy : Enemy
             {
                 targetPos = new Vector2(playerX + Mathf.Sin(Time.time) * 2 + 5, playerY + Mathf.Sin(Time.time) * 2 + 3);
             }
+
+
             Vector2 dir = (targetPos - (Vector2)enemy.transform.position).normalized;
 
             Vector2 w = new Vector2(-dir.y, dir.x);
