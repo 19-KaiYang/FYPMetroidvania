@@ -54,6 +54,11 @@ MonoBehaviour:
   customKnockback: {x: 0, y: 0}
   isSweepHitbox: 0
   sweepKnockbackForce: 12
+  X_Knockback: 0
+  Y_Knockback: 0
+  facingRight: 0
+  CCType: 1
+  CCDuration: 0.5
   applyBloodMark: 0
   isSkillHitbox: 1
   isUltimateHitbox: 0
@@ -193,6 +198,11 @@ MonoBehaviour:
   customKnockback: {x: 0, y: 0}
   isSweepHitbox: 1
   sweepKnockbackForce: 10
+  X_Knockback: 12
+  Y_Knockback: 3
+  facingRight: 0
+  CCType: 2
+  CCDuration: 0.5
   applyBloodMark: 0
   isSkillHitbox: 1
   isUltimateHitbox: 0
@@ -296,6 +306,11 @@ MonoBehaviour:
   customKnockback: {x: 0, y: 0}
   isSweepHitbox: 0
   sweepKnockbackForce: 12
+  X_Knockback: 1
+  Y_Knockback: 12
+  facingRight: 0
+  CCType: 1
+  CCDuration: 0.5
   applyBloodMark: 0
   isSkillHitbox: 1
   isUltimateHitbox: 0
@@ -399,6 +414,11 @@ MonoBehaviour:
   customKnockback: {x: 0, y: 0}
   isSweepHitbox: 0
   sweepKnockbackForce: 12
+  X_Knockback: 0.5
+  Y_Knockback: 0
+  facingRight: 0
+  CCType: 1
+  CCDuration: 0.5
   applyBloodMark: 0
   isSkillHitbox: 0
   isUltimateHitbox: 0
@@ -421,8 +441,8 @@ GameObject:
   - component: {fileID: 2031253323394754989}
   - component: {fileID: 6065374579453490422}
   - component: {fileID: 5268254380248255037}
-  - component: {fileID: 8780732598817854415}
   - component: {fileID: 1279543683446778900}
+  - component: {fileID: 7621129067624534827}
   m_Layer: 8
   m_Name: FinalPlayer
   m_TagString: Player
@@ -598,25 +618,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spriteTransform: {fileID: 6739047975924462519}
-  moveSpeed: 5
-  jumpForce: 10
-  gravity: -30
+  moveSpeed: 10
+  jumpForce: 17
+  gravity: -45
   jumpBufferTime: 0.15
   airJumpCount: 0
   canFloat: 0
-  floatGravity: -5
+  floatGravity: -8
   platformDropping: 0
   platformDropDuration: 0.1
-  platformDropSpeed: 10
+  platformDropSpeed: 5
   wallCoyoteTime: 0.15
-  dashSpeed: 8
-  dashDuration: 0.2
+  dashSpeed: 18
+  dashDuration: 0.25
   dashCooldown: 1
   dashCount: 1
   dashesRemaining: 0
   wallCheckDistance: 0.3
-  wallJumpForce: 8
-  wallJumpDirection: {x: 1.2, y: 0.8}
+  wallJumpForce: 15
+  wallJumpDirection: {x: 0.8, y: 1.2}
   groundCheck: {fileID: 4587435243054224353}
   groundCheckRadius: 0.1
   groundLayer:
@@ -626,6 +646,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   colliderSize: {x: 0.5, y: 1}
+  isInKnockback: 0
+  knockbackTimer: 0
+  knockbackVelocity: {x: 0, y: 0}
   rb: {fileID: 7721234354411303025}
   moveInput: {x: 0, y: 0}
   externalVelocityOverride: 0
@@ -734,6 +757,7 @@ MonoBehaviour:
   knockbackForce: 5
   stunPushbackForce: 3
   groundCheckValue: 2
+  knockbackMult: 1
   defaultStunDuration: 1
   defaultKnockdownDuration: 2
   knockdownRecoveryTime: 1
@@ -774,7 +798,7 @@ MonoBehaviour:
   swordDashHitbox: {fileID: 269540336706389665}
   swordUppercutHitbox: {fileID: 8223723184335653064}
   gauntletShockwaveHitbox: {fileID: 204553692531015905}
-  dashSpeed: 30
+  dashSpeed: 35
   dashDuration: 0.3
   dashFlatDamage: 23
   swordDashHealthCost: 5
@@ -783,9 +807,9 @@ MonoBehaviour:
   swordDashCCDuration: 1.5
   swordDashCooldown: 0
   swordDashCost: 20
-  uppercutUpSpeed: 7
-  uppercutForwardSpeed: 2
-  uppercutDuration: 0.2
+  uppercutUpSpeed: 25
+  uppercutForwardSpeed: 1.5
+  uppercutDuration: 0.15
   uppercutFlatDamage: 10
   swordUppercutHealthCost: 8
   swordUppercutGroundedCC: 2
@@ -893,20 +917,6 @@ MonoBehaviour:
   heatPerSkill: 20
   chunkSize: 10
   chunkInterval: 0.5
---- !u!114 &8780732598817854415
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 765186428982251967}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f7dd5ca101a667c4daf85efcf203527d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SpiritGauge
-  maxSpirit: 100
-  drainPerSecond: 2
 --- !u!114 &1279543683446778900
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -919,11 +929,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da0739f9832287e42b250c7ec38dd4ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeManager
-  AttackUpgrade: {fileID: 11400000, guid: 7ef4f18aebc187e45bf76089f80df883, type: 2}
+  AttackUpgrade: {fileID: 0}
   SkillUpgrade: {fileID: 0}
   SpiritUpgrade: {fileID: 0}
   MobilityUpgrade: {fileID: 0}
   MiscUpgrades: []
+--- !u!114 &7621129067624534827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 765186428982251967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7dd5ca101a667c4daf85efcf203527d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpiritGauge
+  maxSpirit: 100
+  drainPerSecond: 20
 --- !u!1 &1219747033826149343
 GameObject:
   m_ObjectHideFlags: 0
@@ -1127,6 +1151,11 @@ MonoBehaviour:
   customKnockback: {x: 0, y: 0}
   isSweepHitbox: 0
   sweepKnockbackForce: 12
+  X_Knockback: 0
+  Y_Knockback: 0
+  facingRight: 0
+  CCType: 1
+  CCDuration: 0.5
   applyBloodMark: 0
   isSkillHitbox: 0
   isUltimateHitbox: 0
@@ -1380,6 +1409,11 @@ MonoBehaviour:
   customKnockback: {x: 0, y: 0}
   isSweepHitbox: 0
   sweepKnockbackForce: 12
+  X_Knockback: 0
+  Y_Knockback: 0
+  facingRight: 0
+  CCType: 1
+  CCDuration: 0.5
   applyBloodMark: 0
   isSkillHitbox: 0
   isUltimateHitbox: 0
@@ -1545,6 +1579,11 @@ MonoBehaviour:
   customKnockback: {x: 0, y: 0}
   isSweepHitbox: 1
   sweepKnockbackForce: 30
+  X_Knockback: -2
+  Y_Knockback: 12
+  facingRight: 0
+  CCType: 2
+  CCDuration: 1
   applyBloodMark: 0
   isSkillHitbox: 0
   isUltimateHitbox: 0
@@ -6484,6 +6523,11 @@ MonoBehaviour:
   customKnockback: {x: 0, y: 0}
   isSweepHitbox: 0
   sweepKnockbackForce: 12
+  X_Knockback: 0.5
+  Y_Knockback: 0
+  facingRight: 0
+  CCType: 1
+  CCDuration: 0.5
   applyBloodMark: 0
   isSkillHitbox: 0
   isUltimateHitbox: 0
@@ -6587,6 +6631,11 @@ MonoBehaviour:
   customKnockback: {x: 0, y: 0}
   isSweepHitbox: 0
   sweepKnockbackForce: 12
+  X_Knockback: 0
+  Y_Knockback: 0
+  facingRight: 0
+  CCType: 1
+  CCDuration: 0.5
   applyBloodMark: 0
   isSkillHitbox: 0
   isUltimateHitbox: 0
@@ -6690,6 +6739,11 @@ MonoBehaviour:
   customKnockback: {x: 0, y: 0}
   isSweepHitbox: 0
   sweepKnockbackForce: 12
+  X_Knockback: 5
+  Y_Knockback: 8
+  facingRight: 0
+  CCType: 1
+  CCDuration: 0.5
   applyBloodMark: 0
   isSkillHitbox: 0
   isUltimateHitbox: 0
@@ -6793,6 +6847,11 @@ MonoBehaviour:
   customKnockback: {x: 0, y: 0}
   isSweepHitbox: 0
   sweepKnockbackForce: 12
+  X_Knockback: 0
+  Y_Knockback: 0
+  facingRight: 0
+  CCType: 1
+  CCDuration: 0.5
   applyBloodMark: 0
   isSkillHitbox: 0
   isUltimateHitbox: 0
@@ -6927,6 +6986,11 @@ MonoBehaviour:
   customKnockback: {x: 0, y: 0}
   isSweepHitbox: 0
   sweepKnockbackForce: 12
+  X_Knockback: 7
+  Y_Knockback: 3
+  facingRight: 0
+  CCType: 2
+  CCDuration: 0.5
   applyBloodMark: 0
   isSkillHitbox: 0
   isUltimateHitbox: 0
@@ -7030,6 +7094,11 @@ MonoBehaviour:
   customKnockback: {x: 0, y: 0}
   isSweepHitbox: 0
   sweepKnockbackForce: 12
+  X_Knockback: 0
+  Y_Knockback: 0
+  facingRight: 0
+  CCType: 1
+  CCDuration: 0.5
   applyBloodMark: 0
   isSkillHitbox: 0
   isUltimateHitbox: 0
@@ -7164,6 +7233,11 @@ MonoBehaviour:
   customKnockback: {x: 0, y: 0}
   isSweepHitbox: 1
   sweepKnockbackForce: 10
+  X_Knockback: 3
+  Y_Knockback: 10
+  facingRight: 0
+  CCType: 2
+  CCDuration: 0.5
   applyBloodMark: 0
   isSkillHitbox: 1
   isUltimateHitbox: 0
