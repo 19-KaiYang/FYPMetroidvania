@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Spear : ProjectileBase
@@ -9,7 +10,9 @@ public class Spear : ProjectileBase
     private float offset;
     [SerializeField] private Vector2 offSet;
     [SerializeField] private Material matetial;
+    
 
+    
     protected override void Awake()
     {
         base.Awake();
@@ -65,6 +68,11 @@ public class Spear : ProjectileBase
 
             StartCoroutine(Destroy());
         }
+
+        if (collision.CompareTag("Player"))
+        {
+            //player.
+        }
     }
     private IEnumerator Destroy()
     {
@@ -83,5 +91,4 @@ public class Spear : ProjectileBase
         }
         Despawn();
     }
-
 }

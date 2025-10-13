@@ -1,5 +1,6 @@
-using System;
+using System.Collections;
 using UnityEngine;
+
 
 public class Enemy : MonoBehaviour
 {
@@ -54,7 +55,7 @@ public class Enemy : MonoBehaviour
     protected virtual void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
+        //animator = GetComponent<Animator>();
         animator = GetComponentInChildren<Animator>();
         player = FindFirstObjectByType<PlayerController>();
         health = GetComponent<Health>();
@@ -77,13 +78,16 @@ public class Enemy : MonoBehaviour
         Vector3 spawnPos = damageParticlePos.position;
         Quaternion rotation;
 
+        float rotationR = Random.Range(0f, -70f);
+        float rotationL = Random.Range(-130f, -180f);
+
         if (distanceToPlayer.x >= 0)
         {
-            rotation = Quaternion.Euler(-30f, 90f, -90f);
+            rotation = Quaternion.Euler(rotationR, 90f, -90f);
         }
         else
         {
-            rotation = Quaternion.Euler(-150f, 90f, -90f);
+            rotation = Quaternion.Euler(rotationL, 90f, -90f);
         }
 
         GameObject particle = Instantiate(damageParticle, spawnPos, rotation);
