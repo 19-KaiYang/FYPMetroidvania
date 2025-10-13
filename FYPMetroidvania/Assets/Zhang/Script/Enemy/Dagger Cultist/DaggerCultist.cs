@@ -103,10 +103,10 @@ public class DaggerCultist : Enemy
         base.Die();
     }
 
-    public override void TakeDamage(float _damage, Vector2 _dir)
-    {
-        base.TakeDamage(_damage, _dir);
-    }
+    //public override void TakeDamage(float _damage, Vector2 _dir)
+    //{
+    //    base.TakeDamage(_damage, _dir);
+    //}
 
     public class DaggerCultistIdleState : IState
     {

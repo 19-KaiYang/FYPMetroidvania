@@ -16,5 +16,16 @@ public class EnemyAnimationEvent : MonoBehaviour
         brawler.isAttackFinished = true;
     }
 
-
+    private void SpearManThrow()
+    {
+        spearman.ThrowSpear();
+    }
+    private void SpearManThrowFinished()
+    {
+        spearman.isThrowFinished = true;
+    }
+    private void SpearManThrustFinished()
+    {
+        spearman.isThrustFinished = true;
+    }
 }
