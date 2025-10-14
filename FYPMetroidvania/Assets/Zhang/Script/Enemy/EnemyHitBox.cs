@@ -6,6 +6,9 @@ public class EnemyHitBox : MonoBehaviour
     private Enemy enemy;
     [SerializeField] private float attackMultiplier;
     [SerializeField] private float finalDamage;
+    private Spearman owner;
+    [SerializeField] private float attackDamage;
+    public float knockback;
 
 
     private void Awake()
@@ -29,13 +32,11 @@ public class EnemyHitBox : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             Health p = collision.GetComponent<Health>();
-            Vector2 dir;
-            dir = (collision.transform.position - enemy.transform.position).normalized;
+            Vector2 dir = (collision.transform.position - enemy.transform.position).normalized; dir.y = 0f;
+            p.TakeDamage(finalDamage, dir * knockback, true, currentCCState, 0.5f);
 
-            p.TakeDamage(finalDamage, dir, true, CrowdControlState.Knockdown, 0f);
-
-            if (currentCCState == CrowdControlState.Stunned) p.ApplyStun(1, dir);
-            else if (currentCCState == CrowdControlState.Knockdown) p.ApplyKnockdown(1, false, dir);
+            //if (currentCCState == CrowdControlState.Stunned) p.ApplyStun(1, dir);
+            //else if (currentCCState == CrowdControlState.Knockdown) p.ApplyKnockdown(1, false, dir);
 
             //Debug.Log($"Player take {finalDamage} damage");
         }

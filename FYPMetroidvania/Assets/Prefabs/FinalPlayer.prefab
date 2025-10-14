@@ -443,6 +443,7 @@ GameObject:
   - component: {fileID: 5268254380248255037}
   - component: {fileID: 1279543683446778900}
   - component: {fileID: 7621129067624534827}
+  - component: {fileID: 6563075640411928745}
   m_Layer: 8
   m_Name: FinalPlayer
   m_TagString: Player
@@ -520,7 +521,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -636,7 +637,7 @@ MonoBehaviour:
   dashesRemaining: 0
   wallCheckDistance: 0.3
   wallJumpForce: 15
-  wallJumpDirection: {x: 0.8, y: 1.2}
+  wallJumpDirection: {x: 1, y: 1.2}
   groundCheck: {fileID: 4587435243054224353}
   groundCheckRadius: 0.1
   groundLayer:
@@ -807,7 +808,7 @@ MonoBehaviour:
   swordDashCCDuration: 1.5
   swordDashCooldown: 0
   swordDashCost: 20
-  uppercutUpSpeed: 25
+  uppercutUpSpeed: 20
   uppercutForwardSpeed: 1.5
   uppercutDuration: 0.15
   uppercutFlatDamage: 10
@@ -935,6 +936,20 @@ MonoBehaviour:
   MobilityUpgrade: {fileID: 0}
   MiscUpgrades: []
 --- !u!114 &7621129067624534827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 765186428982251967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7dd5ca101a667c4daf85efcf203527d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpiritGauge
+  maxSpirit: 100
+  drainPerSecond: 20
+--- !u!114 &6563075640411928745
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -7253,6 +7268,7 @@ GameObject:
   - component: {fileID: 259343632847283508}
   - component: {fileID: 8233210284631527292}
   - component: {fileID: 2387868613242150479}
+  - component: {fileID: 2059461097378009830}
   m_Layer: 0
   m_Name: Sprite
   m_TagString: Untagged
@@ -7300,7 +7316,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 63b3518254a0d984e867983da7c9fda1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -7321,7 +7337,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_Sprite: {fileID: -1484801028873491122, guid: 066987860af3bc24382aed0a9ababcc0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -7368,3 +7384,57 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AnimationEventRelay
   particleEffectsObject: {fileID: 4064043382543299264}
+--- !u!114 &2059461097378009830
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8302625869394393446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db70e0ea77f5ac47a8f4565a9406397, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.2D.Runtime::UnityEngine.Rendering.Universal.ShadowCaster2D
+  m_ShadowGroup: 0
+  m_Priority: 2
+  m_ComponentVersion: 5
+  m_HasRenderer: 1
+  m_UseRendererSilhouette: 1
+  m_CastsShadows: 1
+  m_SelfShadows: 0
+  m_AlphaCutoff: 0.1
+  m_ApplyToSortingLayers: 00000000
+  m_ShapePath:
+  - {x: -1.4300596, y: 0.058451854, z: 0}
+  - {x: -0.37271282, y: 5.7645564, z: 0}
+  - {x: -0.23177564, y: 7.2967973, z: 0}
+  - {x: 0.81630456, y: 7.384477, z: 0}
+  - {x: 0.6794443, y: 5.589198, z: 0}
+  - {x: 1.0793359, y: 0.00000005729993, z: 0}
+  m_ShapePathHash: -311273551
+  m_InstanceId: 0
+  m_ShadowShape2DComponent: {fileID: 0}
+  m_ShadowShape2DProvider:
+    rid: -2
+  m_ShadowCastingSource: 1
+  m_ShadowMesh:
+    m_Mesh: {fileID: 0}
+    m_LocalBounds:
+      m_Center: {x: -0.17536175, y: 3.6922386, z: 0}
+      m_Extent: {x: 1.2546978, y: 3.6922386, z: 0}
+    m_EdgeProcessing: 1
+    m_TrimEdge: 0.04
+    m_FlipX: 0
+    m_FlipY: 0
+    m_InitialTrim: 0
+  m_CastingOption: 1
+  m_PreviousTrimEdge: 0.04
+  m_PreviousEdgeProcessing: 1
+  m_PreviousShadowCastingSource: 1
+  m_PreviousShadowShape2DSource: {fileID: 0}
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }

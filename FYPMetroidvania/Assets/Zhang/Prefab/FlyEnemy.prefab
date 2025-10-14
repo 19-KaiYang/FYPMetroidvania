@@ -64,7 +64,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 63b3518254a0d984e867983da7c9fda1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -200,6 +200,8 @@ MonoBehaviour:
   isFacingRight: 1
   isFacingLeft: 0
   distanceToPlayer: {x: 0, y: 0}
+  damageParticle: {fileID: 0}
+  damageParticlePos: {fileID: 0}
   originalPosiiton: {x: 0, y: 0}
   chaseSpeed: 1
   waveAmplitude: 2
@@ -241,10 +243,13 @@ MonoBehaviour:
   knockbackForce: 5
   stunPushbackForce: 5
   groundCheckValue: 1
+  knockbackMult: 1
   defaultStunDuration: 1
   defaultKnockdownDuration: 2
   knockdownRecoveryTime: 1
   currentCCState: 0
+  stunImmune: 0
+  knockdownImmune: 0
   invincibilityDuration: 0.3
   isBloodMarked: 0
   bloodMarkHealAmount: 10
