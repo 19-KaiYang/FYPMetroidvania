@@ -10,15 +10,6 @@ public class EnemyHitBox : MonoBehaviour
     [SerializeField] private float attackDamage;
     public float knockback;
 
-    public void Init(float _attackDamage, Spearman _enemy)
-    {
-        attackDamage = _attackDamage;
-        owner = _enemy;
-    }
-    public void SetOwner(Spearman enemy)
-    {
-        owner = enemy;
-    }
 
     private void Awake()
     {
@@ -26,17 +17,15 @@ public class EnemyHitBox : MonoBehaviour
     }
     private void OnEnable()
     {
-        if (owner != null)
+        if(enemy != null)
         {
             finalDamage = attackMultiplier * enemy.attackDamage;
-        }
-        else
-        {
-            finalDamage = attackMultiplier * attackDamage;
+            Debug.Log("not projectile");
         }
     }
     public void Update()
     {
+
     }
     public void OnTriggerEnter2D(Collider2D collision)
     {
@@ -49,7 +38,7 @@ public class EnemyHitBox : MonoBehaviour
             //if (currentCCState == CrowdControlState.Stunned) p.ApplyStun(1, dir);
             //else if (currentCCState == CrowdControlState.Knockdown) p.ApplyKnockdown(1, false, dir);
 
-            Debug.Log($"Player take {finalDamage} damage");
+            //Debug.Log($"Player take {finalDamage} damage");
         }
     }
     private void OnDrawGizmos()

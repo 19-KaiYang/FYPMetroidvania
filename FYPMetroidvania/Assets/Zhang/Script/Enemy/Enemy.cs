@@ -114,17 +114,6 @@ public class Enemy : MonoBehaviour
             Flip();
         }
     }
-
-    //public virtual void TakeDamage(float _damage, Vector2 _dir)
-    //{
-    //    currentHealth -= _damage;
-
-    //    if(currentHealth <= 0)
-    //    {
-    //        Die();
-    //    }
-    //}
-
     public virtual void Die()
     {
 

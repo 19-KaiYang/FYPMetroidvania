@@ -234,6 +234,11 @@ MonoBehaviour:
   speed: 20
   knockback: 5
   rb: {fileID: 0}
+  direction: {x: 0, y: 0}
+  currentCCState: 0
+  ownerAttackDamage: 0
+  attackMultiplier: 1.5
+  finalDamage: 0
 --- !u!50 &7498822927185310925
 Rigidbody2D:
   serializedVersion: 5
