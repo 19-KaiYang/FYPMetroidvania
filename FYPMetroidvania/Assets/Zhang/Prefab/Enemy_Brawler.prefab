@@ -390,6 +390,7 @@ MonoBehaviour:
   attackMultiplier: 2
   finalDamage: 0
   attackDamage: 0
+  knockback: 6
 --- !u!1 &4298579516614745451
 GameObject:
   m_ObjectHideFlags: 0
@@ -788,6 +789,7 @@ MonoBehaviour:
   attackMultiplier: 1
   finalDamage: 0
   attackDamage: 0
+  knockback: 0
 --- !u!1 &7201207688564687193
 GameObject:
   m_ObjectHideFlags: 0
