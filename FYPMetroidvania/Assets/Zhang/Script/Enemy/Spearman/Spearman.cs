@@ -45,8 +45,9 @@ public class Spearman : Enemy
         stateMachine.stateChanged += OnStateChanged;
     }
 
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         stateMachine.Initialize(new SpearmanIdleState(this));
     }
 
