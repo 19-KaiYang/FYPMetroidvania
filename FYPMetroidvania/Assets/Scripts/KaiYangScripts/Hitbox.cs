@@ -12,7 +12,6 @@ public class Hitbox : MonoBehaviour
     public float damage;
     public bool isCritical = false;
 
-
     [Header("Hitstop Settings")]
     public float hitstopDuration = 0.08f;
     public bool applyHitstopToEnemy = true;
@@ -25,6 +24,14 @@ public class Hitbox : MonoBehaviour
     [Header("Special Sweep Knockback")]
     public bool isSweepHitbox = false;
     public float sweepKnockbackForce = 12f;
+
+    [Header("Knockback Settings")]
+    public float X_Knockback; public float Y_Knockback;
+    public bool facingRight;
+
+    [Header("Crowd Control Settings")]
+    public CrowdControlState CCType = CrowdControlState.Stunned;
+    public float CCDuration = 0.5f;
 
     [Header("Special Settings")]
     public bool applyBloodMark = false;
@@ -51,6 +58,7 @@ public class Hitbox : MonoBehaviour
         if (!isSkillHitbox && owner != null)
         {
             damage = owner.GetAttackDamage(owner.CurrentComboStep);
+            facingRight = PlayerController.instance.facingRight;
         }
     }
 
@@ -82,41 +90,9 @@ public class Hitbox : MonoBehaviour
             {
                 hitEnemies.Add(h);
 
-                Vector2 dir;
-                bool useRawForce = false;
-                CrowdControlState forceCC = CrowdControlState.None;
-
                 OnHit?.Invoke(this, h);
-
-                if (isSweepHitbox)
-                {
-                    dir = Vector2.up * sweepKnockbackForce;
-                    useRawForce = true;
-                    h.TakeDamage(damage, dir, useRawForce, CrowdControlState.Knockdown, 2.0f);
-                }
-                else if (forceUpKnockback)
-                {
-                    dir = customKnockback;
-                    h.TakeDamage(damage, dir, useRawForce, CrowdControlState.None, 0f);
-                }
-                else
-                {
-                    Vector3 sourcePos = (owner != null) ? owner.transform.position : transform.position;
-                    dir = (other.transform.position - sourcePos).normalized;
-
-                    if (isSkillHitbox)
-                    {
-                        h.TakeDamage(damage, dir, false, CrowdControlState.Stunned, 0f);
-                    }
-                    else if (isUltimateHitbox)
-                    {
-                        h.TakeDamage(damage, dir, false, CrowdControlState.Stunned, 1.5f);
-                    }
-                    else
-                    {
-                        h.TakeDamage(damage, dir, false, CrowdControlState.None, 0f);
-                    }
-                }
+                float directionalXknockback = facingRight ? X_Knockback : -X_Knockback;
+                h.TakeDamage(damage, new Vector2(directionalXknockback, Y_Knockback), false, CCType, CCDuration);
 
                 if (!h.isPlayer && applyBloodMark)
                 {

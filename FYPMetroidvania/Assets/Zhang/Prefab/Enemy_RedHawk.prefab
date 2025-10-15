@@ -230,7 +230,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af196f38ea8868b40a61bf0922e5bf00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Health
-  maxHealth: 100
+  maxHealth: 50
   destroyOnDeath: 1
   isPlayer: 0
   currentHealth: 0
@@ -244,6 +244,7 @@ MonoBehaviour:
   knockbackForce: 5
   stunPushbackForce: 5
   groundCheckValue: 1
+  knockbackMult: 1
   defaultStunDuration: 1
   defaultKnockdownDuration: 2
   knockdownRecoveryTime: 1
@@ -366,7 +367,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 63b3518254a0d984e867983da7c9fda1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -525,6 +526,8 @@ MonoBehaviour:
   currentCCState: 1
   attackMultiplier: 1
   finalDamage: 0
+  attackDamage: 0
+  knockback: 0
 --- !u!61 &5754736961652110007
 BoxCollider2D:
   m_ObjectHideFlags: 0
