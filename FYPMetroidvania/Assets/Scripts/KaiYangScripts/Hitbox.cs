@@ -13,17 +13,8 @@ public class Hitbox : MonoBehaviour
     public bool isCritical = false;
 
     [Header("Hitstop Settings")]
-    public float hitstopDuration = 0.08f;
-    public bool applyHitstopToEnemy = true;
-    public bool applyHitstopToPlayer = true;
-
-    [Header("Knockback Overrides")]
-    public bool forceUpKnockback = false;
-    public Vector2 customKnockback = Vector2.zero;
-
-    [Header("Special Sweep Knockback")]
-    public bool isSweepHitbox = false;
-    public float sweepKnockbackForce = 12f;
+    public float hitstopDuration = 0.05f;
+    public bool applyHitstop = false;
 
     [Header("Knockback Settings")]
     public float X_Knockback; public float Y_Knockback;
@@ -32,6 +23,9 @@ public class Hitbox : MonoBehaviour
     [Header("Crowd Control Settings")]
     public CrowdControlState CCType = CrowdControlState.Stunned;
     public float CCDuration = 0.5f;
+
+    [Header("FX")]
+    public SFXTYPE sfx = SFXTYPE.NONE;
 
     [Header("Special Settings")]
     public bool applyBloodMark = false;
@@ -88,6 +82,7 @@ public class Hitbox : MonoBehaviour
             Health h = other.GetComponentInParent<Health>();
             if (h != null && !hitEnemies.Contains(h))
             {
+                if(sfx != SFXTYPE.NONE) AudioManager.PlaySFX(sfx, 0.3f);
                 hitEnemies.Add(h);
 
                 OnHit?.Invoke(this, h);
@@ -98,20 +93,45 @@ public class Hitbox : MonoBehaviour
                 {
                     h.ApplyBloodMark();
                 }
-
-                // hitstop 
-                if (skills != null)
+                if (applyHitstop)
                 {
-                    if (applyHitstopToEnemy)
-                        skills.StartCoroutine(skills.LocalHitstop(h.GetComponent<Rigidbody2D>(), hitstopDuration));
-
-                    if (applyHitstopToPlayer)
-                        skills.StartCoroutine(skills.LocalHitstop(skills.GetComponent<Rigidbody2D>(), hitstopDuration));
+                    StartCoroutine(LocalHitstop(owner.GetComponent<Rigidbody2D>(), hitstopDuration));
                 }
+                //// hitstop 
+                //if (skills != null)
+                //{
+                //    if (applyHitstopToEnemy)
+                //        skills.StartCoroutine(skills.LocalHitstop(h.GetComponent<Rigidbody2D>(), hitstopDuration));
+
+                //    if (applyHitstopToPlayer)
+                //        skills.StartCoroutine(skills.LocalHitstop(skills.GetComponent<Rigidbody2D>(), hitstopDuration));
+                //}
             }
         }
     }
+    public IEnumerator LocalHitstop(Rigidbody2D targetRb, float duration)
+    {
+        PlayerController pc = targetRb ? targetRb.GetComponent<PlayerController>() : null;
 
+        Vector2 savedVel = Vector2.zero;
+        if (pc != null) savedVel = pc.GetVelocity();
+
+        // freeze
+        if (pc != null) pc.SetHitstop(true);
+        //if (targetRb) targetRb.simulated = false;
+
+        yield return new WaitForSecondsRealtime(duration);
+
+        // unfreeze
+        if (pc != null)
+        {
+            pc.SetHitstop(false);
+            pc.SetVelocity(savedVel);
+            pc.externalVelocityOverride = false;
+        }
+
+        if (targetRb) targetRb.simulated = true;
+    }
     private void OnDrawGizmos()
     {
         if (col == null) col = GetComponent<Collider2D>();

@@ -318,8 +318,8 @@ public class Health : MonoBehaviour
 
         //gameObject.SetActive(false);
 
-        //if (destroyOnDeath)
-        //    Destroy(gameObject);
+        if (destroyOnDeath)
+            Destroy(gameObject);
         //else
         //    gameObject.SetActive(false);
     }

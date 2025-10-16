@@ -71,9 +71,11 @@ public class CombatSystem : MonoBehaviour
     private float attackCooldown;
 
     // Combat variables
-    private int comboStep = 0;
+    public int comboStep = 0;
     private float comboTimer = 0f;
     private float attackCooldownTimer = 0f;
+    public bool canTransition = true;
+    public bool isBuffered;
 
     // Weapon unlocks
     private HashSet<WeaponType> unlockedWeapons = new HashSet<WeaponType>();
@@ -122,7 +124,7 @@ public class CombatSystem : MonoBehaviour
         if (enemyLayer >= 0)
             Physics2D.IgnoreLayerCollision(playerLayer, enemyLayer, true);
 
-        currentWeapon = WeaponType.None;
+        UnlockWeapon(WeaponType.Sword);
         ApplyWeaponStats(currentWeapon);
     }
 
@@ -134,6 +136,29 @@ public class CombatSystem : MonoBehaviour
 
         if (attackCooldownTimer > 0f)
             attackCooldownTimer -= Time.deltaTime;
+
+        if (isBuffered && canTransition)
+        {
+            if (comboStep > 3)
+            {
+                //comboStep = 0;
+                comboTimer = 1f;
+            }
+            else
+            {
+                comboTimer = 1f;
+            }
+            attackCooldownTimer = attackCooldown;
+
+            animator.SetTrigger("DoAttack");
+
+            //controller.externalVelocityOverride = true;
+            //controller.SetHitstop(false);
+
+            Debug.Log($"Performing Combo Step {comboStep} with {currentWeapon}");
+            canTransition = false;
+            //isBuffered = false;
+        }
 
         if (comboStep > 0)
         {
@@ -395,11 +420,6 @@ public class CombatSystem : MonoBehaviour
         {
             if (controller.IsGrounded && swordDownSweepHitbox != null)
             {
-                // Grounded sweep attack
-                var hb = swordDownSweepHitbox.GetComponent<Hitbox>();
-                if (hb != null)
-                    hb.isSweepHitbox = true; 
-
                 StartCoroutine(ToggleHitbox(swordDownSweepHitbox, 0.2f));
             }
             else if (swordDownHitbox != null)
@@ -424,28 +444,16 @@ public class CombatSystem : MonoBehaviour
                 return;
             }
         }
-
-        // Normal flow
-        comboStep++;
-        if (comboStep > 3)
+        if (!isBuffered)
         {
-            comboStep = 1;
-            comboTimer = 0.5f; 
-        }
-        else
-        {
-            comboTimer = 0.8f;  
+            // Normal flow
+            comboStep++;
+            animator.SetInteger("ComboStep", comboStep);
+            isBuffered = true;
+            //if (comboStep > 3) ResetCombo();
         }
 
-        attackCooldownTimer = attackCooldown;
-
-        animator.SetTrigger("DoAttack");
-        animator.SetInteger("ComboStep", comboStep);
-
-        controller.externalVelocityOverride = false;
-        controller.SetHitstop(false);
-
-        Debug.Log($"Performing Combo Step {comboStep} with {currentWeapon}");
+        
     }
 
     // === HITBOX HELPERS ===
@@ -510,6 +518,7 @@ public class CombatSystem : MonoBehaviour
             particleEffectAnimator.SetTrigger("Effect1");
             Debug.Log("Playing Effect1");
         }
+        AudioManager.PlaySFX(SFXTYPE.SWORD_SWING, 0.5f);
     }
 
     public void PlayEffect2()
@@ -519,6 +528,7 @@ public class CombatSystem : MonoBehaviour
             particleEffectAnimator.SetTrigger("Effect2");
             Debug.Log("Playing Effect2");
         }
+        AudioManager.PlaySFX(SFXTYPE.SWORD_SWING, 0.5f);
     }
 
     public void PlayEffect3()
@@ -528,6 +538,7 @@ public class CombatSystem : MonoBehaviour
             particleEffectAnimator.SetTrigger("Effect3");
             Debug.Log("Playing Effect3");
         }
+        AudioManager.PlaySFX(SFXTYPE.SWORD_SWING, 1.0f);
     }
 
 
@@ -553,11 +564,23 @@ public class CombatSystem : MonoBehaviour
             animator.SetInteger("ComboStep", 0);
 
 
-        controller.externalVelocityOverride = false;
-        controller.SetHitstop(false);
+        //controller.externalVelocityOverride = false;
+        //controller.SetHitstop(false);
+        canTransition = true;
+        isBuffered = false;
     }
 
-
+    public void SetCanTransition(bool canTransiton, int comboEnd)
+    {
+        this.canTransition = canTransiton;
+        if (comboEnd == 1) ResetCombo();
+    }
+    public void SetCanBuffer()
+    {
+        isBuffered = false;
+        comboStep = animator.GetInteger("ComboStep");
+        animator.SetInteger("ComboStep", 0);
+    }
 
     public float GetAttackDamage(int attackNumber)
     {

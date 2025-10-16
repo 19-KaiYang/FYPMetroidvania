@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -82,6 +83,7 @@ public class PlayerController : MonoBehaviour
 
     // Facing direction
     public bool facingRight { get; private set; } = true;
+    public Action flipped;
 
     // Conditions
     private bool hasAirDashed = false;
@@ -192,6 +194,7 @@ public class PlayerController : MonoBehaviour
                 velocity.y = jumpForce;
                 jumpLocked = true;
                 jumpBufferCounter = 0f;
+                AudioManager.PlaySFX(SFXTYPE.PLAYER_JUMP);
             }
         }
         else if (velocity.y < 0f)
@@ -437,6 +440,9 @@ public class PlayerController : MonoBehaviour
         Vector3 spriteScale = spriteTransform.localScale;
         spriteScale.x *= -1f;
         spriteTransform.localScale = spriteScale;
+        flipped?.Invoke();
+        //float yRotation = facingRight ? 0f : 180f;
+        //spriteTransform.rotation = Quaternion.Euler(0f, yRotation, 0f);
     }
 
     private bool IsTouchingWall()
@@ -475,7 +481,11 @@ public class PlayerController : MonoBehaviour
     {
         isInHitstop = state;
         if (state)
+        {
             velocity = Vector2.zero;
+            Time.timeScale = 0f;
+        }
+        else Time.timeScale = 1f;
     }
 
     private void OnDrawGizmosSelected()
