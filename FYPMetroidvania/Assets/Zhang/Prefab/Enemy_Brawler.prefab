@@ -180,6 +180,37 @@ MonoBehaviour:
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
+--- !u!1 &2011586941948726255
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5775245395168690232}
+  m_Layer: 6
+  m_Name: BloodParticlPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5775245395168690232
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2011586941948726255}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.4, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5033397307062096171}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2357565151400336557
 GameObject:
   m_ObjectHideFlags: 0
@@ -268,7 +299,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4020999845850698724}
   m_Layer: 6
-  m_Name: BloodParticlPos
+  m_Name: HitParticlPos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -428,6 +459,7 @@ Transform:
   - {fileID: 9122029889740227851}
   - {fileID: 6664236964327506532}
   - {fileID: 4020999845850698724}
+  - {fileID: 5775245395168690232}
   - {fileID: 5314991759159687320}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -592,8 +624,10 @@ MonoBehaviour:
   isFacingRight: 1
   isFacingLeft: 0
   distanceToPlayer: {x: 0, y: 0}
-  damageParticle: {fileID: 3786330769736489564, guid: 132d3cf110e334a4586f49391eea9df5, type: 3}
+  damageParticle: {fileID: 6966180119663813987, guid: edda90ab5a07d484ca1c0c2ce435f1a7, type: 3}
+  bloodParticle: {fileID: 3786330769736489564, guid: 132d3cf110e334a4586f49391eea9df5, type: 3}
   damageParticlePos: {fileID: 4020999845850698724}
+  bloodParticlePos: {fileID: 5775245395168690232}
   currentState: 
   detectSize: {x: 13.27, y: 1.93}
   detectOffset: {x: 0, y: 0}
@@ -829,7 +863,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7201207688564687193}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 073797afb82c5a1438f328866b10b3f0, type: 3}
   m_Name: 

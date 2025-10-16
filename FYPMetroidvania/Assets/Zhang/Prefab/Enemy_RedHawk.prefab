@@ -36,8 +36,8 @@ Transform:
   m_Children:
   - {fileID: 5619162626746242320}
   - {fileID: 4044856902708663086}
-  - {fileID: 5434299039622722702}
   - {fileID: 2306154919855101203}
+  - {fileID: 2177094167119367268}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &331086571970216107
@@ -159,7 +159,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.0021024942, y: -0.21235967}
+  m_Offset: {x: -0.0021024942, y: 0.0030269027}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.52, y: 0.52}
@@ -169,7 +169,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1.5631135, y: 1.7246504}
+  m_Size: {x: 1.5631135, y: 1.2938772}
   m_EdgeRadius: 0
 --- !u!114 &8292173397301734869
 MonoBehaviour:
@@ -201,8 +201,10 @@ MonoBehaviour:
   isFacingRight: 1
   isFacingLeft: 0
   distanceToPlayer: {x: 0, y: 0}
-  damageParticle: {fileID: 3786330769736489564, guid: 132d3cf110e334a4586f49391eea9df5, type: 3}
+  damageParticle: {fileID: 6966180119663813987, guid: edda90ab5a07d484ca1c0c2ce435f1a7, type: 3}
+  bloodParticle: {fileID: 3786330769736489564, guid: 132d3cf110e334a4586f49391eea9df5, type: 3}
   damageParticlePos: {fileID: 2306154919855101203}
+  bloodParticlePos: {fileID: 2177094167119367268}
   originalPosiiton: {x: 0, y: 0}
   chaseSpeed: 3
   waveAmplitude: 0.3
@@ -210,7 +212,8 @@ MonoBehaviour:
   canFlip: 1
   attackProbability: 0.3
   attackCheckCooldown: 1
-  attackMoveSpeed: 8
+  startAttack: 0
+  attackMoveSpeed: 15
   playerDetectDistance: 8
   attackDistance: 11
   playerEscapeDistance: 12
@@ -266,7 +269,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2306154919855101203}
   m_Layer: 6
-  m_Name: BloodParticlPos
+  m_Name: HitParticlPos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -298,6 +301,7 @@ GameObject:
   - component: {fileID: 5619162626746242320}
   - component: {fileID: 4218750126570943285}
   - component: {fileID: 8483848782642184438}
+  - component: {fileID: 9090193633063731793}
   m_Layer: 6
   m_Name: Sprite
   m_TagString: Untagged
@@ -317,7 +321,8 @@ Transform:
   m_LocalPosition: {x: -0.0010001659, y: -0.011000067, z: 0}
   m_LocalScale: {x: -0.6, y: 0.6, z: 0.6}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 5434299039622722702}
   m_Father: {fileID: 7908290132464564940}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -25}
 --- !u!95 &4218750126570943285
@@ -400,6 +405,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &9090193633063731793
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4572673347448313744}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2924bb5a58860d45a6e7e497b495153, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyAnimationEvent
 --- !u!1 &7189176840684207593
 GameObject:
   m_ObjectHideFlags: 0
@@ -478,6 +495,37 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.66607857, y: 1.4787909}
   m_EdgeRadius: 0
+--- !u!1 &7193945390388540132
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2177094167119367268}
+  m_Layer: 6
+  m_Name: BloodParticlPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2177094167119367268
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7193945390388540132}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7908290132464564940}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8940059070723076372
 GameObject:
   m_ObjectHideFlags: 0
@@ -495,7 +543,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5434299039622722702
 Transform:
   m_ObjectHideFlags: 0
@@ -504,12 +552,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8940059070723076372}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: 0, z: -0.21643952, w: 0.97629607}
+  m_LocalPosition: {x: 0.0062372815, y: 0.017320225, z: 0}
+  m_LocalScale: {x: -1.6666665, y: 1.6666665, z: 1.6666665}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 7908290132464564940}
+  m_Father: {fileID: 5619162626746242320}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4958745814961255700
 MonoBehaviour:

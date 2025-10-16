@@ -17,6 +17,7 @@ public class FlyEnemy : Enemy
     [SerializeField, Range(0f, 1f)] private float attackProbability = 0.3f;
     [SerializeField] private float attackCheckCooldown = 1f;
     private float lastAttackCheckTime;
+    public bool startAttack = false;
 
     [SerializeField] private float attackMoveSpeed = 8f;
     private Vector2 dashDir;
@@ -243,19 +244,13 @@ public class FlyEnemy : Enemy
 
         public void OnEnter()
         {
+            enemy.animator.SetBool("isIdle", false);
+
             enemy.canFlip = false;
 
-            enemy.StartCoroutine(WaitToAttack(0.4f));
+            enemy.StartCoroutine(WaitToAttack(1.6f));
+            
 
-            enemy.dashDir = (enemy.player.transform.position - enemy.transform.position).normalized;
-
-            Vector2 direction = enemy.player.transform.position - enemy.transform.position;
-            float angle = Mathf.Atan2(enemy.dashDir.y, enemy.dashDir.x) * Mathf.Rad2Deg;
-
-            if (enemy.player.transform.position.x > enemy.transform.position.x)
-                enemy.rb.rotation = angle + 90;
-            else if (enemy.player.transform.position.x < enemy.transform.position.x)
-                enemy.rb.rotation = angle - 270;
         }
         public void OnUpdate()
         {
@@ -266,16 +261,23 @@ public class FlyEnemy : Enemy
         }
         public void OnExit()
         {
+            enemy.StopAllCoroutines();
             enemy.canFlip = true;
-
             enemy.rb.linearVelocity = Vector2.zero;
             enemy.rb.rotation = 0f;
+            enemy.animator.SetBool("isIdle", true);
         }
         public IEnumerator WaitToAttack(float _time)
         {
             yield return new WaitForSeconds(_time);
-
+            enemy.dashDir = (enemy.player.transform.position - enemy.transform.position).normalized;
             enemy.rb.linearVelocity = enemy.dashDir * enemy.attackMoveSpeed;
+            
+            float angle = Mathf.Atan2(enemy.dashDir.y, enemy.dashDir.x) * Mathf.Rad2Deg;
+            if (enemy.player.transform.position.x > enemy.transform.position.x)
+                enemy.rb.rotation = angle + 90;
+            else if (enemy.player.transform.position.x < enemy.transform.position.x)
+                enemy.rb.rotation = angle - 270;
         }
     }
 }

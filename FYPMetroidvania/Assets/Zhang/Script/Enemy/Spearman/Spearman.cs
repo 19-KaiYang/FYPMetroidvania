@@ -307,5 +307,4 @@ public class Spearman : Enemy
             enemy.animator.SetBool("isStun", false);
         }
     }
-
 }
