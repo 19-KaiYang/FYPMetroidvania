@@ -1,8 +1,10 @@
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class CameraFollow : MonoBehaviour
 {
+    public CinemachineCamera FollowCamera;
     [Header("Target")]
     public Transform target;  
 
@@ -22,19 +24,20 @@ public class CameraFollow : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (target == null) return;
+        //if (target == null) return;
 
       
-        Vector3 desiredPosition = target.position + offset;
-        Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed * Time.deltaTime);
+        //Vector3 desiredPosition = target.position + offset;
+        //Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed * Time.deltaTime);
 
-        transform.position = smoothedPosition;
+        //transform.position = smoothedPosition;
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player == null) return;
-        target = player.transform;
+        //target = player.transform;
+        //FollowCamera.Target.TrackingTarget = player.transform;
     }
 }

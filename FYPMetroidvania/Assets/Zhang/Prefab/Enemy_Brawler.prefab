@@ -629,10 +629,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Health
   maxHealth: 100
-  destroyOnDeath: 1
+  destroyOnDeath: 0
   isPlayer: 0
   currentHealth: 0
-  spriteRenderer: {fileID: 0}
+  spriteRenderer: {fileID: 5754543994558531676}
   originalColor: {r: 0, g: 0, b: 0, a: 0}
   flashDuration: 0.1
   hitSound: {fileID: 0}

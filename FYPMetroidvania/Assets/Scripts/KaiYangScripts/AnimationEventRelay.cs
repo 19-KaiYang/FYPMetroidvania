@@ -28,12 +28,15 @@ public class AnimationEventRelay : MonoBehaviour
 
     public void EnableGauntletDownHitbox() => combatSystem?.gauntletDownHitbox?.SetActive(true);
     public void DisableGauntletDownHitbox() => combatSystem?.DisableGauntletDownHitbox();
+    public void SetCanTransition(int comboEnd) => combatSystem?.SetCanTransition(true, comboEnd);
+    public void SetCanBuffer() => combatSystem?.SetCanBuffer();
 
     // === OLD Particle Effect Methods (using Animator triggers) ===
     public void PlayEffect1()
     {
         if (combatSystem != null)
             combatSystem.PlayEffect1();
+        //AudioManager.PlaySFX(SFXTYPE.SWORD_SWING, 0.5f);
     }
 
     public void PlayEffect2()
@@ -60,6 +63,7 @@ public class AnimationEventRelay : MonoBehaviour
             particleEffectsObject.SetActive(true);
             if (combatSystem?.particleEffectAnimator != null)
                 combatSystem.particleEffectAnimator.Play("Effect1");
+            AudioManager.PlaySFX(SFXTYPE.SWORD_SWING, 0.5f);
         }
     }
 
@@ -86,6 +90,7 @@ public class AnimationEventRelay : MonoBehaviour
             particleEffectsObject.SetActive(true);
             if (combatSystem?.particleEffectAnimator != null)
                 combatSystem.particleEffectAnimator.Play("Effect2");
+            AudioManager.PlaySFX(SFXTYPE.SWORD_SWING, 0.5f);
         }
     }
 
@@ -111,6 +116,7 @@ public class AnimationEventRelay : MonoBehaviour
             particleEffectsObject.SetActive(true);
             if (combatSystem?.particleEffectAnimator != null)
                 combatSystem.particleEffectAnimator.Play("Effect3");
+            AudioManager.PlaySFX(SFXTYPE.SWORD_SWING, 1.0f);
         }
     }
 

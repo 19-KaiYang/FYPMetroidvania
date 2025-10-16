@@ -59,6 +59,7 @@ MonoBehaviour:
   facingRight: 0
   CCType: 1
   CCDuration: 0.5
+  sfx: 0
   applyBloodMark: 0
   isSkillHitbox: 1
   isUltimateHitbox: 0
@@ -203,6 +204,7 @@ MonoBehaviour:
   facingRight: 0
   CCType: 2
   CCDuration: 0.5
+  sfx: 7
   applyBloodMark: 0
   isSkillHitbox: 1
   isUltimateHitbox: 0
@@ -311,6 +313,7 @@ MonoBehaviour:
   facingRight: 0
   CCType: 1
   CCDuration: 0.5
+  sfx: 6
   applyBloodMark: 0
   isSkillHitbox: 1
   isUltimateHitbox: 0
@@ -419,6 +422,7 @@ MonoBehaviour:
   facingRight: 0
   CCType: 1
   CCDuration: 0.5
+  sfx: 6
   applyBloodMark: 0
   isSkillHitbox: 0
   isUltimateHitbox: 0
@@ -444,6 +448,7 @@ GameObject:
   - component: {fileID: 1279543683446778900}
   - component: {fileID: 7621129067624534827}
   - component: {fileID: 6563075640411928745}
+  - component: {fileID: 2410184887729232841}
   m_Layer: 8
   m_Name: FinalPlayer
   m_TagString: Player
@@ -619,7 +624,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spriteTransform: {fileID: 6739047975924462519}
-  moveSpeed: 10
+  moveSpeed: 7
   jumpForce: 17
   gravity: -45
   jumpBufferTime: 0.15
@@ -628,7 +633,7 @@ MonoBehaviour:
   floatGravity: -8
   platformDropping: 0
   platformDropDuration: 0.1
-  platformDropSpeed: 5
+  platformDropSpeed: 7.5
   wallCoyoteTime: 0.15
   dashSpeed: 18
   dashDuration: 0.25
@@ -732,6 +737,7 @@ MonoBehaviour:
   - {fileID: 4414663687543333401}
   - {fileID: 5831051524767921042}
   - {fileID: 3800294071731714437}
+  comboStep: 0
 --- !u!114 &1476827326203152432
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -963,6 +969,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SpiritGauge
   maxSpirit: 100
   drainPerSecond: 20
+--- !u!114 &2410184887729232841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 765186428982251967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7dd5ca101a667c4daf85efcf203527d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpiritGauge
+  maxSpirit: 100
+  drainPerSecond: 20
 --- !u!1 &1219747033826149343
 GameObject:
   m_ObjectHideFlags: 0
@@ -1171,6 +1191,7 @@ MonoBehaviour:
   facingRight: 0
   CCType: 1
   CCDuration: 0.5
+  sfx: 0
   applyBloodMark: 0
   isSkillHitbox: 0
   isUltimateHitbox: 0
@@ -1429,6 +1450,7 @@ MonoBehaviour:
   facingRight: 0
   CCType: 1
   CCDuration: 0.5
+  sfx: 0
   applyBloodMark: 0
   isSkillHitbox: 0
   isUltimateHitbox: 0
@@ -1599,6 +1621,7 @@ MonoBehaviour:
   facingRight: 0
   CCType: 2
   CCDuration: 1
+  sfx: 6
   applyBloodMark: 0
   isSkillHitbox: 0
   isUltimateHitbox: 0
@@ -6543,6 +6566,7 @@ MonoBehaviour:
   facingRight: 0
   CCType: 1
   CCDuration: 0.5
+  sfx: 6
   applyBloodMark: 0
   isSkillHitbox: 0
   isUltimateHitbox: 0
@@ -6651,6 +6675,7 @@ MonoBehaviour:
   facingRight: 0
   CCType: 1
   CCDuration: 0.5
+  sfx: 0
   applyBloodMark: 0
   isSkillHitbox: 0
   isUltimateHitbox: 0
@@ -6759,6 +6784,7 @@ MonoBehaviour:
   facingRight: 0
   CCType: 1
   CCDuration: 0.5
+  sfx: 6
   applyBloodMark: 0
   isSkillHitbox: 0
   isUltimateHitbox: 0
@@ -6867,6 +6893,7 @@ MonoBehaviour:
   facingRight: 0
   CCType: 1
   CCDuration: 0.5
+  sfx: 0
   applyBloodMark: 0
   isSkillHitbox: 0
   isUltimateHitbox: 0
@@ -7006,6 +7033,7 @@ MonoBehaviour:
   facingRight: 0
   CCType: 2
   CCDuration: 0.5
+  sfx: 7
   applyBloodMark: 0
   isSkillHitbox: 0
   isUltimateHitbox: 0
@@ -7114,6 +7142,7 @@ MonoBehaviour:
   facingRight: 0
   CCType: 1
   CCDuration: 0.5
+  sfx: 0
   applyBloodMark: 0
   isSkillHitbox: 0
   isUltimateHitbox: 0
@@ -7253,6 +7282,7 @@ MonoBehaviour:
   facingRight: 0
   CCType: 2
   CCDuration: 0.5
+  sfx: 7
   applyBloodMark: 0
   isSkillHitbox: 1
   isUltimateHitbox: 0

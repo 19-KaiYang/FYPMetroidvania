@@ -229,7 +229,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Health
   maxHealth: 100
-  destroyOnDeath: 1
+  destroyOnDeath: 0
   isPlayer: 0
   currentHealth: 0
   spriteRenderer: {fileID: 0}
@@ -242,6 +242,7 @@ MonoBehaviour:
   knockbackForce: 5
   stunPushbackForce: 5
   groundCheckValue: 1
+  knockbackMult: 1
   defaultStunDuration: 1
   defaultKnockdownDuration: 2
   knockdownRecoveryTime: 1
