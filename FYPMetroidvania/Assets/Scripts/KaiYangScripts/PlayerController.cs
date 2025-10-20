@@ -138,7 +138,12 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        animator.SetFloat("Speed", Mathf.Abs(velocity.x));
+        if (IsGrounded)
+            animator.SetFloat("Speed", Mathf.Abs(velocity.x));
+        else
+            animator.SetFloat("Speed", 0f);
+
+        animator.SetBool("IsFalling", !IsGrounded && velocity.y < -0.1f);
 
         // Dash timers
         if (isDashing)
@@ -246,7 +251,6 @@ public class PlayerController : MonoBehaviour
 
         }
     }
-
     private void FixedUpdate()
     {
         if (isInHitstop) return;
