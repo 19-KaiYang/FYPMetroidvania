@@ -132,11 +132,41 @@ public class PlayerController : MonoBehaviour
         if (isInHitstop) return;
 
         var health = GetComponent<Health>();
+
+        // Handle knockdown animation phases BEFORE checking CC state
+        if (health != null && health.currentCCState == CrowdControlState.Knockdown)
+        {
+            if (velocity.y > 0.1f)
+            {
+                animator.SetInteger("KnockdownPhase", 1); // Launch phase (going up)
+                Debug.Log("Knockdown Phase 1: Launch");
+            }
+            else if (!IsGrounded && velocity.y < -0.1f)
+            {
+                animator.SetInteger("KnockdownPhase", 2); // Falling phase
+                Debug.Log("Knockdown Phase 2: Falling");
+            }
+            else if (IsGrounded)
+            {
+                animator.SetInteger("KnockdownPhase", 3); // Landing phase
+                Debug.Log("Knockdown Phase 3: Landing");
+            }
+        }
+        else
+        {
+            animator.SetInteger("KnockdownPhase", 0);
+        }
+
+        // Stop player movement and input while CC active
         if (health != null && health.currentCCState != CrowdControlState.None)
         {
             velocity.x = 0f;
-            return;
+
+            // Allow knockdown animation updates to still play
+            if (health.currentCCState != CrowdControlState.Knockdown)
+                return;
         }
+
 
         if (IsGrounded)
             animator.SetFloat("Speed", Mathf.Abs(velocity.x));
@@ -160,7 +190,6 @@ public class PlayerController : MonoBehaviour
         if (dashCooldownTimer > 0f)
         {
             dashCooldownTimer -= Time.deltaTime;
-            // Reset dashes when cooldown finishes
             if (dashCooldownTimer <= 0f)
             {
                 dashesRemaining = dashCount;
@@ -191,7 +220,6 @@ public class PlayerController : MonoBehaviour
             hasWallJumped = false;
             lastWallJumpDirection = 0f;
 
-
             if (velocity.y < 0) velocity.y = -1f;
 
             if (jumpBufferCounter > 0f && !jumpLocked && !platformDropping)
@@ -219,7 +247,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        // Movement logic
+        // Movement logic (only runs if NOT in CC state)
         if (!externalVelocityOverride)
         {
             if (skills != null && skills.IsChargeLocked)
@@ -230,14 +258,15 @@ public class PlayerController : MonoBehaviour
                 velocity = dashDirection * dashSpeed;
         }
 
-        // Flip sprite
-        if (moveInput.x > 0 && !facingRight)
-            Flip();
-        else if (moveInput.x < 0 && facingRight)
-            Flip();
+        bool isKnockedDown = health != null && health.currentCCState == CrowdControlState.Knockdown;
 
-        // Apply movement manually
-        //Move(velocity * Time.deltaTime);
+        if (!isKnockedDown)
+        {
+            if (moveInput.x > 0 && !facingRight)
+                Flip();
+            else if (moveInput.x < 0 && facingRight)
+                Flip();
+        }
 
         // Handle wall coyote timer
         if (IsTouchingWall() && !IsGrounded)
@@ -248,7 +277,6 @@ public class PlayerController : MonoBehaviour
         {
             if (wallCoyoteCounter > 0)
                 wallCoyoteCounter -= Time.deltaTime;
-
         }
     }
     private void FixedUpdate()

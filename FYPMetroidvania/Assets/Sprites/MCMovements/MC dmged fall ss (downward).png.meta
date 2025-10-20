@@ -106,12 +106,12 @@ TextureImporter:
       name: MC dmged fall ss (downward)_0
       rect:
         serializedVersion: 2
-        x: 151
-        y: 400
-        width: 706
-        height: 382
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 152
+        y: 401
+        width: 704
+        height: 380
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -128,12 +128,12 @@ TextureImporter:
       name: MC dmged fall ss (downward)_1
       rect:
         serializedVersion: 2
-        x: 1148
-        y: 390
-        width: 650
-        height: 435
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1150
+        y: 391
+        width: 647
+        height: 432
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -150,7 +150,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 86b2256282e692b46a6f153cc6d5a8ea
     internalID: 0
     vertices: []
     indices: 
@@ -158,7 +158,9 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.0},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":7,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
       MC dmged fall ss (downward)_0: -1118259333813981657
       MC dmged fall ss (downward)_1: 8768612775449536569

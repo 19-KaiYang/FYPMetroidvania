@@ -134,6 +134,7 @@ public class Health : MonoBehaviour
                 }
 
                 // Regular knockdown timer countdown (only when grounded)
+                // Regular knockdown timer countdown (only when grounded)
                 if (ccTimer > 0f)
                 {
                     ccTimer -= Time.deltaTime;
@@ -141,6 +142,15 @@ public class Health : MonoBehaviour
                     if (ccTimer <= 0f)
                     {
                         currentCCState = CrowdControlState.None;
+
+                        // Clear external velocity override for player
+                        if (isPlayer)
+                        {
+                            var pc = GetComponent<PlayerController>();
+                            if (pc != null)
+                                pc.externalVelocityOverride = false;
+                        }
+
                         //Debug.Log($"{gameObject.name} recovered from knockdown - can move again!");
                     }
                 }
@@ -475,6 +485,7 @@ public class Health : MonoBehaviour
                 if (pc.IsGrounded && isInArcKnockdown)
                 {
                     pc.externalVelocityOverride = false;
+
                 }
             }
         }

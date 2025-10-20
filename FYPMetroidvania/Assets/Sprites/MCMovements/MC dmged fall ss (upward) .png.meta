@@ -113,11 +113,11 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 204
-        y: 158
-        width: 528
-        height: 677
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        y: 157
+        width: 527
+        height: 674
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -135,11 +135,11 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 1165
-        y: 176
-        width: 659
-        height: 621
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        y: 175
+        width: 660
+        height: 619
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -157,11 +157,11 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 2142
-        y: 305
+        y: 304
         width: 785
-        height: 439
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        height: 441
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -179,11 +179,11 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 3136
-        y: 328
-        width: 788
-        height: 456
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        y: 327
+        width: 789
+        height: 457
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -200,7 +200,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 1ab105d025db3d746b03d11bcac92c86
     internalID: 0
     vertices: []
     indices: 
@@ -208,7 +208,9 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.0},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":7,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
       MC dmged fall ss (upward) _0: 8638710154125233062
       MC dmged fall ss (upward) _1: -2796689884231215344
