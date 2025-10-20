@@ -258,6 +258,7 @@ public class PlayerController : MonoBehaviour
                 velocity = dashDirection * dashSpeed;
         }
 
+        //Flipping of sprites
         bool isKnockedDown = health != null && health.currentCCState == CrowdControlState.Knockdown;
 
         if (!isKnockedDown)
