@@ -338,22 +338,21 @@ public class Health : MonoBehaviour
     {
         Debug.Log("=== PLAYER DEATH - Starting Respawn ===");
 
-        // Disable player controls immediately
+        // Disable player controls but keep controller for gravity simulation
         var controller = GetComponent<PlayerController>();
+        bool wasGrounded = controller != null && controller.IsGrounded;
+
         if (controller != null)
         {
             controller.enabled = false;
-            controller.SetVelocity(Vector2.zero);
         }
 
-        // Stop physics
-        if (rb != null)
-        {
-            rb.linearVelocity = Vector2.zero;
-        }
-
+        // Trigger death animation
         if (animator != null)
         {
+            Debug.Log("Triggering Die animation...");
+
+            // Check if parameter exists
             bool hasDieParam = false;
             foreach (var param in animator.parameters)
             {
@@ -367,7 +366,44 @@ public class Health : MonoBehaviour
             if (hasDieParam)
             {
                 animator.SetTrigger("Die");
-                yield return new WaitForSeconds(1.5f); 
+
+                float deathAnimTime = 1.5f; 
+                float elapsedTime = 0f;
+
+                if (!wasGrounded)
+                {
+                    Vector2 fallVelocity = Vector2.zero;
+                    float deathGravity = -20f; 
+
+                    while (elapsedTime < deathAnimTime)
+                    {
+                        fallVelocity.y += deathGravity * Time.deltaTime;
+
+                        Vector2 moveAmount = fallVelocity * Time.deltaTime;
+                        transform.position += (Vector3)moveAmount;
+                        if (controller != null && controller.groundCheck != null)
+                        {
+                            RaycastHit2D groundHit = Physics2D.Raycast(
+                                controller.groundCheck.position,
+                                Vector2.down,
+                                controller.groundCheckRadius,
+                                controller.groundLayer | controller.platformLayer
+                            );
+
+                            if (groundHit.collider != null)
+                            {
+                                fallVelocity.y = 0f;
+                            }
+                        }
+
+                        elapsedTime += Time.deltaTime;
+                        yield return null;
+                    }
+                }
+                else
+                {
+                    yield return new WaitForSeconds(deathAnimTime);
+                }
             }
             else
             {
