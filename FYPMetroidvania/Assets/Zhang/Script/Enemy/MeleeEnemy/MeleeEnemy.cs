@@ -242,7 +242,7 @@ public class MeleeEnemy : Enemy
         }
         public void OnExit()
         {
-            
+            enemy.animator.SetBool("isWalk", false);
         }
     }
 

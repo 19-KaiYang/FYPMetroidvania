@@ -109,6 +109,37 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1.56, y: 1.93}
   m_EdgeRadius: 0
+--- !u!1 &1560987225806562695
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5159987425480546382}
+  m_Layer: 6
+  m_Name: BloodParticlPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5159987425480546382
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1560987225806562695}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.3, y: 0.25, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5180712474465827317}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1622291904529723399
 GameObject:
   m_ObjectHideFlags: 0
@@ -215,7 +246,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2738677383517438410}
   m_Layer: 6
-  m_Name: BloodParticlPos
+  m_Name: HitParticlPos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -307,7 +338,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7139534395097468050}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 073797afb82c5a1438f328866b10b3f0, type: 3}
   m_Name: 
@@ -381,7 +412,7 @@ Transform:
   m_GameObject: {fileID: 7454651824018524623}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.94100004, y: -0.95853996, z: 0}
+  m_LocalPosition: {x: -0.941, y: -0.95853996, z: 0}
   m_LocalScale: {x: -0.63, y: 0.63, z: 0.63}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -570,6 +601,7 @@ Transform:
   - {fileID: 4161527860742551270}
   - {fileID: 3213642399744412101}
   - {fileID: 2738677383517438410}
+  - {fileID: 5159987425480546382}
   - {fileID: 7397686422016457685}
   - {fileID: 8687817161233866175}
   m_Father: {fileID: 0}
@@ -731,12 +763,14 @@ MonoBehaviour:
   currentHealth: 0
   isDead: 0
   moveSpeed: 2
-  attackDamage: 0
+  attackDamage: 2
   isFacingRight: 1
   isFacingLeft: 0
   distanceToPlayer: {x: 0, y: 0}
-  damageParticle: {fileID: 3786330769736489564, guid: 132d3cf110e334a4586f49391eea9df5, type: 3}
+  damageParticle: {fileID: 6966180119663813987, guid: edda90ab5a07d484ca1c0c2ce435f1a7, type: 3}
+  bloodParticle: {fileID: 3786330769736489564, guid: 132d3cf110e334a4586f49391eea9df5, type: 3}
   damageParticlePos: {fileID: 2738677383517438410}
+  bloodParticlePos: {fileID: 5159987425480546382}
   currentState: 
   detectSize: {x: 15, y: 2}
   detectOffset: {x: 0, y: 0}
