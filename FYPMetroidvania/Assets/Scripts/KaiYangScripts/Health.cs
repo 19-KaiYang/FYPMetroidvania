@@ -51,6 +51,7 @@ public class Health : MonoBehaviour
     private float ccTimer = 0f;
 
     public float invincibilityDuration = 0.3f; // player only
+    private Animator animator;
 
     private bool invincible = false;
 
@@ -79,6 +80,7 @@ public class Health : MonoBehaviour
         currentHealth = maxHealth;
         rb = GetComponent<Rigidbody2D>();
         audioSource = GetComponent<AudioSource>();
+        animator = GetComponentInChildren<Animator>();
         if (spriteRenderer == null)
         {
             spriteRenderer = GetComponent<SpriteRenderer>();
@@ -297,13 +299,13 @@ public class Health : MonoBehaviour
     private void Die()
     {
         Debug.Log($"{gameObject.name} has died!");
-
         enemyDeath?.Invoke(gameObject);
 
-        for(int i = debuffs.Count - 1; i >= 0; i--)
-        {
+        if (animator != null)
+            animator.SetTrigger("Die");
+
+        for (int i = debuffs.Count - 1; i >= 0; i--)
             RemoveDebuff(debuffs[i]);
-        }
 
         if (!isPlayer && isBloodMarked)
         {
@@ -326,21 +328,56 @@ public class Health : MonoBehaviour
         if (audioSource != null && deathSound != null)
             audioSource.PlayOneShot(deathSound);
 
-        //gameObject.SetActive(false);
-
+        // wait for animation to finish
         if (destroyOnDeath)
-            Destroy(gameObject);
-        //else
-        //    gameObject.SetActive(false);
+            Destroy(gameObject, 1.5f);
     }
+
 
     private IEnumerator RespawnPlayer()
     {
-        // Disable player controls
-        var controller = GetComponent<PlayerController>();
-        if (controller != null) controller.enabled = false;
+        Debug.Log("=== PLAYER DEATH - Starting Respawn ===");
 
-        yield return new WaitForSeconds(1f);
+        // Disable player controls immediately
+        var controller = GetComponent<PlayerController>();
+        if (controller != null)
+        {
+            controller.enabled = false;
+            controller.SetVelocity(Vector2.zero);
+        }
+
+        // Stop physics
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector2.zero;
+        }
+
+        if (animator != null)
+        {
+            bool hasDieParam = false;
+            foreach (var param in animator.parameters)
+            {
+                if (param.name == "Die" && param.type == AnimatorControllerParameterType.Trigger)
+                {
+                    hasDieParam = true;
+                    break;
+                }
+            }
+
+            if (hasDieParam)
+            {
+                animator.SetTrigger("Die");
+                yield return new WaitForSeconds(1.5f); 
+            }
+            else
+            {
+                yield return new WaitForSeconds(1f);
+            }
+        }
+        else
+        {
+            yield return new WaitForSeconds(1f);
+        }
 
         // Move player to last checkpoint
         if (CheckpointManager.Instance != null)
@@ -353,9 +390,25 @@ public class Health : MonoBehaviour
         var energy = GetComponent<EnergySystem>();
         if (energy != null) energy.ResetEnergy();
 
-        // Re-enable controls
-        if (controller != null) controller.enabled = true;
+        // Reset animator state
+        if (animator != null)
+        {
+            animator.Rebind();
+            animator.Update(0f);
+        }
 
+        // Reset physics
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector2.zero;
+        }
+
+        // Re-enable controls
+        if (controller != null)
+        {
+            controller.enabled = true;
+            controller.SetVelocity(Vector2.zero);
+        }
 
         Camera mainCam = Camera.main;
         if (mainCam != null)
