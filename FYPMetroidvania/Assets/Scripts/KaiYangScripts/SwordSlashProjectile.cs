@@ -30,6 +30,7 @@ public class SwordSlashProjectile : ProjectileBase
         {
             hasInvokedStart = true;
             Skills.InvokeSkillStart(hitbox);
+            AudioManager.PlaySFX(SFXTYPE.SWORD_PROJECTILE);
         }
     }
 

@@ -20,6 +20,11 @@ public class PlayerController : MonoBehaviour
     private int airJumpsDone;
     private float jumpBufferCounter;
 
+    [Header("Footstep Settings")]
+    public float footstepInterval = 0.4f;
+    private float footstepTimer = 0f;
+
+
     [Header("Float")]
     public bool canFloat = false;
     private bool isFloating = false;
@@ -172,6 +177,22 @@ public class PlayerController : MonoBehaviour
             animator.SetFloat("Speed", Mathf.Abs(velocity.x));
         else
             animator.SetFloat("Speed", 0f);
+
+        // === FOOTSTEP SOUND ===
+        if (IsGrounded && Mathf.Abs(velocity.x) > 0.1f)
+        {
+            footstepTimer -= Time.deltaTime;
+            if (footstepTimer <= 0f)
+            {
+                AudioManager.PlaySFX(SFXTYPE.PLAYER_FOOTSTEP);
+                footstepTimer = footstepInterval;
+            }
+        }
+        else
+        {
+            footstepTimer = 0f;
+        }
+
 
         animator.SetBool("IsFalling", !IsGrounded && velocity.y < -0.1f);
 
@@ -456,6 +477,9 @@ public class PlayerController : MonoBehaviour
         velocity = dashDirection * dashSpeed;
 
         dashesRemaining--;
+
+        AudioManager.PlaySFX(SFXTYPE.PLAYER_DASH);
+
 
         // Start cooldown only when all dashes are used
         if (dashesRemaining <= 0)

@@ -540,6 +540,8 @@ public class Skills : MonoBehaviour
         Vector2 dir = controller.facingRight ? Vector2.right : Vector2.left;
         float t = 0f;
 
+        AudioManager.PlaySFX(SFXTYPE.SWORD_DASH, 0.5f);
+
         // --- Hook into hitbox for Sword Dash specific logic ---
         void OnDashHit(Hitbox hb, Health h)
         {
@@ -637,6 +639,8 @@ public class Skills : MonoBehaviour
 
         if (controller) controller.externalVelocityOverride = true;
 
+        AudioManager.PlaySFX(SFXTYPE.SWORD_UPPERCUT);
+
         // Disable collisions with enemies temporarily
         int playerLayer = gameObject.layer;
         int enemyLayer = SingleLayerIndex(enemyMask);
@@ -682,6 +686,8 @@ public class Skills : MonoBehaviour
         }
 
         Hitbox.OnHit += OnUppercutHit;
+
+       
 
         // --- Phase 1: short forward dash ---
         float dashPhase = 0.12f;
