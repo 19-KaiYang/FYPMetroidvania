@@ -13,40 +13,35 @@ MonoBehaviour:
   m_Name: TestDialogue
   m_EditorClassIdentifier: Assembly-CSharp::DialogueTextSO
   SpeakerType: 0
-  Name: 
-  Text: 
   defaultPlayerImage: {fileID: -3718515074069802047, guid: c7d220190b1b5b14f9eeab2f9df79bb0, type: 3}
   defaultNPCImage: {fileID: -3312853685737720060, guid: 2aae3159b01706349adf9fb347b2cc82, type: 3}
+  hasCutscene: 1
   Steps:
   - SpeakerType: 0
     Name: John Ratterson
     SpeakerImage: {fileID: -3718515074069802047, guid: c7d220190b1b5b14f9eeab2f9df79bb0, type: 3}
-    Text: This is test dialogue
+    Text: This is test dialogue...testing stuff, yes.
+    sfx: 8
+    pitch: 0.8
     autoskip: 0
   - SpeakerType: 1
     Name: Goblin 1
     SpeakerImage: {fileID: -3312853685737720060, guid: 2aae3159b01706349adf9fb347b2cc82, type: 3}
     Text: yes.
+    sfx: 8
+    pitch: 0.5
     autoskip: 0
   - SpeakerType: 1
     Name: Goblin 2
     SpeakerImage: {fileID: -7093195954321390883, guid: 63716a0eaeb89d94d9d8fee6f689a7be, type: 3}
     Text: Yes I agree with this statement
+    sfx: 8
+    pitch: 0.4
     autoskip: 1
   - SpeakerType: 0
     Name: John Ratterson
     SpeakerImage: {fileID: -3718515074069802047, guid: c7d220190b1b5b14f9eeab2f9df79bb0, type: 3}
     Text: okay no one asked buddy
-    autoskip: 0
-  - SpeakerType: 1
-    Name: Pixie
-    SpeakerImage: {fileID: 68631100154771428, guid: cafbf3de4a318164dbd456ea259f370a, type: 3}
-    Text: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum eget
-      tincidunt est. Suspendisse potenti. Duis mauris velit, sodales eu placerat
-      at, elementum in diam
-    autoskip: 0
-  - SpeakerType: 2
-    Name: Narrator
-    SpeakerImage: {fileID: 0}
-    Text: True.
+    sfx: 8
+    pitch: 0.8
     autoskip: 0

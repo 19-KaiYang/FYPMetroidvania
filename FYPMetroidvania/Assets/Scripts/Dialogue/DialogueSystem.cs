@@ -1,17 +1,17 @@
 using DG.Tweening;
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Globalization;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
+using UnityEngine.Playables;
+using UnityEngine.Timeline;
 using UnityEngine.UI;
 
-public class Dialogue : MonoBehaviour, IPointerClickHandler
+public class DialogueSystem : MonoBehaviour, IPointerClickHandler
 {
+    [SerializeField] PlayableDirector cutscenePlayer;
     [SerializeField] private Canvas DialogueCanvas;
     [SerializeField] private Image characterImage;
     [SerializeField] private Image npcImage;
@@ -63,12 +63,12 @@ public class Dialogue : MonoBehaviour, IPointerClickHandler
     void Update()
     {
     }
-    public void StartDialogue(DialogueTextSO dialogueData, int startstep = 0)
+    public void StartDialogue(DialogueTextSO dialogueData)
     {
-        currentDialogueStep = null;
+        //currentDialogueStep = null;
         DialogueCanvas.enabled = true;
         dialogueActive = true;
-        StartCoroutine(DialogueCoroutine(dialogueData, startstep));
+        StartCoroutine(DialogueCoroutine(dialogueData));
     }
     IEnumerator DialogueCoroutine(DialogueTextSO dialogueData, int startstep = 0)
     {
@@ -105,6 +105,10 @@ public class Dialogue : MonoBehaviour, IPointerClickHandler
         }
         DialogueCanvas.enabled = false;
         dialogueActive = false;
+        if(dialogueData.hasCutscene)
+        {
+            cutscenePlayer.Resume();
+        }
     }
     IEnumerator DialogueTextCoroutine(DialogueStep dialoguestep)
     {
@@ -129,9 +133,10 @@ public class Dialogue : MonoBehaviour, IPointerClickHandler
             {
                 i++;
             }
-
             _textBox.maxVisibleCharacters = i + 1;
-
+            AudioManager.PlaySFX(dialoguestep.sfx, 0.5f, pitch: dialoguestep.pitch);
+            if (line[i] == '.') yield return new WaitForSeconds(0.3f);
+            else if (line[i] == ',') yield return new WaitForSeconds(0.15f);
             yield return new WaitForSeconds(speed);
         }
         textDone = true;
@@ -140,7 +145,7 @@ public class Dialogue : MonoBehaviour, IPointerClickHandler
     {
         DOTween.CompleteAll();
         textDone = false;
-        if(currentDialogueStep.Name == "")
+        if (currentDialogueStep == null || currentDialogueStep.Name == "") ;
         {
             Debug.Log("start");
             StartCoroutine(DialogueTextCoroutine(nextStep));
@@ -202,24 +207,6 @@ public class Dialogue : MonoBehaviour, IPointerClickHandler
                 characterImage.color = Color.gray;
                 break;
         }
-
-    }
-    IEnumerator AnimateCharacterImage(bool moveIn, float duration = 0.75f)
-    {
-        float elapsed = 0f;
-        if (characterImage.sprite == null) characterImage.enabled = false;
-        else characterImage.enabled = true;
-        Vector3 position = characterImage.rectTransform.anchoredPosition;
-        Vector3 finalPosition = moveIn ? new Vector3(425f, 0, 0) : characterOffscreenPos.anchoredPosition;
-        while (elapsed < duration)
-        {
-            elapsed += Time.deltaTime;
-            position += (finalPosition - position);
-            characterImage.rectTransform.anchoredPosition = position;
-            //Debug.Log("Animate " + characterImage.rectTransform.anchoredPosition);
-            yield return null;
-        }
-        characterImage.rectTransform.anchoredPosition = finalPosition;
 
     }
     public void OnPointerClick(PointerEventData eventData)
