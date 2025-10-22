@@ -23,6 +23,9 @@ public class PlayerController : MonoBehaviour
     [Header("Footstep Settings")]
     public float footstepInterval = 0.4f;
     private float footstepTimer = 0f;
+    private Vector3 lastPosition;
+    private float moveDistanceSinceLastStep = 0f;
+
 
 
     [Header("Float")]
@@ -131,6 +134,7 @@ public class PlayerController : MonoBehaviour
         }
         GroundCheckLayer = groundLayer | platformLayer;
 
+        lastPosition = transform.position;
         // Initialize dash count
         dashesRemaining = dashCount;
     }
@@ -201,24 +205,32 @@ public class PlayerController : MonoBehaviour
 
 
         if (IsGrounded)
-            animator.SetFloat("Speed", Mathf.Abs(velocity.x));
+            animator.SetFloat("Speed", Mathf.Abs(moveInput.x));
         else
             animator.SetFloat("Speed", 0f);
 
         // === FOOTSTEP SOUND ===
         if (IsGrounded && Mathf.Abs(velocity.x) > 0.1f)
         {
-            footstepTimer -= Time.deltaTime;
-            if (footstepTimer <= 0f)
+            // Track actual distance moved
+            float distanceMoved = Vector3.Distance(transform.position, lastPosition);
+            moveDistanceSinceLastStep += distanceMoved;
+
+            // Only play footstep if we've moved enough distance
+            float requiredDistance = moveSpeed * footstepInterval;
+            if (moveDistanceSinceLastStep >= requiredDistance)
             {
                 AudioManager.PlaySFX(SFXTYPE.PLAYER_FOOTSTEP);
-                footstepTimer = footstepInterval;
+                moveDistanceSinceLastStep = 0f;
             }
         }
         else
         {
-            footstepTimer = 0f;
+            // Reset when not moving
+            moveDistanceSinceLastStep = 0f;
         }
+
+        lastPosition = transform.position;
 
 
         animator.SetBool("IsFalling", !IsGrounded && velocity.y < -0.1f);

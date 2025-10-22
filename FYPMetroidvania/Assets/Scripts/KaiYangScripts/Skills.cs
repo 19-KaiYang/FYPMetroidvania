@@ -332,6 +332,7 @@ public class Skills : MonoBehaviour
             proj.stunKnockbackMultiplier = crimsonWaveStunKnockbackMultiplier;
             proj.knockdownKnockbackMultiplier = crimsonWaveKnockdownKnockbackMultiplier;
             proj.Init(dir);
+            AudioManager.PlaySFX(SFXTYPE.SWORD_PROJECTILE);
         }
     }
 
