@@ -136,7 +136,6 @@ public class Health : MonoBehaviour
                 }
 
                 // Regular knockdown timer countdown (only when grounded)
-                // Regular knockdown timer countdown (only when grounded)
                 if (ccTimer > 0f)
                 {
                     ccTimer -= Time.deltaTime;
@@ -573,6 +572,7 @@ public class Health : MonoBehaviour
 
                 if (pc.IsGrounded && isInArcKnockdown)
                 {
+
                     if (currentCCState == CrowdControlState.None)
                     {
                         pc.externalVelocityOverride = false;

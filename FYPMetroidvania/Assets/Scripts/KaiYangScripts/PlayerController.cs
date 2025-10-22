@@ -86,6 +86,7 @@ public class PlayerController : MonoBehaviour
 
     private int currentKnockdownPhase = 0;
     private bool wasGroundedLastFrame = false;
+    private float knockdownPhaseTimer = 0f;
 
     [HideInInspector] public bool externalVelocityOverride = false;
 
@@ -145,23 +146,36 @@ public class PlayerController : MonoBehaviour
 
         var health = GetComponent<Health>();
 
-        // Handle knockdown animation phases
+        // GROUND CHECK
+        RaycastHit2D ground = Physics2D.Raycast(groundCheck.position, Vector2.down, groundCheckRadius, GroundCheckLayer);
+        if (ground.collider != null)
+        {
+            IsGrounded = true;
+            IsOnPlatform = ground.collider.CompareTag("Platform");
+        }
+        else
+        {
+            IsGrounded = false;
+            IsOnPlatform = false;
+        }
+
         if (health != null && health.currentCCState == CrowdControlState.Knockdown)
         {
-            // Initialize knockdown phase when first entering knockdown state
             if (currentKnockdownPhase == 0)
             {
                 currentKnockdownPhase = 1;
+                knockdownPhaseTimer = 0.1f; 
                 animator.SetInteger("KnockdownPhase", 1);
                 Debug.Log("Knockdown Started - Phase 1: Launch");
             }
             else
             {
-                // Progress through phases based on state changes
+                knockdownPhaseTimer -= Time.deltaTime;
+
                 switch (currentKnockdownPhase)
                 {
-                    case 1: // Launch phase
-                        if (velocity.y < -0.1f)
+                    case 1: 
+                        if (knockdownPhaseTimer <= 0 && velocity.y < -0.1f)
                         {
                             currentKnockdownPhase = 2;
                             animator.SetInteger("KnockdownPhase", 2);
@@ -169,7 +183,8 @@ public class PlayerController : MonoBehaviour
                         }
                         break;
 
-                    case 2: // Falling phase
+                    case 2: 
+                           
                         if (IsGrounded && !wasGroundedLastFrame)
                         {
                             currentKnockdownPhase = 3;
@@ -178,7 +193,7 @@ public class PlayerController : MonoBehaviour
                         }
                         break;
 
-                    case 3: // Landing phase - stays until knockdown ends
+                    case 3: 
                         break;
                 }
             }
@@ -191,6 +206,7 @@ public class PlayerController : MonoBehaviour
             animator.SetInteger("KnockdownPhase", 0);
             currentKnockdownPhase = 0;
             wasGroundedLastFrame = false;
+            knockdownPhaseTimer = 0f;
         }
 
         // Stop player movement and input while CC active
@@ -254,19 +270,6 @@ public class PlayerController : MonoBehaviour
             {
                 dashesRemaining = dashCount;
             }
-        }
-
-        // Ground check
-        RaycastHit2D ground = Physics2D.Raycast(groundCheck.position, Vector2.down, groundCheckRadius, GroundCheckLayer);
-        if (ground.collider != null)
-        {
-            IsGrounded = true;
-            IsOnPlatform = ground.collider.CompareTag("Platform");
-        }
-        else
-        {
-            IsGrounded = false;
-            IsOnPlatform = false;
         }
 
         isFloating = false;
