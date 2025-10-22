@@ -573,8 +573,11 @@ public class Health : MonoBehaviour
 
                 if (pc.IsGrounded && isInArcKnockdown)
                 {
-                    pc.externalVelocityOverride = false;
-
+                    if (currentCCState == CrowdControlState.None)
+                    {
+                        pc.externalVelocityOverride = false;
+                        isInArcKnockdown = false;
+                    }
                 }
             }
         }

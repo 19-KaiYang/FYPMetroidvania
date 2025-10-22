@@ -81,6 +81,9 @@ public class PlayerController : MonoBehaviour
     private float dashTimer;
     private float dashCooldownTimer;
 
+    private int currentKnockdownPhase = 0;
+    private bool wasGroundedLastFrame = false;
+
     [HideInInspector] public bool externalVelocityOverride = false;
 
     // Jump control
@@ -138,28 +141,52 @@ public class PlayerController : MonoBehaviour
 
         var health = GetComponent<Health>();
 
-        // Handle knockdown animation phases BEFORE checking CC state
+        // Handle knockdown animation phases
         if (health != null && health.currentCCState == CrowdControlState.Knockdown)
         {
-            if (velocity.y > 0.1f)
+            // Initialize knockdown phase when first entering knockdown state
+            if (currentKnockdownPhase == 0)
             {
-                animator.SetInteger("KnockdownPhase", 1); // Launch phase (going up)
-                Debug.Log("Knockdown Phase 1: Launch");
+                currentKnockdownPhase = 1;
+                animator.SetInteger("KnockdownPhase", 1);
+                Debug.Log("Knockdown Started - Phase 1: Launch");
             }
-            else if (!IsGrounded && velocity.y < -0.1f)
+            else
             {
-                animator.SetInteger("KnockdownPhase", 2); // Falling phase
-                Debug.Log("Knockdown Phase 2: Falling");
+                // Progress through phases based on state changes
+                switch (currentKnockdownPhase)
+                {
+                    case 1: // Launch phase
+                        if (velocity.y < -0.1f)
+                        {
+                            currentKnockdownPhase = 2;
+                            animator.SetInteger("KnockdownPhase", 2);
+                            Debug.Log("Knockdown Phase 2: Falling");
+                        }
+                        break;
+
+                    case 2: // Falling phase
+                        if (IsGrounded && !wasGroundedLastFrame)
+                        {
+                            currentKnockdownPhase = 3;
+                            animator.SetInteger("KnockdownPhase", 3);
+                            Debug.Log("Knockdown Phase 3: Landing");
+                        }
+                        break;
+
+                    case 3: // Landing phase - stays until knockdown ends
+                        break;
+                }
             }
-            else if (IsGrounded)
-            {
-                animator.SetInteger("KnockdownPhase", 3); // Landing phase
-                Debug.Log("Knockdown Phase 3: Landing");
-            }
+
+            wasGroundedLastFrame = IsGrounded;
         }
         else
         {
+            // Reset when not in knockdown
             animator.SetInteger("KnockdownPhase", 0);
+            currentKnockdownPhase = 0;
+            wasGroundedLastFrame = false;
         }
 
         // Stop player movement and input while CC active
