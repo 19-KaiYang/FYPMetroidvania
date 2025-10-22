@@ -187,6 +187,7 @@ public class PlayerController : MonoBehaviour
                            
                         if (IsGrounded && !wasGroundedLastFrame)
                         {
+                            AudioManager.PlaySFX(SFXTYPE.PLAYER_LAND);
                             currentKnockdownPhase = 3;
                             animator.SetInteger("KnockdownPhase", 3);
                             Debug.Log("Knockdown Phase 3: Landing");

@@ -66,5 +66,6 @@ public enum SFXTYPE
     SWORD_PROJECTILE,
     UPGRADE_POPUP,
     PLAYER_HURT
+
 }
 

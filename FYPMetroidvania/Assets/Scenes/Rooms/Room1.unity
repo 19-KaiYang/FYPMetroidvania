@@ -9600,6 +9600,9 @@ MonoBehaviour:
   - key: 12
     clips:
     - {fileID: 8300000, guid: b53aae962f01bdf469f9f3ce5d822847, type: 3}
+  - key: 13
+    clips:
+    - {fileID: 8300000, guid: e204c1b0829054e42a19a5e503025e2d, type: 3}
   SFXSource: {fileID: 844942688}
 --- !u!4 &857966899
 Transform:
@@ -17557,17 +17560,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1959403563}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &1464603619 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5059149836124238424, guid: 6c69f689ba2fb3c40b71fd50b4c94e24, type: 3}
-  m_PrefabInstance: {fileID: 443569983}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &1487998617 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1685127557292553864, guid: 89a578ca472de19439c62d8383256cb9, type: 3}
-  m_PrefabInstance: {fileID: 868048739}
-  m_PrefabAsset: {fileID: 0}
---- !u!43 &1504623188
+--- !u!43 &1455321154
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -17745,6 +17738,16 @@ Mesh:
       - serializedVersion: 1
         m_IndexStart: 0
         m_IndexCount: 0
+--- !u!4 &1464603619 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5059149836124238424, guid: 6c69f689ba2fb3c40b71fd50b4c94e24, type: 3}
+  m_PrefabInstance: {fileID: 443569983}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1487998617 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1685127557292553864, guid: 89a578ca472de19439c62d8383256cb9, type: 3}
+  m_PrefabInstance: {fileID: 868048739}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1528755546
 GameObject:
   m_ObjectHideFlags: 0
