@@ -329,8 +329,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3972477075943802027}
-  - component: {fileID: 6644509847644796992}
   - component: {fileID: 2917100788964237326}
+  - component: {fileID: 2147137083326911622}
   m_Layer: 0
   m_Name: Claw2
   m_TagString: Untagged
@@ -353,8 +353,25 @@ Transform:
   m_Children: []
   m_Father: {fileID: 3159306975020777348}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!60 &6644509847644796992
-PolygonCollider2D:
+--- !u!114 &2917100788964237326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4026990737734762289}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b95fea1b004c7247878e15342cdb73d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyHitBox
+  currentCCState: 1
+  attackMultiplier: 2
+  finalDamage: 0
+  attackDamage: 0
+  knockback: 6
+--- !u!61 &2147137083326911622
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -387,7 +404,7 @@ PolygonCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -4.4086604, y: 1.8579359}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -397,31 +414,8 @@ PolygonCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: -5.049173, y: 0.30307665}
-      - {x: -1.8887814, y: 0.13997574}
-      - {x: -2.2781622, y: 3.8240929}
-      - {x: -5.384071, y: 3.426892}
-      - {x: -6.9481597, y: 1.8540126}
-  m_UseDelaunayMesh: 0
---- !u!114 &2917100788964237326
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4026990737734762289}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b95fea1b004c7247878e15342cdb73d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyHitBox
-  currentCCState: 1
-  attackMultiplier: 2
-  finalDamage: 0
-  attackDamage: 0
-  knockback: 6
+  m_Size: {x: 7.6129947, y: 4.337986}
+  m_EdgeRadius: 0
 --- !u!1 &4298579516614745451
 GameObject:
   m_ObjectHideFlags: 0
@@ -619,8 +613,8 @@ MonoBehaviour:
   maxHealth: 0
   currentHealth: 0
   isDead: 0
-  moveSpeed: 2
-  attackDamage: 1
+  moveSpeed: 5
+  attackDamage: 10
   isFacingRight: 1
   isFacingLeft: 0
   distanceToPlayer: {x: 0, y: 0}
@@ -645,7 +639,8 @@ MonoBehaviour:
   jumpForceX: 0
   gravityA: 3
   gravityB: 3
-  distanceOffset: 0
+  distanceOffset: 2
+  maxJumpRange: 50
   meleeAttackCooldown: 0
   meleeAttackTimer: 0
   jumpCooldown: 0
@@ -730,8 +725,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7372596999031554169}
-  - component: {fileID: 2587857535001795041}
   - component: {fileID: 7846939692664773438}
+  - component: {fileID: 1884260015455104130}
   m_Layer: 0
   m_Name: Claw1
   m_TagString: Untagged
@@ -754,8 +749,25 @@ Transform:
   m_Children: []
   m_Father: {fileID: 3159306975020777348}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!60 &2587857535001795041
-PolygonCollider2D:
+--- !u!114 &7846939692664773438
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5550723767581551360}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b95fea1b004c7247878e15342cdb73d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyHitBox
+  currentCCState: 0
+  attackMultiplier: 1
+  finalDamage: 0
+  attackDamage: 0
+  knockback: 0
+--- !u!61 &1884260015455104130
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -788,7 +800,7 @@ PolygonCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -3.6528907, y: 1.8579357}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -798,32 +810,8 @@ PolygonCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: -3.4762132, y: 5.0213757}
-      - {x: -5.8037057, y: 4.090746}
-      - {x: -7.2054133, y: 2.4052086}
-      - {x: -5.232287, y: 0.571802}
-      - {x: -2.7344909, y: -0.01704403}
-      - {x: -1.9917793, y: 1.5339203}
-  m_UseDelaunayMesh: 0
---- !u!114 &7846939692664773438
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5550723767581551360}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b95fea1b004c7247878e15342cdb73d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyHitBox
-  currentCCState: 0
-  attackMultiplier: 1
-  finalDamage: 0
-  attackDamage: 0
-  knockback: 0
+  m_Size: {x: 6.668277, y: 4.2120247}
+  m_EdgeRadius: 0
 --- !u!1 &7201207688564687193
 GameObject:
   m_ObjectHideFlags: 0

@@ -160,6 +160,8 @@ public class Spearman : Enemy
     public class SpearmanChaseState : IState
     {
         private Spearman enemy;
+        private Vector2 prevposition;
+        private float stuckCheck;
 
         public SpearmanChaseState(Spearman _enemy)
         {
@@ -186,6 +188,12 @@ public class Spearman : Enemy
                     enemy.animator.SetBool("isWalk", true);
                     enemy.FaceToPlayer();
                     enemy.rb.linearVelocity = new Vector2(enemy.moveSpeed * enemy.transform.localScale.x, enemy.rb.linearVelocityY);
+
+                    // Unstuck from floor
+                    if (enemy.rb.position == prevposition)
+                        stuckCheck += Time.deltaTime;
+                    else stuckCheck = 0f;
+                    if (stuckCheck > 0.1f) enemy.rb.MovePosition(enemy.rb.position + new Vector2(0f, 0.02f));
                 }
                 else
                 {
@@ -213,6 +221,7 @@ public class Spearman : Enemy
                 }
             }
             else enemy.animator.SetBool("isWalk", false);
+            prevposition = enemy.rb.position;
         }
         public void OnExit()
         {
