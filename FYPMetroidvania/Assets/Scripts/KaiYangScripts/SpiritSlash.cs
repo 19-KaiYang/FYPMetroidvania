@@ -23,6 +23,15 @@ public class SpiritSlash : MonoBehaviour
     public CrowdControlState airborneCC = CrowdControlState.Knockdown;
     public float ccDuration = 1.5f;
 
+    [Header("Spawn Animation")]
+    public float freezeDuration = 0.4f;
+    public float burstDelay = 0.3f;
+    public float spiritFadeInDuration = 0.3f;  
+    public float overlayFadeOutDuration = 0.2f; 
+    public float darkenAlpha = 0.7f;
+
+    private GameObject darkenOverlay;
+
     private Transform player;
     private Transform currentTarget;
     private LayerMask enemyMask;
@@ -58,6 +67,8 @@ public class SpiritSlash : MonoBehaviour
         Hitbox.OnHit += OnSpiritSlashHit;
 
         Skills.InvokeUltimateStart(hitbox);
+
+        StartCoroutine(DramaticSpawn());
     }
 
     private void Update()
@@ -274,4 +285,279 @@ public class SpiritSlash : MonoBehaviour
         Hitbox.OnHit -= OnSpiritSlashHit;
         Skills.InvokeUltimateEnd();
     }
+
+    #region POLISHINGANIMATION
+
+    private static GameObject cachedOverlay; // Static so it persists between spawns
+
+    private IEnumerator DramaticSpawn()
+    {
+        // CREATE overlay if it doesn't exist
+        if (cachedOverlay == null)
+        {
+            cachedOverlay = CreateDarkenOverlay();
+        }
+        darkenOverlay = cachedOverlay;
+
+        // Freeze time
+        float originalTimeScale = Time.timeScale;
+        Time.timeScale = 0f;
+
+        // Show overlay
+        if (darkenOverlay != null)
+            darkenOverlay.SetActive(true);
+
+        // Hide spirit slash initially
+        SpriteRenderer sr = GetComponent<SpriteRenderer>();
+        Vector3 originalScale = transform.localScale;
+        Color originalColor = sr != null ? sr.color : Color.white;
+
+        if (sr != null) sr.color = new Color(originalColor.r, originalColor.g, originalColor.b, 0);
+        transform.localScale = Vector3.zero;
+
+        // Brief pause before anything happens
+        float elapsed = 0f;
+        while (elapsed < burstDelay)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            yield return null;
+        }
+
+        // BURST! (still frozen)
+        CreateDramaticBurst();
+
+        // Fade in spirit slash WHILE STILL FROZEN
+        elapsed = 0f;
+        while (elapsed < spiritFadeInDuration)
+        {
+            elapsed += Time.unscaledDeltaTime; // USE UNSCALED TIME
+            float t = elapsed / spiritFadeInDuration;
+
+            // Explosive scale with overshoot
+            float scale = Mathf.Min(t * 2f, 1.3f);
+            if (t > 0.5f) scale = 1.3f - ((t - 0.5f) / 0.5f) * 0.3f;
+
+            transform.localScale = originalScale * scale;
+
+            if (sr != null)
+                sr.color = new Color(originalColor.r, originalColor.g, originalColor.b, t);
+
+            yield return null;
+        }
+
+        transform.localScale = originalScale;
+        if (sr != null) sr.color = originalColor;
+
+        // NOW resume time (spirit is visible, particles will start moving)
+        Time.timeScale = originalTimeScale;
+
+        // THEN fade out overlay
+        if (darkenOverlay != null)
+            StartCoroutine(FadeOutOverlay());
+    }
+
+    private GameObject CreateDarkenOverlay()
+    {
+        // Try to find existing canvas, or create one
+        Canvas canvas = Object.FindFirstObjectByType<Canvas>();
+
+        // If no canvas exists, create one
+        if (canvas == null)
+        {
+            GameObject canvasObj = new GameObject("SpawnCanvas");
+            canvas = canvasObj.AddComponent<Canvas>();
+            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            canvasObj.AddComponent<UnityEngine.UI.CanvasScaler>();
+            canvasObj.AddComponent<UnityEngine.UI.GraphicRaycaster>();
+        }
+
+        // Make sure this canvas renders on top
+        canvas.sortingOrder = 9999;
+
+        // Create overlay panel
+        GameObject overlay = new GameObject("DarkenOverlay");
+        overlay.transform.SetParent(canvas.transform, false);
+
+        UnityEngine.UI.Image image = overlay.AddComponent<UnityEngine.UI.Image>();
+        image.color = new Color(0, 0, 0, darkenAlpha);
+
+        // Make it cover the whole screen
+        RectTransform rect = overlay.GetComponent<RectTransform>();
+        rect.anchorMin = Vector2.zero;
+        rect.anchorMax = Vector2.one;
+        rect.offsetMin = Vector2.zero;
+        rect.offsetMax = Vector2.zero;
+
+        // Add CanvasGroup for fading
+        overlay.AddComponent<CanvasGroup>();
+
+        // Start inactive
+        overlay.SetActive(false);
+
+        Debug.Log("Created DarkenOverlay successfully!");
+
+        return overlay;
+    }
+
+    private IEnumerator FadeOutOverlay()
+    {
+        CanvasGroup cg = darkenOverlay.GetComponent<CanvasGroup>();
+        if (cg == null)
+        {
+            darkenOverlay.SetActive(false);
+            yield break;
+        }
+
+        float elapsed = 0f;
+
+        while (elapsed < overlayFadeOutDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / overlayFadeOutDuration;
+            cg.alpha = 1 - t;
+            yield return null;
+        }
+
+        darkenOverlay.SetActive(false);
+        cg.alpha = 1f; // Reset for next use
+    }
+
+    private void CreateDramaticBurst()
+    {
+        // Inner fast burst
+        CreateBurstRing(12, 0f, 0.3f, 1.5f, Color.white, 0.2f);
+
+        // Outer slower burst  
+        CreateBurstRing(16, 0f, 0.4f, 2.5f, new Color(0, 1, 1), 0.15f);
+
+        // Shockwave
+        CreateShockwaveRing();
+    }
+
+    private void CreateBurstRing(int count, float delay, float duration, float distance, Color color, float size)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            float angle = (360f / count) * i;
+            Vector2 direction = new Vector2(
+                Mathf.Cos(angle * Mathf.Deg2Rad),
+                Mathf.Sin(angle * Mathf.Deg2Rad)
+            );
+
+            StartCoroutine(AnimateBurstParticle(direction, delay, duration, distance, color, size));
+        }
+    }
+
+    private IEnumerator AnimateBurstParticle(Vector2 direction, float delay, float duration, float distance, Color color, float size)
+    {
+        if (delay > 0)
+        {
+            float delayElapsed = 0f;
+            while (delayElapsed < delay)
+            {
+                delayElapsed += Time.unscaledDeltaTime;
+                yield return null;
+            }
+        }
+
+        GameObject particle = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        Destroy(particle.GetComponent<Collider>());
+
+        particle.transform.position = transform.position;
+        particle.transform.localScale = Vector3.one * size;
+
+        Renderer rend = particle.GetComponent<Renderer>();
+        if (rend != null) rend.material.color = color;
+
+        Vector3 startPos = transform.position;
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.unscaledDeltaTime; // USE UNSCALED
+            float t = elapsed / duration;
+
+            // Explosive movement
+            float moveT = 1 - Mathf.Pow(1 - t, 2);
+            particle.transform.position = startPos + (Vector3)(direction * distance * moveT);
+
+            // Fade out
+            if (rend != null)
+            {
+                Color c = rend.material.color;
+                c.a = 1 - t;
+                rend.material.color = c;
+            }
+
+            particle.transform.localScale = Vector3.one * (size * (1 - t * 0.3f));
+
+            yield return null;
+        }
+
+        Destroy(particle);
+    }
+
+    private void CreateShockwaveRing()
+    {
+        GameObject ring = new GameObject("Shockwave");
+        ring.transform.position = transform.position;
+
+        LineRenderer lr = ring.AddComponent<LineRenderer>();
+        lr.useWorldSpace = false;
+        lr.loop = true;
+
+        int segments = 40;
+        lr.positionCount = segments;
+
+        for (int i = 0; i < segments; i++)
+        {
+            float angle = (360f / segments) * i;
+            float x = Mathf.Cos(angle * Mathf.Deg2Rad);
+            float y = Mathf.Sin(angle * Mathf.Deg2Rad);
+            lr.SetPosition(i, new Vector3(x, y, 0) * 0.1f);
+        }
+
+        lr.startWidth = 0.1f;
+        lr.endWidth = 0.1f;
+        lr.material = new Material(Shader.Find("Sprites/Default"));
+        lr.startColor = Color.white;
+        lr.endColor = Color.white;
+        lr.sortingOrder = 10;
+
+        StartCoroutine(AnimateShockwave(ring, lr, segments));
+    }
+
+    private IEnumerator AnimateShockwave(GameObject ring, LineRenderer lr, int segments)
+    {
+        float duration = 0.5f;
+        float maxRadius = 3f;
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.unscaledDeltaTime; // USE UNSCALED
+            float t = elapsed / duration;
+
+            float radius = Mathf.Lerp(0.1f, maxRadius, t);
+
+            for (int i = 0; i < segments; i++)
+            {
+                float angle = (360f / segments) * i;
+                float x = Mathf.Cos(angle * Mathf.Deg2Rad);
+                float y = Mathf.Sin(angle * Mathf.Deg2Rad);
+                lr.SetPosition(i, new Vector3(x, y, 0) * radius);
+            }
+
+            Color c = Color.white;
+            c.a = 1 - t;
+            lr.startColor = c;
+            lr.endColor = c;
+
+            yield return null;
+        }
+
+        Destroy(ring);
+    }
+
+    #endregion
 }

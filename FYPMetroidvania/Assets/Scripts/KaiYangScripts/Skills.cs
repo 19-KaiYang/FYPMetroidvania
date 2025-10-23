@@ -461,7 +461,8 @@ public class Skills : MonoBehaviour
         Collider2D[] enemies = Physics2D.OverlapCircleAll(transform.position, spiritSlashRadius, enemyMask);
         Transform firstTarget = enemies.Length > 0 ? enemies[Random.Range(0, enemies.Length)].transform : null;
 
-        GameObject slash = Instantiate(spiritSlashPrefab, transform.position, Quaternion.identity);
+        Vector3 spawnOffset = new Vector3(0f, 2.5f, 0f);
+        GameObject slash = Instantiate(spiritSlashPrefab, transform.position + spawnOffset, Quaternion.identity);
         SpiritSlash slashComp = slash.GetComponent<SpiritSlash>();
 
         if (slashComp != null)
