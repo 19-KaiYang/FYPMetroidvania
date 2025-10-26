@@ -68,16 +68,24 @@ public class SpiritSlash : MonoBehaviour
         if (hitboxObject != null)
         {
             hitbox = hitboxObject.GetComponent<Hitbox>();
+            hitboxObject.SetActive(false); // hide hitbox until animation finishes
         }
+
+        // Hide the spirit sprite immediately so it doesn't pop up early
+        SpriteRenderer sr = GetComponent<SpriteRenderer>();
+        if (sr != null)
+            sr.enabled = false;
 
         // event subscribe
         Hitbox.OnHit += OnSpiritSlashHit;
 
+        // Start ultimate
         Skills.InvokeUltimateStart(hitbox);
 
-        // Start with cutin, THEN dramatic spawn
+        // Start with cut-in, then cinematic spawn
         StartCoroutine(PlayCutinThenSpawn());
     }
+
 
     private void Update()
     {
@@ -290,41 +298,50 @@ public class SpiritSlash : MonoBehaviour
     }
 
     #region CUTIN_AND_SPAWN
-
     private IEnumerator PlayCutinThenSpawn()
     {
         // Find the canvas
-        GameObject canvasObj = GameObject.Find(cutinCanvasName);
-        if (canvasObj == null)
+        GameObject cutinCanvas = GameObject.Find(cutinCanvasName);
+        Animator cutinAnimator = null;
+
+        if (cutinCanvas != null)
+            cutinAnimator = cutinCanvas.GetComponent<Animator>();
+
+        bool hasCutin = (cutinAnimator != null);
+
+        // Store original timescale
+        float originalTimeScale = Time.timeScale;
+
+        // Freeze gameplay BEFORE cut-in starts
+        Time.timeScale = 0f;
+
+        if (hasCutin)
         {
-            Debug.LogWarning($"Canvas '{cutinCanvasName}' not found! Skipping cutin.");
-            yield return StartCoroutine(DramaticSpawn());
-            isFullyInitialized = true;
-            yield break;
+            cutinAnimator.ResetTrigger(cutinTriggerName);
+            cutinAnimator.SetTrigger(cutinTriggerName);
+            Debug.Log("[SpiritSlash] Playing Cut-In Animation");
+
+            // Wait for the cut-in animation duration using unscaled time
+            float elapsed = 0f;
+            while (elapsed < cutinDuration)
+            {
+                elapsed += Time.unscaledDeltaTime;
+                yield return null;
+            }
         }
 
-        // Get the animator
-        Animator cutinAnimator = canvasObj.GetComponent<Animator>();
-        if (cutinAnimator == null)
-        {
-            Debug.LogWarning($"Animator not found on '{cutinCanvasName}'! Skipping cutin.");
-            yield return StartCoroutine(DramaticSpawn());
-            isFullyInitialized = true;
-            yield break;
-        }
+        yield return new WaitForSecondsRealtime(0.05f);
 
-        // Play the cutin animation
-        cutinAnimator.SetTrigger(cutinTriggerName);
-
-        // Wait for cutin to finish
-        yield return new WaitForSeconds(cutinDuration);
-
-        // NOW do the dramatic spawn with freeze frame
         yield return StartCoroutine(DramaticSpawn());
 
-        // Finally allow movement
+        // Restore time after everything
+        Time.timeScale = originalTimeScale;
+
+        // Mark initialization done
         isFullyInitialized = true;
     }
+
+
 
     #endregion
 
@@ -349,15 +366,19 @@ public class SpiritSlash : MonoBehaviour
         if (darkenOverlay != null)
             darkenOverlay.SetActive(true);
 
-        // Hide spirit slash initially
+        // Prepare sprite
         SpriteRenderer sr = GetComponent<SpriteRenderer>();
         Vector3 originalScale = transform.localScale;
         Color originalColor = sr != null ? sr.color : Color.white;
 
-        if (sr != null) sr.color = new Color(originalColor.r, originalColor.g, originalColor.b, 0);
+        if (sr != null)
+        {
+            sr.enabled = true; // now enable it for fade-in
+            sr.color = new Color(originalColor.r, originalColor.g, originalColor.b, 0);
+        }
         transform.localScale = Vector3.zero;
 
-        // Brief pause before anything happens
+        // Short delay before burst
         float elapsed = 0f;
         while (elapsed < burstDelay)
         {
@@ -365,10 +386,10 @@ public class SpiritSlash : MonoBehaviour
             yield return null;
         }
 
-        // BURST! (still frozen)
+        // Burst effects while time is frozen
         CreateDramaticBurst();
 
-        // Fade in spirit slash WHILE STILL FROZEN
+        // Fade in spirit slash while still frozen
         elapsed = 0f;
         while (elapsed < spiritFadeInDuration)
         {
@@ -389,13 +410,18 @@ public class SpiritSlash : MonoBehaviour
         transform.localScale = originalScale;
         if (sr != null) sr.color = originalColor;
 
-        // NOW resume time
+        // Resume time
         Time.timeScale = originalTimeScale;
 
-        // THEN fade out overlay
+        // Fade out overlay
         if (darkenOverlay != null)
             StartCoroutine(FadeOutOverlay());
+
+        // Enable hitbox only after cinematic is done
+        if (hitboxObject != null)
+            hitboxObject.SetActive(true);
     }
+
 
     private GameObject CreateDarkenOverlay()
     {

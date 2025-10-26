@@ -282,14 +282,14 @@ MonoBehaviour:
   groundedCC: 1
   airborneCC: 2
   ccDuration: 1.5
+  cutinCanvasName: UpdatedPlayerUICanvas
+  cutinTriggerName: PlayCutIn
+  cutinDuration: 1
   freezeDuration: 0.3
   burstDelay: 0.3
   spiritFadeInDuration: 0.3
   overlayFadeOutDuration: 0.6
   darkenAlpha: 0.7
-  cutInSprite: {fileID: -1484801028873491122, guid: 066987860af3bc24382aed0a9ababcc0, type: 3}
-  cutInDuration: 0.4
-  cutInTint: {r: 1, g: 1, b: 1, a: 1}
 --- !u!96 &6553343887951831201
 TrailRenderer:
   serializedVersion: 3
