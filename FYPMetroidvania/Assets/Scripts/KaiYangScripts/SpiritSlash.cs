@@ -23,11 +23,16 @@ public class SpiritSlash : MonoBehaviour
     public CrowdControlState airborneCC = CrowdControlState.Knockdown;
     public float ccDuration = 1.5f;
 
+    [Header("Cutin Animation")]
+    public string cutinCanvasName = "UpdatedPlayerUICanvas";
+    public string cutinTriggerName = "PlayCutIn";
+    public float cutinDuration = 1.4f;
+
     [Header("Spawn Animation")]
     public float freezeDuration = 0.4f;
     public float burstDelay = 0.3f;
-    public float spiritFadeInDuration = 0.3f;  
-    public float overlayFadeOutDuration = 0.2f; 
+    public float spiritFadeInDuration = 0.3f;
+    public float overlayFadeOutDuration = 0.2f;
     public float darkenAlpha = 0.7f;
 
     private GameObject darkenOverlay;
@@ -46,6 +51,8 @@ public class SpiritSlash : MonoBehaviour
     private HashSet<int> hitEnemyIds = new HashSet<int>();
 
     private Health pendingTargetHealth = null;
+
+    private bool isFullyInitialized = false;
 
     public void Init(Transform playerTransform, Transform target, LayerMask enemyMask)
     {
@@ -68,11 +75,15 @@ public class SpiritSlash : MonoBehaviour
 
         Skills.InvokeUltimateStart(hitbox);
 
-        StartCoroutine(DramaticSpawn());
+        // Start with cutin, THEN dramatic spawn
+        StartCoroutine(PlayCutinThenSpawn());
     }
 
     private void Update()
     {
+        // Don't move until fully initialized (after cutin + dramatic spawn)
+        if (!isFullyInitialized) return;
+
         if (spirit == null || spirit.IsEmpty)
         {
             Destroy(gameObject);
@@ -108,12 +119,12 @@ public class SpiritSlash : MonoBehaviour
         {
             Health currentTargetHealth = currentTarget.GetComponent<Health>();
             if (currentTargetHealth == null || h != currentTargetHealth)
-                return; // ignore hits on other enemies while flying to the target
+                return;
         }
         else if (pendingTargetHealth != null)
         {
             if (h != pendingTargetHealth)
-                return; // ignore hits on other enemies while hitbox is briefly enabled at the target
+                return;
         }
         else
         {
@@ -122,7 +133,6 @@ public class SpiritSlash : MonoBehaviour
 
         int id = h.GetInstanceID();
 
-        // Track hit enemies
         if (!hitEnemyIds.Contains(id))
         {
             hitEnemyIds.Add(id);
@@ -131,10 +141,8 @@ public class SpiritSlash : MonoBehaviour
 
             Vector2 knockDir = (h.transform.position - transform.position).normalized;
 
-            // Damage without knockback (CC handles it)
             h.TakeDamage(spiritSlashBloodCost, knockDir, false, CrowdControlState.None, 0f, true, false, 0f);
 
-            // Apply CC with separate multipliers
             Skills skills = player.GetComponent<Skills>();
             if (skills != null)
             {
@@ -142,7 +150,6 @@ public class SpiritSlash : MonoBehaviour
                                    stunKnockbackMultiplier, knockdownKnockbackMultiplier);
             }
 
-            // Apply blood mark
             h.ApplyBloodMark();
 
             Health playerHealth = player.GetComponent<Health>();
@@ -159,12 +166,10 @@ public class SpiritSlash : MonoBehaviour
     {
         if (hitboxObject != null)
         {
-            // store the target's Health so the hit handler knows which enemy is valid
             pendingTargetHealth = target.GetComponent<Health>();
             StartCoroutine(EnableHitboxAtTarget(target.position));
         }
 
-        // Clear currentTarget right away (movement finished)
         currentTarget = null;
         StartCoroutine(DelayBeforeNextTarget());
     }
@@ -237,7 +242,6 @@ public class SpiritSlash : MonoBehaviour
 
         Transform best = null;
 
-        // prior unhit enemies
         if (unhit.Count > 0)
         {
             float closest = float.MaxValue;
@@ -281,14 +285,52 @@ public class SpiritSlash : MonoBehaviour
 
     private void OnDestroy()
     {
-        // Unsubscribe from events
         Hitbox.OnHit -= OnSpiritSlashHit;
         Skills.InvokeUltimateEnd();
     }
 
+    #region CUTIN_AND_SPAWN
+
+    private IEnumerator PlayCutinThenSpawn()
+    {
+        // Find the canvas
+        GameObject canvasObj = GameObject.Find(cutinCanvasName);
+        if (canvasObj == null)
+        {
+            Debug.LogWarning($"Canvas '{cutinCanvasName}' not found! Skipping cutin.");
+            yield return StartCoroutine(DramaticSpawn());
+            isFullyInitialized = true;
+            yield break;
+        }
+
+        // Get the animator
+        Animator cutinAnimator = canvasObj.GetComponent<Animator>();
+        if (cutinAnimator == null)
+        {
+            Debug.LogWarning($"Animator not found on '{cutinCanvasName}'! Skipping cutin.");
+            yield return StartCoroutine(DramaticSpawn());
+            isFullyInitialized = true;
+            yield break;
+        }
+
+        // Play the cutin animation
+        cutinAnimator.SetTrigger(cutinTriggerName);
+
+        // Wait for cutin to finish
+        yield return new WaitForSeconds(cutinDuration);
+
+        // NOW do the dramatic spawn with freeze frame
+        yield return StartCoroutine(DramaticSpawn());
+
+        // Finally allow movement
+        isFullyInitialized = true;
+    }
+
+    #endregion
+
     #region POLISHINGANIMATION
 
-    private static GameObject cachedOverlay; // Static so it persists between spawns
+    private static GameObject cachedOverlay;
 
     private IEnumerator DramaticSpawn()
     {
@@ -330,10 +372,9 @@ public class SpiritSlash : MonoBehaviour
         elapsed = 0f;
         while (elapsed < spiritFadeInDuration)
         {
-            elapsed += Time.unscaledDeltaTime; // USE UNSCALED TIME
+            elapsed += Time.unscaledDeltaTime;
             float t = elapsed / spiritFadeInDuration;
 
-            // Explosive scale with overshoot
             float scale = Mathf.Min(t * 2f, 1.3f);
             if (t > 0.5f) scale = 1.3f - ((t - 0.5f) / 0.5f) * 0.3f;
 
@@ -348,7 +389,7 @@ public class SpiritSlash : MonoBehaviour
         transform.localScale = originalScale;
         if (sr != null) sr.color = originalColor;
 
-        // NOW resume time (spirit is visible, particles will start moving)
+        // NOW resume time
         Time.timeScale = originalTimeScale;
 
         // THEN fade out overlay
@@ -358,10 +399,8 @@ public class SpiritSlash : MonoBehaviour
 
     private GameObject CreateDarkenOverlay()
     {
-        // Try to find existing canvas, or create one
         Canvas canvas = Object.FindFirstObjectByType<Canvas>();
 
-        // If no canvas exists, create one
         if (canvas == null)
         {
             GameObject canvasObj = new GameObject("SpawnCanvas");
@@ -371,27 +410,21 @@ public class SpiritSlash : MonoBehaviour
             canvasObj.AddComponent<UnityEngine.UI.GraphicRaycaster>();
         }
 
-        // Make sure this canvas renders on top
         canvas.sortingOrder = 9999;
 
-        // Create overlay panel
         GameObject overlay = new GameObject("DarkenOverlay");
         overlay.transform.SetParent(canvas.transform, false);
 
         UnityEngine.UI.Image image = overlay.AddComponent<UnityEngine.UI.Image>();
         image.color = new Color(0, 0, 0, darkenAlpha);
 
-        // Make it cover the whole screen
         RectTransform rect = overlay.GetComponent<RectTransform>();
         rect.anchorMin = Vector2.zero;
         rect.anchorMax = Vector2.one;
         rect.offsetMin = Vector2.zero;
         rect.offsetMax = Vector2.zero;
 
-        // Add CanvasGroup for fading
         overlay.AddComponent<CanvasGroup>();
-
-        // Start inactive
         overlay.SetActive(false);
 
         Debug.Log("Created DarkenOverlay successfully!");
@@ -419,18 +452,13 @@ public class SpiritSlash : MonoBehaviour
         }
 
         darkenOverlay.SetActive(false);
-        cg.alpha = 1f; // Reset for next use
+        cg.alpha = 1f;
     }
 
     private void CreateDramaticBurst()
     {
-        // Inner fast burst
         CreateBurstRing(12, 0f, 0.3f, 1.5f, Color.white, 0.2f);
-
-        // Outer slower burst  
         CreateBurstRing(16, 0f, 0.4f, 2.5f, new Color(0, 1, 1), 0.15f);
-
-        // Shockwave
         CreateShockwaveRing();
     }
 
@@ -474,14 +502,12 @@ public class SpiritSlash : MonoBehaviour
 
         while (elapsed < duration)
         {
-            elapsed += Time.unscaledDeltaTime; // USE UNSCALED
+            elapsed += Time.unscaledDeltaTime;
             float t = elapsed / duration;
 
-            // Explosive movement
             float moveT = 1 - Mathf.Pow(1 - t, 2);
             particle.transform.position = startPos + (Vector3)(direction * distance * moveT);
 
-            // Fade out
             if (rend != null)
             {
                 Color c = rend.material.color;
@@ -535,7 +561,7 @@ public class SpiritSlash : MonoBehaviour
 
         while (elapsed < duration)
         {
-            elapsed += Time.unscaledDeltaTime; // USE UNSCALED
+            elapsed += Time.unscaledDeltaTime;
             float t = elapsed / duration;
 
             float radius = Mathf.Lerp(0.1f, maxRadius, t);
