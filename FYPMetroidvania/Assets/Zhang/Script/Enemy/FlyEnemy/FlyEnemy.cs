@@ -23,6 +23,8 @@ public class FlyEnemy : Enemy
     private Vector2 dashDir;
 
     private bool stopAttack = false;
+    [SerializeField] private float attackRestTime = 1f;
+    private float attackRestTimer;
 
     [Header("Detect")]
     [SerializeField] private float playerDetectDistance = 5f;
@@ -152,9 +154,14 @@ public class FlyEnemy : Enemy
         public void OnUpdate()
         {
             enemy.rb.linearVelocity = Vector2.zero;
-
+            if (enemy.attackRestTimer > 0)
+            {
+                enemy.attackRestTimer -= Time.deltaTime;
+                return;
+            }
             if (enemy.playerDetected)
             {
+                enemy.attackRestTimer = 1f;
                 enemy.stateMachine.ChangeState(new FlyEnemyChaseState(enemy));
             }
         }
@@ -213,7 +220,11 @@ public class FlyEnemy : Enemy
                     enemy.stateMachine.ChangeState(new FlyEnemyIdleState(enemy));
                 }
             }
-
+            if (enemy.attackRestTimer > 0)
+            {
+                enemy.attackRestTimer -= Time.deltaTime;
+                return;
+            }
             if (enemy.inAttackArea)
             {
                 if (Time.time >= enemy.lastAttackCheckTime + enemy.attackCheckCooldown)
@@ -237,6 +248,9 @@ public class FlyEnemy : Enemy
     public class FlyEnemyAttackState : IState
     {
         private FlyEnemy enemy;
+        private bool isAttacking;
+        private float attackDuration;
+
         public FlyEnemyAttackState(FlyEnemy _enemy)
         {
             enemy = _enemy;
@@ -245,18 +259,22 @@ public class FlyEnemy : Enemy
         public void OnEnter()
         {
             enemy.animator.SetBool("isIdle", false);
-
             enemy.canFlip = false;
-
+            enemy.dashDir = (enemy.player.transform.position - enemy.transform.position).normalized;
             enemy.StartCoroutine(WaitToAttack(1.6f));
-            
 
         }
         public void OnUpdate()
         {
+            if (isAttacking)
+            {
+                attackDuration += Time.deltaTime;
+                if (attackDuration > 1.5f) enemy.stopAttack = true;
+            }
             if (enemy.stopAttack)
             {
-                enemy.stateMachine.ChangeState(new FlyEnemyChaseState(enemy));
+                enemy.attackRestTimer = enemy.attackRestTime;
+                enemy.stateMachine.ChangeState(new FlyEnemyIdleState(enemy));
             }
         }
         public void OnExit()
@@ -270,7 +288,7 @@ public class FlyEnemy : Enemy
         public IEnumerator WaitToAttack(float _time)
         {
             yield return new WaitForSeconds(_time);
-            enemy.dashDir = (enemy.player.transform.position - enemy.transform.position).normalized;
+            isAttacking = true;
             enemy.rb.linearVelocity = enemy.dashDir * enemy.attackMoveSpeed;
             
             float angle = Mathf.Atan2(enemy.dashDir.y, enemy.dashDir.x) * Mathf.Rad2Deg;

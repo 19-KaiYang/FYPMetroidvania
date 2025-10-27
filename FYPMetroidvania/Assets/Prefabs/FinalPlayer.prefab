@@ -289,7 +289,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85f2735b1d4274748ae03c2735e0e881, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hitbox
-  damage: 0
+  damage: 8
   isCritical: 0
   hitstopDuration: 0.08
   applyHitstop: 0
@@ -636,6 +636,7 @@ MonoBehaviour:
   knockbackTimer: 0
   knockbackVelocity: {x: 0, y: 0}
   rb: {fileID: 7721234354411303025}
+  animator: {fileID: 0}
   moveInput: {x: 0, y: 0}
   externalVelocityOverride: 0
 --- !u!114 &1835037867212476304
@@ -713,10 +714,43 @@ MonoBehaviour:
   - {fileID: 5650804964027471493}
   - {fileID: 743029895108933649}
   - {fileID: 7645673019371433563}
+  - {fileID: 527879510584102650}
+  - {fileID: 5983308619838929821}
   gauntletHitboxes:
   - {fileID: 4414663687543333401}
   - {fileID: 5831051524767921042}
   - {fileID: 3800294071731714437}
+  attackVFXList:
+  - VFX_name: Ground Combo 1
+    animationName: Effect1
+    position: {x: 0.49850005, y: 0.10000001, z: 0}
+    angle: 0
+    scale: {x: 0.20000002, y: 0.10000001, z: 0.08}
+    sfxVolume: 0.5
+  - VFX_name: Ground Combo 2
+    animationName: Effect2
+    position: {x: 0.49850005, y: 0.10000001, z: 0}
+    angle: 0
+    scale: {x: 0.20000002, y: 0.10000001, z: 0.08}
+    sfxVolume: 0.5
+  - VFX_name: Ground Combo 3
+    animationName: Effect3
+    position: {x: 0.49850005, y: 0.10000001, z: 0}
+    angle: 0
+    scale: {x: 0.20000002, y: 0.10000001, z: 0.08}
+    sfxVolume: 0.5
+  - VFX_name: Ground Upward Attack
+    animationName: Effect2
+    position: {x: 0.1233, y: 0.482, z: 0}
+    angle: 65
+    scale: {x: 0.11, y: 0.15, z: 0.08}
+    sfxVolume: 0.5
+  - VFX_name: Air Downward Attack
+    animationName: Effect1
+    position: {x: 0, y: -0.25, z: 0}
+    angle: -90
+    scale: {x: 0.13, y: 0.14, z: 0.08}
+    sfxVolume: 0.5
   comboStep: 0
   canTransition: 1
   isBuffered: 0
@@ -736,11 +770,13 @@ MonoBehaviour:
   destroyOnDeath: 0
   isPlayer: 1
   currentHealth: 0
-  spriteRenderer: {fileID: 0}
+  spriteRenderer: {fileID: 259343632847283508}
   originalColor: {r: 0, g: 0, b: 0, a: 0}
   flashDuration: 0.1
   hitSound: {fileID: 0}
   deathSound: {fileID: 0}
+  healthBar: {fileID: 0}
+  defaultDamageColor: {r: 0, g: 0, b: 0, a: 0}
   arcKnockdownGravity: 15
   isInArcKnockdown: 0
   knockbackForce: 5
@@ -796,9 +832,9 @@ MonoBehaviour:
   swordDashCCDuration: 1.5
   swordDashCooldown: 0
   swordDashCost: 20
-  uppercutUpSpeed: 20
+  uppercutUpSpeed: 18
   uppercutForwardSpeed: 1.5
-  uppercutDuration: 0.15
+  uppercutDuration: 0.05
   uppercutFlatDamage: 10
   swordUppercutHealthCost: 8
   swordUppercutGroundedCC: 2
@@ -1198,13 +1234,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4064043382543299264}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.4985, y: 0.121, z: 0}
-  m_LocalScale: {x: 0.2, y: 0.1, z: 0.08}
+  m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: -0.25, z: 0}
+  m_LocalScale: {x: 0.13, y: 0.14, z: 0.08}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6739047975924462519}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
 --- !u!95 &8203955659687371261
 Animator:
   serializedVersion: 7
@@ -7300,7 +7336,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 2
-  m_Sprite: {fileID: -1484801028873491122, guid: 066987860af3bc24382aed0a9ababcc0, type: 3}
+  m_Sprite: {fileID: -3189063973579013628, guid: 62066b35704bfb84b9c306a8450bb33c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

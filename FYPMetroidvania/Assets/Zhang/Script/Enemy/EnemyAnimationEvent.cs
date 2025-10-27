@@ -4,11 +4,13 @@ public class EnemyAnimationEvent : MonoBehaviour
 {
     private MeleeEnemy brawler;
     private Spearman spearman;
+    private Enemy enemy;
 
     private void Awake()
     {
         brawler = GetComponentInParent<MeleeEnemy>();
         spearman = GetComponentInParent<Spearman>();
+        enemy = GetComponentInParent<Enemy>();
     }
 
     private void BrawlerClawFinished()
@@ -36,5 +38,13 @@ public class EnemyAnimationEvent : MonoBehaviour
     private void SpearManThrustFinished()
     {
         spearman.isThrustFinished = true;
+    }
+    private void PlayAttackFlash()
+    {
+        AudioManager.PlaySFX(SFXTYPE.ENEMY_ATTACKFLASH, 0.65f, pitch: 1.2f);
+    }
+    private void HawkAttackSFX()
+    {
+        AudioManager.PlaySFX(SFXTYPE.HAWK_ATTACK, 0.5f);
     }
 }

@@ -106,6 +106,8 @@ public class Skills : MonoBehaviour
     private float swordUppercutCooldownTimer = 0f;
     public float swordUppercutCost = 20f;
 
+    private bool uppercutStart = false;
+
     // ===================== CRIMSON WAVE =====================
 
 
@@ -633,6 +635,7 @@ public class Skills : MonoBehaviour
     private IEnumerator Skill_SwordUppercut()
     {
         usingSkill = true;
+        uppercutStart = false;
         swordUppercutCooldownTimer = swordUppercutCooldown;
 
         if (controller) controller.externalVelocityOverride = true;
@@ -684,20 +687,19 @@ public class Skills : MonoBehaviour
         Hitbox.OnHit += OnUppercutHit;
 
         // --- Phase 1: short forward dash ---
-        float dashPhase = 0.12f;
+        controller.animator.SetTrigger("Sword Uppercut");
 
-        // Activate hitbox during dash phase
-        Coroutine hitboxRoutine = StartCoroutine(ActivateSkillHitbox(swordUppercutHitbox, uppercutDuration));
-
-        while (elapsed < dashPhase)
+        while (!uppercutStart)
         {
-            controller.SetVelocity(new Vector2(forward, uppercutUpSpeed * 0.25f));
+            controller.SetVelocity(new Vector2(forward, 0f));
             elapsed += Time.deltaTime;
             yield return null;
         }
-
+        elapsed = 0f;
         // --- Phase 2: rising slash (forward + strong upward) ---
-        while (elapsed < uppercutDuration)
+        // Activate hitbox during dash phase
+        Coroutine hitboxRoutine = StartCoroutine(ActivateSkillHitbox(swordUppercutHitbox, uppercutDuration));
+        while (uppercutStart)
         {
             controller.SetVelocity(new Vector2(forward * 0.7f, uppercutUpSpeed));  
             elapsed += Time.deltaTime;
@@ -719,7 +721,10 @@ public class Skills : MonoBehaviour
         usingSkill = false;
     }
 
-
+    public void SetUppercut_Start(int start)
+    {
+        uppercutStart = start == 0 ? false : true;
+    }
 
     #endregion
 
