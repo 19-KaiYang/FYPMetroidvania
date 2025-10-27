@@ -688,7 +688,6 @@ public class Skills : MonoBehaviour
 
         // --- Phase 1: short forward dash ---
         controller.animator.SetTrigger("Sword Uppercut");
-        float dashPhase = 0.15f;
 
         while (!uppercutStart)
         {
@@ -700,7 +699,7 @@ public class Skills : MonoBehaviour
         // --- Phase 2: rising slash (forward + strong upward) ---
         // Activate hitbox during dash phase
         Coroutine hitboxRoutine = StartCoroutine(ActivateSkillHitbox(swordUppercutHitbox, uppercutDuration));
-        while (elapsed < uppercutDuration)
+        while (uppercutStart)
         {
             controller.SetVelocity(new Vector2(forward * 0.7f, uppercutUpSpeed));  
             elapsed += Time.deltaTime;
@@ -722,9 +721,9 @@ public class Skills : MonoBehaviour
         usingSkill = false;
     }
 
-    public void SetUppercut_Start()
+    public void SetUppercut_Start(int start)
     {
-        uppercutStart = true;
+        uppercutStart = start == 0 ? false : true;
     }
 
     #endregion

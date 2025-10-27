@@ -289,7 +289,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85f2735b1d4274748ae03c2735e0e881, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hitbox
-  damage: 0
+  damage: 8
   isCritical: 0
   hitstopDuration: 0.08
   applyHitstop: 0
@@ -714,6 +714,8 @@ MonoBehaviour:
   - {fileID: 5650804964027471493}
   - {fileID: 743029895108933649}
   - {fileID: 7645673019371433563}
+  - {fileID: 527879510584102650}
+  - {fileID: 5983308619838929821}
   gauntletHitboxes:
   - {fileID: 4414663687543333401}
   - {fileID: 5831051524767921042}
@@ -724,26 +726,31 @@ MonoBehaviour:
     position: {x: 0.49850005, y: 0.10000001, z: 0}
     angle: 0
     scale: {x: 0.20000002, y: 0.10000001, z: 0.08}
+    sfxVolume: 0.5
   - VFX_name: Ground Combo 2
     animationName: Effect2
     position: {x: 0.49850005, y: 0.10000001, z: 0}
     angle: 0
     scale: {x: 0.20000002, y: 0.10000001, z: 0.08}
+    sfxVolume: 0.5
   - VFX_name: Ground Combo 3
     animationName: Effect3
     position: {x: 0.49850005, y: 0.10000001, z: 0}
     angle: 0
     scale: {x: 0.20000002, y: 0.10000001, z: 0.08}
+    sfxVolume: 0.5
   - VFX_name: Ground Upward Attack
     animationName: Effect2
     position: {x: 0.1233, y: 0.482, z: 0}
     angle: 65
     scale: {x: 0.11, y: 0.15, z: 0.08}
+    sfxVolume: 0.5
   - VFX_name: Air Downward Attack
     animationName: Effect1
     position: {x: 0, y: -0.25, z: 0}
     angle: -90
     scale: {x: 0.13, y: 0.14, z: 0.08}
+    sfxVolume: 0.5
   comboStep: 0
   canTransition: 1
   isBuffered: 0
@@ -825,7 +832,7 @@ MonoBehaviour:
   swordDashCCDuration: 1.5
   swordDashCooldown: 0
   swordDashCost: 20
-  uppercutUpSpeed: 20
+  uppercutUpSpeed: 18
   uppercutForwardSpeed: 1.5
   uppercutDuration: 0.05
   uppercutFlatDamage: 10
@@ -1303,7 +1310,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 2
-  m_Sprite: {fileID: 4332135467606403519, guid: 705b66d7529ecb846874e06b01c849a6, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -1311,7 +1318,7 @@ SpriteRenderer:
   m_Size: {x: 3.5008547, y: 5.92}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &4065387723786430843

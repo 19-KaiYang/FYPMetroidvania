@@ -34,6 +34,11 @@ public class EnemyHealthUI : MonoBehaviour
     {
         health.updateUI -= UpdateHealthUI;
     }
+    private void Update()
+    {
+        if (health.transform.localScale.x < 0) transform.localScale = new Vector3(-1f, 1f, 1f);
+        else transform.localScale = new Vector3(1f, 1f, 1f);
+    }
     void UpdateHealthUI(Health health, float numberValue, Color numberColor)
     {
         if (numberValue <= 0) return;
@@ -53,10 +58,11 @@ public class EnemyHealthUI : MonoBehaviour
                 dmgNumber.transform.position = position;
 
                 DG.Tweening.Sequence numberSequence = DOTween.Sequence();
-                numberSequence.Append(dmgNumber.transform.DOScale(Vector3.one, 0.3f));
-                numberSequence.Join(dmgNumber.numberText.DOFade(1f, 0.3f));
+                numberSequence.Append(dmgNumber.transform.DOScale(Vector3.one, 0.2f));
+                numberSequence.Join(dmgNumber.numberText.DOFade(1f, 0.2f));
                 numberSequence.AppendInterval(0.5f);
-                numberSequence.Append(dmgNumber.numberText.DOFade(0f, 1f));
+                numberSequence.Append(dmgNumber.numberText.DOFade(0f, 0.75f));
+                numberSequence.Join(dmgNumber.transform.DOScale(Vector3.one * 0.25f, 0.75f));
                 TweenCallback endDamageNumber = new TweenCallback(() =>
                 {
                     dmgNumber.transform.SetParent(damageNumberTransform);

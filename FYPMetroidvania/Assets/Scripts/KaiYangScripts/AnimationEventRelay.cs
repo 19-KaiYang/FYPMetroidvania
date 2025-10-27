@@ -33,7 +33,7 @@ public class AnimationEventRelay : MonoBehaviour
     public void DisableGauntletDownHitbox() => combatSystem?.DisableGauntletDownHitbox();
     public void SetCanTransition(int comboEnd) => combatSystem?.SetCanTransition(true, comboEnd);
     public void SetCanBuffer() => combatSystem?.SetCanBuffer();
-    public void SetUppercutStart() => skills?.SetUppercut_Start();
+    public void SetUppercutStart(int start) => skills?.SetUppercut_Start(start);
 
     #region Old VFX Methods
     // === OLD Particle Effect Methods (using Animator triggers) ===
