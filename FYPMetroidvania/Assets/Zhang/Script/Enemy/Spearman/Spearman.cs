@@ -243,7 +243,7 @@ public class Spearman : Enemy
             enemy.animator.SetTrigger("thrust");
             enemy.isThrustFinished = false;
             enemy.thrustTimer = 0;
-            AudioManager.PlaySFX(SFXTYPE.SPEARMAN_CHARGE, 0.2f);
+            //AudioManager.PlaySFX(SFXTYPE.SPEARMAN_CHARGE, 0.2f);
         }
         public void OnUpdate()
         {

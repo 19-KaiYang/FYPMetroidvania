@@ -380,7 +380,7 @@ public class MeleeEnemy : Enemy
             enemy.isAttackFinished = false;
             enemy.meleeAttackTimer = 0;
             enemy.rb.linearVelocity = Vector3.zero;
-            AudioManager.PlaySFX(SFXTYPE.BRALWER_CHARGE, 0.2f);
+            //AudioManager.PlaySFX(SFXTYPE.BRALWER_CHARGE, 0.2f);
         }
         public void OnUpdate()
         {

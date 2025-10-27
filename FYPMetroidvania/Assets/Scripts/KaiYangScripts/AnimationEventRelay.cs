@@ -1,8 +1,10 @@
 using UnityEngine;
+using System.Linq;
 
 public class AnimationEventRelay : MonoBehaviour
 {
     private CombatSystem combatSystem;
+    private Skills skills;
 
     // Reference to the ParticleEffects GameObject (assign in Inspector)
     public GameObject particleEffectsObject;
@@ -11,6 +13,7 @@ public class AnimationEventRelay : MonoBehaviour
     {
         //  Automatically find CombatSystem on the Player 
         combatSystem = GetComponentInParent<CombatSystem>();
+        skills = GetComponentInParent<Skills>();
     }
 
     // === Forwarded Methods ===
@@ -30,7 +33,9 @@ public class AnimationEventRelay : MonoBehaviour
     public void DisableGauntletDownHitbox() => combatSystem?.DisableGauntletDownHitbox();
     public void SetCanTransition(int comboEnd) => combatSystem?.SetCanTransition(true, comboEnd);
     public void SetCanBuffer() => combatSystem?.SetCanBuffer();
+    public void SetUppercutStart() => skills?.SetUppercut_Start();
 
+    #region Old VFX Methods
     // === OLD Particle Effect Methods (using Animator triggers) ===
     public void PlayEffect1()
     {
@@ -93,7 +98,6 @@ public class AnimationEventRelay : MonoBehaviour
             AudioManager.PlaySFX(SFXTYPE.SWORD_SWING, 0.5f);
         }
     }
-
     public void HideEffect2()
     {
         if (particleEffectsObject != null)
@@ -104,7 +108,6 @@ public class AnimationEventRelay : MonoBehaviour
             particleEffectsObject.SetActive(false);
         }
     }
-
     public void ShowEffect3()
     {
         if (particleEffectsObject != null)
@@ -119,8 +122,34 @@ public class AnimationEventRelay : MonoBehaviour
             AudioManager.PlaySFX(SFXTYPE.SWORD_SWING, 1.0f);
         }
     }
-
     public void HideEffect3()
+    {
+        if (particleEffectsObject != null)
+        {
+            var sr = particleEffectsObject.GetComponent<SpriteRenderer>();
+            if (sr != null) sr.sprite = null;
+
+            particleEffectsObject.SetActive(false);
+        }
+    }
+    #endregion
+    public void PlayVFX(string Name)
+    {
+        if (particleEffectsObject == null) return;
+        AttackVFX vfx = combatSystem.attackVFXList.FirstOrDefault(i => i.VFX_name == Name);
+        if(vfx != null)
+        {
+            particleEffectsObject.SetActive(true);
+            particleEffectsObject.transform.localPosition = vfx.position;
+            particleEffectsObject.transform.localEulerAngles = new Vector3(0f, 0f, vfx.angle);
+            particleEffectsObject.transform.localScale = vfx.scale;
+            if (combatSystem?.particleEffectAnimator != null)
+                combatSystem.particleEffectAnimator.Play(vfx.animationName);
+
+            AudioManager.PlaySFX(SFXTYPE.SWORD_SWING, vfx.sfxVolume);
+        }
+    }
+    public void HideVFX()
     {
         if (particleEffectsObject != null)
         {

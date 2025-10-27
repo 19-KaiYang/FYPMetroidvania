@@ -23,6 +23,16 @@ public class WeaponStats
     public float projectileSpeed = 10f;
     public float projectileLifetime = 3f;
 }
+[Serializable]
+public class AttackVFX
+{
+    public string VFX_name;
+    public string animationName;
+    public Vector3 position;
+    public float angle;
+    public Vector3 scale;
+    public float sfxVolume = 0.5f;
+}
 
 public class CombatSystem : MonoBehaviour
 {
@@ -54,11 +64,12 @@ public class CombatSystem : MonoBehaviour
 
     public GameObject swordDownSweepHitbox;
 
-
     [Header("Melee Combo Hitboxes")]
     public List<GameObject> swordHitboxes;
     public List<GameObject> gauntletHitboxes;
 
+    [Header("Melee VFX")]
+    public List<AttackVFX> attackVFXList;
 
     private List<GameObject> activeHitboxes;
 
@@ -86,9 +97,7 @@ public class CombatSystem : MonoBehaviour
     // Events
     public static Action<Hitbox> basicAttackStart;
     public static Action basicAttackEnd;
-
     public int CurrentComboStep => comboStep;
-
     private void Start()
     {
       
@@ -101,8 +110,6 @@ public class CombatSystem : MonoBehaviour
 
       
     }
-
-
     private void Awake()
     {
         // Auto-find Animator & SpriteRenderer 
@@ -392,7 +399,8 @@ public class CombatSystem : MonoBehaviour
 
         if (currentWeapon == WeaponType.Sword && swordUpHitbox != null)
         {
-            StartCoroutine(ToggleHitbox(swordUpHitbox, 0.2f));
+            //StartCoroutine(ToggleHitbox(swordUpHitbox, 0.2f));
+            animator.SetTrigger("UpAttack");
         }
         else if (currentWeapon == WeaponType.Gauntlet && gauntletUpHitbox != null)
         {
@@ -425,7 +433,8 @@ public class CombatSystem : MonoBehaviour
             else if (swordDownHitbox != null)
             {
                 // Air down attack
-                StartCoroutine(ToggleHitbox(swordDownHitbox, 0.2f));
+                //StartCoroutine(ToggleHitbox(swordDownHitbox, 0.2f));
+                animator.SetTrigger("Air DownAttack");
             }
         }
         else if (currentWeapon == WeaponType.Gauntlet && gauntletDownHitbox != null)
