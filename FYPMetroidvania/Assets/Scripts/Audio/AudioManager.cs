@@ -49,12 +49,6 @@ public class AudioManager : MonoBehaviour
     }
     private void Update()
     {
-        //while (sfxTasks.Count > 0)
-        //{
-        //    instance.SFXSource.pitch = sfxTasks[0].pitch;
-        //    instance.SFXSource.PlayOneShot(sfxTasks[0].clip, sfxTasks[0].volume);
-        //    sfxTasks.RemoveAt(0);
-        //}
     }
     public static void PlaySFX(SFXTYPE type, float volume = 1f, int variantIndex = -1, float pitch = 1f)
     {
@@ -65,8 +59,6 @@ public class AudioManager : MonoBehaviour
         AudioClip clipChosen = audioClips[Random.Range(0, audioClips.Length)];
         instance.SFXSource.pitch = pitch;
         instance.SFXSource.PlayOneShot(clipChosen,volume);
-        //SFXTask newTask = new SFXTask(clipChosen, volume, pitch);
-        //instance.sfxTasks.Add(newTask);
     }
     public void PlayBGM(AudioClip song)
     {
@@ -97,6 +89,11 @@ public enum SFXTYPE
     SWORD_SWING,
     SWORD_LIGHTHIT,
     SWORD_HEAVYHIT,
-    DIALOGUE_1
+    DIALOGUE_1,
+    BRAWLER_ATTACK,
+    BRALWER_CHARGE,
+    SPEARMAN_ATTACK,
+    SPEARMAN_CHARGE,
+    SPEARMAN_THROW
 }
 

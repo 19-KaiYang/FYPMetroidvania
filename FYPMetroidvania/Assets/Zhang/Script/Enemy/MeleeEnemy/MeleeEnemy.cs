@@ -1,5 +1,7 @@
 using System.Collections;
+using System.Runtime.CompilerServices;
 using UnityEngine;
+using static Spearman;
 
 public class MeleeEnemy : Enemy
 {
@@ -124,6 +126,11 @@ public class MeleeEnemy : Enemy
         float velocitX = (targetX - enemyPos.x) / time;
 
         _rb.linearVelocity = new Vector2(velocitX, VelocitY);
+    }
+
+    public void PlaySFX()
+    {
+        AudioManager.PlaySFX(SFXTYPE.BRAWLER_ATTACK, 0.5f);
     }
     private void MoveBack()
     {
@@ -290,6 +297,7 @@ public class MeleeEnemy : Enemy
                 enemy.Flip();
             }
             enemy.animator.SetTrigger("jump");
+            AudioManager.PlaySFX(SFXTYPE.BRALWER_CHARGE, 0.2f, pitch: 0.85f);
         }
         public void OnUpdate()
         {
@@ -372,10 +380,11 @@ public class MeleeEnemy : Enemy
             enemy.isAttackFinished = false;
             enemy.meleeAttackTimer = 0;
             enemy.rb.linearVelocity = Vector3.zero;
+            AudioManager.PlaySFX(SFXTYPE.BRALWER_CHARGE, 0.2f);
         }
         public void OnUpdate()
         {
-            if (enemy.health.currentCCState == CrowdControlState.Stunned)
+            if (enemy.health.currentCCState != CrowdControlState.None)
             {
                 enemy.stateMachine.ChangeState(new MeleeEnemyCCState(enemy));
             }

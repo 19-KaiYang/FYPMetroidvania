@@ -23,6 +23,7 @@ public class Spearman : Enemy
     [Header("Attack")]
     [SerializeField] private float thrustCooldown;
     [SerializeField] private float thrustTimer;
+    [SerializeField] private ParticleSystem thrustParticleSystem;
     [SerializeField] public bool isThrustFinished;
     [SerializeField] public bool isThrowFinished;
 
@@ -174,7 +175,7 @@ public class Spearman : Enemy
         }
         public void OnUpdate()
         {
-            if (enemy.health.currentCCState == CrowdControlState.Stunned)
+            if (enemy.health.currentCCState != CrowdControlState.None)
             {
                 enemy.stateMachine.ChangeState(new SpearmanCCState(enemy));
             }
@@ -242,10 +243,11 @@ public class Spearman : Enemy
             enemy.animator.SetTrigger("thrust");
             enemy.isThrustFinished = false;
             enemy.thrustTimer = 0;
+            AudioManager.PlaySFX(SFXTYPE.SPEARMAN_CHARGE, 0.2f);
         }
         public void OnUpdate()
         {
-            if (enemy.health.currentCCState == CrowdControlState.Stunned)
+            if (enemy.health.currentCCState != CrowdControlState.None)
             {
                 enemy.stateMachine.ChangeState(new SpearmanCCState(enemy));
             }
@@ -260,7 +262,10 @@ public class Spearman : Enemy
 
         }
     }
-
+    public void ThrustVFX()
+    {
+        thrustParticleSystem.Play();
+    }
     public class SpearmanThrowtState : IState
     {
         private Spearman enemy;
@@ -274,9 +279,14 @@ public class Spearman : Enemy
             enemy.animator.SetTrigger("throw");
             enemy.isThrowFinished = false;
             enemy.throwTimer = 0;
+            AudioManager.PlaySFX(SFXTYPE.SPEARMAN_CHARGE, 0.2f, pitch: 1.4f);
         }
         public void OnUpdate()
         {
+            if (enemy.health.currentCCState != CrowdControlState.None)
+            {
+                enemy.stateMachine.ChangeState(new SpearmanCCState(enemy));
+            }
             if (enemy.isThrowFinished)
             {
                 enemy.stateMachine.ChangeState(new SpearmanChaseState(enemy));
