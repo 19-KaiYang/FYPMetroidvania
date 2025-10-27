@@ -48,12 +48,7 @@ MonoBehaviour:
   damage: 0
   isCritical: 0
   hitstopDuration: 0.08
-  applyHitstopToEnemy: 1
-  applyHitstopToPlayer: 1
-  forceUpKnockback: 0
-  customKnockback: {x: 0, y: 0}
-  isSweepHitbox: 0
-  sweepKnockbackForce: 12
+  applyHitstop: 0
   X_Knockback: 0
   Y_Knockback: 0
   facingRight: 0
@@ -192,13 +187,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Hitbox
   damage: 0
   isCritical: 0
-  hitstopDuration: 0.08
-  applyHitstopToEnemy: 1
-  applyHitstopToPlayer: 1
-  forceUpKnockback: 0
-  customKnockback: {x: 0, y: 0}
-  isSweepHitbox: 1
-  sweepKnockbackForce: 10
+  hitstopDuration: 0.25
+  applyHitstop: 1
   X_Knockback: 12
   Y_Knockback: 3
   facingRight: 0
@@ -275,7 +265,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -1.0297996, y: 0.41628382}
+  m_Offset: {x: -1.0070367, y: 0.48912567}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -285,7 +275,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.3494075, y: 0.44510955}
+  m_Size: {x: 0.64987993, y: 0.59079325}
   m_EdgeRadius: 0
 --- !u!114 &5788203806030980929
 MonoBehaviour:
@@ -302,12 +292,7 @@ MonoBehaviour:
   damage: 0
   isCritical: 0
   hitstopDuration: 0.08
-  applyHitstopToEnemy: 1
-  applyHitstopToPlayer: 1
-  forceUpKnockback: 0
-  customKnockback: {x: 0, y: 0}
-  isSweepHitbox: 0
-  sweepKnockbackForce: 12
+  applyHitstop: 0
   X_Knockback: 1
   Y_Knockback: 12
   facingRight: 0
@@ -384,7 +369,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.7110493, y: -0.03285716}
+  m_Offset: {x: -0.65186554, y: 0.15380009}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -394,7 +379,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.6701615, y: 0.18389556}
+  m_Size: {x: 0.78852904, y: 0.5572101}
   m_EdgeRadius: 0
 --- !u!114 &3693036728604249990
 MonoBehaviour:
@@ -410,13 +395,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Hitbox
   damage: 0
   isCritical: 0
-  hitstopDuration: 0.08
-  applyHitstopToEnemy: 1
-  applyHitstopToPlayer: 1
-  forceUpKnockback: 0
-  customKnockback: {x: 0, y: 0}
-  isSweepHitbox: 0
-  sweepKnockbackForce: 12
+  hitstopDuration: 0.05
+  applyHitstop: 0
   X_Knockback: 0.5
   Y_Knockback: 0
   facingRight: 0
@@ -738,6 +718,8 @@ MonoBehaviour:
   - {fileID: 5831051524767921042}
   - {fileID: 3800294071731714437}
   comboStep: 0
+  canTransition: 1
+  isBuffered: 0
 --- !u!114 &1476827326203152432
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -805,8 +787,8 @@ MonoBehaviour:
   swordDashHitbox: {fileID: 269540336706389665}
   swordUppercutHitbox: {fileID: 8223723184335653064}
   gauntletShockwaveHitbox: {fileID: 204553692531015905}
-  dashSpeed: 35
-  dashDuration: 0.3
+  dashSpeed: 30
+  dashDuration: 0.25
   dashFlatDamage: 23
   swordDashHealthCost: 5
   swordDashGroundedCC: 2
@@ -1180,12 +1162,7 @@ MonoBehaviour:
   damage: 0
   isCritical: 0
   hitstopDuration: 0.08
-  applyHitstopToEnemy: 1
-  applyHitstopToPlayer: 1
-  forceUpKnockback: 0
-  customKnockback: {x: 0, y: 0}
-  isSweepHitbox: 0
-  sweepKnockbackForce: 12
+  applyHitstop: 0
   X_Knockback: 0
   Y_Knockback: 0
   facingRight: 0
@@ -1222,9 +1199,9 @@ Transform:
   m_GameObject: {fileID: 4064043382543299264}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.336, y: 0.117, z: 0}
-  m_LocalScale: {x: 0.08, y: 0.08, z: 0.08}
-  m_ConstrainProportionsScale: 1
+  m_LocalPosition: {x: 0.4985, y: 0.121, z: 0}
+  m_LocalScale: {x: 0.2, y: 0.1, z: 0.08}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6739047975924462519}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1302,7 +1279,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 3.5008547, y: 5.92}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0
@@ -1439,12 +1416,7 @@ MonoBehaviour:
   damage: 0
   isCritical: 0
   hitstopDuration: 0.08
-  applyHitstopToEnemy: 1
-  applyHitstopToPlayer: 1
-  forceUpKnockback: 0
-  customKnockback: {x: 0, y: 0}
-  isSweepHitbox: 0
-  sweepKnockbackForce: 12
+  applyHitstop: 0
   X_Knockback: 0
   Y_Knockback: 0
   facingRight: 0
@@ -1583,7 +1555,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.8057935, y: -0.12701105}
+  m_Offset: {x: -0.7101886, y: -0.12701105}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -1593,7 +1565,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.51833004, y: 0.13962963}
+  m_Size: {x: 0.7095399, y: 0.13962963}
   m_EdgeRadius: 0
 --- !u!114 &1988688822365818046
 MonoBehaviour:
@@ -1610,12 +1582,7 @@ MonoBehaviour:
   damage: 0
   isCritical: 0
   hitstopDuration: 0.08
-  applyHitstopToEnemy: 1
-  applyHitstopToPlayer: 1
-  forceUpKnockback: 0
-  customKnockback: {x: 0, y: 0}
-  isSweepHitbox: 1
-  sweepKnockbackForce: 30
+  applyHitstop: 0
   X_Knockback: -2
   Y_Knockback: 12
   facingRight: 0
@@ -6528,7 +6495,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.69314295, y: -0.021743812}
+  m_Offset: {x: -0.6521698, y: 0.09662412}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -6538,7 +6505,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.59978855, y: 0.31242865}
+  m_Size: {x: 0.6817348, y: 0.54916453}
   m_EdgeRadius: 0
 --- !u!114 &1176072479163570622
 MonoBehaviour:
@@ -6554,13 +6521,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Hitbox
   damage: 0
   isCritical: 0
-  hitstopDuration: 0.1
-  applyHitstopToEnemy: 1
-  applyHitstopToPlayer: 1
-  forceUpKnockback: 0
-  customKnockback: {x: 0, y: 0}
-  isSweepHitbox: 0
-  sweepKnockbackForce: 12
+  hitstopDuration: 0.05
+  applyHitstop: 0
   X_Knockback: 0.5
   Y_Knockback: 0
   facingRight: 0
@@ -6664,12 +6626,7 @@ MonoBehaviour:
   damage: 0
   isCritical: 0
   hitstopDuration: 0.08
-  applyHitstopToEnemy: 1
-  applyHitstopToPlayer: 1
-  forceUpKnockback: 0
-  customKnockback: {x: 0, y: 0}
-  isSweepHitbox: 0
-  sweepKnockbackForce: 12
+  applyHitstop: 0
   X_Knockback: 0
   Y_Knockback: 0
   facingRight: 0
@@ -6746,7 +6703,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -1.0297996, y: -0.38773915}
+  m_Offset: {x: -1.0297997, y: -0.38773915}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -6756,7 +6713,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.34940743, y: 0.4113744}
+  m_Size: {x: 0.75003874, y: 0.4113744}
   m_EdgeRadius: 0
 --- !u!114 &7174681093743753349
 MonoBehaviour:
@@ -6773,12 +6730,7 @@ MonoBehaviour:
   damage: 0
   isCritical: 0
   hitstopDuration: 0.08
-  applyHitstopToEnemy: 1
-  applyHitstopToPlayer: 1
-  forceUpKnockback: 0
-  customKnockback: {x: 0, y: 0}
-  isSweepHitbox: 0
-  sweepKnockbackForce: 12
+  applyHitstop: 0
   X_Knockback: 5
   Y_Knockback: 8
   facingRight: 0
@@ -6882,12 +6834,7 @@ MonoBehaviour:
   damage: 0
   isCritical: 0
   hitstopDuration: 0.08
-  applyHitstopToEnemy: 1
-  applyHitstopToPlayer: 1
-  forceUpKnockback: 0
-  customKnockback: {x: 0, y: 0}
-  isSweepHitbox: 0
-  sweepKnockbackForce: 12
+  applyHitstop: 0
   X_Knockback: 0
   Y_Knockback: 0
   facingRight: 0
@@ -6995,7 +6942,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.7946997, y: 0.0035511553}
+  m_Offset: {x: -0.56251615, y: 0.090050876}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -7005,7 +6952,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.6828433, y: 0.44999427}
+  m_Size: {x: 1.1472105, y: 0.6229938}
   m_EdgeRadius: 0
 --- !u!114 &4841575542077192640
 MonoBehaviour:
@@ -7021,13 +6968,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Hitbox
   damage: 0
   isCritical: 0
-  hitstopDuration: 0.08
-  applyHitstopToEnemy: 1
-  applyHitstopToPlayer: 1
-  forceUpKnockback: 0
-  customKnockback: {x: 0, y: 0}
-  isSweepHitbox: 0
-  sweepKnockbackForce: 12
+  hitstopDuration: 0.2
+  applyHitstop: 1
   X_Knockback: 7
   Y_Knockback: 3
   facingRight: 0
@@ -7131,12 +7073,7 @@ MonoBehaviour:
   damage: 0
   isCritical: 0
   hitstopDuration: 0.08
-  applyHitstopToEnemy: 1
-  applyHitstopToPlayer: 1
-  forceUpKnockback: 0
-  customKnockback: {x: 0, y: 0}
-  isSweepHitbox: 0
-  sweepKnockbackForce: 12
+  applyHitstop: 0
   X_Knockback: 0
   Y_Knockback: 0
   facingRight: 0
@@ -7244,7 +7181,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.6243288, y: 0.37705866}
+  m_Offset: {x: -0.801881, y: 0.37705866}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -7254,7 +7191,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.42039526, y: 0.89429396}
+  m_Size: {x: 0.6662375, y: 0.89429396}
   m_EdgeRadius: 0
 --- !u!114 &5992295364396435484
 MonoBehaviour:
@@ -7270,15 +7207,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Hitbox
   damage: 0
   isCritical: 0
-  hitstopDuration: 0.08
-  applyHitstopToEnemy: 1
-  applyHitstopToPlayer: 1
-  forceUpKnockback: 0
-  customKnockback: {x: 0, y: 0}
-  isSweepHitbox: 1
-  sweepKnockbackForce: 10
+  hitstopDuration: 0.25
+  applyHitstop: 1
   X_Knockback: 3
-  Y_Knockback: 10
+  Y_Knockback: 15
   facingRight: 0
   CCType: 2
   CCDuration: 0.5
