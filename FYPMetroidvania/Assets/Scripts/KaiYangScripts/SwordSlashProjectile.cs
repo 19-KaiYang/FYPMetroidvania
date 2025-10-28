@@ -5,11 +5,9 @@ public class SwordSlashProjectile : ProjectileBase
     public float maxDistance = 10f;
     public float bloodCost;
 
-    public CrowdControlState groundedCC = CrowdControlState.Stunned;
-    public CrowdControlState airborneCC = CrowdControlState.Knockdown;
+    public CrowdControlState crowdControl = CrowdControlState.Stunned;
     public float ccDuration = 1.0f;
-    public float stunKnockbackMultiplier = 1f;
-    public float knockdownKnockbackMultiplier = 1f;
+    public float X_Knockback; public float Y_Knockback;
 
     private Vector3 startPos;
     private Health playerHealth;
@@ -44,6 +42,10 @@ public class SwordSlashProjectile : ProjectileBase
     {
         if (!rb) rb = GetComponent<Rigidbody2D>();
         rb.linearVelocity = dir.normalized * speed;
+        if(dir.x < 0)
+        {
+            transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+        }
 
         if (hitbox != null && !hasInvokedStart)
         {
@@ -62,19 +64,10 @@ public class SwordSlashProjectile : ProjectileBase
                 Skills.InvokeSkillHit(hitbox, enemy);
             }
 
-            Vector2 knockDir = (enemy.transform.position - transform.position).normalized;
-
+            float directionalXknockback = rb.linearVelocity.x > 0 ? X_Knockback : -X_Knockback;
             // Damage without knockback (CC handles it)
-            enemy.TakeDamage(damage, knockDir, false, CrowdControlState.None, 0f, true, false, 0f);
+            enemy.TakeDamage(damage, new Vector2(directionalXknockback, Y_Knockback), false, crowdControl, ccDuration);
             enemy.ApplyBloodMark();
-
-            // Apply CC with separate multipliers
-            var skills = PlayerController.instance.GetComponent<Skills>();
-            if (skills != null)
-            {
-                skills.ApplySkillCC(enemy, knockDir, groundedCC, airborneCC, ccDuration,
-                                   stunKnockbackMultiplier, knockdownKnockbackMultiplier);
-            }
 
             // Blood cost
             if (playerHealth != null && bloodCost > 0f)
