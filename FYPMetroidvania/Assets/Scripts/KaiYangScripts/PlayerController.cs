@@ -230,6 +230,7 @@ public class PlayerController : MonoBehaviour
                 return;
         }
 
+        animator.SetBool("IsUsingSkill", skills != null && skills.IsUsingSkill);
 
         if (IsGrounded)
             animator.SetFloat("Speed", Mathf.Abs(moveInput.x));
