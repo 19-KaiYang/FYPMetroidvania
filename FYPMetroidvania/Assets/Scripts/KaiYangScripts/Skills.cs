@@ -314,6 +314,7 @@ public class Skills : MonoBehaviour
     public void TryUseSwordCrimsonWave()
     {
         if (usingSkill || combat.isAttacking) return;
+        controller.animator.SetBool("IsAttacking", false);
         float cost = swordSlashEnergyCost;
         if (cost < 0) cost = 0;
 
@@ -479,6 +480,7 @@ public class Skills : MonoBehaviour
     #region Sword Skills
     private IEnumerator Skill_SwordDash()
     {
+        controller.animator.SetBool("IsAttacking", false);
         usingSkill = true;
         swordDashCooldownTimer = swordDashCooldown;
 
@@ -578,11 +580,9 @@ public class Skills : MonoBehaviour
 
         usingSkill = false;
     }
-
-
-
     private IEnumerator Skill_SwordUppercut()
     {
+        controller.animator.SetBool("IsAttacking", false);
         usingSkill = true;
         uppercutStart = false;
         swordUppercutCooldownTimer = swordUppercutCooldown;

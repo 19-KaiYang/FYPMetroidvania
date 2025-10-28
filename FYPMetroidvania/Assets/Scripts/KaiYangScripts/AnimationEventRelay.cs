@@ -3,6 +3,7 @@ using System.Linq;
 
 public class AnimationEventRelay : MonoBehaviour
 {
+    [SerializeField] Animator animator;
     private PlayerController controller;
     private CombatSystem combatSystem;
     private Skills skills;
@@ -13,7 +14,7 @@ public class AnimationEventRelay : MonoBehaviour
     private void Awake()
     {
         //  Automatically find CombatSystem on the Player 
-        controller = PlayerController.instance;
+        controller = GetComponent<PlayerController>();
         combatSystem = GetComponentInParent<CombatSystem>();
         skills = GetComponentInParent<Skills>();
     }
@@ -24,6 +25,9 @@ public class AnimationEventRelay : MonoBehaviour
     // === Forwarded Methods ===
     public void EnableHitbox(int index) => combatSystem?.EnableHitbox(index);
     public void DisableHitbox(int index) => combatSystem?.DisableHitbox(index);
+    public void PlayVFX(string Name) => combatSystem?.PlayVFX(Name);
+    public void HideVFX() => combatSystem?.HideVFX();
+    public void EndAnimation() => combatSystem?.SetEndAnimation();
     #region Old Methods
     public void EnableSwordUpHitbox() => combatSystem?.swordUpHitbox?.SetActive(true);
     public void DisableSwordUpHitbox() => combatSystem?.DisableSwordUpHitbox();
@@ -137,30 +141,31 @@ public class AnimationEventRelay : MonoBehaviour
         }
     }
     #endregion
-    public void PlayVFX(string Name)
-    {
-        if (particleEffectsObject == null) return;
-        AttackVFX vfx = combatSystem.attackVFXList.FirstOrDefault(i => i.VFX_name == Name);
-        if(vfx != null)
-        {
-            particleEffectsObject.SetActive(true);
-            particleEffectsObject.transform.localPosition = vfx.position;
-            particleEffectsObject.transform.localEulerAngles = new Vector3(0f, 0f, vfx.angle);
-            particleEffectsObject.transform.localScale = vfx.scale;
-            if (combatSystem?.particleEffectAnimator != null)
-                combatSystem.particleEffectAnimator.Play(vfx.animationName);
+    //public void PlayVFX(string Name)
+    //{
+    //    if (particleEffectsObject == null) return;
+    //    AttackVFX vfx = combatSystem.attackVFXList.FirstOrDefault(i => i.VFX_name == Name);
+    //    if(vfx != null)
+    //    {
+    //        particleEffectsObject.SetActive(true);
+    //        particleEffectsObject.transform.localPosition = vfx.position;
+    //        particleEffectsObject.transform.localEulerAngles = new Vector3(0f, 0f, vfx.angle);
+    //        particleEffectsObject.transform.localScale = vfx.scale;
+    //        if (combatSystem?.particleEffectAnimator != null)
+    //            combatSystem.particleEffectAnimator.Play(vfx.animationName);
 
-            AudioManager.PlaySFX(SFXTYPE.SWORD_SWING, vfx.sfxVolume);
-        }
-    }
-    public void HideVFX()
-    {
-        if (particleEffectsObject != null)
-        {
-            var sr = particleEffectsObject.GetComponent<SpriteRenderer>();
-            if (sr != null) sr.sprite = null;
+    //        AudioManager.PlaySFX(SFXTYPE.SWORD_SWING, vfx.sfxVolume);
+    //    }
+    //}
+    //public void HideVFX()
+    //{
+    //    if (particleEffectsObject != null)
+    //    {
+    //        var sr = particleEffectsObject.GetComponent<SpriteRenderer>();
+    //        if (sr != null) sr.sprite = null;
 
-            particleEffectsObject.SetActive(false);
-        }
-    }
+    //        particleEffectsObject.SetActive(false);
+    //    }
+    //    controller.animator.SetBool("isAttacking", false);
+    //}
 }

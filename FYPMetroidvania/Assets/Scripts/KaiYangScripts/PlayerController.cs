@@ -153,7 +153,8 @@ public class PlayerController : MonoBehaviour
             if (!IsGrounded)
             {
                 AudioManager.PlaySFX(SFXTYPE.PLAYER_LAND, 0.5f);
-                if(combat.isAttacking)
+                animator.SetBool("IsAttacking", false);
+                if (combat.isAttacking)
                 {
                     combat.isAttacking = false;
                     externalVelocityOverride = false;
@@ -297,8 +298,9 @@ public class PlayerController : MonoBehaviour
 
             if (velocity.y < 0) velocity.y = -1f;
 
-            if (jumpBufferCounter > 0f && !jumpLocked && !platformDropping)
+            if (jumpBufferCounter > 0f && !jumpLocked && !platformDropping && !combat.isAttacking)
             {
+                animator.SetBool("IsAttacking", false);
                 velocity.y = jumpForce;
                 jumpLocked = true;
                 jumpBufferCounter = 0f;

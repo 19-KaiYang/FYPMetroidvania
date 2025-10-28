@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -43,6 +44,7 @@ public class CombatSystem : MonoBehaviour
 
     [Header("Particle Effects")]
     public Animator particleEffectAnimator;
+    public GameObject particleEffectsObject;
 
     [Header("General Attack Settings")]
     public float baseAttackDamage = 10f;
@@ -158,6 +160,7 @@ public class CombatSystem : MonoBehaviour
             }
             attackCooldownTimer = attackCooldown;
 
+            animator.SetBool("IsAttacking", true);
             animator.SetTrigger("DoAttack");
 
             Debug.Log($"Performing Combo Step {comboStep} with {currentWeapon}");
@@ -389,7 +392,7 @@ public class CombatSystem : MonoBehaviour
 
     private void PerformUpAttack()
     {
-        if (isAttacking) return;
+        if (isAttacking || !controller.IsGrounded) return;
 
         comboStep = 0;
         attackCooldownTimer = attackCooldown;
@@ -400,6 +403,7 @@ public class CombatSystem : MonoBehaviour
         if (currentWeapon == WeaponType.Sword && swordUpHitbox != null)
         {
             //StartCoroutine(ToggleHitbox(swordUpHitbox, 0.2f));
+            animator.SetBool("IsAttacking", true);
             animator.SetTrigger("UpAttack");
         }
         else if (currentWeapon == WeaponType.Gauntlet && gauntletUpHitbox != null)
@@ -434,8 +438,7 @@ public class CombatSystem : MonoBehaviour
             {
                 isAttacking = true;
                 controller.externalVelocityOverride = true;
-                // Air down attack
-                //StartCoroutine(ToggleHitbox(swordDownHitbox, 0.2f));
+                animator.SetBool("IsAttacking", true);
                 animator.SetTrigger("Air DownAttack");
             }
         }
@@ -455,6 +458,14 @@ public class CombatSystem : MonoBehaviour
                 return;
             }
         }
+        if (!controller.IsGrounded && !isAttacking) {
+            isAttacking = true;
+            controller.externalVelocityOverride = true;
+            animator.SetBool("IsAttacking", true);
+            animator.SetTrigger("Air Attack");
+            return;
+        }
+
         if (!isBuffered)
         {
             // Normal flow
@@ -548,6 +559,32 @@ public class CombatSystem : MonoBehaviour
         }
         AudioManager.PlaySFX(SFXTYPE.SWORD_SWING, 1.0f);
     }
+    public void PlayVFX(string Name)
+    {
+        if (particleEffectsObject == null) return;
+        AttackVFX vfx = attackVFXList.FirstOrDefault(i => i.VFX_name == Name);
+        if (vfx != null)
+        {
+            particleEffectsObject.SetActive(true);
+            particleEffectsObject.transform.localPosition = vfx.position;
+            particleEffectsObject.transform.localEulerAngles = new Vector3(0f, 0f, vfx.angle);
+            particleEffectsObject.transform.localScale = vfx.scale;
+            particleEffectAnimator.Play(vfx.animationName);
+
+            AudioManager.PlaySFX(SFXTYPE.SWORD_SWING, vfx.sfxVolume);
+        }
+    }
+    public void HideVFX()
+    {
+        if (particleEffectsObject != null)
+        {
+            var sr = particleEffectsObject.GetComponent<SpriteRenderer>();
+            if (sr != null) sr.sprite = null;
+
+            particleEffectsObject.SetActive(false);
+        }
+        //animator.SetBool("isAttacking", false);
+    }
 
     // === DAMAGE MULTIPLIER ===
     public float GetDamageMultiplier(int attackNumber)
@@ -578,8 +615,9 @@ public class CombatSystem : MonoBehaviour
 
     public void SetCanTransition(int comboEnd)
     {
-        controller.externalVelocityOverride = false;
+        Debug.Log("attack can be cancelled");
         isAttacking = false;
+        controller.externalVelocityOverride = false;
         if (comboEnd == 1) ResetCombo();
     }
     public void SetCanBuffer()
@@ -588,7 +626,12 @@ public class CombatSystem : MonoBehaviour
         comboStep = animator.GetInteger("ComboStep");
         animator.SetInteger("ComboStep", 0);
     }
-
+    public void SetEndAnimation()
+    {
+        Debug.Log("End of attack animation");
+        //isAttacking = false;
+        animator.SetBool("IsAttacking", false);
+    }
     public float GetAttackDamage(int attackNumber)
     {
         float dmg = baseAttackDamage;

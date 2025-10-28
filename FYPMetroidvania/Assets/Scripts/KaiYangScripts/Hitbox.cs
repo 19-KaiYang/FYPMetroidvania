@@ -86,7 +86,7 @@ public class Hitbox : MonoBehaviour
                 hitEnemies.Add(h);
 
                 OnHit?.Invoke(this, h);
-                float directionalXknockback = facingRight ? X_Knockback : -X_Knockback;
+                float directionalXknockback = PlayerController.instance.facingRight ? X_Knockback : -X_Knockback;
                 h.TakeDamage(damage, new Vector2(directionalXknockback, Y_Knockback), false, CCType, CCDuration);
 
                 if (!h.isPlayer && applyBloodMark)

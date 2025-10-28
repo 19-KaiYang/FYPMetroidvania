@@ -185,16 +185,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85f2735b1d4274748ae03c2735e0e881, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hitbox
-  damage: 0
+  damage: 23
   isCritical: 0
-  hitstopDuration: 0.25
+  hitstopDuration: 0.2
   applyHitstop: 1
   X_Knockback: 12
   Y_Knockback: 3
   facingRight: 0
   CCType: 2
   CCDuration: 0.5
-  sfx: 7
+  sfx: 8
   applyBloodMark: 0
   isSkillHitbox: 1
   isUltimateHitbox: 0
@@ -293,12 +293,12 @@ MonoBehaviour:
   isCritical: 0
   hitstopDuration: 0.08
   applyHitstop: 0
-  X_Knockback: 1
+  X_Knockback: 2
   Y_Knockback: 12
   facingRight: 0
   CCType: 1
   CCDuration: 0.5
-  sfx: 6
+  sfx: 7
   applyBloodMark: 0
   isSkillHitbox: 1
   isUltimateHitbox: 0
@@ -402,7 +402,7 @@ MonoBehaviour:
   facingRight: 0
   CCType: 1
   CCDuration: 0.5
-  sfx: 6
+  sfx: 7
   applyBloodMark: 0
   isSkillHitbox: 0
   isUltimateHitbox: 0
@@ -609,6 +609,7 @@ MonoBehaviour:
   gravity: -45
   jumpBufferTime: 0.15
   airJumpCount: 0
+  footstepInterval: 0.4
   canFloat: 0
   floatGravity: -8
   platformDropping: 0
@@ -682,7 +683,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   overheat: {fileID: 0}
+  isAttacking: 0
   particleEffectAnimator: {fileID: 8203955659687371261}
+  particleEffectsObject: {fileID: 4064043382543299264}
   baseAttackDamage: 10
   OverheatMultiplier: 2
   currentWeapon: 0
@@ -716,6 +719,7 @@ MonoBehaviour:
   - {fileID: 7645673019371433563}
   - {fileID: 527879510584102650}
   - {fileID: 5983308619838929821}
+  - {fileID: 8076092583273748411}
   gauntletHitboxes:
   - {fileID: 4414663687543333401}
   - {fileID: 5831051524767921042}
@@ -750,6 +754,12 @@ MonoBehaviour:
     position: {x: 0, y: -0.25, z: 0}
     angle: -90
     scale: {x: 0.13, y: 0.14, z: 0.08}
+    sfxVolume: 0.5
+  - VFX_name: Air Neutral Attack
+    animationName: Effect3
+    position: {x: 0.221, y: 0.0976, z: 0}
+    angle: 10
+    scale: {x: 0.13, y: 0.11526509, z: 0.08}
     sfxVolume: 0.5
   comboStep: 0
   canTransition: 1
@@ -954,8 +964,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da0739f9832287e42b250c7ec38dd4ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeManager
-  AttackUpgrade: {fileID: 0}
-  SkillUpgrade: {fileID: 0}
+  AttackUpgrade: {fileID: 11400000, guid: a9a155d7083b5224a95c6ca440ba9ad6, type: 2}
+  SkillUpgrade: {fileID: 11400000, guid: 7ef4f18aebc187e45bf76089f80df883, type: 2}
   SpiritUpgrade: {fileID: 0}
   MobilityUpgrade: {fileID: 0}
   MiscUpgrades: []
@@ -1033,6 +1043,7 @@ Transform:
   - {fileID: 7661444077629927508}
   - {fileID: 4240349539991643196}
   - {fileID: 8500528341152039226}
+  - {fileID: 10754350184750521}
   - {fileID: 9096902319989011080}
   - {fileID: 7867952451353171865}
   - {fileID: 3221561865789982449}
@@ -1234,13 +1245,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4064043382543299264}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: -0.25, z: 0}
-  m_LocalScale: {x: 0.13, y: 0.14, z: 0.08}
+  m_LocalRotation: {x: 0, y: 0, z: 0.08715578, w: 0.9961947}
+  m_LocalPosition: {x: 0.221, y: 0.0976, z: 0}
+  m_LocalScale: {x: 0.13, y: 0.11526509, z: 0.08}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6739047975924462519}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 10}
 --- !u!95 &8203955659687371261
 Animator:
   serializedVersion: 7
@@ -1315,7 +1326,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 3.5008547, y: 5.92}
+  m_Size: {x: 8.362041, y: 3.7300003}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0
@@ -1624,7 +1635,7 @@ MonoBehaviour:
   facingRight: 0
   CCType: 2
   CCDuration: 1
-  sfx: 6
+  sfx: 7
   applyBloodMark: 0
   isSkillHitbox: 0
   isUltimateHitbox: 0
@@ -6564,7 +6575,7 @@ MonoBehaviour:
   facingRight: 0
   CCType: 1
   CCDuration: 0.5
-  sfx: 6
+  sfx: 7
   applyBloodMark: 0
   isSkillHitbox: 0
   isUltimateHitbox: 0
@@ -6772,7 +6783,7 @@ MonoBehaviour:
   facingRight: 0
   CCType: 1
   CCDuration: 0.5
-  sfx: 6
+  sfx: 7
   applyBloodMark: 0
   isSkillHitbox: 0
   isUltimateHitbox: 0
@@ -7006,12 +7017,12 @@ MonoBehaviour:
   isCritical: 0
   hitstopDuration: 0.2
   applyHitstop: 1
-  X_Knockback: 7
-  Y_Knockback: 3
+  X_Knockback: 10
+  Y_Knockback: 4
   facingRight: 0
   CCType: 2
   CCDuration: 0.5
-  sfx: 7
+  sfx: 8
   applyBloodMark: 0
   isSkillHitbox: 0
   isUltimateHitbox: 0
@@ -7116,6 +7127,110 @@ MonoBehaviour:
   CCType: 1
   CCDuration: 0.5
   sfx: 0
+  applyBloodMark: 0
+  isSkillHitbox: 0
+  isUltimateHitbox: 0
+--- !u!1 &8076092583273748411
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 10754350184750521}
+  - component: {fileID: 1626434269697327935}
+  - component: {fileID: 7956545279806126887}
+  m_Layer: 0
+  m_Name: AirSlashHitbox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &10754350184750521
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8076092583273748411}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1.03, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3586705734273259557}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &1626434269697327935
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8076092583273748411}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: -0.7241091, y: 0.090050876}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 1.0074543, y: 0.6229938}
+  m_EdgeRadius: 0
+--- !u!114 &7956545279806126887
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8076092583273748411}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85f2735b1d4274748ae03c2735e0e881, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Hitbox
+  damage: 0
+  isCritical: 0
+  hitstopDuration: 0.1
+  applyHitstop: 1
+  X_Knockback: 5
+  Y_Knockback: 2
+  facingRight: 0
+  CCType: 1
+  CCDuration: 0.5
+  sfx: 7
   applyBloodMark: 0
   isSkillHitbox: 0
   isUltimateHitbox: 0
@@ -7241,16 +7356,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85f2735b1d4274748ae03c2735e0e881, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hitbox
-  damage: 0
+  damage: 10
   isCritical: 0
-  hitstopDuration: 0.25
+  hitstopDuration: 0.15
   applyHitstop: 1
-  X_Knockback: 3
+  X_Knockback: 5
   Y_Knockback: 15
   facingRight: 0
   CCType: 2
   CCDuration: 0.5
-  sfx: 7
+  sfx: 8
   applyBloodMark: 0
   isSkillHitbox: 1
   isUltimateHitbox: 0
@@ -7336,7 +7451,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 2
-  m_Sprite: {fileID: -3189063973579013628, guid: 62066b35704bfb84b9c306a8450bb33c, type: 3}
+  m_Sprite: {fileID: 8223526649361557135, guid: c699e838c01db174a86eb1ea1f66020b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -7381,6 +7496,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a2a9fd25f6735a4bb213831809179ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AnimationEventRelay
+  animator: {fileID: 8233210284631527292}
   particleEffectsObject: {fileID: 4064043382543299264}
 --- !u!114 &2059461097378009830
 MonoBehaviour:
