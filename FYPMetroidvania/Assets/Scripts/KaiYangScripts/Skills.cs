@@ -271,7 +271,7 @@ public class Skills : MonoBehaviour
     #region CombatSystem API
     public void TryUseSwordDash()
     {
-        if (usingSkill) return;
+        if (usingSkill || combat.isAttacking) return;
         if (swordDashCooldownTimer > 0f) return;
 
     
@@ -291,10 +291,9 @@ public class Skills : MonoBehaviour
         if (!PlayerController.instance.IsGrounded)
             PlayerController.instance.MarkAirSwordDash();
     }
-
     public void TryUseSwordUppercut()
     {
-        if (usingSkill) return;
+        if (usingSkill || combat.isAttacking) return;
         if (swordUppercutCooldownTimer > 0f) return;
 
         if (!PlayerController.instance.IsGrounded && PlayerController.instance.HasAirUppercut)
@@ -312,9 +311,10 @@ public class Skills : MonoBehaviour
         if (!PlayerController.instance.IsGrounded)
             PlayerController.instance.MarkAirUppercut();
     }
-
     public void TryUseSwordCrimsonWave()
     {
+        if (usingSkill || combat.isAttacking) return;
+        controller.animator.SetBool("IsAttacking", false);
         float cost = swordSlashEnergyCost;
         if (cost < 0) cost = 0;
 
@@ -328,11 +328,6 @@ public class Skills : MonoBehaviour
         if (proj != null)
         {
             proj.bloodCost = swordSlashBloodCost;
-            proj.groundedCC = crimsonWaveGroundedCC;
-            proj.airborneCC = crimsonWaveAirborneCC;
-            proj.ccDuration = crimsonWaveCCDuration;
-            proj.stunKnockbackMultiplier = crimsonWaveStunKnockbackMultiplier;
-            proj.knockdownKnockbackMultiplier = crimsonWaveKnockdownKnockbackMultiplier;
             proj.Init(dir);
             AudioManager.PlaySFX(SFXTYPE.SWORD_PROJECTILE);
         }
@@ -354,7 +349,6 @@ public class Skills : MonoBehaviour
 
         StartCoroutine(Skill_GauntletShockwave());
     }
-
     public void TryUseGauntletLaunch()
     {
         if (usingSkill) return;
@@ -373,7 +367,6 @@ public class Skills : MonoBehaviour
 
         StartCoroutine(Skill_GauntletLaunch());
     }
-
     public void StartGauntletChargeShot()
     {
         if (overheat != null && overheat.IsOverheated) return;
@@ -388,7 +381,6 @@ public class Skills : MonoBehaviour
         IsChargeLocked = true;   
         chargeRoutine = StartCoroutine(Skill_GauntletChargeShot());
     }
-
     public void ReleaseGauntletChargeShot()
     {
         if (!isCharging) return;
@@ -403,8 +395,6 @@ public class Skills : MonoBehaviour
 
         IsChargeLocked = false;  
     }
-
-
     private bool CanUseGauntletChargeShot()
     {
         if (isCharging) return false; 
@@ -414,38 +404,7 @@ public class Skills : MonoBehaviour
         return true;
     }
 
-
-
-    private IEnumerator ChargeLoop()
-    {
-        while (isCharging && IsChargeButtonHeld && currentChargeTime < gauntletChargeMaxTime)
-        {
-            currentChargeTime += Time.deltaTime;
-            float ratio = currentChargeTime / gauntletChargeMaxTime;
-
-            int stage = 0;
-            if (ratio >= 0.66f) stage = 3;
-            else if (ratio >= 0.33f) stage = 2;
-            else stage = 1;
-
-            if (stage != lastStage)
-            {
-                PlayChargeStage(stage);
-                lastStage = stage;
-            }
-
-            yield return null;
-        }
-
-        if (isCharging && currentChargeTime >= gauntletChargeMaxTime)
-        {
-            chargeRoutine = null; 
-            FireGauntletChargeShot();
-        }
-    }
-
     // Ultimates
-
     public void TryUseSwordUltimate()
     {
         if (usingUltimate) return;
@@ -453,8 +412,6 @@ public class Skills : MonoBehaviour
 
         StartCoroutine(Skill_SwordUltimate());
     }
-
-
     private IEnumerator Skill_SwordUltimate()
     {
         usingUltimate = true;
@@ -485,7 +442,6 @@ public class Skills : MonoBehaviour
         spirit.StopDrain();
         usingUltimate = false;
     }
-
     public void TryUseGauntletUltimate()
     {
         if (spirit == null || spirit.IsEmpty) return;
@@ -519,14 +475,12 @@ public class Skills : MonoBehaviour
             usingUltimate = false;
         };
     }
-
-
-
     #endregion
 
     #region Sword Skills
     private IEnumerator Skill_SwordDash()
     {
+        controller.animator.SetBool("IsAttacking", false);
         usingSkill = true;
         swordDashCooldownTimer = swordDashCooldown;
 
@@ -551,16 +505,9 @@ public class Skills : MonoBehaviour
         {
             if (h == null || h.isPlayer) return;
 
-            Vector2 knockDir = (h.transform.position - transform.position).normalized;
+            //Vector2 knockDir = 
 
-            h.TakeDamage(dashFlatDamage, knockDir, false, CrowdControlState.None, 0f, true, false, 0f);
-
-
-
-            // Apply Sword Dash CC
-            ApplySkillCC(h, knockDir, swordDashGroundedCC, swordDashAirborneCC, swordDashCCDuration,
-              swordDashStunKnockbackMultiplier, swordDashKnockdownKnockbackMultiplier);
-
+            //h.TakeDamage(dashFlatDamage, knockDir, false, CrowdControlState.None, 0f, true, false, 0f);
 
             // Spirit + BloodMark + HealthCost (only Sword)
             h.ApplyBloodMark();
@@ -573,11 +520,11 @@ public class Skills : MonoBehaviour
             }
 
             // Local hitstop
-            if (hitstop > 0f)
-            {
-                StartCoroutine(LocalHitstop(h.GetComponent<Rigidbody2D>(), hitstop));
-                StartCoroutine(LocalHitstop(rb, hitstop));
-            }
+            //if (hitstop > 0f)
+            //{
+            //    StartCoroutine(LocalHitstop(h.GetComponent<Rigidbody2D>(), hitstop));
+            //    StartCoroutine(LocalHitstop(rb, hitstop));
+            //}
         }
 
         Hitbox.OnHit += OnDashHit;
@@ -633,11 +580,9 @@ public class Skills : MonoBehaviour
 
         usingSkill = false;
     }
-
-
-
     private IEnumerator Skill_SwordUppercut()
     {
+        controller.animator.SetBool("IsAttacking", false);
         usingSkill = true;
         uppercutStart = false;
         swordUppercutCooldownTimer = swordUppercutCooldown;
@@ -664,13 +609,13 @@ public class Skills : MonoBehaviour
         {
             if (h == null || h.isPlayer) return;
 
-            Vector2 knockDir = (h.transform.position - transform.position).normalized;
+            //Vector2 knockDir = (h.transform.position - transform.position).normalized;
 
-            h.TakeDamage(uppercutFlatDamage, knockDir, false, CrowdControlState.None, 0f, true, false, 0f);
+            //h.TakeDamage(uppercutFlatDamage, knockDir, false, CrowdControlState.None, 0f, true, false, 0f);
 
-            // Apply Uppercut CC
-            ApplySkillCC(h, knockDir, swordUppercutGroundedCC, swordUppercutAirborneCC, swordUppercutCCDuration,
-              swordUppercutStunKnockbackMultiplier, swordUppercutKnockdownKnockbackMultiplier);
+            //// Apply Uppercut CC
+            //ApplySkillCC(h, knockDir, swordUppercutGroundedCC, swordUppercutAirborneCC, swordUppercutCCDuration,
+            //  swordUppercutStunKnockbackMultiplier, swordUppercutKnockdownKnockbackMultiplier);
 
             // Spirit + BloodMark + HealthCost
             h.ApplyBloodMark();
@@ -683,11 +628,11 @@ public class Skills : MonoBehaviour
             }
 
             // Local hitstop
-            if (hitstop > 0f)
-            {
-                StartCoroutine(LocalHitstop(h.GetComponent<Rigidbody2D>(), hitstop));
-                StartCoroutine(LocalHitstop(rb, hitstop));
-            }
+            //if (hitstop > 0f)
+            //{
+            //    StartCoroutine(LocalHitstop(h.GetComponent<Rigidbody2D>(), hitstop));
+            //    StartCoroutine(LocalHitstop(rb, hitstop));
+            //}
         }
 
         Hitbox.OnHit += OnUppercutHit;
