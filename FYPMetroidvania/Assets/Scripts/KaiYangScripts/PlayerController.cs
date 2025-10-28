@@ -175,7 +175,7 @@ public class PlayerController : MonoBehaviour
             if (currentKnockdownPhase == 0)
             {
                 currentKnockdownPhase = 1;
-                knockdownPhaseTimer = 0.1f; 
+                knockdownPhaseTimer = 0.1f;
                 animator.SetInteger("KnockdownPhase", 1);
                 Debug.Log("Knockdown Started - Phase 1: Launch");
             }
@@ -185,7 +185,7 @@ public class PlayerController : MonoBehaviour
 
                 switch (currentKnockdownPhase)
                 {
-                    case 1: 
+                    case 1:
                         if (knockdownPhaseTimer <= 0 && velocity.y < -0.1f)
                         {
                             currentKnockdownPhase = 2;
@@ -194,8 +194,8 @@ public class PlayerController : MonoBehaviour
                         }
                         break;
 
-                    case 2: 
-                           
+                    case 2:
+
                         if (IsGrounded && !wasGroundedLastFrame)
                         {
                             AudioManager.PlaySFX(SFXTYPE.PLAYER_LAND);
@@ -205,7 +205,7 @@ public class PlayerController : MonoBehaviour
                         }
                         break;
 
-                    case 3: 
+                    case 3:
                         break;
                 }
             }
@@ -233,10 +233,16 @@ public class PlayerController : MonoBehaviour
 
         animator.SetBool("IsUsingSkill", skills != null && skills.IsUsingSkill);
 
-        if (IsGrounded)
-            animator.SetFloat("Speed", Mathf.Abs(moveInput.x));
-        else
-            animator.SetFloat("Speed", 0f);
+        // === ONLY UPDATE THESE ANIMATIONS IF NOT USING SKILL ===
+        if (skills == null || !skills.IsUsingSkill)
+        {
+            if (IsGrounded)
+                animator.SetFloat("Speed", Mathf.Abs(moveInput.x));
+            else
+                animator.SetFloat("Speed", 0f);
+
+            animator.SetBool("IsFalling", !IsGrounded && velocity.y < -0.1f);
+        }
 
         // === FOOTSTEP SOUND ===
         //if (IsGrounded && Mathf.Abs(velocity.x) > 0.1f)
@@ -260,9 +266,6 @@ public class PlayerController : MonoBehaviour
         //}
 
         lastPosition = transform.position;
-
-
-        animator.SetBool("IsFalling", !IsGrounded && velocity.y < -0.1f);
 
         // Dash timers
         if (isDashing)
