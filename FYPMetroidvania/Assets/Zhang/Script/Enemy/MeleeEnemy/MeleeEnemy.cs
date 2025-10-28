@@ -117,17 +117,7 @@ public class MeleeEnemy : Enemy
 
         _rb.linearVelocity = new Vector2(velocitX, VelocitY);
     }
-    private void MoveBack()
-    {
-        if (isFacingRight)
-        {
-            rb.linearVelocity = new Vector2(-moveSpeed, 0);
-        }
-        else if(!isFacingRight) 
-        {
-            rb.linearVelocity = new Vector2(moveSpeed, 0);
-        }
-    }
+
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.orange;

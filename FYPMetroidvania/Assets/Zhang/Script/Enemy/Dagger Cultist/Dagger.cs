@@ -5,12 +5,15 @@ public class Dagger : ProjectileBase
     public CrowdControlState currentCCState = CrowdControlState.None;
     private PlayerController player;
     private Vector3 playerPosition;
+    public Transform R;
 
     private DaggerCultist owner;
     [SerializeField] private float ownerAttackDamage;
 
     [SerializeField] private float attackMultiplier;
     [SerializeField] private float finalDamage;
+
+    public float timer;
 
     public void Init(float _attackDamage, DaggerCultist _enemy)
     {
@@ -58,6 +61,10 @@ public class Dagger : ProjectileBase
                 transform.rotation = Quaternion.Euler(0, 0, angle);
             }
         }
+
+        R.Rotate(0,0,1200 * Time.deltaTime, Space.Self);
+
+        timer += Time.deltaTime;
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -91,7 +98,7 @@ public class Dagger : ProjectileBase
             Despawn();
         }
 
-        if (!collision.CompareTag("Enemy") && !collision.CompareTag("Hurtbox"))
+        if (!collision.CompareTag("Enemy") && !collision.CompareTag("Hurtbox") && timer >= 0.5f)
         {
             Despawn();
         }
