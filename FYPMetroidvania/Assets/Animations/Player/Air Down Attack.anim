@@ -25,7 +25,7 @@ AnimationClip:
     - time: 0.083333336
       value: {fileID: 4949058734435450003, guid: 62066b35704bfb84b9c306a8450bb33c, type: 3}
     - time: 0.41666666
-      value: {fileID: -7511274980266521641, guid: 62066b35704bfb84b9c306a8450bb33c, type: 3}
+      value: {fileID: -3189063973579013628, guid: 62066b35704bfb84b9c306a8450bb33c, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -50,7 +50,7 @@ AnimationClip:
     pptrCurveMapping:
     - {fileID: -7511274980266521641, guid: 62066b35704bfb84b9c306a8450bb33c, type: 3}
     - {fileID: 4949058734435450003, guid: 62066b35704bfb84b9c306a8450bb33c, type: 3}
-    - {fileID: -7511274980266521641, guid: 62066b35704bfb84b9c306a8450bb33c, type: 3}
+    - {fileID: -3189063973579013628, guid: 62066b35704bfb84b9c306a8450bb33c, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
@@ -77,20 +77,34 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 0.083333336
-    functionName: PlayVFX
-    data: Air Downward Attack
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
-  - time: 0.083333336
     functionName: EnableHitbox
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 4
     messageOptions: 0
-  - time: 0.41666666
+  - time: 0.083333336
+    functionName: PlayVFX
+    data: Air Downward Attack
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.33333334
+    functionName: SetCanTransition
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 1
+    messageOptions: 0
+  - time: 0.5
+    functionName: EndAnimation
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.5
     functionName: DisableHitbox
     data: 
     objectReferenceParameter: {fileID: 0}

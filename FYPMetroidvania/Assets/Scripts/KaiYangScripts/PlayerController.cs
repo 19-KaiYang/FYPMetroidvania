@@ -456,14 +456,14 @@ public class PlayerController : MonoBehaviour
                 platformDropTimer = platformDropDuration;
                 velocity.y = -platformDropSpeed;
             }
-            else if (!jumpLocked)
+            else if (!jumpLocked && !combat.isAttacking)
             {
                 velocity.y = jumpForce;
                 jumpLocked = true;
                 airJumpsDone = 0;
-
-
+                animator.SetBool("IsAttacking", false);
                 animator.SetTrigger("Jump");
+                AudioManager.PlaySFX(SFXTYPE.PLAYER_JUMP);
             }
         }
         else if (!IsGrounded)
