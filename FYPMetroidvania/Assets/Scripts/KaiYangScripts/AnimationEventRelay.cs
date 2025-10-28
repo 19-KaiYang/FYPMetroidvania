@@ -3,6 +3,7 @@ using System.Linq;
 
 public class AnimationEventRelay : MonoBehaviour
 {
+    private PlayerController controller;
     private CombatSystem combatSystem;
     private Skills skills;
 
@@ -12,26 +13,29 @@ public class AnimationEventRelay : MonoBehaviour
     private void Awake()
     {
         //  Automatically find CombatSystem on the Player 
+        controller = PlayerController.instance;
         combatSystem = GetComponentInParent<CombatSystem>();
         skills = GetComponentInParent<Skills>();
     }
-
+    public void PlayFootstep()
+    {
+        AudioManager.PlaySFX(SFXTYPE.PLAYER_FOOTSTEP, 0.2f, pitch: Random.Range(0.9f,1.1f));
+    }
     // === Forwarded Methods ===
     public void EnableHitbox(int index) => combatSystem?.EnableHitbox(index);
     public void DisableHitbox(int index) => combatSystem?.DisableHitbox(index);
-
+    #region Old Methods
     public void EnableSwordUpHitbox() => combatSystem?.swordUpHitbox?.SetActive(true);
     public void DisableSwordUpHitbox() => combatSystem?.DisableSwordUpHitbox();
 
     public void EnableGauntletUpHitbox() => combatSystem?.gauntletUpHitbox?.SetActive(true);
     public void DisableGauntletUpHitbox() => combatSystem?.DisableGauntletUpHitbox();
-
     public void EnableSwordDownHitbox() => combatSystem?.swordDownHitbox?.SetActive(true);
     public void DisableSwordDownHitbox() => combatSystem?.DisableSwordDownHitbox();
-
     public void EnableGauntletDownHitbox() => combatSystem?.gauntletDownHitbox?.SetActive(true);
     public void DisableGauntletDownHitbox() => combatSystem?.DisableGauntletDownHitbox();
-    public void SetCanTransition(int comboEnd) => combatSystem?.SetCanTransition(true, comboEnd);
+#endregion
+    public void SetCanTransition(int comboEnd) => combatSystem?.SetCanTransition(comboEnd);
     public void SetCanBuffer() => combatSystem?.SetCanBuffer();
     public void SetUppercutStart(int start) => skills?.SetUppercut_Start(start);
 

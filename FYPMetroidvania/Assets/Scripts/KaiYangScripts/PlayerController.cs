@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     public static PlayerController instance;
+    private CombatSystem combat;
     private Skills skills;
 
     [Header("References")]
@@ -25,8 +26,6 @@ public class PlayerController : MonoBehaviour
     private float footstepTimer = 0f;
     private Vector3 lastPosition;
     private float moveDistanceSinceLastStep = 0f;
-
-
 
     [Header("Float")]
     public bool canFloat = false;
@@ -126,6 +125,7 @@ public class PlayerController : MonoBehaviour
         rb.simulated = true;
 
         skills = GetComponentInChildren<Skills>();
+        combat = GetComponentInChildren<CombatSystem>();
         if(animator == null) animator = GetComponentInChildren<Animator>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
 
@@ -150,6 +150,16 @@ public class PlayerController : MonoBehaviour
         RaycastHit2D ground = Physics2D.Raycast(groundCheck.position, Vector2.down, groundCheckRadius, GroundCheckLayer);
         if (ground.collider != null)
         {
+            if (!IsGrounded)
+            {
+                AudioManager.PlaySFX(SFXTYPE.PLAYER_LAND, 0.5f);
+                if(combat.isAttacking)
+                {
+                    combat.isAttacking = false;
+                    externalVelocityOverride = false;
+                    combat.DisableAllHitboxes();
+                }
+            }
             IsGrounded = true;
             IsOnPlatform = ground.collider.CompareTag("Platform");
         }
@@ -227,25 +237,25 @@ public class PlayerController : MonoBehaviour
             animator.SetFloat("Speed", 0f);
 
         // === FOOTSTEP SOUND ===
-        if (IsGrounded && Mathf.Abs(velocity.x) > 0.1f)
-        {
-            // Track actual distance moved
-            float distanceMoved = Vector3.Distance(transform.position, lastPosition);
-            moveDistanceSinceLastStep += distanceMoved;
+        //if (IsGrounded && Mathf.Abs(velocity.x) > 0.1f)
+        //{
+        //    // Track actual distance moved
+        //    float distanceMoved = Vector3.Distance(transform.position, lastPosition);
+        //    moveDistanceSinceLastStep += distanceMoved;
 
-            // Only play footstep if we've moved enough distance
-            float requiredDistance = moveSpeed * footstepInterval;
-            if (moveDistanceSinceLastStep >= requiredDistance)
-            {
-                AudioManager.PlaySFX(SFXTYPE.PLAYER_FOOTSTEP);
-                moveDistanceSinceLastStep = 0f;
-            }
-        }
-        else
-        {
-            // Reset when not moving
-            moveDistanceSinceLastStep = 0f;
-        }
+        //    // Only play footstep if we've moved enough distance
+        //    float requiredDistance = moveSpeed * footstepInterval;
+        //    if (moveDistanceSinceLastStep >= requiredDistance)
+        //    {
+        //        AudioManager.PlaySFX(SFXTYPE.PLAYER_FOOTSTEP);
+        //        moveDistanceSinceLastStep = 0f;
+        //    }
+        //}
+        //else
+        //{
+        //    // Reset when not moving
+        //    moveDistanceSinceLastStep = 0f;
+        //}
 
         lastPosition = transform.position;
 
