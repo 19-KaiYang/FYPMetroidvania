@@ -22,9 +22,9 @@ AnimationClip:
     curve:
     - time: 0
       value: {fileID: -6768747716512761297, guid: 3b7b8d9780f8d064b8a00ba6eb4f5ed4, type: 3}
-    - time: 0.25
+    - time: 0.16666667
       value: {fileID: -2120895050762239146, guid: 3b7b8d9780f8d064b8a00ba6eb4f5ed4, type: 3}
-    - time: 0.5
+    - time: 0.41666666
       value: {fileID: 4837983245466882408, guid: 3b7b8d9780f8d064b8a00ba6eb4f5ed4, type: 3}
     attribute: m_Sprite
     path: 
@@ -56,7 +56,7 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.6666667
+    m_StopTime: 0.5833333
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -83,21 +83,28 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.25
+  - time: 0.16666667
     functionName: EnableHitbox
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.25
-    functionName: ShowEffect1
+  - time: 0.16666667
+    functionName: PlayVFX
+    data: Ground Combo 1
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.41666666
+    functionName: DisableHitbox
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.5
+  - time: 0.41666666
     functionName: SetCanTransition
     data: 
     objectReferenceParameter: {fileID: 0}
@@ -105,14 +112,14 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 0.5
-    functionName: DisableHitbox
+    functionName: HideVFX
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.6666667
-    functionName: HideEffect1
+  - time: 0.5833333
+    functionName: EndAnimation
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

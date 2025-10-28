@@ -13,7 +13,7 @@ public class BleedDebuff : Debuff
         {
             finalDamage *= 2f;
         }
-        owner.TakeDamage(finalDamage, triggerEffects: false, isDebuff: true);
+        owner.TakeDamage(finalDamage, triggerEffects: false, isDebuff: true, damageNumberColor: Color.orangeRed);
         Debug.Log("Bleed ticked at: " + Time.time + " on target: " + owner.name + " for damage: " + finalDamage);
     }
 }

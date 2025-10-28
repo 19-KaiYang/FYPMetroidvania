@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 413d64d7f6ce4c54c942e901f83eb9b4, type: 3}
+  m_Name: testDialogue2
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueTextSO
+  SpeakerType: 0
+  defaultPlayerImage: {fileID: -3718515074069802047, guid: c7d220190b1b5b14f9eeab2f9df79bb0, type: 3}
+  defaultNPCImage: {fileID: 68631100154771428, guid: cafbf3de4a318164dbd456ea259f370a, type: 3}
+  hasCutscene: 1
+  Steps:
+  - SpeakerType: 2
+    Name: Disembodied Voice
+    SpeakerImage: {fileID: 0}
+    Text: A pink thing approaches.
+    sfx: 0
+    pitch: 0
+    autoskip: 0
+  - SpeakerType: 1
+    Name: Pixie
+    SpeakerImage: {fileID: 68631100154771428, guid: cafbf3de4a318164dbd456ea259f370a, type: 3}
+    Text: Henlo.
+    sfx: 8
+    pitch: 1.2
+    autoskip: 0
+  - SpeakerType: 1
+    Name: Pixie
+    SpeakerImage: {fileID: 68631100154771428, guid: cafbf3de4a318164dbd456ea259f370a, type: 3}
+    Text: This is a second dialogue test. For a cutscene with 2 or more dialogue
+      sequences within it.
+    sfx: 8
+    pitch: 1.2
+    autoskip: 0
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: -3718515074069802047, guid: c7d220190b1b5b14f9eeab2f9df79bb0, type: 3}
+    Text: Ok, now this is epic.
+    sfx: 8
+    pitch: 0.9
+    autoskip: 0
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: -3718515074069802047, guid: c7d220190b1b5b14f9eeab2f9df79bb0, type: 3}
+    Text: Time to begin the game lol.
+    sfx: 8
+    pitch: 0.9
+    autoskip: 0

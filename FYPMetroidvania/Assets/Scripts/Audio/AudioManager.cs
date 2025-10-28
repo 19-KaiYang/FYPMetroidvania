@@ -3,12 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+public struct SFXTask
+{
+    public AudioClip clip;
+    public float volume;
+    public float pitch;
+    public SFXTask(AudioClip clip, float volume, float pitch)
+    {
+        this.clip = clip;
+        this.volume = volume;
+        this.pitch = pitch;
+    }
+}
+
 public class AudioManager : MonoBehaviour
 {
     public List<SoundEffect> SFXList = new();
     private static Dictionary<SFXTYPE, AudioClip[]> SFXDictionary = new();
-    private static AudioManager instance;
+    public static AudioManager instance;
     public AudioSource SFXSource;
+    public AudioSource BGMSource;
+    public List<SFXTask> sfxTasks = new();
 
     private void Awake()
     {
@@ -32,14 +47,28 @@ public class AudioManager : MonoBehaviour
             }
         }
     }
-    public static void PlaySFX(SFXTYPE type, float volume = 1f, int variantIndex = -1)
+    private void Update()
+    {
+    }
+    public static void PlaySFX(SFXTYPE type, float volume = 1f, int variantIndex = -1, float pitch = 1f)
     {
         if (!SFXDictionary.ContainsKey(type) || instance.SFXSource == null) return;
 
         // Get sfx from dictionary
         AudioClip[] audioClips = SFXDictionary[type];
         AudioClip clipChosen = audioClips[Random.Range(0, audioClips.Length)];
-        instance.SFXSource.PlayOneShot(clipChosen, volume);
+        instance.SFXSource.pitch = pitch;
+        instance.SFXSource.PlayOneShot(clipChosen,volume);
+    }
+    public void PlayBGM(AudioClip song)
+    {
+        BGMSource.clip = song;
+        //BGMSource.volume = volume;  
+        BGMSource.Play();
+    }
+    public void StopBGM()
+    {
+        BGMSource.Stop();
     }
 }
 
@@ -56,9 +85,23 @@ public enum SFXTYPE
     PLAYER_JUMP,
     PLAYER_DASH,
     PLAYER_LAND,
+    PLAYER_FOOTSTEP,
     PHYSICAL_HIT,
     SWORD_SWING,
     SWORD_LIGHTHIT,
-    SWORD_HEAVYHIT
+    SWORD_HEAVYHIT,
+    SWORD_DASH,
+    SWORD_UPPERCUT,
+    SWORD_PROJECTILE,
+    UPGRADE_POPUP,
+    PLAYER_HURT,
+    DIALOGUE_1,
+    BRAWLER_ATTACK,
+    BRALWER_CHARGE,
+    SPEARMAN_ATTACK,
+    SPEARMAN_CHARGE,
+    SPEARMAN_THROW,
+    ENEMY_ATTACKFLASH,
+    HAWK_ATTACK
 }
 

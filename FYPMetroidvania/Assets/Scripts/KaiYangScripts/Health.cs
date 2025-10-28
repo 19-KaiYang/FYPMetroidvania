@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum CrowdControlState
 {
@@ -24,6 +25,8 @@ public class Health : MonoBehaviour
     public float flashDuration = 0.1f;
     public AudioClip hitSound;
     public AudioClip deathSound;
+    public Slider healthBar;
+    public Color defaultDamageColor;
 
     [Header("Arc Knockdown")]
     public float arcKnockdownGravity = 15f;
@@ -51,6 +54,7 @@ public class Health : MonoBehaviour
     private float ccTimer = 0f;
 
     public float invincibilityDuration = 0.3f; // player only
+    private Animator animator;
 
     private bool invincible = false;
 
@@ -67,6 +71,7 @@ public class Health : MonoBehaviour
     // Events
     public Action<Health> damageTaken;
     public System.Action<GameObject> enemyDeath;
+    public Action<Health, float, Color> updateUI;
 
     private AudioSource audioSource;
     private Rigidbody2D rb;
@@ -79,6 +84,7 @@ public class Health : MonoBehaviour
         currentHealth = maxHealth;
         rb = GetComponent<Rigidbody2D>();
         audioSource = GetComponent<AudioSource>();
+        animator = GetComponentInChildren<Animator>();
         if (spriteRenderer == null)
         {
             spriteRenderer = GetComponent<SpriteRenderer>();
@@ -141,6 +147,15 @@ public class Health : MonoBehaviour
                     if (ccTimer <= 0f)
                     {
                         currentCCState = CrowdControlState.None;
+
+                        // Clear external velocity override for player
+                        if (isPlayer)
+                        {
+                            var pc = GetComponent<PlayerController>();
+                            if (pc != null)
+                                pc.externalVelocityOverride = false;
+                        }
+
                         //Debug.Log($"{gameObject.name} recovered from knockdown - can move again!");
                     }
                 }
@@ -183,11 +198,12 @@ public class Health : MonoBehaviour
 
     public void TakeDamage(float amount, Vector2? hitDirection = null, bool useRawForce = false,
      CrowdControlState forceCC = CrowdControlState.None, float forceCCDuration = 0f,
-     bool triggerEffects = true, bool isDebuff = false, float knockbackMultiplier = 1f)
+     bool triggerEffects = true, bool isDebuff = false, float knockbackMultiplier = 1f, Color? damageNumberColor = null)
     {
         if (isPlayer && invincible) return;
 
         currentHealth -= amount;
+        updateUI?.Invoke(this, amount, damageNumberColor.HasValue ? damageNumberColor.Value : Color.white);
         if (triggerEffects) damageTaken?.Invoke(this);
 
         if (spriteRenderer != null && gameObject.activeInHierarchy)
@@ -204,6 +220,7 @@ public class Health : MonoBehaviour
             {
                 PlayerController pc = GetComponent<PlayerController>();
                 pc.SetKnockback(hitDirection.Value, forceCCDuration);
+                AudioManager.PlaySFX(SFXTYPE.PLAYER_HURT,0.3f);
             }
             else
             {
@@ -287,13 +304,13 @@ public class Health : MonoBehaviour
     private void Die()
     {
         Debug.Log($"{gameObject.name} has died!");
-
         enemyDeath?.Invoke(gameObject);
 
-        for(int i = debuffs.Count - 1; i >= 0; i--)
-        {
+        if (animator != null)
+            animator.SetTrigger("Die");
+
+        for (int i = debuffs.Count - 1; i >= 0; i--)
             RemoveDebuff(debuffs[i]);
-        }
 
         if (!isPlayer && isBloodMarked)
         {
@@ -316,21 +333,92 @@ public class Health : MonoBehaviour
         if (audioSource != null && deathSound != null)
             audioSource.PlayOneShot(deathSound);
 
-        //gameObject.SetActive(false);
-
+        // wait for animation to finish
         if (destroyOnDeath)
-            Destroy(gameObject);
-        //else
-        //    gameObject.SetActive(false);
+            Destroy(gameObject, 1.5f);
     }
+
 
     private IEnumerator RespawnPlayer()
     {
-        // Disable player controls
-        var controller = GetComponent<PlayerController>();
-        if (controller != null) controller.enabled = false;
+        Debug.Log("=== PLAYER DEATH - Starting Respawn ===");
 
-        yield return new WaitForSeconds(1f);
+        // Disable player controls but keep controller for gravity simulation
+        var controller = GetComponent<PlayerController>();
+        bool wasGrounded = controller != null && controller.IsGrounded;
+
+        if (controller != null)
+        {
+            controller.enabled = false;
+        }
+
+        // Trigger death animation
+        if (animator != null)
+        {
+            Debug.Log("Triggering Die animation...");
+
+            // Check if parameter exists
+            bool hasDieParam = false;
+            foreach (var param in animator.parameters)
+            {
+                if (param.name == "Die" && param.type == AnimatorControllerParameterType.Trigger)
+                {
+                    hasDieParam = true;
+                    break;
+                }
+            }
+
+            if (hasDieParam)
+            {
+                animator.SetTrigger("Die");
+
+                float deathAnimTime = 1.5f; 
+                float elapsedTime = 0f;
+
+                if (!wasGrounded)
+                {
+                    Vector2 fallVelocity = Vector2.zero;
+                    float deathGravity = -20f; 
+
+                    while (elapsedTime < deathAnimTime)
+                    {
+                        fallVelocity.y += deathGravity * Time.deltaTime;
+
+                        Vector2 moveAmount = fallVelocity * Time.deltaTime;
+                        transform.position += (Vector3)moveAmount;
+                        if (controller != null && controller.groundCheck != null)
+                        {
+                            RaycastHit2D groundHit = Physics2D.Raycast(
+                                controller.groundCheck.position,
+                                Vector2.down,
+                                controller.groundCheckRadius,
+                                controller.groundLayer | controller.platformLayer
+                            );
+
+                            if (groundHit.collider != null)
+                            {
+                                fallVelocity.y = 0f;
+                            }
+                        }
+
+                        elapsedTime += Time.deltaTime;
+                        yield return null;
+                    }
+                }
+                else
+                {
+                    yield return new WaitForSeconds(deathAnimTime);
+                }
+            }
+            else
+            {
+                yield return new WaitForSeconds(1f);
+            }
+        }
+        else
+        {
+            yield return new WaitForSeconds(1f);
+        }
 
         // Move player to last checkpoint
         if (CheckpointManager.Instance != null)
@@ -343,9 +431,25 @@ public class Health : MonoBehaviour
         var energy = GetComponent<EnergySystem>();
         if (energy != null) energy.ResetEnergy();
 
-        // Re-enable controls
-        if (controller != null) controller.enabled = true;
+        // Reset animator state
+        if (animator != null)
+        {
+            animator.Rebind();
+            animator.Update(0f);
+        }
 
+        // Reset physics
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector2.zero;
+        }
+
+        // Re-enable controls
+        if (controller != null)
+        {
+            controller.enabled = true;
+            controller.SetVelocity(Vector2.zero);
+        }
 
         Camera mainCam = Camera.main;
         if (mainCam != null)
@@ -474,7 +578,12 @@ public class Health : MonoBehaviour
 
                 if (pc.IsGrounded && isInArcKnockdown)
                 {
-                    pc.externalVelocityOverride = false;
+
+                    if (currentCCState == CrowdControlState.None)
+                    {
+                        pc.externalVelocityOverride = false;
+                        isInArcKnockdown = false;
+                    }
                 }
             }
         }
