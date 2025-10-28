@@ -42,6 +42,7 @@ public class AnimationEventRelay : MonoBehaviour
     public void SetCanTransition(int comboEnd) => combatSystem?.SetCanTransition(comboEnd);
     public void SetCanBuffer() => combatSystem?.SetCanBuffer();
     public void SetUppercutStart(int start) => skills?.SetUppercut_Start(start);
+    public void SetLungeStart() => skills?.SetLunge_Start();
 
     #region Old VFX Methods
     // === OLD Particle Effect Methods (using Animator triggers) ===

@@ -1,4 +1,6 @@
+using System.Collections;
 using UnityEngine;
+using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 
 public class SwordSlashProjectile : ProjectileBase
 {
@@ -13,6 +15,8 @@ public class SwordSlashProjectile : ProjectileBase
     private Health playerHealth;
     private Hitbox hitbox;
     private bool hasInvokedStart = false;
+    [SerializeField] Sprite[] sprites;
+    private SpriteRenderer spriteRenderer;
 
     private void OnEnable()
     {
@@ -20,18 +24,28 @@ public class SwordSlashProjectile : ProjectileBase
         playerHealth = PlayerController.instance.GetComponent<Health>();
         hitbox = GetComponent<Hitbox>();
         hasInvokedStart = false;
+        StartCoroutine(Animate());
     }
 
     private void Start()
     {
+        spriteRenderer = GetComponent<SpriteRenderer>();
         if (hitbox != null && !hasInvokedStart)
         {
             hasInvokedStart = true;
-            Skills.InvokeSkillStart(hitbox);
-            
+            Skills.InvokeSkillStart(hitbox); 
         }
     }
-
+    IEnumerator Animate()
+    {
+        int index = 0;
+        while(true)
+        {
+            spriteRenderer.sprite = sprites[index];
+            index = (index + 1) % sprites.Length;
+            yield return new WaitForSeconds(0.1f);
+        }
+    }
     protected override void Move()
     {
         if (Vector3.Distance(startPos, transform.position) >= maxDistance)

@@ -107,6 +107,7 @@ public class Skills : MonoBehaviour
     public float swordUppercutCost = 20f;
 
     private bool uppercutStart = false;
+    private bool lungeStart = false;
 
     // ===================== CRIMSON WAVE =====================
 
@@ -322,9 +323,10 @@ public class Skills : MonoBehaviour
             return;
 
         Vector2 dir = controller.facingRight ? Vector2.right : Vector2.left;
-        Vector3 spawnPos = transform.position + (Vector3)(dir * 0.7f);
+        Vector3 spawnPos = transform.position + (Vector3)(dir * 0.7f) + Vector3.up * 0.5f;
 
         SwordSlashProjectile proj = ProjectileManager.instance.SpawnSwordSlash(spawnPos, Quaternion.identity);
+        proj.transform.localScale = new Vector3(dir.x < 0 ? -Mathf.Abs(proj.transform.localScale.x) : Mathf.Abs(proj.transform.localScale.x), proj.transform.localScale.y, proj.transform.localScale.z);
         if (proj != null)
         {
             proj.bloodCost = swordSlashBloodCost;
@@ -483,8 +485,10 @@ public class Skills : MonoBehaviour
         controller.animator.SetBool("IsAttacking", false);
         usingSkill = true;
         swordDashCooldownTimer = swordDashCooldown;
+        lungeStart = false;
 
-        if (controller) controller.externalVelocityOverride = true;
+        controller.externalVelocityOverride = true;
+        controller.rb.linearVelocity = Vector2.zero;
 
         int playerLayer = gameObject.layer;
         int enemyLayer = SingleLayerIndex(enemyMask);
@@ -497,9 +501,10 @@ public class Skills : MonoBehaviour
 
         Vector2 dir = controller.facingRight ? Vector2.right : Vector2.left;
         float t = 0f;
+        controller.animator.SetTrigger("Sword Lunge");
+        while(!lungeStart) yield return null;
 
         AudioManager.PlaySFX(SFXTYPE.SWORD_DASH, 0.5f);
-
         // --- Hook into hitbox for Sword Dash specific logic ---
         void OnDashHit(Hitbox hb, Health h)
         {
@@ -608,16 +613,6 @@ public class Skills : MonoBehaviour
         void OnUppercutHit(Hitbox hb, Health h)
         {
             if (h == null || h.isPlayer) return;
-
-            //Vector2 knockDir = (h.transform.position - transform.position).normalized;
-
-            //h.TakeDamage(uppercutFlatDamage, knockDir, false, CrowdControlState.None, 0f, true, false, 0f);
-
-            //// Apply Uppercut CC
-            //ApplySkillCC(h, knockDir, swordUppercutGroundedCC, swordUppercutAirborneCC, swordUppercutCCDuration,
-            //  swordUppercutStunKnockbackMultiplier, swordUppercutKnockdownKnockbackMultiplier);
-
-            // Spirit + BloodMark + HealthCost
             h.ApplyBloodMark();
             GainSpirit(spiritGainPerHit);
 
@@ -678,7 +673,10 @@ public class Skills : MonoBehaviour
     {
         uppercutStart = start == 0 ? false : true;
     }
-
+    public void SetLunge_Start()
+    {
+        lungeStart = true;
+    }
     #endregion
 
     #region Gauntlet Skills

@@ -97,7 +97,6 @@ GameObject:
   - component: {fileID: 5666887810853791225}
   - component: {fileID: 7202069678498631190}
   - component: {fileID: 786583344897588331}
-  - component: {fileID: 1552869594930794101}
   m_Layer: 0
   m_Name: SwordProjectile
   m_TagString: Untagged
@@ -115,8 +114,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -1.8019, y: 0.1848, z: 0}
-  m_LocalScale: {x: 0.7681, y: 1.1232, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 2875296808194067203}
   m_Father: {fileID: 0}
@@ -168,7 +167,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 87c624e6be9471447863ca1d38049420, type: 3}
+  m_Sprite: {fileID: -2304741076594719113, guid: 055219424ebe353409813abe95829989, type: 3}
   m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -240,17 +239,17 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.6313416, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 3, y: 3}
+    oldSize: {x: 3.93, y: 6.112984}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 2.2626827, y: 5.787672}
   m_EdgeRadius: 0
 --- !u!114 &786583344897588331
 MonoBehaviour:
@@ -275,28 +274,7 @@ MonoBehaviour:
   ccDuration: 1
   X_Knockback: 7
   Y_Knockback: 4
---- !u!114 &1552869594930794101
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1827530487365237664}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85f2735b1d4274748ae03c2735e0e881, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Hitbox
-  damage: 0
-  isCritical: 0
-  hitstopDuration: 0.08
-  applyHitstop: 0
-  X_Knockback: 0
-  Y_Knockback: 0
-  facingRight: 0
-  CCType: 0
-  CCDuration: 1
-  sfx: 0
-  applyBloodMark: 1
-  isSkillHitbox: 1
-  isUltimateHitbox: 0
+  sprites:
+  - {fileID: -2304741076594719113, guid: 055219424ebe353409813abe95829989, type: 3}
+  - {fileID: 4030209539379040288, guid: 055219424ebe353409813abe95829989, type: 3}
+  - {fileID: 4030550102243885832, guid: 055219424ebe353409813abe95829989, type: 3}
