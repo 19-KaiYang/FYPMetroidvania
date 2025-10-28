@@ -17,11 +17,14 @@ public class FlyEnemy : Enemy
     [SerializeField, Range(0f, 1f)] private float attackProbability = 0.3f;
     [SerializeField] private float attackCheckCooldown = 1f;
     private float lastAttackCheckTime;
+    public bool startAttack = false;
 
     [SerializeField] private float attackMoveSpeed = 8f;
     private Vector2 dashDir;
 
     private bool stopAttack = false;
+    [SerializeField] private float attackRestTime = 1f;
+    private float attackRestTimer;
 
     [Header("Detect")]
     [SerializeField] private float playerDetectDistance = 5f;
@@ -151,9 +154,14 @@ public class FlyEnemy : Enemy
         public void OnUpdate()
         {
             enemy.rb.linearVelocity = Vector2.zero;
-
+            if (enemy.attackRestTimer > 0)
+            {
+                enemy.attackRestTimer -= Time.deltaTime;
+                return;
+            }
             if (enemy.playerDetected)
             {
+                enemy.attackRestTimer = 1f;
                 enemy.stateMachine.ChangeState(new FlyEnemyChaseState(enemy));
             }
         }
@@ -212,7 +220,11 @@ public class FlyEnemy : Enemy
                     enemy.stateMachine.ChangeState(new FlyEnemyIdleState(enemy));
                 }
             }
-
+            if (enemy.attackRestTimer > 0)
+            {
+                enemy.attackRestTimer -= Time.deltaTime;
+                return;
+            }
             if (enemy.inAttackArea)
             {
                 if (Time.time >= enemy.lastAttackCheckTime + enemy.attackCheckCooldown)
@@ -236,6 +248,9 @@ public class FlyEnemy : Enemy
     public class FlyEnemyAttackState : IState
     {
         private FlyEnemy enemy;
+        private bool isAttacking;
+        private float attackDuration;
+
         public FlyEnemyAttackState(FlyEnemy _enemy)
         {
             enemy = _enemy;
@@ -243,39 +258,44 @@ public class FlyEnemy : Enemy
 
         public void OnEnter()
         {
+            enemy.animator.SetBool("isIdle", false);
             enemy.canFlip = false;
-
-            enemy.StartCoroutine(WaitToAttack(0.4f));
-
             enemy.dashDir = (enemy.player.transform.position - enemy.transform.position).normalized;
+            enemy.StartCoroutine(WaitToAttack(1.6f));
 
-            Vector2 direction = enemy.player.transform.position - enemy.transform.position;
-            float angle = Mathf.Atan2(enemy.dashDir.y, enemy.dashDir.x) * Mathf.Rad2Deg;
-
-            if (enemy.player.transform.position.x > enemy.transform.position.x)
-                enemy.rb.rotation = angle + 90;
-            else if (enemy.player.transform.position.x < enemy.transform.position.x)
-                enemy.rb.rotation = angle - 270;
         }
         public void OnUpdate()
         {
+            if (isAttacking)
+            {
+                attackDuration += Time.deltaTime;
+                if (attackDuration > 1.5f) enemy.stopAttack = true;
+            }
             if (enemy.stopAttack)
             {
-                enemy.stateMachine.ChangeState(new FlyEnemyChaseState(enemy));
+                enemy.attackRestTimer = enemy.attackRestTime;
+                enemy.stateMachine.ChangeState(new FlyEnemyIdleState(enemy));
             }
         }
         public void OnExit()
         {
+            enemy.StopAllCoroutines();
             enemy.canFlip = true;
-
             enemy.rb.linearVelocity = Vector2.zero;
             enemy.rb.rotation = 0f;
+            enemy.animator.SetBool("isIdle", true);
         }
         public IEnumerator WaitToAttack(float _time)
         {
             yield return new WaitForSeconds(_time);
-
+            isAttacking = true;
             enemy.rb.linearVelocity = enemy.dashDir * enemy.attackMoveSpeed;
+            
+            float angle = Mathf.Atan2(enemy.dashDir.y, enemy.dashDir.x) * Mathf.Rad2Deg;
+            if (enemy.player.transform.position.x > enemy.transform.position.x)
+                enemy.rb.rotation = angle + 90;
+            else if (enemy.player.transform.position.x < enemy.transform.position.x)
+                enemy.rb.rotation = angle - 270;
         }
     }
 }

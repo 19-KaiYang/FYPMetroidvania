@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum CrowdControlState
 {
@@ -24,6 +25,8 @@ public class Health : MonoBehaviour
     public float flashDuration = 0.1f;
     public AudioClip hitSound;
     public AudioClip deathSound;
+    public Slider healthBar;
+    public Color defaultDamageColor;
 
     [Header("Arc Knockdown")]
     public float arcKnockdownGravity = 15f;
@@ -68,6 +71,7 @@ public class Health : MonoBehaviour
     // Events
     public Action<Health> damageTaken;
     public System.Action<GameObject> enemyDeath;
+    public Action<Health, float, Color> updateUI;
 
     private AudioSource audioSource;
     private Rigidbody2D rb;
@@ -194,11 +198,12 @@ public class Health : MonoBehaviour
 
     public void TakeDamage(float amount, Vector2? hitDirection = null, bool useRawForce = false,
      CrowdControlState forceCC = CrowdControlState.None, float forceCCDuration = 0f,
-     bool triggerEffects = true, bool isDebuff = false, float knockbackMultiplier = 1f)
+     bool triggerEffects = true, bool isDebuff = false, float knockbackMultiplier = 1f, Color? damageNumberColor = null)
     {
         if (isPlayer && invincible) return;
 
         currentHealth -= amount;
+        updateUI?.Invoke(this, amount, damageNumberColor.HasValue ? damageNumberColor.Value : Color.white);
         if (triggerEffects) damageTaken?.Invoke(this);
 
         if (spriteRenderer != null && gameObject.activeInHierarchy)

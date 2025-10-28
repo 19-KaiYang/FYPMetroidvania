@@ -34,7 +34,9 @@ public class Enemy : MonoBehaviour
     protected Health health;
     [Header("Damaged effect")]
     [SerializeField] protected GameObject damageParticle;
+    [SerializeField] protected GameObject bloodParticle;
     [SerializeField] protected Transform damageParticlePos;
+    [SerializeField] protected Transform bloodParticlePos;
 
     protected virtual void OnEnable()
     {
@@ -43,12 +45,14 @@ public class Enemy : MonoBehaviour
 
         if (health != null)
             health.damageTaken += SpawnParticle;
+            health.enemyDeath += DeathParticle;
     }
 
     protected virtual void OnDisable()
     {
         if (health != null)
             health.damageTaken -= SpawnParticle;
+            health.enemyDeath -= DeathParticle;
     }
 
 
@@ -91,6 +95,15 @@ public class Enemy : MonoBehaviour
         }
 
         GameObject particle = Instantiate(damageParticle, spawnPos, rotation);
+
+        Destroy(particle, 0.2f);
+    }
+    protected virtual void DeathParticle(GameObject _enemy)
+    {
+        Vector3 spawnPos = bloodParticlePos.position;
+        if (bloodParticle == null) return;
+
+        GameObject particle = Instantiate(bloodParticle, spawnPos, transform.rotation);
 
         Destroy(particle, 2.0f);
     }

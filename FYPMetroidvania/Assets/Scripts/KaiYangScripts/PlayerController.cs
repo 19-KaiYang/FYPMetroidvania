@@ -73,7 +73,7 @@ public class PlayerController : MonoBehaviour
     public Vector2 knockbackVelocity;
 
     public Rigidbody2D rb;
-    private Animator animator;
+    public Animator animator;
     private SpriteRenderer spriteRenderer;
 
     public Vector2 moveInput;
@@ -126,7 +126,7 @@ public class PlayerController : MonoBehaviour
         rb.simulated = true;
 
         skills = GetComponentInChildren<Skills>();
-        animator = GetComponentInChildren<Animator>();
+        if(animator == null) animator = GetComponentInChildren<Animator>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
 
         if (groundCheck != null)
