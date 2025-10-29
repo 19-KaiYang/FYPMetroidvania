@@ -15,6 +15,7 @@ public class EnemyHealthUI : MonoBehaviour
 
     private void Start()
     {
+        health = GetComponentInParent<Health>();
         for(int i = 0; i < 10; i++)
         {
             GameObject number = Instantiate(damageNumberPrefab, damageNumberTransform);

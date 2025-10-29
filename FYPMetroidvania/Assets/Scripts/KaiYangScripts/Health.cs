@@ -219,6 +219,7 @@ public class Health : MonoBehaviour
             if (isPlayer)
             {
                 PlayerController pc = GetComponent<PlayerController>();
+                pc.ResetState();
                 pc.SetKnockback(hitDirection.Value, forceCCDuration);
                 AudioManager.PlaySFX(SFXTYPE.PLAYER_HURT,0.3f);
             }

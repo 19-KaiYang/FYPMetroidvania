@@ -16,7 +16,7 @@ public class SwordSlashProjectile : ProjectileBase
     private Hitbox hitbox;
     private bool hasInvokedStart = false;
     [SerializeField] Sprite[] sprites;
-    private SpriteRenderer spriteRenderer;
+    [SerializeField] private SpriteRenderer spriteRenderer;
 
     private void OnEnable()
     {
@@ -41,9 +41,9 @@ public class SwordSlashProjectile : ProjectileBase
         int index = 0;
         while(true)
         {
-            spriteRenderer.sprite = sprites[index];
+            if(sprites[index] != null) spriteRenderer.sprite = sprites[index];
             index = (index + 1) % sprites.Length;
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.05f);
         }
     }
     protected override void Move()
