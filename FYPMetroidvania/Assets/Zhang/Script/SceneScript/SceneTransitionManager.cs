@@ -41,7 +41,9 @@ public class SceneTransitionManager : MonoBehaviour
     {
         currentSceneName = SceneManager.GetActiveScene().name;
         roomIndex = 0;
-        ShuffleRooms();
+        rooms = new List<string>(progressionData.rooms);
+        rooms.RemoveAt(0);
+        //ShuffleRooms();
     }
 
     void Update()
