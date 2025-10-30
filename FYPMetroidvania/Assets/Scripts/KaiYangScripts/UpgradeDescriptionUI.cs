@@ -6,87 +6,132 @@ using TMPro;
 public class UpgradeDescriptionUI : MonoBehaviour
 {
     [Header("UI References")]
-    [SerializeField] private GameObject panel;
-    [SerializeField] private Transform contentParent;
+    [SerializeField] private GameObject panelBackground;
+    [SerializeField] private GameObject upgradePanel;    
+    [SerializeField] private GameObject skillPanel;      
+    [SerializeField] private Transform contentParent;     
     [SerializeField] private GameObject upgradeEntryPrefab;
-    [SerializeField] private GameObject Background;
-    [SerializeField] private GameObject UpgradeParent;
 
+    [Header("Toggle Button")]
+    [SerializeField] private Button toggleButton;         
+    [SerializeField] private TextMeshProUGUI buttonText;  
 
     private UpgradeManager upgradeManager;
     private bool isOpen = false;
+    private bool showingUpgrade = true; 
+
+    void Awake()
+    {
+        if (toggleButton)
+            toggleButton.onClick.AddListener(TogglePanels);
+    }
 
     void Start()
     {
         upgradeManager = FindAnyObjectByType<UpgradeManager>();
-        panel.SetActive(false);
-        if (Background != null)
-            Background.SetActive(false);
 
-        if (UpgradeParent != null)
-            UpgradeParent.SetActive(false);
+        // Hide everything at start
+        if (panelBackground) panelBackground.SetActive(false);
+        if (upgradePanel) upgradePanel.SetActive(false);
+        if (skillPanel) skillPanel.SetActive(false);
+        if(toggleButton) toggleButton.gameObject.SetActive(false);
     }
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.M))
-        {
             ToggleMenu();
-        }
     }
 
+    // ---------- MENU OPEN/CLOSE ----------
     void ToggleMenu()
     {
         isOpen = !isOpen;
-        panel.SetActive(isOpen);
-        Background.SetActive(true);
-        UpgradeParent.SetActive(true);
+
+        if (panelBackground) panelBackground.SetActive(isOpen);
+        if (toggleButton) toggleButton.gameObject.SetActive(isOpen); 
 
         if (isOpen)
         {
             Time.timeScale = 0f;
+            showingUpgrade = true;
+            UpdateButtonText();
+            upgradePanel.SetActive(true);
+            skillPanel.SetActive(false);
             RefreshUI();
         }
         else
         {
             Time.timeScale = 1f;
+            panelBackground.SetActive(false);
+            upgradePanel.SetActive(false);
+            skillPanel.SetActive(false);
             ClearUI();
-            Background.SetActive(false);
-            UpgradeParent.SetActive(false);
         }
     }
 
+    // ---------- PANEL SWITCH ----------
+    void TogglePanels()
+    {
+        showingUpgrade = !showingUpgrade;
+        UpdateButtonText();
+
+        if (showingUpgrade)
+        {
+            // Show upgrade panel
+            skillPanel.SetActive(false);
+            upgradePanel.SetActive(true);
+            RefreshUI();
+        }
+        else
+        {
+            // Show skill panel
+            upgradePanel.SetActive(false);
+            ClearUI();
+            skillPanel.SetActive(true);
+        }
+    }
+
+    // ---------- UPDATE BUTTON LABEL ----------
+    void UpdateButtonText()
+    {
+        if (buttonText)
+            buttonText.text = showingUpgrade ? "Skill" : "Upgrade";
+    }
+
+    // ---------- UPGRADE LIST CREATION ----------
     void RefreshUI()
     {
         ClearUI();
+        if (!upgradeManager || !contentParent || !upgradeEntryPrefab) return;
 
         List<Upgrade> allUpgrades = new List<Upgrade>();
-        if (upgradeManager.AttackUpgrade) allUpgrades.Add(upgradeManager.AttackUpgrade);
-        if (upgradeManager.SkillUpgrade) allUpgrades.Add(upgradeManager.SkillUpgrade);
-        if (upgradeManager.SpiritUpgrade) allUpgrades.Add(upgradeManager.SpiritUpgrade);
+        if (upgradeManager.AttackUpgrade)   allUpgrades.Add(upgradeManager.AttackUpgrade);
+        if (upgradeManager.SkillUpgrade)    allUpgrades.Add(upgradeManager.SkillUpgrade);
+        if (upgradeManager.SpiritUpgrade)   allUpgrades.Add(upgradeManager.SpiritUpgrade);
         if (upgradeManager.MobilityUpgrade) allUpgrades.Add(upgradeManager.MobilityUpgrade);
         allUpgrades.AddRange(upgradeManager.MiscUpgrades);
 
         foreach (var upgrade in allUpgrades)
         {
             GameObject entry = Instantiate(upgradeEntryPrefab, contentParent);
-            var icon = entry.transform.Find("LeftGroup/Icon").GetComponent<Image>();
-            var nameText = entry.transform.Find("LeftGroup/Name").GetComponent<TextMeshProUGUI>();
-            var descText = entry.transform.Find("Description").GetComponent<TextMeshProUGUI>();
+            var icon = entry.transform.Find("LeftGroup/Icon")?.GetComponent<Image>();
+            var nameText = entry.transform.Find("LeftGroup/Name")?.GetComponent<TextMeshProUGUI>();
+            var descText = entry.transform.Find("Description")?.GetComponent<TextMeshProUGUI>();
 
-
-            if (upgrade.icon != null)
+            if (upgrade.icon != null && icon != null)
                 icon.sprite = upgrade.icon;
-            nameText.text = upgrade.displayName;
-            descText.text = upgrade.description;
+            if (nameText != null)
+                nameText.text = upgrade.displayName;
+            if (descText != null)
+                descText.text = upgrade.description;
         }
     }
 
     void ClearUI()
     {
-        foreach (Transform child in contentParent)
-        {
-            Destroy(child.gameObject);
-        }
+        if (!contentParent) return;
+        for (int i = contentParent.childCount - 1; i >= 0; i--)
+            Destroy(contentParent.GetChild(i).gameObject);
     }
 }
