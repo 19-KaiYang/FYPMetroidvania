@@ -16,9 +16,9 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected LayerMask groundleLayer;
 
     [Header("-")]
-    [SerializeField] public float maxHealth;
-    [SerializeField] public float currentHealth;
-    [SerializeField] public bool isDead = false;
+    //[SerializeField] public float maxHealth;
+    //[SerializeField] public float currentHealth;
+    //[SerializeField] public bool isDead = false;
     [SerializeField] public float moveSpeed;
     [SerializeField] public float attackDamage;
 
@@ -38,6 +38,10 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected Transform damageParticlePos;
     [SerializeField] protected Transform bloodParticlePos;
 
+    [Header("Knockdown State")]
+    public float knockdownStep = 0;
+    public bool getUp = false;
+
     protected virtual void OnEnable()
     {
         if (health == null)
@@ -54,8 +58,6 @@ public class Enemy : MonoBehaviour
             health.damageTaken -= SpawnParticle;
             health.enemyDeath -= DeathParticle;
     }
-
-
     protected virtual void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -67,7 +69,7 @@ public class Enemy : MonoBehaviour
 
     protected virtual void Start()
     {
-        currentHealth = maxHealth;
+        
     }
 
     protected virtual void Update()

@@ -19,7 +19,7 @@ public class Skills : MonoBehaviour
 
 
     // global skill gate
-    private bool usingSkill = false;
+    public bool usingSkill = false;
     public bool IsUsingSkill => usingSkill;
 
     private bool usingUltimate = false;
@@ -79,11 +79,12 @@ public class Skills : MonoBehaviour
     public CrowdControlState swordDashAirborneCC = CrowdControlState.Knockdown;
     public float swordDashCCDuration = 1.5f;
 
+    public ParticleSystem dashParticle;
+    public TrailRenderer[] dashTrails;
+
     [Header("Lunging Strike Cooldown")]
     public float swordDashCooldown = 2f;
     private float swordDashCooldownTimer = 0f;
-
-
 
     [Header("Lunging Strike Cost")]
     public float swordDashCost = 20f;
@@ -106,7 +107,9 @@ public class Skills : MonoBehaviour
     private float swordUppercutCooldownTimer = 0f;
     public float swordUppercutCost = 20f;
 
+    private bool waveStart = false;
     private bool uppercutStart = false;
+    private bool lungeStart = false;
 
     // ===================== CRIMSON WAVE =====================
 
@@ -255,6 +258,9 @@ public class Skills : MonoBehaviour
             chargeMain = sharedChargeParticles.main;
             chargeEmission = sharedChargeParticles.emission;
         }
+
+        dashParticle.Stop();
+        foreach (var trail in dashTrails) trail.emitting = false;
     }
 
     private void Update()
@@ -314,23 +320,13 @@ public class Skills : MonoBehaviour
     public void TryUseSwordCrimsonWave()
     {
         if (usingSkill || combat.isAttacking) return;
-        controller.animator.SetBool("IsAttacking", false);
         float cost = swordSlashEnergyCost;
         if (cost < 0) cost = 0;
 
         if (energy != null && !energy.TrySpend(cost))
             return;
 
-        Vector2 dir = controller.facingRight ? Vector2.right : Vector2.left;
-        Vector3 spawnPos = transform.position + (Vector3)(dir * 0.7f);
-
-        SwordSlashProjectile proj = ProjectileManager.instance.SpawnSwordSlash(spawnPos, Quaternion.identity);
-        if (proj != null)
-        {
-            proj.bloodCost = swordSlashBloodCost;
-            proj.Init(dir);
-            AudioManager.PlaySFX(SFXTYPE.SWORD_PROJECTILE);
-        }
+        StartCoroutine(Skill_SwordWave());
     }
 
     public void TryUseGauntletShockwave()
@@ -478,13 +474,42 @@ public class Skills : MonoBehaviour
     #endregion
 
     #region Sword Skills
+    private IEnumerator Skill_SwordWave()
+    {
+        controller.animator.SetBool("IsAttacking", false);
+        usingSkill = true;
+        waveStart = false;
+        controller.externalVelocityOverride = true;
+        controller.rb.linearVelocity = Vector2.zero;
+        controller.animator.SetTrigger("Sword Wave");
+
+        while (!waveStart) yield return null;
+
+        Vector2 dir = controller.facingRight ? Vector2.right : Vector2.left;
+        Vector3 spawnPos = transform.position + (Vector3)(dir * 0.7f) + Vector3.up * 0.5f;
+
+        SwordSlashProjectile proj = ProjectileManager.instance.SpawnSwordSlash(spawnPos, Quaternion.identity);
+        proj.transform.localScale = new Vector3(dir.x < 0 ? -Mathf.Abs(proj.transform.localScale.x) : Mathf.Abs(proj.transform.localScale.x), proj.transform.localScale.y, proj.transform.localScale.z);
+        if (proj != null)
+        {
+            proj.bloodCost = swordSlashBloodCost;
+            proj.Init(dir);
+            AudioManager.PlaySFX(SFXTYPE.SWORD_PROJECTILE);
+        }
+        while(waveStart) yield return null;
+
+        controller.externalVelocityOverride = false;
+        usingSkill = false;
+    }
     private IEnumerator Skill_SwordDash()
     {
         controller.animator.SetBool("IsAttacking", false);
         usingSkill = true;
         swordDashCooldownTimer = swordDashCooldown;
+        lungeStart = false;
 
-        if (controller) controller.externalVelocityOverride = true;
+        controller.externalVelocityOverride = true;
+        controller.rb.linearVelocity = Vector2.zero;
 
         int playerLayer = gameObject.layer;
         int enemyLayer = SingleLayerIndex(enemyMask);
@@ -497,9 +522,10 @@ public class Skills : MonoBehaviour
 
         Vector2 dir = controller.facingRight ? Vector2.right : Vector2.left;
         float t = 0f;
+        controller.animator.SetTrigger("Sword Lunge");
+        while(!lungeStart) yield return null;
 
         AudioManager.PlaySFX(SFXTYPE.SWORD_DASH, 0.5f);
-
         // --- Hook into hitbox for Sword Dash specific logic ---
         void OnDashHit(Hitbox hb, Health h)
         {
@@ -530,7 +556,8 @@ public class Skills : MonoBehaviour
         Hitbox.OnHit += OnDashHit;
         //SKILL START, SKILL HIT, SKILL END
         Coroutine hitboxRoutine = StartCoroutine(ActivateSkillHitbox(swordDashHitbox, dashDuration));
-
+        dashParticle.Play();
+        foreach (var trail in dashTrails) trail.emitting = true;
         // --- Dash loop ---
         while (t < dashDuration)
         {
@@ -578,6 +605,9 @@ public class Skills : MonoBehaviour
             controller.SetHitstop(false);
         }
 
+        dashParticle.Stop();
+        foreach (var trail in dashTrails) trail.emitting = false;
+
         usingSkill = false;
     }
     private IEnumerator Skill_SwordUppercut()
@@ -608,16 +638,6 @@ public class Skills : MonoBehaviour
         void OnUppercutHit(Hitbox hb, Health h)
         {
             if (h == null || h.isPlayer) return;
-
-            //Vector2 knockDir = (h.transform.position - transform.position).normalized;
-
-            //h.TakeDamage(uppercutFlatDamage, knockDir, false, CrowdControlState.None, 0f, true, false, 0f);
-
-            //// Apply Uppercut CC
-            //ApplySkillCC(h, knockDir, swordUppercutGroundedCC, swordUppercutAirborneCC, swordUppercutCCDuration,
-            //  swordUppercutStunKnockbackMultiplier, swordUppercutKnockdownKnockbackMultiplier);
-
-            // Spirit + BloodMark + HealthCost
             h.ApplyBloodMark();
             GainSpirit(spiritGainPerHit);
 
@@ -678,7 +698,14 @@ public class Skills : MonoBehaviour
     {
         uppercutStart = start == 0 ? false : true;
     }
-
+    public void SetLunge_Start()
+    {
+        lungeStart = true;
+    }
+    public void SetWave_Start(int start)
+    {
+        waveStart = start == 0 ? false : true;
+    }
     #endregion
 
     #region Gauntlet Skills
@@ -1067,7 +1094,10 @@ public class Skills : MonoBehaviour
         }
     }
 
-
+    public void ResetState()
+    {
+        usingSkill = false;
+    }
 
     //INVOKES ARE HERE
     #region InvokeSkillsStartHitEnd

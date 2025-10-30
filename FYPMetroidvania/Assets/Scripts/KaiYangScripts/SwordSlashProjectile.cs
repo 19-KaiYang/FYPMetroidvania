@@ -1,4 +1,6 @@
+using System.Collections;
 using UnityEngine;
+using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 
 public class SwordSlashProjectile : ProjectileBase
 {
@@ -13,25 +15,39 @@ public class SwordSlashProjectile : ProjectileBase
     private Health playerHealth;
     private Hitbox hitbox;
     private bool hasInvokedStart = false;
+    [SerializeField] Sprite[] sprites;
+    [SerializeField] private SpriteRenderer spriteRenderer;
+    [SerializeField] GameObject impactParticle;
 
     private void OnEnable()
     {
+        impactParticle.SetActive(false);
         startPos = transform.position;
         playerHealth = PlayerController.instance.GetComponent<Health>();
         hitbox = GetComponent<Hitbox>();
         hasInvokedStart = false;
+        StartCoroutine(Animate());
     }
 
     private void Start()
     {
+        spriteRenderer = GetComponent<SpriteRenderer>();
         if (hitbox != null && !hasInvokedStart)
         {
             hasInvokedStart = true;
-            Skills.InvokeSkillStart(hitbox);
-            
+            Skills.InvokeSkillStart(hitbox); 
         }
     }
-
+    IEnumerator Animate()
+    {
+        int index = 0;
+        while(true)
+        {
+            if(sprites[index] != null) spriteRenderer.sprite = sprites[index];
+            index = (index + 1) % sprites.Length;
+            yield return new WaitForSeconds(0.05f);
+        }
+    }
     protected override void Move()
     {
         if (Vector3.Distance(startPos, transform.position) >= maxDistance)
@@ -68,6 +84,9 @@ public class SwordSlashProjectile : ProjectileBase
             // Damage without knockback (CC handles it)
             enemy.TakeDamage(damage, new Vector2(directionalXknockback, Y_Knockback), false, crowdControl, ccDuration);
             enemy.ApplyBloodMark();
+            impactParticle.transform.SetParent(null);
+            impactParticle.transform.position = transform.position;
+            impactParticle.SetActive(true);
 
             // Blood cost
             if (playerHealth != null && bloodCost > 0f)
