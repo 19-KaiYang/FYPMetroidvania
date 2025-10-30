@@ -1,13 +1,10 @@
 fileFormatVersion: 2
-guid: fe286c97ae7ad6f488e76d6874595a70
+guid: 5491663b7655a5a47b0b25e598291910
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -3847141516758117896
-    second: Fall frame_0
-  - first:
-      213: 2483181157159006848
-    second: Fall frame_1
+      213: 728590169923205809
+    second: Hit frame_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -54,7 +51,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 200
+  spritePixelsToUnits: 225
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -129,45 +126,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Fall frame_0
+      name: Hit frame_0
       rect:
         serializedVersion: 2
-        x: 140
-        y: 17
-        width: 730
-        height: 962
+        x: 16
+        y: 88
+        width: 929
+        height: 819
       alignment: 9
-      pivot: {x: 1, y: 0.11745775}
+      pivot: {x: 0.8, y: 0.1}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 8f199fc6c253c9ac0800000000000000
-      internalID: -3847141516758117896
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Fall frame_1
-      rect:
-        serializedVersion: 2
-        x: 865
-        y: 354
-        width: 8
-        height: 6
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 082f7612b18067220800000000000000
-      internalID: 2483181157159006848
+      spriteID: 1ba3d1936e87c1a00800000000000000
+      internalID: 728590169923205809
       vertices: []
       indices: 
       edges: []
@@ -176,7 +151,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 35329c89eef47da48b994ae3bdfb8122
+    spriteID: 7bc1af6f1da95cb4d96142e4fb05a14e
     internalID: 0
     vertices: []
     indices: 
@@ -186,8 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Fall frame_0: -3847141516758117896
-      Fall frame_1: 2483181157159006848
+      Hit frame_0: 728590169923205809
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -299,7 +299,7 @@ public class Skills : MonoBehaviour
     }
     public void TryUseSwordUppercut()
     {
-        if (usingSkill || combat.isAttacking) return;
+        if (usingSkill || combat.isAttacking || controller.animator.GetCurrentAnimatorStateInfo(0).IsName("Ascending Slash")) return;
         if (swordUppercutCooldownTimer > 0f) return;
 
         if (!PlayerController.instance.IsGrounded && PlayerController.instance.HasAirUppercut)
