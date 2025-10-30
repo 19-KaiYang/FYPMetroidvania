@@ -52,12 +52,12 @@ public class Health : MonoBehaviour
     public bool stunImmune = false;
     public bool knockdownImmune = false;
 
-    private float ccTimer = 0f;
+    public float ccTimer = 0f;
 
     public float invincibilityDuration = 0.3f; // player only
     private Animator animator;
 
-    private bool invincible = false;
+    public bool invincible = false;
 
     //Enemy Use
     [Header("Blood Mark")]
@@ -118,11 +118,7 @@ public class Health : MonoBehaviour
                     bool stoppedFalling = rb != null && Mathf.Abs(rb.linearVelocity.y) < 0.1f;
 
                     landed = touchingGround && stoppedFalling;
-
-                    //Debug.Log($"{gameObject.name} - TouchingGround: {touchingGround}, StoppedFalling: {stoppedFalling}, Y velocity: {(rb ? rb.linearVelocity.y : 0f)}");
                 }
-
-
                 // if in air knockdown, don't count down timer 
                 if (isInArcKnockdown)
                 {
@@ -130,7 +126,6 @@ public class Health : MonoBehaviour
                     {
                         ccTimer = knockdownRecoveryTime;
                         isInArcKnockdown = false;
-                        //Debug.Log($"{gameObject.name} landed from air knockdown, starting recovery timer ({knockdownRecoveryTime}s)");
                     }
                     else
                     {
@@ -164,7 +159,7 @@ public class Health : MonoBehaviour
             else
             {
                 // For stun and other CC states, count down normally
-                if (ccTimer > 0f)
+                if (ccTimer >= 0f)
                 {
                     ccTimer -= Time.deltaTime;
                     if (ccTimer <= 0f)
@@ -511,6 +506,7 @@ public class Health : MonoBehaviour
             var pc = GetComponent<PlayerController>();
             if (pc != null)
             {
+                Debug.Log("arc knockdown");
                 pc.SetVelocity(Vector2.zero);
                 float xDir = pc.facingRight ? -1f : 1f;
                 Vector2 arcKnockback = new Vector2(xDir * 10f, 8f) * knockbackMult;

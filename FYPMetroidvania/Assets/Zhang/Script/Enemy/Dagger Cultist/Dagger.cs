@@ -91,9 +91,6 @@ public class Dagger : ProjectileBase
 
             p.TakeDamage(finalDamage, dir, true, CrowdControlState.Knockdown, 0f);
 
-            if (currentCCState == CrowdControlState.Stunned) p.ApplyStun(1, dir);
-            else if (currentCCState == CrowdControlState.Knockdown) p.ApplyKnockdown(1, false, dir);
-
 
             Despawn();
         }
