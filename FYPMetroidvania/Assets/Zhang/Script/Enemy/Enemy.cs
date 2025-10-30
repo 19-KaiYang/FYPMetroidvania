@@ -38,6 +38,10 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected Transform damageParticlePos;
     [SerializeField] protected Transform bloodParticlePos;
 
+    [Header("Knockdown State")]
+    public float knockdownStep = 0;
+    public bool getUp = false;
+
     protected virtual void OnEnable()
     {
         if (health == null)

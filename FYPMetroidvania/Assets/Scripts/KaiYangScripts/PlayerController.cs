@@ -153,13 +153,13 @@ public class PlayerController : MonoBehaviour
             if (!IsGrounded)
             {
                 AudioManager.PlaySFX(SFXTYPE.PLAYER_LAND, 0.5f);
-                animator.SetBool("IsAttacking", false);
                 if (combat.isAttacking)
                 {
-                    combat.isAttacking = false;
                     externalVelocityOverride = false;
                     combat.DisableAllHitboxes();
                 }
+                combat.isAttacking = false;
+                animator.SetBool("IsAttacking", false); 
             }
             IsGrounded = true;
             IsOnPlatform = ground.collider.CompareTag("Platform");
@@ -300,10 +300,12 @@ public class PlayerController : MonoBehaviour
 
             if (jumpBufferCounter > 0f && !jumpLocked && !platformDropping && !combat.isAttacking)
             {
+                Debug.Log("Jump1");
                 animator.SetBool("IsAttacking", false);
                 velocity.y = jumpForce;
                 jumpLocked = true;
                 jumpBufferCounter = 0f;
+                externalVelocityOverride = false;
                 AudioManager.PlaySFX(SFXTYPE.PLAYER_JUMP);
             }
         }
@@ -453,8 +455,9 @@ public class PlayerController : MonoBehaviour
                 platformDropTimer = platformDropDuration;
                 velocity.y = -platformDropSpeed;
             }
-            else if (!jumpLocked && !combat.isAttacking)
+            else if (!jumpLocked && !combat.isAttacking && !externalVelocityOverride)
             {
+                Debug.Log("Jump1");
                 velocity.y = jumpForce;
                 jumpLocked = true;
                 airJumpsDone = 0;
@@ -601,6 +604,12 @@ public class PlayerController : MonoBehaviour
         else Time.timeScale = 1f;
     }
 
+    public void ResetState()
+    {
+        combat.isAttacking = false;
+        animator.SetBool("IsAttacking", false);
+        
+    }
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
