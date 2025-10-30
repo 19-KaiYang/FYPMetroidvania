@@ -21,6 +21,10 @@ public class EnemyAnimationEvent : MonoBehaviour
     {
         AudioManager.PlaySFX(SFXTYPE.BRAWLER_ATTACK, 0.35f, pitch: Random.Range(0.9f,1.1f));
     }
+    private void GetUp()
+    {
+        enemy.getUp = true;
+    }
     private void SpearmanThrustSFX()
     {
         AudioManager.PlaySFX(SFXTYPE.SPEARMAN_ATTACK, 0.35f, pitch: Random.Range(0.9f, 1.1f));

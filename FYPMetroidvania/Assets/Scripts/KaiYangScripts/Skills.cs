@@ -19,7 +19,7 @@ public class Skills : MonoBehaviour
 
 
     // global skill gate
-    private bool usingSkill = false;
+    public bool usingSkill = false;
     public bool IsUsingSkill => usingSkill;
 
     private bool usingUltimate = false;

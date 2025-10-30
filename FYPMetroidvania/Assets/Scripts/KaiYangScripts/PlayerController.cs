@@ -300,10 +300,12 @@ public class PlayerController : MonoBehaviour
 
             if (jumpBufferCounter > 0f && !jumpLocked && !platformDropping && !combat.isAttacking)
             {
+                Debug.Log("Jump1");
                 animator.SetBool("IsAttacking", false);
                 velocity.y = jumpForce;
                 jumpLocked = true;
                 jumpBufferCounter = 0f;
+                externalVelocityOverride = false;
                 AudioManager.PlaySFX(SFXTYPE.PLAYER_JUMP);
             }
         }
@@ -453,8 +455,9 @@ public class PlayerController : MonoBehaviour
                 platformDropTimer = platformDropDuration;
                 velocity.y = -platformDropSpeed;
             }
-            else if (!jumpLocked && !combat.isAttacking)
+            else if (!jumpLocked && !combat.isAttacking && !externalVelocityOverride)
             {
+                Debug.Log("Jump1");
                 velocity.y = jumpForce;
                 jumpLocked = true;
                 airJumpsDone = 0;

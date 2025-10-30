@@ -378,11 +378,13 @@ public class CombatSystem : MonoBehaviour
 
         if (up)
         {
-            PerformUpAttack();
+            if (controller.IsGrounded) PerformUpAttack();
+            else PerformAttack();
         }
         else if (down)
         {
-            PerformDownAttack();
+            if (!controller.IsGrounded) PerformDownAttack();
+            else PerformAttack();
         }
         else
         {

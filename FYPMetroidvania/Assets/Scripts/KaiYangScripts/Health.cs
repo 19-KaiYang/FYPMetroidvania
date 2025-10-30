@@ -48,6 +48,7 @@ public class Health : MonoBehaviour
 
     [Header("Combat States")]
     public CrowdControlState currentCCState = CrowdControlState.None;
+    public bool knockdownLanded = false;
     public bool stunImmune = false;
     public bool knockdownImmune = false;
 
@@ -220,6 +221,7 @@ public class Health : MonoBehaviour
             {
                 PlayerController pc = GetComponent<PlayerController>();
                 pc.ResetState();
+                pc.externalVelocityOverride = false;
                 pc.SetKnockback(hitDirection.Value, forceCCDuration);
                 AudioManager.PlaySFX(SFXTYPE.PLAYER_HURT,0.3f);
             }
@@ -240,9 +242,11 @@ public class Health : MonoBehaviour
         {
             if (forceCC != CrowdControlState.None)
             {
-                if (forceCC == CrowdControlState.Stunned && !stunImmune && !airborne)
+                if (forceCC == CrowdControlState.Stunned && !stunImmune)
                 {
-                    ApplyStun(forceCCDuration, hitDirection);
+                    if (!airborne)
+                        ApplyStun(forceCCDuration, hitDirection);
+                    else ApplyKnockdown(forceCCDuration, airborne, hitDirection, shouldPreserveVelocity);
                 }
                 else if (forceCC == CrowdControlState.Knockdown)
                 {
@@ -487,7 +491,7 @@ public class Health : MonoBehaviour
 
     public void ApplyStun(float duration, Vector2? hitDirection = null, float knockbackMultiplier = 1f)
     {
-        currentCCState = CrowdControlState.Stunned;
+        if(currentCCState == CrowdControlState.None) currentCCState = CrowdControlState.Stunned;
         ccTimer = duration;
     }
 

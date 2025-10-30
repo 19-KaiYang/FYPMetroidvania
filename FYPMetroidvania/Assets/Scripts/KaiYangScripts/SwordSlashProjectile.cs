@@ -17,9 +17,11 @@ public class SwordSlashProjectile : ProjectileBase
     private bool hasInvokedStart = false;
     [SerializeField] Sprite[] sprites;
     [SerializeField] private SpriteRenderer spriteRenderer;
+    [SerializeField] GameObject impactParticle;
 
     private void OnEnable()
     {
+        impactParticle.SetActive(false);
         startPos = transform.position;
         playerHealth = PlayerController.instance.GetComponent<Health>();
         hitbox = GetComponent<Hitbox>();
@@ -82,6 +84,9 @@ public class SwordSlashProjectile : ProjectileBase
             // Damage without knockback (CC handles it)
             enemy.TakeDamage(damage, new Vector2(directionalXknockback, Y_Knockback), false, crowdControl, ccDuration);
             enemy.ApplyBloodMark();
+            impactParticle.transform.SetParent(null);
+            impactParticle.transform.position = transform.position;
+            impactParticle.SetActive(true);
 
             // Blood cost
             if (playerHealth != null && bloodCost > 0f)
