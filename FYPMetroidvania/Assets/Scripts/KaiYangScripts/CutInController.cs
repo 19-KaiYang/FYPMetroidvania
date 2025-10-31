@@ -13,6 +13,11 @@ public class CutInController : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
+    private void Awake()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
+
     // Call this INSTEAD of calling Init directly
     public void PlayCutInThenInit(SpiritSlash slash, Transform player, Transform target, LayerMask enemyMask)
     {

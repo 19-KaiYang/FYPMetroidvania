@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Blur_Far
+  m_Name: S1_Blur
   m_Shader: {fileID: 4800000, guid: e5895c4168a53d440ace918812b6e7b8, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -24,12 +24,12 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: e98af7739dde3014fa9224434cba31fd, type: 3}
+        m_Texture: {fileID: 2800000, guid: cf0193af4cd73664ba6566a0e6fe400c, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _BlurRadiusPx: 0
+    - _BlurRadiusPx: 5.5
     - _BlurSize: 0.00324
     m_Colors: []
   m_BuildTextureStacks: []

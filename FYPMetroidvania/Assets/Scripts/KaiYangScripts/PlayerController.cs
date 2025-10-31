@@ -179,7 +179,7 @@ public class PlayerController : MonoBehaviour
             {
                 externalVelocityOverride = true;
                 currentKnockdownPhase = 1;
-                knockdownPhaseTimer = 0.1f; 
+                knockdownPhaseTimer = 0.1f;
                 animator.SetInteger("KnockdownPhase", 1);
                 Debug.Log("Knockdown Started - Phase 1: Launch");
                 wasGroundedLastFrame = false;
@@ -212,7 +212,7 @@ public class PlayerController : MonoBehaviour
                         }
                         break;
 
-                    case 3: 
+                    case 3:
                         break;
                 }
             }
@@ -241,15 +241,18 @@ public class PlayerController : MonoBehaviour
 
         animator.SetBool("IsUsingSkill", skills != null && skills.IsUsingSkill);
 
-        if (IsGrounded)
-            animator.SetFloat("Speed", Mathf.Abs(moveInput.x));
-        else
-            animator.SetFloat("Speed", 0f);
+        // === ONLY UPDATE THESE ANIMATIONS IF NOT USING SKILL ===
+        if (skills == null || !skills.IsUsingSkill)
+        {
+            if (IsGrounded)
+                animator.SetFloat("Speed", Mathf.Abs(moveInput.x));
+            else
+                animator.SetFloat("Speed", 0f);
+
+            animator.SetBool("IsFalling", !IsGrounded && velocity.y < -0.1f);
+        }
 
         lastPosition = transform.position;
-
-
-        animator.SetBool("IsFalling", !IsGrounded && velocity.y < -0.1f);
 
         // Dash timers
         if (isDashing)
