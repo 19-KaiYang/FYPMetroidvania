@@ -24,6 +24,8 @@ public class UpgradeDescriptionUI : MonoBehaviour
     {
         if (toggleButton)
             toggleButton.onClick.AddListener(TogglePanels);
+
+        DontDestroyOnLoad(gameObject);
     }
 
     void Start()
