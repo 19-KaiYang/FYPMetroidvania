@@ -429,6 +429,7 @@ GameObject:
   - component: {fileID: 7621129067624534827}
   - component: {fileID: 6563075640411928745}
   - component: {fileID: 2410184887729232841}
+  - component: {fileID: 5052374980784339615}
   m_Layer: 8
   m_Name: FinalPlayer
   m_TagString: Player
@@ -513,7 +514,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.26, y: 0.37}
+  m_Size: {x: 5.515386, y: 7.59}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0
@@ -638,10 +639,11 @@ MonoBehaviour:
   knockbackTimer: 0
   knockbackVelocity: {x: 0, y: 0}
   rb: {fileID: 7721234354411303025}
-  animator: {fileID: 0}
+  animator: {fileID: 8233210284631527292}
   moveInput: {x: 0, y: 0}
   wasGroundedLastFrame: 0
   externalVelocityOverride: 0
+  isInCutscene: 0
 --- !u!114 &1835037867212476304
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -763,6 +765,7 @@ MonoBehaviour:
     angle: 10
     scale: {x: 0.13, y: 0.11526509, z: 0.08}
     sfxVolume: 0.5
+  animator: {fileID: 8233210284631527292}
   comboStep: 0
   canTransition: 1
   isBuffered: 0
@@ -782,7 +785,7 @@ MonoBehaviour:
   destroyOnDeath: 0
   isPlayer: 1
   currentHealth: 0
-  spriteRenderer: {fileID: 259343632847283508}
+  spriteRenderer: {fileID: 0}
   originalColor: {r: 0, g: 0, b: 0, a: 0}
   flashDuration: 0.1
   hitSound: {fileID: 0}
@@ -974,8 +977,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da0739f9832287e42b250c7ec38dd4ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeManager
-  AttackUpgrade: {fileID: 11400000, guid: a9a155d7083b5224a95c6ca440ba9ad6, type: 2}
-  SkillUpgrade: {fileID: 11400000, guid: 7ef4f18aebc187e45bf76089f80df883, type: 2}
+  AttackUpgrade: {fileID: 0}
+  SkillUpgrade: {fileID: 0}
   SpiritUpgrade: {fileID: 0}
   MobilityUpgrade: {fileID: 0}
   MiscUpgrades: []
@@ -1021,6 +1024,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SpiritGauge
   maxSpirit: 100
   drainPerSecond: 20
+--- !u!95 &5052374980784339615
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 765186428982251967}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1219747033826149343
 GameObject:
   m_ObjectHideFlags: 0
@@ -12462,6 +12487,8 @@ GameObject:
   - component: {fileID: 8233210284631527292}
   - component: {fileID: 2387868613242150479}
   - component: {fileID: 2059461097378009830}
+  - component: {fileID: 8224196563127316017}
+  - component: {fileID: 9197915482153139788}
   m_Layer: 0
   m_Name: Sprite
   m_TagString: Untagged
@@ -12632,6 +12659,61 @@ MonoBehaviour:
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
+--- !u!114 &8224196563127316017
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8302625869394393446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4d13c3701bf6364280f19180d9ddcfd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CutsceneReceiver
+  animator: {fileID: 8233210284631527292}
+--- !u!114 &9197915482153139788
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8302625869394393446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Timeline::UnityEngine.Timeline.SignalReceiver
+  m_Events:
+    m_Signals:
+    - {fileID: 11400000, guid: 405c04fab69791744ae443ff546b51aa, type: 2}
+    m_Events:
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 5052374980784339615}
+          m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
+          m_MethodName: set_enabled
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 8224196563127316017}
+          m_TargetAssemblyTypeName: CutsceneReceiver, Assembly-CSharp
+          m_MethodName: RestoreAnimator
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &8360528964084505704
 GameObject:
   m_ObjectHideFlags: 0

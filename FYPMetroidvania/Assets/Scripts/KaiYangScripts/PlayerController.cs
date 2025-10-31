@@ -107,12 +107,15 @@ public class PlayerController : MonoBehaviour
     public Vector2 GetVelocity() => velocity;
     public Vector2 CurrentVelocity => velocity;
 
+    public bool isInCutscene;
+
     private void Awake()
     {
         if (instance == null)
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
+            isInCutscene = true;
         }
         else
         {
@@ -142,6 +145,7 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         if (isInHitstop) return;
+        if (isInCutscene) return;
 
         var health = GetComponent<Health>();
 

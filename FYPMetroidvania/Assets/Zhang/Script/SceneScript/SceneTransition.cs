@@ -65,6 +65,8 @@ public class SceneTransition : MonoBehaviour
 
         StartCoroutine(SceneTransitionManager.instance.MoveToNewScene(exitDirection, jumpForce, exitTime, dir));
         StartCoroutine(SceneTransitionManager.instance.Fade(SceneTransitionManager.FadeDirection.OUT));
+
+        
     }
 
     private void HandleUpgradeChosen()
@@ -92,6 +94,12 @@ public class SceneTransition : MonoBehaviour
 
                 if (!needPress && _other.CompareTag("Player"))
                 {
+                    if(upgradeMenuPrefab == null)
+                    {
+                        HandleUpgradeChosen();
+                        AudioManager.instance.StopBGM();
+                        return;
+                    }
                     GameObject menuObj = Instantiate(upgradeMenuPrefab);
                     UpgradeSelectionUI ui = menuObj.GetComponent<UpgradeSelectionUI>();
                     ui.ShowMenu();

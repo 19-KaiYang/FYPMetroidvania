@@ -141,6 +141,7 @@ public class CombatSystem : MonoBehaviour
 
     private void Update()
     {
+        if (controller.isInCutscene) return;
         int playerLayer = gameObject.layer;
         int enemyLayer = LayerMask.NameToLayer("EnemyLayer");
         Physics2D.IgnoreLayerCollision(playerLayer, enemyLayer, true);
@@ -372,7 +373,7 @@ public class CombatSystem : MonoBehaviour
         if (skills != null && skills.IsUsingSkill && !skills.IsUsingUltimate) return;
         if (currentWeapon == WeaponType.None) return;
         if (attackCooldownTimer > 0f) return;
-
+        if (controller.isInCutscene) return;
 
         bool up = Keyboard.current.wKey.isPressed;
         bool down = Keyboard.current.sKey.isPressed;

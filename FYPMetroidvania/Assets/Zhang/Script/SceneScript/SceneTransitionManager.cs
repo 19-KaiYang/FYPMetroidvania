@@ -42,7 +42,7 @@ public class SceneTransitionManager : MonoBehaviour
         currentSceneName = SceneManager.GetActiveScene().name;
         roomIndex = 0;
         rooms = new List<string>(progressionData.rooms);
-        rooms.RemoveAt(0);
+        //rooms.RemoveAt(0);
         //ShuffleRooms();
     }
 
@@ -62,7 +62,7 @@ public class SceneTransitionManager : MonoBehaviour
         if (roomIndex < rooms.Count)
         {
             _sceneName = rooms[roomIndex];
-            roomIndex++;
+            if(currentSceneName != progressionData.startingScene) roomIndex++;
         }
         else _sceneName = progressionData.EndingScene;
         if (_sceneName != null)
@@ -190,6 +190,7 @@ public class SceneTransitionManager : MonoBehaviour
     {
         currentSceneName = scene.name;
         roomLoaded?.Invoke(currentSceneName);
+        if(currentSceneName == progressionData.startingScene) PlayerController.instance.isInCutscene = true;
     }
     #endregion
 }

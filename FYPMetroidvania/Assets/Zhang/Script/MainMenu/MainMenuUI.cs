@@ -70,7 +70,7 @@ public class MainMenuUI : MonoBehaviour
     }
     public void StartGameBtn()
     {
-        SceneManager.LoadScene("Room1");
+        SceneManager.LoadScene("Goblin Camp");
     }
     public void Setting_BackButton()
     {
