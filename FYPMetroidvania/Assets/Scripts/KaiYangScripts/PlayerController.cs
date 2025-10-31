@@ -526,6 +526,7 @@ public class PlayerController : MonoBehaviour
     public void OnDash()
     {
         if (skills != null && skills.IsChargeLocked) return;
+        if (combat != null && combat.isAttacking) return;
         if (dashCooldownTimer > 0f) return;
         if (dashesRemaining <= 0) return;
 

@@ -16,6 +16,10 @@ Shader "Custom/SimpleSpriteBlur"
         Pass
         {
             HLSLPROGRAM
+            #pragma target 2.0
+            #pragma multi_compile_fog
+            #pragma multi_compile _ _ALPHATEST_ON _ALPHABLEND_ON _ALPHAPREMULTIPLY_ON
+            #pragma multi_compile_instancing
             #pragma vertex vert
             #pragma fragment frag
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
@@ -78,6 +82,11 @@ Shader "Custom/SimpleSpriteBlur"
                 return c;
             }
             ENDHLSL
+
+            
+
         }
+
+
     }
 }
