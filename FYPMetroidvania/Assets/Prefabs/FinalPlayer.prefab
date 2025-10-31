@@ -640,6 +640,7 @@ MonoBehaviour:
   rb: {fileID: 7721234354411303025}
   animator: {fileID: 0}
   moveInput: {x: 0, y: 0}
+  wasGroundedLastFrame: 0
   externalVelocityOverride: 0
 --- !u!114 &1835037867212476304
 MonoBehaviour:
@@ -801,7 +802,9 @@ MonoBehaviour:
   knockdownLanded: 0
   stunImmune: 0
   knockdownImmune: 0
+  ccTimer: 0
   invincibilityDuration: 0.3
+  invincible: 0
   isBloodMarked: 0
   bloodMarkHealAmount: 10
   bloodMarkIcon: {fileID: 0}
@@ -12528,7 +12531,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 2
-  m_Sprite: {fileID: 8033231707528121202, guid: 8c388dac2a21a6742a23a059e53bc0fb, type: 3}
+  m_Sprite: {fileID: -7534805625062979028, guid: 06ac879f182cf184d8114e0e0c475cb9, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

@@ -1,0 +1,296 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 413d64d7f6ce4c54c942e901f83eb9b4, type: 3}
+  m_Name: Opening 2
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueTextSO
+  SpeakerType: 0
+  defaultPlayerImage: {fileID: -3718515074069802047, guid: c7d220190b1b5b14f9eeab2f9df79bb0, type: 3}
+  defaultNPCImage: {fileID: -3312853685737720060, guid: 2aae3159b01706349adf9fb347b2cc82, type: 3}
+  hasCutscene: 1
+  Steps:
+  - SpeakerType: 1
+    Name: Boblin
+    SpeakerImage: {fileID: -3312853685737720060, guid: 2aae3159b01706349adf9fb347b2cc82, type: 3}
+    Text: This is it, huh.
+    sfx: 14
+    pitch: 0.95
+    autoskip: 0
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: -3718515074069802047, guid: c7d220190b1b5b14f9eeab2f9df79bb0, type: 3}
+    Text: Guess so. Man, how long has it been?
+    sfx: 14
+    pitch: 0.8
+    autoskip: 0
+  - SpeakerType: 1
+    Name: Ruru
+    SpeakerImage: {fileID: 68631100154771428, guid: cafbf3de4a318164dbd456ea259f370a, type: 3}
+    Text: I dunno, can barely remember when you first arrived.
+    sfx: 14
+    pitch: 1.2
+    autoskip: 0
+  - SpeakerType: 1
+    Name: Roblin
+    SpeakerImage: {fileID: -7093195954321390883, guid: 63716a0eaeb89d94d9d8fee6f689a7be, type: 3}
+    Text: Small pixie brain, small memory, huh?
+    sfx: 14
+    pitch: 1
+    autoskip: 0
+  - SpeakerType: 1
+    Name: Ruru
+    SpeakerImage: {fileID: 68631100154771428, guid: cafbf3de4a318164dbd456ea259f370a, type: 3}
+    Text: "Sh-shut up! You\u2019re not even bigger than me!"
+    sfx: 14
+    pitch: 1.2
+    autoskip: 0
+  - SpeakerType: 1
+    Name: Ste_ve
+    SpeakerImage: {fileID: -6372313868896128620, guid: 69b61d5a4814e3b4baa90836be9a2ade, type: 3}
+    Text: "Searching internal database\u2026."
+    sfx: 14
+    pitch: 0.65
+    autoskip: 1
+  - SpeakerType: 1
+    Name: Ste_ve
+    SpeakerImage: {fileID: -6372313868896128620, guid: 69b61d5a4814e3b4baa90836be9a2ade, type: 3}
+    Text: Error. Memory region replaced with pictures of turbocharged trucks.
+    sfx: 14
+    pitch: 0.65
+    autoskip: 0
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: -3718515074069802047, guid: c7d220190b1b5b14f9eeab2f9df79bb0, type: 3}
+    Text: "Please don\u2019t talk about trucks right now, I don\u2019t need reminders\u2026"
+    sfx: 14
+    pitch: 0.9
+    autoskip: 0
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: -3718515074069802047, guid: c7d220190b1b5b14f9eeab2f9df79bb0, type: 3}
+    Text: Also, how can you even still think about trucks when our target enemy is
+      literally one?!
+    sfx: 14
+    pitch: 0.9
+    autoskip: 0
+  - SpeakerType: 1
+    Name: Ste_ve
+    SpeakerImage: {fileID: -6372313868896128620, guid: 69b61d5a4814e3b4baa90836be9a2ade, type: 3}
+    Text: "Hey, don\u2019t villanise my trucks just because of that menace! The trucks
+      from my universe are cool, this one don\u2019t come from my universe."
+    sfx: 14
+    pitch: 0.65
+    autoskip: 0
+  - SpeakerType: 1
+    Name: Boblin
+    SpeakerImage: {fileID: -3312853685737720060, guid: 2aae3159b01706349adf9fb347b2cc82, type: 3}
+    Text: "I do actually remember how you first arrived. How confused you were as
+      you recounted your story to us\u2026"
+    sfx: 14
+    pitch: 0.95
+    autoskip: 0
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: -3718515074069802047, guid: c7d220190b1b5b14f9eeab2f9df79bb0, type: 3}
+    Text: Anyone would be if they got hit by a truck and sent to the different dimension
+      as a rat!
+    sfx: 14
+    pitch: 0.9
+    autoskip: 0
+  - SpeakerType: 1
+    Name: Ruru
+    SpeakerImage: {fileID: 68631100154771428, guid: cafbf3de4a318164dbd456ea259f370a, type: 3}
+    Text: And your face when we told you how we experienced the same thing? All of
+      us, hit by trucks or truck equivalent and basically kidnapped to this world!
+    sfx: 14
+    pitch: 1.2
+    autoskip: 0
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: -3718515074069802047, guid: c7d220190b1b5b14f9eeab2f9df79bb0, type: 3}
+    Text: "To be fair, I don\u2019t think an dimension-hopping truck that sends everyone
+      it hits to this particular place would be on my mind about how that works."
+    sfx: 14
+    pitch: 0.9
+    autoskip: 0
+  - SpeakerType: 1
+    Name: Roblin
+    SpeakerImage: {fileID: -7093195954321390883, guid: 63716a0eaeb89d94d9d8fee6f689a7be, type: 3}
+    Text: "I didn\u2019t quite understand it either, haha."
+    sfx: 14
+    pitch: 1
+    autoskip: 0
+  - SpeakerType: 1
+    Name: Boblin
+    SpeakerImage: {fileID: -3312853685737720060, guid: 2aae3159b01706349adf9fb347b2cc82, type: 3}
+    Text: Not like that mattered much to you. You just wanted to see what you could
+      steal from them.
+    sfx: 14
+    pitch: 0.95
+    autoskip: 0
+  - SpeakerType: 1
+    Name: Roblin
+    SpeakerImage: {fileID: -7093195954321390883, guid: 63716a0eaeb89d94d9d8fee6f689a7be, type: 3}
+    Text: "Luckily for them they didn\u2019t have anything for me to nab. "
+    sfx: 14
+    pitch: 1
+    autoskip: 0
+  - SpeakerType: 1
+    Name: Ste_ve
+    SpeakerImage: {fileID: -6372313868896128620, guid: 69b61d5a4814e3b4baa90836be9a2ade, type: 3}
+    Text: You literally tried to steal my arm.
+    sfx: 14
+    pitch: 0.65
+    autoskip: 0
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: -3718515074069802047, guid: c7d220190b1b5b14f9eeab2f9df79bb0, type: 3}
+    Text: "I mean it is detachable\u2026"
+    sfx: 14
+    pitch: 0.9
+    autoskip: 0
+  - SpeakerType: 0
+    Name: Elric
+    SpeakerImage: {fileID: 0}
+    Text: Can we just cut the chit-chat and get to the fighting already?
+    sfx: 14
+    pitch: 1
+    autoskip: 0
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: -6372313868896128620, guid: 69b61d5a4814e3b4baa90836be9a2ade, type: 3}
+    Text: "Shut it or I\u2019ll break your handle."
+    sfx: 14
+    pitch: 0.9
+    autoskip: 0
+  - SpeakerType: 0
+    Name: Elric
+    SpeakerImage: {fileID: 0}
+    Text: "Hey, if you break me you\u2019ll never beat even the rest of the Blood
+      Knights, let alone the Truck."
+    sfx: 14
+    pitch: 1
+    autoskip: 0
+  - SpeakerType: 1
+    Name: Ste_ve
+    SpeakerImage: {fileID: -6372313868896128620, guid: 69b61d5a4814e3b4baa90836be9a2ade, type: 3}
+    Text: "He\u2019s got a point."
+    sfx: 14
+    pitch: 0.65
+    autoskip: 0
+  - SpeakerType: 1
+    Name: Boblin
+    SpeakerImage: {fileID: -3312853685737720060, guid: 2aae3159b01706349adf9fb347b2cc82, type: 3}
+    Text: But how do you feel going against your old allies? Are you fine with this?
+    sfx: 14
+    pitch: 0.95
+    autoskip: 0
+  - SpeakerType: 0
+    Name: MC
+    SpeakerImage: {fileID: -3718515074069802047, guid: c7d220190b1b5b14f9eeab2f9df79bb0, type: 3}
+    Text: "Oi, don\u2019t give him any ideas. I still need a weapon."
+    sfx: 14
+    pitch: 0.9
+    autoskip: 0
+  - SpeakerType: 0
+    Name: Elric
+    SpeakerImage: {fileID: 0}
+    Text: "Look kid, I\u2019m literally a possessed sword now. Serves me right for
+      buying into their stupid cult and their blood magic, its what lead to this
+      freak accident. "
+    sfx: 14
+    pitch: 1
+    autoskip: 0
+  - SpeakerType: 0
+    Name: Elric
+    SpeakerImage: {fileID: 0}
+    Text: "But it opened my eyes to see how evil that cult really is. Its not even
+      about worshipping the truck anymore, they\u2019re just plain power-hungry. "
+    sfx: 14
+    pitch: 1
+    autoskip: 0
+  - SpeakerType: 0
+    Name: MC
+    SpeakerImage: {fileID: -3718515074069802047, guid: c7d220190b1b5b14f9eeab2f9df79bb0, type: 3}
+    Text: Well whatever it is, thanks Elric.
+    sfx: 14
+    pitch: 0.9
+    autoskip: 0
+  - SpeakerType: 0
+    Name: Elric
+    SpeakerImage: {fileID: 0}
+    Text: Oh quit it, don't get sappy with a sword.
+    sfx: 14
+    pitch: 1
+    autoskip: 0
+  - SpeakerType: 1
+    Name: Ruru
+    SpeakerImage: {fileID: 68631100154771428, guid: cafbf3de4a318164dbd456ea259f370a, type: 3}
+    Text: "Aww, he\u2019s blushing!"
+    sfx: 14
+    pitch: 1.2
+    autoskip: 0
+  - SpeakerType: 0
+    Name: Elric
+    SpeakerImage: {fileID: 0}
+    Text: "...I\u2019m literally a red sword what do you want"
+    sfx: 14
+    pitch: 1
+    autoskip: 0
+  - SpeakerType: 0
+    Name: MC
+    SpeakerImage: {fileID: -3718515074069802047, guid: c7d220190b1b5b14f9eeab2f9df79bb0, type: 3}
+    Text: Okay, okay, enough talk.
+    sfx: 14
+    pitch: 0.9
+    autoskip: 0
+  - SpeakerType: 0
+    Name: MC
+    SpeakerImage: {fileID: -3718515074069802047, guid: c7d220190b1b5b14f9eeab2f9df79bb0, type: 3}
+    Text: "Let\u2019s do this, I guess. That truck cult isn\u2019t gonna defeat itself."
+    sfx: 14
+    pitch: 0.9
+    autoskip: 0
+  - SpeakerType: 1
+    Name: Boblin
+    SpeakerImage: {fileID: -3312853685737720060, guid: 2aae3159b01706349adf9fb347b2cc82, type: 3}
+    Text: You go deflate its tires!
+    sfx: 14
+    pitch: 0.95
+    autoskip: 0
+  - SpeakerType: 1
+    Name: Roblin
+    SpeakerImage: {fileID: -7093195954321390883, guid: 63716a0eaeb89d94d9d8fee6f689a7be, type: 3}
+    Text: Yeah! Jam its engine!
+    sfx: 14
+    pitch: 1
+    autoskip: 0
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: -3718515074069802047, guid: c7d220190b1b5b14f9eeab2f9df79bb0, type: 3}
+    Text: "That is some really weird battle talk\u2026 But thanks."
+    sfx: 14
+    pitch: 0.9
+    autoskip: 0
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: -3718515074069802047, guid: c7d220190b1b5b14f9eeab2f9df79bb0, type: 3}
+    Text: "That is some really weird battle talk\u2026 But thanks."
+    sfx: 14
+    pitch: 0.9
+    autoskip: 0
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: -3718515074069802047, guid: c7d220190b1b5b14f9eeab2f9df79bb0, type: 3}
+    Text: "That is some really weird battle talk\u2026 But thanks."
+    sfx: 14
+    pitch: 0.9
+    autoskip: 0

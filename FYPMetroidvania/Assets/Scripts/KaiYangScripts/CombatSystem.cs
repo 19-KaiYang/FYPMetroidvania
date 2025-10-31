@@ -76,7 +76,7 @@ public class CombatSystem : MonoBehaviour
 
     private List<GameObject> activeHitboxes;
 
-    private Animator animator;
+    [SerializeField] private Animator animator;
     private SpriteRenderer spriteRenderer;
     private PlayerController controller;
 
@@ -116,12 +116,13 @@ public class CombatSystem : MonoBehaviour
     private void Awake()
     {
         // Auto-find Animator & SpriteRenderer 
-        animator = GetComponentInChildren<Animator>();
+        //animator = GetComponentInChildren<Animator>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         skills = GetComponentInChildren<Skills>();
         overheat = GetComponent<OverheatSystem>();
 
         controller = GetComponent<PlayerController>();
+        animator = controller.animator;
 
         var pi = GetComponent<PlayerInput>();
         _skill3ChargeAction = pi.actions["Skill3Charge"];

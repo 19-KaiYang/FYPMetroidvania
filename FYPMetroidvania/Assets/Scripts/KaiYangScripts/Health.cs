@@ -119,31 +119,17 @@ public class Health : MonoBehaviour
 
                     landed = touchingGround && stoppedFalling;
                 }
-                // if in air knockdown, don't count down timer 
-                if (isInArcKnockdown)
-                {
-                    if (landed)
-                    {
-                        ccTimer = knockdownRecoveryTime;
-                        isInArcKnockdown = false;
-                    }
-                    else
-                    {
-                        //Debug.Log($"{gameObject.name} still in air knockdown");
-                    }
-                   
-                    return;
-                }
-
                 // Regular knockdown timer countdown (only when grounded)
-                if (ccTimer > 0f)
+
+                if (ccTimer > 0f && !(isPlayer && isInArcKnockdown) && landed)
                 {
+                    if (landed) invincible = true;
                     ccTimer -= Time.deltaTime;
                     //Debug.Log($"{gameObject.name} knockdown recovery timer: {ccTimer:F2}s remaining");
                     if (ccTimer <= 0f)
                     {
                         currentCCState = CrowdControlState.None;
-
+                        invincible = false;
                         // Clear external velocity override for player
                         if (isPlayer)
                         {
@@ -165,7 +151,6 @@ public class Health : MonoBehaviour
                     if (ccTimer <= 0f)
                     {
                         currentCCState = CrowdControlState.None;
-                       // Debug.Log($"{gameObject.name} recovered from CC state");
                     }
                 }
             }
@@ -575,17 +560,7 @@ public class Health : MonoBehaviour
             {
                 Vector2 currentVel = pc.GetVelocity();
                 currentVel.y -= arcKnockdownGravity * Time.deltaTime;
-                pc.SetVelocity(currentVel);
-
-                if (pc.IsGrounded && isInArcKnockdown)
-                {
-
-                    if (currentCCState == CrowdControlState.None)
-                    {
-                        pc.externalVelocityOverride = false;
-                        isInArcKnockdown = false;
-                    }
-                }
+                pc.SetKnockback(currentVel, pc.knockbackTimer);
             }
         }
         else

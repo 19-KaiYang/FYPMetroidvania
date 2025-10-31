@@ -730,7 +730,8 @@ MonoBehaviour:
   attackMultiplier: 2
   finalDamage: 0
   attackDamage: 0
-  knockback: 6
+  knockback: 8
+  ccTime: 0.5
 --- !u!61 &2147137083326911622
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -973,9 +974,6 @@ MonoBehaviour:
   groundleLayer:
     serializedVersion: 2
     m_Bits: 128
-  maxHealth: 0
-  currentHealth: 0
-  isDead: 0
   moveSpeed: 5
   attackDamage: 10
   isFacingRight: 1
@@ -1048,7 +1046,9 @@ MonoBehaviour:
   knockdownLanded: 0
   stunImmune: 0
   knockdownImmune: 0
+  ccTimer: 0
   invincibilityDuration: 0.3
+  invincible: 0
   isBloodMarked: 0
   bloodMarkHealAmount: 10
   bloodMarkIcon: {fileID: 0}
@@ -1283,11 +1283,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b95fea1b004c7247878e15342cdb73d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHitBox
-  currentCCState: 0
+  currentCCState: 1
   attackMultiplier: 1
   finalDamage: 0
   attackDamage: 0
   knockback: 0
+  ccTime: 0.5
 --- !u!61 &1884260015455104130
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1599,11 +1600,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b95fea1b004c7247878e15342cdb73d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHitBox
-  currentCCState: 1
+  currentCCState: 2
   attackMultiplier: 1
   finalDamage: 0
   attackDamage: 0
   knockback: 8
+  ccTime: 1
 --- !u!61 &8130619938128346494
 BoxCollider2D:
   m_ObjectHideFlags: 0

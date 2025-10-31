@@ -86,10 +86,11 @@ public class Dagger : ProjectileBase
         if (collision.CompareTag("Player"))
         {
             Health p = collision.GetComponent<Health>();
+            if (p.invincible) return;
             Vector2 dir;
             dir = (collision.transform.position - this.transform.position).normalized;
 
-            p.TakeDamage(finalDamage, dir, true, CrowdControlState.Knockdown, 0f);
+            p.TakeDamage(finalDamage, dir, true, CrowdControlState.Knockdown, 1f);
 
 
             Despawn();

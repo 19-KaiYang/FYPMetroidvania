@@ -30,7 +30,7 @@ public class DialogueStep
     public string Name;
     public Sprite SpeakerImage;
     public string Text;
-    public SFXTYPE sfx;
+    public SFXTYPE sfx = SFXTYPE.DIALOGUE_1;
     [UnityEngine.Range(0.01f, 3f)]
     public float pitch = 1f;
     public bool autoskip;

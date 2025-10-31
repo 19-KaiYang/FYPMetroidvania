@@ -1,0 +1,99 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 413d64d7f6ce4c54c942e901f83eb9b4, type: 3}
+  m_Name: Opening 3
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueTextSO
+  SpeakerType: 0
+  defaultPlayerImage: {fileID: -3718515074069802047, guid: c7d220190b1b5b14f9eeab2f9df79bb0, type: 3}
+  defaultNPCImage: {fileID: 68631100154771428, guid: cafbf3de4a318164dbd456ea259f370a, type: 3}
+  hasCutscene: 1
+  Steps:
+  - SpeakerType: 1
+    Name: Ruru
+    SpeakerImage: {fileID: 68631100154771428, guid: cafbf3de4a318164dbd456ea259f370a, type: 3}
+    Text: Remember, if you need help, you can always borrow some of my power. Of
+      course as long as you pay back with interest!
+    sfx: 14
+    pitch: 1.2
+    autoskip: 0
+  - SpeakerType: 1
+    Name: Ste_ve
+    SpeakerImage: {fileID: -6372313868896128620, guid: 69b61d5a4814e3b4baa90836be9a2ade, type: 3}
+    Text: "I would say that I could lend you mine, but that hasn\u2019t been added
+      to the game yet so that\u2019ll be a lie. But anyways, good luck."
+    sfx: 14
+    pitch: 0.65
+    autoskip: 0
+  - SpeakerType: 1
+    Name: Ryo
+    SpeakerImage: {fileID: 0}
+    Text: You have my blessing as well.
+    sfx: 14
+    pitch: 0.8
+    autoskip: 0
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: -3718515074069802047, guid: c7d220190b1b5b14f9eeab2f9df79bb0, type: 3}
+    Text: Woah! Since when were you here?
+    sfx: 14
+    pitch: 0.8
+    autoskip: 0
+  - SpeakerType: 1
+    Name: Ryo
+    SpeakerImage: {fileID: 0}
+    Text: "All this while, you just can\u2019t see me."
+    sfx: 14
+    pitch: 0.8
+    autoskip: 0
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: -3718515074069802047, guid: c7d220190b1b5b14f9eeab2f9df79bb0, type: 3}
+    Text: "Are you hiding or\u2026"
+    sfx: 14
+    pitch: 0.8
+    autoskip: 1
+  - SpeakerType: 1
+    Name: Roblin
+    SpeakerImage: {fileID: 0}
+    Text: "The developers haven\u2019t given me a sprite yet."
+    sfx: 14
+    pitch: 0.8
+    autoskip: 0
+  - SpeakerType: 1
+    Name: Ruru
+    SpeakerImage: {fileID: 68631100154771428, guid: cafbf3de4a318164dbd456ea259f370a, type: 3}
+    Text: Tough.
+    sfx: 14
+    pitch: 1.2
+    autoskip: 0
+  - SpeakerType: 1
+    Name: Ryo
+    SpeakerImage: {fileID: 0}
+    Text: Anyways, I shall also lend you my powers should you need it.
+    sfx: 14
+    pitch: 0.8
+    autoskip: 0
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: -3718515074069802047, guid: c7d220190b1b5b14f9eeab2f9df79bb0, type: 3}
+    Text: 'Thanks guys. '
+    sfx: 14
+    pitch: 0.8
+    autoskip: 0
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: -3718515074069802047, guid: c7d220190b1b5b14f9eeab2f9df79bb0, type: 3}
+    Text: 'Time to beat up some knights and cultists, defeat an interdimensional
+      truck god, and go home. '
+    sfx: 14
+    pitch: 0.8
+    autoskip: 0

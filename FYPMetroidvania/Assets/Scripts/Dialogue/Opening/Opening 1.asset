@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 413d64d7f6ce4c54c942e901f83eb9b4, type: 3}
+  m_Name: Opening 1
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueTextSO
+  SpeakerType: 0
+  defaultPlayerImage: {fileID: -3718515074069802047, guid: c7d220190b1b5b14f9eeab2f9df79bb0, type: 3}
+  defaultNPCImage: {fileID: 0}
+  hasCutscene: 1
+  Steps:
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: -3718515074069802047, guid: c7d220190b1b5b14f9eeab2f9df79bb0, type: 3}
+    Text: Alrighty. This is it. No pressure.
+    sfx: 14
+    pitch: 0.8
+    autoskip: 0
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: -3718515074069802047, guid: c7d220190b1b5b14f9eeab2f9df79bb0, type: 3}
+    Text: Just possibly the fate of a whole camp of heroes from across the multiverse
+      at stake. Small beans.
+    sfx: 14
+    pitch: 0.8
+    autoskip: 0
+  - SpeakerType: 1
+    Name: Roblin
+    SpeakerImage: {fileID: -7093195954321390883, guid: 63716a0eaeb89d94d9d8fee6f689a7be, type: 3}
+    Text: "Hey, you\u2019re finally here!"
+    sfx: 14
+    pitch: 1
+    autoskip: 0
