@@ -27,9 +27,12 @@ Shader "Custom/SimpleSpriteBlur"
             // SpriteRenderer-friendly declarations
             TEXTURE2D(_MainTex);
             SAMPLER(sampler_MainTex);
-            float4 _MainTex_TexelSize; // (1/width, 1/height, width, height)
 
-            float _BlurRadiusPx;       // radius in *pixels*
+            CBUFFER_START(UnityPerMaterial)
+            float4 _MainTex_TexelSize;
+            float4 _MainTex_ST;
+            float _BlurRadiusPx;
+            CBUFFER_END
 
             struct appdata
             {
