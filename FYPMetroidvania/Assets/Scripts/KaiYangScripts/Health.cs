@@ -118,10 +118,7 @@ public class Health : MonoBehaviour
                     bool stoppedFalling = rb != null && Mathf.Abs(rb.linearVelocity.y) < 0.1f;
 
                     landed = touchingGround && stoppedFalling;
-
-                    //Debug.Log($"{gameObject.name} - TouchingGround: {touchingGround}, StoppedFalling: {stoppedFalling}, Y velocity: {(rb ? rb.linearVelocity.y : 0f)}");
                 }
-
 
                 // if in air knockdown, don't count down timer 
                 if (isInArcKnockdown)
@@ -130,13 +127,7 @@ public class Health : MonoBehaviour
                     {
                         ccTimer = knockdownRecoveryTime;
                         isInArcKnockdown = false;
-                        //Debug.Log($"{gameObject.name} landed from air knockdown, starting recovery timer ({knockdownRecoveryTime}s)");
                     }
-                    else
-                    {
-                        //Debug.Log($"{gameObject.name} still in air knockdown");
-                    }
-                   
                     return;
                 }
 
@@ -144,20 +135,29 @@ public class Health : MonoBehaviour
                 if (ccTimer > 0f)
                 {
                     ccTimer -= Time.deltaTime;
-                    //Debug.Log($"{gameObject.name} knockdown recovery timer: {ccTimer:F2}s remaining");
                     if (ccTimer <= 0f)
                     {
                         currentCCState = CrowdControlState.None;
 
-                        // Clear external velocity override for player
+                        // IMPORTANT: Clear external velocity override for player
                         if (isPlayer)
                         {
                             var pc = GetComponent<PlayerController>();
                             if (pc != null)
+                            {
                                 pc.externalVelocityOverride = false;
+                                pc.isInKnockback = false;
+                            }
+
+                            // Also reset any stuck skill states
+                            var skills = GetComponent<Skills>();
+                            if (skills != null)
+                            {
+                                skills.ResetState();
+                            }
                         }
 
-                        //Debug.Log($"{gameObject.name} recovered from knockdown - can move again!");
+                        Debug.Log($"{gameObject.name} recovered from knockdown - can move again!");
                     }
                 }
             }
@@ -170,7 +170,45 @@ public class Health : MonoBehaviour
                     if (ccTimer <= 0f)
                     {
                         currentCCState = CrowdControlState.None;
-                       // Debug.Log($"{gameObject.name} recovered from CC state");
+
+                        // IMPORTANT: Clear external velocity override for player
+                        if (isPlayer)
+                        {
+                            var pc = GetComponent<PlayerController>();
+                            if (pc != null)
+                            {
+                                pc.externalVelocityOverride = false;
+                                pc.isInKnockback = false;
+                            }
+
+                            // Also reset any stuck skill states
+                            var skills = GetComponent<Skills>();
+                            if (skills != null)
+                            {
+                                skills.ResetState();
+                            }
+                        }
+
+                        Debug.Log($"{gameObject.name} recovered from CC state");
+                    }
+                }
+            }
+        }
+        else
+        {
+            // NOT IN CC STATE - make sure player isn't stuck
+            if (isPlayer)
+            {
+                var pc = GetComponent<PlayerController>();
+                var skills = GetComponent<Skills>();
+
+                // Safety check: if not in CC and not using skill, clear override
+                if (pc != null && skills != null)
+                {
+                    if (!skills.IsUsingSkill && pc.externalVelocityOverride && !pc.isInKnockback)
+                    {
+                        Debug.LogWarning("Detected stuck state - clearing externalVelocityOverride");
+                        pc.externalVelocityOverride = false;
                     }
                 }
             }
