@@ -31,6 +31,7 @@ public class DaggerCultist : Enemy
     private float dCooldown;
     [SerializeField] private Vector2 daggerCooldown;
     [SerializeField] private float aimingTime;
+    [SerializeField] private float throwingTime;
     [SerializeField] private GameObject daggerPrefab;
     [SerializeField] private Transform throwPoint;
 
@@ -101,14 +102,24 @@ public class DaggerCultist : Enemy
             animator.SetTrigger("aim");
             dCooldown = Random.Range((float)daggerCooldown.x, (float)daggerCooldown.y);
             isAiming = true;
+            line.startColor = Color.yellow;
+            line.endColor = Color.yellow;
+            line.enabled = true;
             yield return new WaitForSeconds(aimingTime);
+            line.startColor = Color.orange;
+            line.endColor = Color.orange;
+            isAiming = false;
+            Vector2 dir = (line.GetPosition(1) - transform.position).normalized;
+            line.SetPosition(1, (Vector2)transform.position + (dir * 30f));
+            yield return new WaitForSeconds(throwingTime);
             //throw dagger
             animator.SetTrigger("attack");
             GameObject daggerObj = Instantiate(daggerPrefab, throwPoint.position, Quaternion.identity);
             Dagger spear = daggerObj.GetComponentInChildren<Dagger>();
             spear.SetOwner(this);
-            spear.Init(attackDamage, this);
 
+            spear.Init(attackDamage, this, dir);
+            line.enabled = false;
             isAiming = false;
             yield return new WaitForSeconds(dCooldown);
             animator.ResetTrigger("attack");
@@ -180,6 +191,7 @@ public class DaggerCultist : Enemy
         public void OnEnter()
         {
             attackRoutine = enemy.StartCoroutine(enemy.ThrowDagger());
+            enemy.line.enabled = true;
         }
         public void OnUpdate()
         {
@@ -187,7 +199,7 @@ public class DaggerCultist : Enemy
             {
                 enemy.stateMachine.ChangeState(new DaggerCultistCCState(enemy));
             }
-            AimingLine();
+            if(enemy.isAiming) AimingLine();
 
             if (!enemy.playerDetected)
             {
@@ -204,14 +216,12 @@ public class DaggerCultist : Enemy
             enemy.isAiming = false;
             enemy.animator.ResetTrigger("attack");
             enemy.animator.ResetTrigger("aim");
+            enemy.line.enabled = false;
         }
         private void AimingLine()
         {
             enemy.line.SetPosition(0, enemy.transform.position);
             enemy.line.SetPosition(1, enemy.player.transform.position);
-
-            if (enemy.isAiming && enemy.playerDetected) enemy.line.enabled = true;
-            else enemy.line.enabled = false;
         }
         //private IEnumerator ThrowDagger()
         //{

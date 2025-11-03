@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85f2735b1d4274748ae03c2735e0e881, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hitbox
+  baseDamage: 0
   damage: 0
   isCritical: 0
   hitstopDuration: 0.08
@@ -185,6 +186,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85f2735b1d4274748ae03c2735e0e881, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hitbox
+  baseDamage: 23
   damage: 23
   isCritical: 0
   hitstopDuration: 0.2
@@ -289,12 +291,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85f2735b1d4274748ae03c2735e0e881, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hitbox
+  baseDamage: 10
   damage: 8
   isCritical: 0
   hitstopDuration: 0.08
   applyHitstop: 0
   X_Knockback: 2
-  Y_Knockback: 12
+  Y_Knockback: 15
   facingRight: 0
   CCType: 1
   CCDuration: 0.5
@@ -393,6 +396,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85f2735b1d4274748ae03c2735e0e881, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hitbox
+  baseDamage: 6
   damage: 0
   isCritical: 0
   hitstopDuration: 0.05
@@ -1383,6 +1387,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85f2735b1d4274748ae03c2735e0e881, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hitbox
+  baseDamage: 0
   damage: 0
   isCritical: 0
   hitstopDuration: 0.08
@@ -1637,6 +1642,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85f2735b1d4274748ae03c2735e0e881, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hitbox
+  baseDamage: 0
   damage: 0
   isCritical: 0
   hitstopDuration: 0.08
@@ -6697,6 +6703,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85f2735b1d4274748ae03c2735e0e881, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hitbox
+  baseDamage: 0
   damage: 0
   isCritical: 0
   hitstopDuration: 0.08
@@ -11637,7 +11644,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85f2735b1d4274748ae03c2735e0e881, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hitbox
-  damage: 0
+  baseDamage: 6
+  damage: 6
   isCritical: 0
   hitstopDuration: 0.05
   applyHitstop: 0
@@ -11741,6 +11749,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85f2735b1d4274748ae03c2735e0e881, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hitbox
+  baseDamage: 0
   damage: 0
   isCritical: 0
   hitstopDuration: 0.08
@@ -11845,6 +11854,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85f2735b1d4274748ae03c2735e0e881, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hitbox
+  baseDamage: 10
   damage: 0
   isCritical: 0
   hitstopDuration: 0.08
@@ -11949,6 +11959,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85f2735b1d4274748ae03c2735e0e881, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hitbox
+  baseDamage: 0
   damage: 0
   isCritical: 0
   hitstopDuration: 0.08
@@ -12118,6 +12129,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85f2735b1d4274748ae03c2735e0e881, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hitbox
+  baseDamage: 15
   damage: 0
   isCritical: 0
   hitstopDuration: 0.2
@@ -12222,6 +12234,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85f2735b1d4274748ae03c2735e0e881, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hitbox
+  baseDamage: 0
   damage: 0
   isCritical: 0
   hitstopDuration: 0.08
@@ -12326,7 +12339,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85f2735b1d4274748ae03c2735e0e881, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hitbox
-  damage: 0
+  baseDamage: 12
+  damage: 10
   isCritical: 0
   hitstopDuration: 0.1
   applyHitstop: 1
@@ -12461,6 +12475,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85f2735b1d4274748ae03c2735e0e881, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hitbox
+  baseDamage: 10
   damage: 10
   isCritical: 0
   hitstopDuration: 0.15
@@ -12557,7 +12572,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 3
   m_Sprite: {fileID: -7534805625062979028, guid: 06ac879f182cf184d8114e0e0c475cb9, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

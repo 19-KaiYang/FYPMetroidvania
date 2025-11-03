@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -115,7 +116,8 @@ public class PlayerController : MonoBehaviour
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
-            isInCutscene = true;
+            if(SceneManager.GetActiveScene().name == "Goblin Camp")
+                isInCutscene = true;
         }
         else
         {

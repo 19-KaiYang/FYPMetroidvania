@@ -622,7 +622,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_TargetDisplay: 0
 --- !u!114 &2740024696592295223
 MonoBehaviour:
@@ -975,7 +975,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   moveSpeed: 5
-  attackDamage: 10
+  attackDamage: 5
   isFacingRight: 1
   isFacingLeft: 0
   distanceToPlayer: {x: 0, y: 0}
@@ -986,12 +986,12 @@ MonoBehaviour:
   knockdownStep: 0
   getUp: 0
   currentState: 
-  detectSize: {x: 13.27, y: 1.93}
+  detectSize: {x: 13.27, y: 6}
   detectOffset: {x: 0, y: 0}
   playerEscapeSize: {x: 27.7, y: 5.42}
   playerEscapeOffset: {x: 0, y: 1}
-  attackArea: {x: 2, y: 1.93}
-  attackAreaOffset: {x: 1.61, y: 0}
+  attackArea: {x: 3.44, y: 1.93}
+  attackAreaOffset: {x: 1.63, y: 0}
   groundCheckSize: 0.1
   groundCheckOffset: {x: -0.12, y: -0.94}
   playerDetected: 0

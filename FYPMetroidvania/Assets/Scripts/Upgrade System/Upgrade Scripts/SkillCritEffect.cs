@@ -31,6 +31,7 @@ public class SkillCritEffect : UpgradeEffect
         {
             context.hitbox.damage *= critDmgMultiplier;
             Debug.Log("Skill CRIT landed on " + context.target.name);
+            context.hitbox.isCritical = true;
         }
     }
 }

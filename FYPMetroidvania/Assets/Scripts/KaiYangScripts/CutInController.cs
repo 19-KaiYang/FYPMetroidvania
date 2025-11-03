@@ -8,6 +8,7 @@ public class CutInController : MonoBehaviour
     private Transform pendingPlayer;
     private Transform pendingTarget;
     private LayerMask pendingEnemyMask;
+    private float pendingHealAmount;
 
     void Start()
     {
@@ -33,12 +34,13 @@ public class CutInController : MonoBehaviour
         }
     }
 
-    public void PlayCutInThenInit(SpiritSlash slash, Transform player, Transform target, LayerMask enemyMask)
+    public void PlayCutInThenInit(SpiritSlash slash, Transform player, Transform target, LayerMask enemyMask, float healamount)
     {
         pendingSlash = slash;
         pendingPlayer = player;
         pendingTarget = target;
         pendingEnemyMask = enemyMask;
+        pendingHealAmount = healamount;
 
         animator.SetTrigger("PlayCutIn");
     }
@@ -47,7 +49,7 @@ public class CutInController : MonoBehaviour
     {
         if (pendingSlash != null)
         {
-            pendingSlash.Init(pendingPlayer, pendingTarget, pendingEnemyMask);
+            pendingSlash.Init(pendingPlayer, pendingTarget, pendingEnemyMask,pendingHealAmount);
             pendingSlash = null;
             pendingPlayer = null;
             pendingTarget = null;

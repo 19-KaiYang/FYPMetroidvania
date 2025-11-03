@@ -1,29 +1,18 @@
 using System;
 using System.Collections.Generic;
+using UnityEditor.PackageManager;
 using UnityEngine;
 using Random = UnityEngine.Random;
-
-public struct SFXTask
-{
-    public AudioClip clip;
-    public float volume;
-    public float pitch;
-    public SFXTask(AudioClip clip, float volume, float pitch)
-    {
-        this.clip = clip;
-        this.volume = volume;
-        this.pitch = pitch;
-    }
-}
 
 public class AudioManager : MonoBehaviour
 {
     public List<SoundEffect> SFXList = new();
     private static Dictionary<SFXTYPE, AudioClip[]> SFXDictionary = new();
+    public List<BGM> BGMList = new();
+    private static Dictionary<BGMType, BGM> BGMDictionary = new(); 
     public static AudioManager instance;
     public AudioSource SFXSource;
     public AudioSource BGMSource;
-    public List<SFXTask> sfxTasks = new();
 
     private void Awake()
     {
@@ -46,6 +35,13 @@ public class AudioManager : MonoBehaviour
                 SFXDictionary.Add(sfx.key, sfx.clips);
             }
         }
+        foreach (var bgm in BGMList)
+        {
+            if (!BGMDictionary.ContainsKey(bgm.key))
+            {
+                BGMDictionary.Add(bgm.key, bgm);
+            }
+        }
     }
     private void Update()
     {
@@ -66,6 +62,25 @@ public class AudioManager : MonoBehaviour
         //BGMSource.volume = volume;  
         BGMSource.Play();
     }
+    public void PlayBGM(BGMType type)
+    {
+        if (!BGMDictionary.ContainsKey(type) || instance.BGMSource == null) return;
+
+        BGM bgm = BGMDictionary[type];
+        BGMSource.clip = bgm.audio;
+        BGMSource.volume = bgm.volume;
+        BGMSource.Play();
+    }
+    public void PlayBGM(string keyname)
+    {
+        BGMType type = (BGMType)Enum.Parse(typeof(BGMType), keyname);
+        if (!BGMDictionary.ContainsKey(type) || instance.BGMSource == null) return;
+
+        BGM bgm = BGMDictionary[type];
+        BGMSource.clip = bgm.audio;
+        BGMSource.volume = bgm.volume;
+        BGMSource.Play();
+    }
     public void StopBGM()
     {
         BGMSource.Stop();
@@ -78,7 +93,6 @@ public class SoundEffect
     public SFXTYPE key;
     public AudioClip[] clips;
 }
-
 public enum SFXTYPE
 {
     NONE,
@@ -104,4 +118,19 @@ public enum SFXTYPE
     ENEMY_ATTACKFLASH,
     HAWK_ATTACK
 }
+[Serializable]
+public class BGM
+{ 
+    public BGMType key;
+    public AudioClip audio;
+    public float volume = 1f;
+}
+public enum BGMType
+{
+    OPENING_CUTSCENE,
+    TOWN_COMBAT,
+    BOSS_PHASE1,
+    BOSS_PHASE2
+}
+
 

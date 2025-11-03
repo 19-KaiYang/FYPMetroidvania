@@ -190,7 +190,8 @@ public class SceneTransitionManager : MonoBehaviour
     {
         currentSceneName = scene.name;
         roomLoaded?.Invoke(currentSceneName);
-        if(currentSceneName == progressionData.startingScene) PlayerController.instance.isInCutscene = true;
+        if (currentSceneName == progressionData.startingScene) PlayerController.instance.isInCutscene = true;
+        else if(currentSceneName != progressionData.EndingScene) AudioManager.instance.PlayBGM(BGMType.TOWN_COMBAT);
     }
     #endregion
 }

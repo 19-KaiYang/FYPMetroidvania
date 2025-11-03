@@ -299,6 +299,13 @@ public class Health : MonoBehaviour
         }
     }
 
+    public void SelfDamage(float amount)
+    {
+        currentHealth -= amount;
+        if (currentHealth <= 0f) currentHealth = 1f;
+        if (spriteRenderer != null && gameObject.activeInHierarchy)
+            StartCoroutine(FlashRed());
+    }
     private void UpdateDebuffs()
     {
         if(debuffs.Count == 0) return;
@@ -501,12 +508,12 @@ public class Health : MonoBehaviour
         spriteRenderer.color = originalColor;
     }
 
-    public void ApplyBloodMark()
+    public void ApplyBloodMark(float healAmount)
     {
         if (!isPlayer && !isBloodMarked)
         {
             isBloodMarked = true;
-
+            bloodMarkHealAmount = healAmount;
             if (bloodMarkIcon != null)
             {
                 bloodMarkIcon.SetActive(true);

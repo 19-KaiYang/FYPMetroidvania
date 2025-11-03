@@ -15,10 +15,17 @@ public class Dagger : ProjectileBase
 
     public float timer;
 
-    public void Init(float _attackDamage, DaggerCultist _enemy)
+    public void Init(float _attackDamage, DaggerCultist _enemy, Vector2 dir)
     {
         ownerAttackDamage = _attackDamage;
         owner = _enemy;
+        rb.linearVelocity = dir * speed;
+
+        playerPosition = PlayerController.instance.transform.position;
+        Vector3 f = transform.localScale;
+        if (playerPosition.x < transform.position.x) f.y = -1;
+        else f.y = 1;
+        transform.localScale = f;
     }
     public void SetOwner(DaggerCultist enemy)
     {
@@ -28,15 +35,7 @@ public class Dagger : ProjectileBase
     protected override void Awake()
     {
         base.Awake();
-        player = FindFirstObjectByType<PlayerController>();
-        playerPosition = player.transform.position;
-        Vector2 dir = (playerPosition - transform.position).normalized;
-        rb.linearVelocity = dir * speed;
-
-        Vector3 f = transform.localScale;
-        if (playerPosition.x < transform.position.x) f.y = -1;
-        else f.y = 1;
-        transform.localScale = f;
+        
     }
     private void Start()
     {

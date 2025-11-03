@@ -374,6 +374,13 @@ MonoBehaviour:
   - key: 21
     clips:
     - {fileID: 8300000, guid: ac55bf4e27998c7498859fb83827f269, type: 3}
+  BGMList:
+  - key: 0
+    audio: {fileID: 8300000, guid: 4decf866f62e53348b47e2ba4fa4d677, type: 3}
+    volume: 0.5
+  - key: 1
+    audio: {fileID: 8300000, guid: fbc22e29c7449804d88cbc9c1958dcf8, type: 3}
+    volume: 0.5
   SFXSource: {fileID: 1761867828731093951}
   BGMSource: {fileID: 6418425531255162442}
 --- !u!114 &887392358450580238
@@ -398,13 +405,13 @@ MonoBehaviour:
         - m_Target: {fileID: 8085505828373033780}
           m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
           m_MethodName: PlayBGM
-          m_Mode: 2
+          m_Mode: 5
           m_Arguments:
-            m_ObjectArgument: {fileID: 8300000, guid: 4decf866f62e53348b47e2ba4fa4d677, type: 3}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
             m_IntArgument: 0
             m_FloatArgument: 0
-            m_StringArgument: 
+            m_StringArgument: OPENING_CUTSCENE
             m_BoolArgument: 0
           m_CallState: 2
     - m_PersistentCalls:
