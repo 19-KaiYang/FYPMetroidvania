@@ -1096,7 +1096,41 @@ public class Skills : MonoBehaviour
 
     public void ResetState()
     {
+        StopAllCoroutines();
+
         usingSkill = false;
+        usingUltimate = false;
+        isCharging = false;
+        IsChargeLocked = false;
+
+        if (sharedChargeParticles != null)
+            sharedChargeParticles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+
+        if (chargeRoutine != null)
+        {
+            chargeRoutine = null;
+        }
+
+        if (swordDashHitbox != null) swordDashHitbox.SetActive(false);
+        if (swordUppercutHitbox != null) swordUppercutHitbox.SetActive(false);
+        if (gauntletShockwaveHitbox != null) gauntletShockwaveHitbox.SetActive(false);
+
+        // Stop dash effects
+        if (dashParticle != null) dashParticle.Stop();
+        if (dashTrails != null)
+        {
+            foreach (var trail in dashTrails)
+            {
+                if (trail != null) trail.emitting = false;
+            }
+        }
+
+        waveStart = false;
+        uppercutStart = false;
+        lungeStart = false;
+
+
+        Hitbox.OnHit -= null; 
     }
 
     //INVOKES ARE HERE

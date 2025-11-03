@@ -162,7 +162,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 5
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -269,9 +269,6 @@ MonoBehaviour:
   groundleLayer:
     serializedVersion: 2
     m_Bits: 128
-  maxHealth: 0
-  currentHealth: 0
-  isDead: 0
   moveSpeed: 0
   attackDamage: 0
   isFacingRight: 1
@@ -281,6 +278,8 @@ MonoBehaviour:
   bloodParticle: {fileID: 3786330769736489564, guid: 132d3cf110e334a4586f49391eea9df5, type: 3}
   damageParticlePos: {fileID: 2306154919855101203}
   bloodParticlePos: {fileID: 2177094167119367268}
+  knockdownStep: 0
+  getUp: 0
   originalPosiiton: {x: 0, y: 0}
   chaseSpeed: 3
   waveAmplitude: 0.3
@@ -331,6 +330,7 @@ MonoBehaviour:
   defaultKnockdownDuration: 2
   knockdownRecoveryTime: 1
   currentCCState: 0
+  knockdownLanded: 0
   stunImmune: 0
   knockdownImmune: 0
   invincibilityDuration: 0.3
@@ -859,7 +859,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 5
   m_Sprite: {fileID: -7166554217582577909, guid: 30ed57690d9982e45bc7fa8512d65788, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

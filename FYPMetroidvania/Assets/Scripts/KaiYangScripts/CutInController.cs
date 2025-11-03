@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CutInController : MonoBehaviour
 {
@@ -16,30 +17,37 @@ public class CutInController : MonoBehaviour
     private void Awake()
     {
         DontDestroyOnLoad(gameObject);
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    // Call this INSTEAD of calling Init directly
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == "MainMenu")
+        {
+            Destroy(gameObject);
+        }
+    }
+
     public void PlayCutInThenInit(SpiritSlash slash, Transform player, Transform target, LayerMask enemyMask)
     {
-        // Store the parameters
         pendingSlash = slash;
         pendingPlayer = player;
         pendingTarget = target;
         pendingEnemyMask = enemyMask;
 
-        // Play the cut-in animation
-        animator.SetTrigger("PlayCutIn"); // Adjust trigger name if needed
+        animator.SetTrigger("PlayCutIn");
     }
 
-    // This method will be called by the Animation Event
     public void OnCutInComplete()
     {
         if (pendingSlash != null)
         {
-            // NOW call Init - this starts the spirit slash effects
             pendingSlash.Init(pendingPlayer, pendingTarget, pendingEnemyMask);
-
-            // Clear references
             pendingSlash = null;
             pendingPlayer = null;
             pendingTarget = null;
