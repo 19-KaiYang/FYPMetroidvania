@@ -309,10 +309,9 @@ public class SpiritSlash : MonoBehaviour
 
         bool hasCutin = (cutinAnimator != null);
 
-        // Store original timescale
-        float originalTimeScale = Time.timeScale;
+      
+        float originalTimeScale = Mathf.Max(Time.timeScale, 1.0f);
 
-        // Freeze gameplay BEFORE cut-in starts
         Time.timeScale = 0f;
 
         if (hasCutin)
