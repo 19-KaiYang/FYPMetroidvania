@@ -86,6 +86,7 @@ public class Health : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         audioSource = GetComponent<AudioSource>();
 
+
         Transform spriteTransform = transform.Find("Sprite");
         if (spriteTransform != null)
         {

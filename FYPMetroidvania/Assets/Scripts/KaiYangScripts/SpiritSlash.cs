@@ -25,7 +25,7 @@ public class SpiritSlash : MonoBehaviour
     public float ccDuration = 1.5f;
 
     [Header("Cutin Animation")]
-    public string cutinCanvasName = "UpdatedPlayerUICanvas";
+    public string cutinCanvasName = "FinalPlayerUICanvas";
     public string cutinTriggerName = "PlayCutIn";
     public float cutinDuration = 1.4f;
 
@@ -304,14 +304,26 @@ public class SpiritSlash : MonoBehaviour
         GameObject cutinCanvas = GameObject.Find(cutinCanvasName);
         Animator cutinAnimator = null;
 
+        Debug.Log($"[SpiritSlash] Looking for canvas: '{cutinCanvasName}'");
+        Debug.Log($"[SpiritSlash] Canvas found: {cutinCanvas != null}");
+
         if (cutinCanvas != null)
+        {
             cutinAnimator = cutinCanvas.GetComponent<Animator>();
+            Debug.Log($"[SpiritSlash] Animator found: {cutinAnimator != null}");
+        }
+        else
+        {
+            Debug.LogError($"[SpiritSlash] Could not find GameObject named '{cutinCanvasName}'!");
+        }
 
         bool hasCutin = (cutinAnimator != null);
+        Debug.Log($"[SpiritSlash] Has cutin: {hasCutin}");
 
-      
+        // Store original timescale - BUT ensure it's at least 1.0
         float originalTimeScale = Mathf.Max(Time.timeScale, 1.0f);
 
+        // Freeze gameplay BEFORE cut-in starts
         Time.timeScale = 0f;
 
         if (hasCutin)
@@ -328,11 +340,16 @@ public class SpiritSlash : MonoBehaviour
                 yield return null;
             }
         }
+        else
+        {
+            Debug.LogWarning("[SpiritSlash] Skipping cut-in - no animator found");
+        }
 
         yield return new WaitForSecondsRealtime(0.05f);
 
         yield return StartCoroutine(DramaticSpawn());
         PlayerController.instance.SetHitstop(false);
+
         // Restore time after everything
         Time.timeScale = originalTimeScale;
 
