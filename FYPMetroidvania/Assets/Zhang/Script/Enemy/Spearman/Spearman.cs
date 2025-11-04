@@ -74,6 +74,7 @@ public class Spearman : Enemy
         Collider2D ground = Physics2D.OverlapCircle((Vector2)transform.position + groundCheckOffset, groundCheckSize, groundleLayer);
         if (ground != null) isGround = true;
         else isGround = false;
+        if (isOnPlatform) isGround = true;
 
         Collider2D pDetected = Physics2D.OverlapBox((Vector2)transform.position + detectOffset, detectSize, 0f, playerLayer);
         Collider2D pEscaped = Physics2D.OverlapBox((Vector2)transform.position + playerEscapeOffset, playerEscapeSize, 0f, playerLayer);
