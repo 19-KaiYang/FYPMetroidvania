@@ -18,6 +18,10 @@ public class Skills : MonoBehaviour
     private GauntletCannon activeCannon;
 
 
+    [SerializeField] private float skillTimeoutDuration = 1f;
+    [SerializeField] private float skillTimer = 0f;
+
+
     // global skill gate
     public bool usingSkill = false;
     public bool IsUsingSkill => usingSkill;
@@ -271,9 +275,27 @@ public class Skills : MonoBehaviour
         if (gauntletShockCooldownTimer > 0f) gauntletShockCooldownTimer -= Time.deltaTime;
         if (swordUppercutCooldownTimer > 0f) swordUppercutCooldownTimer -= Time.deltaTime;
 
+        if (usingSkill)
+        {
+            skillTimer += Time.deltaTime;
+            if (skillTimer >= skillTimeoutDuration)
+            {
+                usingSkill = false;
+                skillTimer = 0f;
+
+                if (controller)
+                {
+                    controller.externalVelocityOverride = false;
+                    controller.SetHitstop(false);
+                }
+            }
+        }
+        else
+        {
+            skillTimer = 0f; 
+        }
 
 
-     
     }
 
     #region CombatSystem API
@@ -485,6 +507,7 @@ public class Skills : MonoBehaviour
 
         controller.animator.SetBool("IsAttacking", false);
         usingSkill = true;
+        skillTimer = 0f;
         waveStart = false;
         controller.externalVelocityOverride = true;
         controller.rb.linearVelocity = Vector2.zero;
@@ -512,8 +535,10 @@ public class Skills : MonoBehaviour
     {
         controller.animator.SetBool("IsAttacking", false);
         usingSkill = true;
+        skillTimer = 0f;
         swordDashCooldownTimer = swordDashCooldown;
         lungeStart = false;
+
 
         controller.externalVelocityOverride = true;
         controller.rb.linearVelocity = Vector2.zero;
@@ -534,6 +559,8 @@ public class Skills : MonoBehaviour
 
         Vector2 dir = controller.facingRight ? Vector2.right : Vector2.left;
         float t = 0f;
+
+        controller.animator.ResetTrigger("Sword Lunge");
         controller.animator.SetTrigger("Sword Lunge");
         while(!lungeStart) yield return null;
 
@@ -614,12 +641,17 @@ public class Skills : MonoBehaviour
         dashParticle.Stop();
         foreach (var trail in dashTrails) trail.emitting = false;
 
+        controller.animator.ResetTrigger("Sword Lunge");
+        lungeStart = false;
+
         usingSkill = false;
     }
     private IEnumerator Skill_SwordUppercut()
     {
         controller.animator.SetBool("IsAttacking", false);
         usingSkill = true;
+        skillTimer = 0f;
+        skillTimer = 0f;
         uppercutStart = false;
         swordUppercutCooldownTimer = swordUppercutCooldown;
 
