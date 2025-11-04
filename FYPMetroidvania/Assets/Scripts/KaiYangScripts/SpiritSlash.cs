@@ -91,6 +91,12 @@ public class SpiritSlash : MonoBehaviour
 
     private void Update()
     {
+        // Debug to not get softlocked
+        if(Input.GetKeyDown(KeyCode.Plus))
+        {
+            Time.timeScale = 1.0f;
+        }
+
         // Don't move until fully initialized (after cutin + dramatic spawn)
         if (!isFullyInitialized) return;
 
@@ -327,7 +333,7 @@ public class SpiritSlash : MonoBehaviour
         yield return new WaitForSecondsRealtime(0.05f);
 
         yield return StartCoroutine(DramaticSpawn());
-
+        PlayerController.instance.SetHitstop(false);
         // Restore time after everything
         Time.timeScale = originalTimeScale;
 

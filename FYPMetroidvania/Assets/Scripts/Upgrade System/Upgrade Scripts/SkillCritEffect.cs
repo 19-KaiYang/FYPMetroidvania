@@ -11,6 +11,7 @@ public class SkillCritEffect : UpgradeEffect
     public override void DoEffect(ActionContext context)
     {
         if (context.hitbox == null || context.skillSystem == null || context.target == null) return;
+        if(context.hitbox.isCritical) return;
 
         float finalCrit = critChance;
 
