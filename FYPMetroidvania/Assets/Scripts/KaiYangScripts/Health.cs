@@ -209,7 +209,7 @@ public class Health : MonoBehaviour
                 // Safety check: if not in CC and not using skill, clear override
                 if (pc != null && skills != null)
                 {
-                    if (!skills.IsUsingSkill && pc.externalVelocityOverride && !pc.isInKnockback && !combat.isAttacking)
+                    if (!skills.IsUsingSkill && pc.externalVelocityOverride && !pc.isInKnockback && !combat.isAttacking && !pc.isDashing)
                     {
                         Debug.LogWarning("Detected stuck state - clearing externalVelocityOverride");
                         pc.externalVelocityOverride = false;

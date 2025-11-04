@@ -81,7 +81,7 @@ public class PlayerController : MonoBehaviour
     private Vector2 dashDirection;
     private Vector2 velocity;
 
-    private bool isDashing;
+    public bool isDashing;
     private float dashTimer;
     private float dashCooldownTimer;
 
