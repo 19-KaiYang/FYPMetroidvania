@@ -5,6 +5,8 @@ using TMPro;
 
 public class UpgradeDescriptionUI : MonoBehaviour
 {
+    private static UpgradeDescriptionUI instance;
+
     [Header("UI References")]
     [SerializeField] private GameObject panelBackground;
     [SerializeField] private GameObject upgradePanel;    
@@ -22,10 +24,16 @@ public class UpgradeDescriptionUI : MonoBehaviour
 
     void Awake()
     {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else Destroy(gameObject);
+
         if (toggleButton)
             toggleButton.onClick.AddListener(TogglePanels);
 
-        DontDestroyOnLoad(gameObject);
     }
 
     void Start()

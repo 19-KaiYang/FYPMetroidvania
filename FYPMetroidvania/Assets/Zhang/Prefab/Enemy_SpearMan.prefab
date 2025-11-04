@@ -270,6 +270,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 5180712474465827317}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1562584372181790117
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8345976199276818450}
+  m_Layer: 6
+  m_Name: GroundCheck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8345976199276818450
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1562584372181790117}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.873, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5180712474465827317}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1622291904529723399
 GameObject:
   m_ObjectHideFlags: 0
@@ -5547,6 +5578,7 @@ RectTransform:
   m_Children:
   - {fileID: 5589993661541007395}
   - {fileID: 3175681851646992484}
+  - {fileID: 2592531703050335147}
   m_Father: {fileID: 5180712474465827317}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -6009,7 +6041,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.2D.Runtime::UnityEngine.Rendering.Universal.ShadowCaster2D
   m_ShadowGroup: 0
-  m_Priority: 0
+  m_Priority: 2
   m_ComponentVersion: 5
   m_HasRenderer: 1
   m_UseRendererSilhouette: 1
@@ -6069,7 +6101,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5180712474465827317
 Transform:
   m_ObjectHideFlags: 0
@@ -6091,6 +6123,7 @@ Transform:
   - {fileID: 7397686422016457685}
   - {fileID: 8687817161233866175}
   - {fileID: 4283411526032220930}
+  - {fileID: 8345976199276818450}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1219375631403177790
@@ -6246,11 +6279,16 @@ MonoBehaviour:
   groundleLayer:
     serializedVersion: 2
     m_Bits: 128
+  platformLayer:
+    serializedVersion: 2
+    m_Bits: 512
   moveSpeed: 3
   attackDamage: 6
   isFacingRight: 1
   isFacingLeft: 0
   distanceToPlayer: {x: 0, y: 0}
+  groundCheck: {fileID: 8345976199276818450}
+  groundCheckRadius: 0.1
   damageParticle: {fileID: 6966180119663813987, guid: edda90ab5a07d484ca1c0c2ce435f1a7, type: 3}
   bloodParticle: {fileID: 3786330769736489564, guid: 132d3cf110e334a4586f49391eea9df5, type: 3}
   damageParticlePos: {fileID: 2738677383517438410}
@@ -6322,5 +6360,112 @@ MonoBehaviour:
   invincible: 0
   isBloodMarked: 0
   bloodMarkHealAmount: 10
-  bloodMarkIcon: {fileID: 0}
+  bloodMarkIcon: {fileID: 2055024200357677500}
   debuffVFXs: []
+--- !u!1001 &7128687763136487302
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 4283411526032220930}
+    m_Modifications:
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_Pivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_Pivot.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0.8345
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0.8345
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9570669
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.28986716
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.56
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 33.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 9109311307756738106, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_Name
+      value: Blood Mark
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+--- !u!1 &2055024200357677500 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9109311307756738106, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+  m_PrefabInstance: {fileID: 7128687763136487302}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &2592531703050335147 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+  m_PrefabInstance: {fileID: 7128687763136487302}
+  m_PrefabAsset: {fileID: 0}

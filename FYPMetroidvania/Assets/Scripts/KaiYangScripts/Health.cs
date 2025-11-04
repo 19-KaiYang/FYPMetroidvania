@@ -12,7 +12,11 @@ public enum CrowdControlState
     Knockdown
 }
 public class Health : MonoBehaviour
-{
+{   
+    private PlayerController pc;
+    private Skills skills;
+    private CombatSystem combat;
+
     [Header("Health Settings")]
     public float maxHealth = 100f;
     public bool destroyOnDeath = true;
@@ -101,6 +105,13 @@ public class Health : MonoBehaviour
             spriteRenderer = GetComponent<SpriteRenderer>();
         }
         originalColor = spriteRenderer.color;
+        pc = GetComponent<PlayerController>();
+        skills = GetComponent<Skills>();
+        combat = GetComponent<CombatSystem>();
+        if (bloodMarkIcon != null)
+        {
+            bloodMarkIcon.SetActive(false);
+        }
     }
 
     private void Update()
@@ -142,7 +153,6 @@ public class Health : MonoBehaviour
                         // Clear external velocity override for player
                         if (isPlayer)
                         {
-                            var pc = GetComponent<PlayerController>();
                             if (pc != null)
                             {
                                 pc.externalVelocityOverride = false;
@@ -150,7 +160,6 @@ public class Health : MonoBehaviour
                             }
 
                             // Also reset any stuck skill states
-                            var skills = GetComponent<Skills>();
                             if (skills != null)
                             {
                                 skills.ResetState();
@@ -174,7 +183,6 @@ public class Health : MonoBehaviour
                         // IMPORTANT: Clear external velocity override for player
                         if (isPlayer)
                         {
-                            var pc = GetComponent<PlayerController>();
                             if (pc != null)
                             {
                                 pc.externalVelocityOverride = false;
@@ -182,7 +190,6 @@ public class Health : MonoBehaviour
                             }
 
                             // Also reset any stuck skill states
-                            var skills = GetComponent<Skills>();
                             if (skills != null)
                             {
                                 skills.ResetState();
@@ -199,13 +206,10 @@ public class Health : MonoBehaviour
             // NOT IN CC STATE - make sure player isn't stuck
             if (isPlayer)
             {
-                var pc = GetComponent<PlayerController>();
-                var skills = GetComponent<Skills>();
-
                 // Safety check: if not in CC and not using skill, clear override
                 if (pc != null && skills != null)
                 {
-                    if (!skills.IsUsingSkill && pc.externalVelocityOverride && !pc.isInKnockback)
+                    if (!skills.IsUsingSkill && pc.externalVelocityOverride && !pc.isInKnockback && !combat.isAttacking)
                     {
                         Debug.LogWarning("Detected stuck state - clearing externalVelocityOverride");
                         pc.externalVelocityOverride = false;
@@ -375,8 +379,6 @@ public class Health : MonoBehaviour
 
         if (bloodMarkIcon != null)
         {
-            var sr = bloodMarkIcon.GetComponent<SpriteRenderer>();
-            if (sr != null) sr.enabled = false;
             bloodMarkIcon.SetActive(false);
         }
 
@@ -527,9 +529,6 @@ public class Health : MonoBehaviour
             if (bloodMarkIcon != null)
             {
                 bloodMarkIcon.SetActive(true);
-
-                var sr = bloodMarkIcon.GetComponent<SpriteRenderer>();
-                if (sr != null) sr.enabled = true;
             }
         }
     }
