@@ -85,7 +85,16 @@ public class Health : MonoBehaviour
         currentHealth = maxHealth;
         rb = GetComponent<Rigidbody2D>();
         audioSource = GetComponent<AudioSource>();
-        animator = GetComponentInChildren<Animator>();
+
+        Transform spriteTransform = transform.Find("Sprite");
+        if (spriteTransform != null)
+        {
+            animator = spriteTransform.GetComponent<Animator>();
+        }
+        else
+        {
+            animator = GetComponentInChildren<Animator>();
+        }
         if (spriteRenderer == null)
         {
             spriteRenderer = GetComponent<SpriteRenderer>();
