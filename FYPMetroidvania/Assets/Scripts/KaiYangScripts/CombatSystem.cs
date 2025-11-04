@@ -616,7 +616,6 @@ public class CombatSystem : MonoBehaviour
         canTransition = true;
         isBuffered = false;
     }
-
     public void SetCanTransition(int comboEnd)
     {
         Debug.Log("attack can be cancelled");
@@ -632,8 +631,7 @@ public class CombatSystem : MonoBehaviour
     }
     public void SetEndAnimation()
     {
-        Debug.Log("End of attack animation");
-        //isAttacking = false;
+        //if(isAttacking) isAttacking = false;
         animator.SetBool("IsAttacking", false);
     }
     public float GetAttackDamage(int attackNumber)

@@ -49,6 +49,7 @@ public class PlayerController : MonoBehaviour
     public float dashCooldown = 1f;
     public int dashCount = 1;
     public int dashesRemaining;
+    public TrailRenderer dashTrail;
 
     [Header("Wall Jump")]
     public float wallCheckDistance = 0.3f;
@@ -142,6 +143,7 @@ public class PlayerController : MonoBehaviour
         lastPosition = transform.position;
         // Initialize dash count
         dashesRemaining = dashCount;
+        if (dashTrail != null) dashTrail.emitting = false;
     }
 
     private void Update()
@@ -232,7 +234,6 @@ public class PlayerController : MonoBehaviour
             currentKnockdownPhase = 0;
             wasGroundedLastFrame = false;
             knockdownPhaseTimer = 0f;
-            externalVelocityOverride = false;
         }
 
         // Stop player movement and input while CC active
@@ -267,6 +268,8 @@ public class PlayerController : MonoBehaviour
             if (dashTimer <= 0f)
             {
                 isDashing = false;
+                animator.SetBool("isDashing", false);
+                dashTrail.emitting = false;
                 if (Mathf.Abs(velocity.y) > 0.1f)
                     velocity.y *= 0.3f;
             }
@@ -336,7 +339,7 @@ public class PlayerController : MonoBehaviour
         //Flipping of sprites
         bool isKnockedDown = health != null && health.currentCCState == CrowdControlState.Knockdown;
 
-        if (!isKnockedDown)
+        if (!isKnockedDown && !skills.IsUsingSkill && !combat.isAttacking)
         {
             if (moveInput.x > 0 && !facingRight)
                 Flip();
@@ -519,7 +522,6 @@ public class PlayerController : MonoBehaviour
     public void OnDash()
     {
         if (skills != null && skills.IsUsingSkill) return;
-        if (combat != null && combat.isAttacking) return;
         if (isInCutscene) return;
         if (dashCooldownTimer > 0f) return;
         if (dashesRemaining <= 0) return;
@@ -532,9 +534,14 @@ public class PlayerController : MonoBehaviour
         isDashing = true;
         dashTimer = dashDuration;
         velocity = dashDirection * dashSpeed;
-
+        animator.SetBool("isDashing", true);
+        dashTrail.emitting = true;
         dashesRemaining--;
-
+        if (combat != null && combat.isAttacking){
+            combat.SetCanTransition(1);
+            animator.SetBool("IsAttacking", false);
+            combat.HideVFX();
+        }
         AudioManager.PlaySFX(SFXTYPE.PLAYER_DASH);
 
 
