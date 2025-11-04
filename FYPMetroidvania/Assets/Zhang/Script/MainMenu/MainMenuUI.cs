@@ -81,4 +81,8 @@ public class MainMenuUI : MonoBehaviour
         if (currentScene != "MainMenu") pausePanel.SetActive(true);
         else MainMenu.SetActive(true);
     }
+    public void EndGame()
+    {
+        Application.Quit();
+    }
 }

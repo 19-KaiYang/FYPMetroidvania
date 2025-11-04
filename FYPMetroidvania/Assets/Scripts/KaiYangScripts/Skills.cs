@@ -301,7 +301,7 @@ public class Skills : MonoBehaviour
     #region CombatSystem API
     public void TryUseSwordDash()
     {
-        if (usingSkill || combat.isAttacking) return;
+        if (usingSkill || combat.isAttacking || controller.isInCutscene || controller.isDashing) return;
         if (swordDashCooldownTimer > 0f) return;
 
     
@@ -323,7 +323,7 @@ public class Skills : MonoBehaviour
     }
     public void TryUseSwordUppercut()
     {
-        if (usingSkill || combat.isAttacking || controller.animator.GetCurrentAnimatorStateInfo(0).IsName("Ascending Slash")) return;
+        if (usingSkill || combat.isAttacking || controller.animator.GetCurrentAnimatorStateInfo(0).IsName("Ascending Slash") || controller.isInCutscene || controller.isDashing) return;
         if (swordUppercutCooldownTimer > 0f) return;
 
         if (!PlayerController.instance.IsGrounded && PlayerController.instance.HasAirUppercut)
@@ -343,7 +343,7 @@ public class Skills : MonoBehaviour
     }
     public void TryUseSwordCrimsonWave()
     {
-        if (usingSkill || combat.isAttacking) return;
+        if (usingSkill || combat.isAttacking || controller.isInCutscene || controller.isDashing) return;
         float cost = swordSlashEnergyCost;
         if (cost < 0) cost = 0;
 

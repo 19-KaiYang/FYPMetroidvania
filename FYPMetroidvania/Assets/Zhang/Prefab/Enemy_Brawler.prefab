@@ -1009,7 +1009,7 @@ MonoBehaviour:
   jumpForceX: 0
   gravityA: 3
   gravityB: 3
-  distanceOffset: 2
+  distanceOffset: 4
   maxJumpRange: 50
   jumpHitbox: {fileID: 7688238546090216199}
   jumpTrail: {fileID: 5057681478030813393}
@@ -1029,7 +1029,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af196f38ea8868b40a61bf0922e5bf00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Health
-  maxHealth: 300
+  maxHealth: 175
   destroyOnDeath: 0
   isPlayer: 0
   currentHealth: 0
