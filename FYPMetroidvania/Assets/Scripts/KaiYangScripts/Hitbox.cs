@@ -9,6 +9,7 @@ public class Hitbox : MonoBehaviour
     private Skills skills;
 
     [Header("Damage")]
+    public float baseDamage;
     public float damage;
     public bool isCritical = false;
 
@@ -49,9 +50,9 @@ public class Hitbox : MonoBehaviour
     {
         hitEnemies.Clear();
         isCritical = false;
-        if (!isSkillHitbox && owner != null)
+        if (owner != null)
         {
-            damage = owner.GetAttackDamage(owner.CurrentComboStep);
+            damage = baseDamage;
             facingRight = PlayerController.instance.facingRight;
         }
     }
@@ -88,11 +89,6 @@ public class Hitbox : MonoBehaviour
                 OnHit?.Invoke(this, h);
                 float directionalXknockback = PlayerController.instance.facingRight ? X_Knockback : -X_Knockback;
                 h.TakeDamage(damage, new Vector2(directionalXknockback, Y_Knockback), false, CCType, CCDuration);
-
-                if (!h.isPlayer && applyBloodMark)
-                {
-                    h.ApplyBloodMark();
-                }
                 if (applyHitstop)
                 {
                     StartCoroutine(LocalHitstop(owner.GetComponent<Rigidbody2D>(), hitstopDuration));

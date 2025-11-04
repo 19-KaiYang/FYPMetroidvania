@@ -7,5 +7,6 @@ using UnityEngine.SceneManagement;
 public class ProgressionData : ScriptableObject
 {
     public List<string> rooms = new();
+    public string startingScene;
     public string EndingScene;
 }

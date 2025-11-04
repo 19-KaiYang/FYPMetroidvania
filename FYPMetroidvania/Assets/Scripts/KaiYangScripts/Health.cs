@@ -52,12 +52,12 @@ public class Health : MonoBehaviour
     public bool stunImmune = false;
     public bool knockdownImmune = false;
 
-    private float ccTimer = 0f;
+    public float ccTimer = 0f;
 
     public float invincibilityDuration = 0.3f; // player only
     private Animator animator;
 
-    private bool invincible = false;
+    public bool invincible = false;
 
     //Enemy Use
     [Header("Blood Mark")]
@@ -119,27 +119,17 @@ public class Health : MonoBehaviour
 
                     landed = touchingGround && stoppedFalling;
                 }
-
-                // if in air knockdown, don't count down timer 
-                if (isInArcKnockdown)
-                {
-                    if (landed)
-                    {
-                        ccTimer = knockdownRecoveryTime;
-                        isInArcKnockdown = false;
-                    }
-                    return;
-                }
-
                 // Regular knockdown timer countdown (only when grounded)
-                if (ccTimer > 0f)
+
+                if (ccTimer > 0f && !(isPlayer && isInArcKnockdown) && landed)
                 {
+                    if (landed) invincible = true;
                     ccTimer -= Time.deltaTime;
                     if (ccTimer <= 0f)
                     {
                         currentCCState = CrowdControlState.None;
-
-                        // IMPORTANT: Clear external velocity override for player
+                        invincible = false;
+                        // Clear external velocity override for player
                         if (isPlayer)
                         {
                             var pc = GetComponent<PlayerController>();
@@ -164,7 +154,7 @@ public class Health : MonoBehaviour
             else
             {
                 // For stun and other CC states, count down normally
-                if (ccTimer > 0f)
+                if (ccTimer >= 0f)
                 {
                     ccTimer -= Time.deltaTime;
                     if (ccTimer <= 0f)
@@ -309,6 +299,13 @@ public class Health : MonoBehaviour
         }
     }
 
+    public void SelfDamage(float amount)
+    {
+        currentHealth -= amount;
+        if (currentHealth <= 0f) currentHealth = 1f;
+        if (spriteRenderer != null && gameObject.activeInHierarchy)
+            StartCoroutine(FlashRed());
+    }
     private void UpdateDebuffs()
     {
         if(debuffs.Count == 0) return;
@@ -511,12 +508,12 @@ public class Health : MonoBehaviour
         spriteRenderer.color = originalColor;
     }
 
-    public void ApplyBloodMark()
+    public void ApplyBloodMark(float healAmount)
     {
         if (!isPlayer && !isBloodMarked)
         {
             isBloodMarked = true;
-
+            bloodMarkHealAmount = healAmount;
             if (bloodMarkIcon != null)
             {
                 bloodMarkIcon.SetActive(true);
@@ -549,6 +546,7 @@ public class Health : MonoBehaviour
             var pc = GetComponent<PlayerController>();
             if (pc != null)
             {
+                Debug.Log("arc knockdown");
                 pc.SetVelocity(Vector2.zero);
                 float xDir = pc.facingRight ? -1f : 1f;
                 Vector2 arcKnockback = new Vector2(xDir * 10f, 8f) * knockbackMult;
@@ -617,17 +615,7 @@ public class Health : MonoBehaviour
             {
                 Vector2 currentVel = pc.GetVelocity();
                 currentVel.y -= arcKnockdownGravity * Time.deltaTime;
-                pc.SetVelocity(currentVel);
-
-                if (pc.IsGrounded && isInArcKnockdown)
-                {
-
-                    if (currentCCState == CrowdControlState.None)
-                    {
-                        pc.externalVelocityOverride = false;
-                        isInArcKnockdown = false;
-                    }
-                }
+                pc.SetKnockback(currentVel, pc.knockbackTimer);
             }
         }
         else

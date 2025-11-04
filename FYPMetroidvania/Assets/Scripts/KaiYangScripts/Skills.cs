@@ -25,7 +25,6 @@ public class Skills : MonoBehaviour
     private bool usingUltimate = false;
     public bool IsUsingUltimate => usingUltimate;
 
-
     // SKILL EVENTS - for ian
     public static event System.Action<Hitbox> skillStart;
     public static event System.Action skillEnd;
@@ -235,7 +234,10 @@ public class Skills : MonoBehaviour
 
     [Header("Spirit Gain")]
     public float spiritGainPerHit = 5f;   
-    public float spiritGainPerSkill = 10f; 
+    public float spiritGainPerSkill = 10f;
+
+    [Header("Blood Mark Heal")]
+    public float bloodMarkHealAmount = 20f;
 
     #endregion
 
@@ -422,7 +424,7 @@ public class Skills : MonoBehaviour
 
         if (slashComp != null)
         {
-            slashComp.Init(transform, firstTarget, enemyMask);
+            slashComp.Init(transform, firstTarget, enemyMask, bloodMarkHealAmount);
         }
 
         while (!spirit.IsEmpty)
@@ -476,6 +478,11 @@ public class Skills : MonoBehaviour
     #region Sword Skills
     private IEnumerator Skill_SwordWave()
     {
+        if (health != null && swordSlashBloodCost > 0f)
+        {
+            health.SelfDamage(swordSlashBloodCost);
+        }
+
         controller.animator.SetBool("IsAttacking", false);
         usingSkill = true;
         waveStart = false;
@@ -511,6 +518,11 @@ public class Skills : MonoBehaviour
         controller.externalVelocityOverride = true;
         controller.rb.linearVelocity = Vector2.zero;
 
+        if (health != null && swordDashHealthCost > 0f)
+        {
+            health.SelfDamage(swordDashHealthCost);
+        }
+
         int playerLayer = gameObject.layer;
         int enemyLayer = SingleLayerIndex(enemyMask);
         bool collisionToggled = false;
@@ -536,14 +548,8 @@ public class Skills : MonoBehaviour
             //h.TakeDamage(dashFlatDamage, knockDir, false, CrowdControlState.None, 0f, true, false, 0f);
 
             // Spirit + BloodMark + HealthCost (only Sword)
-            h.ApplyBloodMark();
+            h.ApplyBloodMark(bloodMarkHealAmount);
             GainSpirit(spiritGainPerHit);
-
-            if (health != null && swordDashHealthCost > 0f)
-            {
-                float safeCost = Mathf.Min(swordDashHealthCost, health.CurrentHealth - 1f);
-                if (safeCost > 0f) health.TakeDamage(safeCost);
-            }
 
             // Local hitstop
             //if (hitstop > 0f)
@@ -621,6 +627,11 @@ public class Skills : MonoBehaviour
 
         AudioManager.PlaySFX(SFXTYPE.SWORD_UPPERCUT);
 
+        if (health != null && swordUppercutHealthCost > 0f)
+        {
+            health.SelfDamage(swordUppercutHealthCost);
+        }
+
         // Disable collisions with enemies temporarily
         int playerLayer = gameObject.layer;
         int enemyLayer = SingleLayerIndex(enemyMask);
@@ -638,21 +649,8 @@ public class Skills : MonoBehaviour
         void OnUppercutHit(Hitbox hb, Health h)
         {
             if (h == null || h.isPlayer) return;
-            h.ApplyBloodMark();
+            h.ApplyBloodMark(bloodMarkHealAmount);
             GainSpirit(spiritGainPerHit);
-
-            if (health != null && swordUppercutHealthCost > 0f)
-            {
-                float safeCost = Mathf.Min(swordUppercutHealthCost, health.CurrentHealth - 1f);
-                if (safeCost > 0f) health.TakeDamage(safeCost);
-            }
-
-            // Local hitstop
-            //if (hitstop > 0f)
-            //{
-            //    StartCoroutine(LocalHitstop(h.GetComponent<Rigidbody2D>(), hitstop));
-            //    StartCoroutine(LocalHitstop(rb, hitstop));
-            //}
         }
 
         Hitbox.OnHit += OnUppercutHit;

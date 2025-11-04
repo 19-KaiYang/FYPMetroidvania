@@ -76,7 +76,7 @@ public class CombatSystem : MonoBehaviour
 
     private List<GameObject> activeHitboxes;
 
-    private Animator animator;
+    [SerializeField] private Animator animator;
     private SpriteRenderer spriteRenderer;
     private PlayerController controller;
 
@@ -116,12 +116,13 @@ public class CombatSystem : MonoBehaviour
     private void Awake()
     {
         // Auto-find Animator & SpriteRenderer 
-        animator = GetComponentInChildren<Animator>();
+        //animator = GetComponentInChildren<Animator>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         skills = GetComponentInChildren<Skills>();
         overheat = GetComponent<OverheatSystem>();
 
         controller = GetComponent<PlayerController>();
+        animator = controller.animator;
 
         var pi = GetComponent<PlayerInput>();
         _skill3ChargeAction = pi.actions["Skill3Charge"];
@@ -140,6 +141,7 @@ public class CombatSystem : MonoBehaviour
 
     private void Update()
     {
+        if (controller.isInCutscene) return;
         int playerLayer = gameObject.layer;
         int enemyLayer = LayerMask.NameToLayer("EnemyLayer");
         Physics2D.IgnoreLayerCollision(playerLayer, enemyLayer, true);
@@ -371,7 +373,7 @@ public class CombatSystem : MonoBehaviour
         if (skills != null && skills.IsUsingSkill && !skills.IsUsingUltimate) return;
         if (currentWeapon == WeaponType.None) return;
         if (attackCooldownTimer > 0f) return;
-
+        if (controller.isInCutscene) return;
 
         bool up = Keyboard.current.wKey.isPressed;
         bool down = Keyboard.current.sKey.isPressed;

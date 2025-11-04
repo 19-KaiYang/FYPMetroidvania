@@ -83,18 +83,10 @@ public class SwordSlashProjectile : ProjectileBase
             float directionalXknockback = rb.linearVelocity.x > 0 ? X_Knockback : -X_Knockback;
             // Damage without knockback (CC handles it)
             enemy.TakeDamage(damage, new Vector2(directionalXknockback, Y_Knockback), false, crowdControl, ccDuration);
-            enemy.ApplyBloodMark();
+            enemy.ApplyBloodMark(20f);
             impactParticle.transform.SetParent(null);
             impactParticle.transform.position = transform.position;
             impactParticle.SetActive(true);
-
-            // Blood cost
-            if (playerHealth != null && bloodCost > 0f)
-            {
-                float safeCost = Mathf.Min(bloodCost, playerHealth.CurrentHealth - 1f);
-                if (safeCost > 0f)
-                    playerHealth.TakeDamage(safeCost);
-            }
 
             Despawn();
         }

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -84,10 +85,10 @@ public class PlayerController : MonoBehaviour
     private float dashCooldownTimer;
 
     private int currentKnockdownPhase = 0;
-    private bool wasGroundedLastFrame = false;
+    public bool wasGroundedLastFrame = false;
     private float knockdownPhaseTimer = 0f;
 
-    [HideInInspector] public bool externalVelocityOverride = false;
+    public bool externalVelocityOverride = false;
 
     // Jump control
     private bool jumpLocked = false;
@@ -105,8 +106,9 @@ public class PlayerController : MonoBehaviour
 
     public bool isInHitstop { get; private set; }
     public Vector2 GetVelocity() => velocity;
-
     public Vector2 CurrentVelocity => velocity;
+
+    public bool isInCutscene;
 
     private void Awake()
     {
@@ -114,6 +116,8 @@ public class PlayerController : MonoBehaviour
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
+            if(SceneManager.GetActiveScene().name == "Goblin Camp")
+                isInCutscene = true;
         }
         else
         {
@@ -143,6 +147,7 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         if (isInHitstop) return;
+        if (isInCutscene) return;
 
         var health = GetComponent<Health>();
 
@@ -169,15 +174,21 @@ public class PlayerController : MonoBehaviour
             IsGrounded = false;
             IsOnPlatform = false;
         }
-
+        //if (currentKnockdownPhase >= 3)
+        //{
+        //    currentKnockdownPhase = 0;
+        //    animator.SetInteger("KnockdownPhase", 0);
+        //}
         if (health != null && health.currentCCState == CrowdControlState.Knockdown)
         {
             if (currentKnockdownPhase == 0)
             {
+                externalVelocityOverride = true;
                 currentKnockdownPhase = 1;
                 knockdownPhaseTimer = 0.1f;
                 animator.SetInteger("KnockdownPhase", 1);
                 Debug.Log("Knockdown Started - Phase 1: Launch");
+                wasGroundedLastFrame = false;
             }
             else
             {
@@ -185,23 +196,25 @@ public class PlayerController : MonoBehaviour
 
                 switch (currentKnockdownPhase)
                 {
-                    case 1:
-                        if (knockdownPhaseTimer <= 0 && velocity.y < -0.1f)
+                    case 1: 
+                        if (knockdownPhaseTimer <= 0 && velocity.y < 0.1f)
                         {
                             currentKnockdownPhase = 2;
                             animator.SetInteger("KnockdownPhase", 2);
                             Debug.Log("Knockdown Phase 2: Falling");
+                            wasGroundedLastFrame = false;
                         }
                         break;
 
-                    case 2:
-
-                        if (IsGrounded && !wasGroundedLastFrame)
+                    case 2: 
+                           
+                        if (IsGrounded && currentKnockdownPhase < 3)
                         {
                             AudioManager.PlaySFX(SFXTYPE.PLAYER_LAND);
                             currentKnockdownPhase = 3;
                             animator.SetInteger("KnockdownPhase", 3);
                             Debug.Log("Knockdown Phase 3: Landing");
+                            health.isInArcKnockdown = false;
                         }
                         break;
 
@@ -219,6 +232,7 @@ public class PlayerController : MonoBehaviour
             currentKnockdownPhase = 0;
             wasGroundedLastFrame = false;
             knockdownPhaseTimer = 0f;
+            externalVelocityOverride = false;
         }
 
         // Stop player movement and input while CC active
@@ -243,27 +257,6 @@ public class PlayerController : MonoBehaviour
 
             animator.SetBool("IsFalling", !IsGrounded && velocity.y < -0.1f);
         }
-
-        // === FOOTSTEP SOUND ===
-        //if (IsGrounded && Mathf.Abs(velocity.x) > 0.1f)
-        //{
-        //    // Track actual distance moved
-        //    float distanceMoved = Vector3.Distance(transform.position, lastPosition);
-        //    moveDistanceSinceLastStep += distanceMoved;
-
-        //    // Only play footstep if we've moved enough distance
-        //    float requiredDistance = moveSpeed * footstepInterval;
-        //    if (moveDistanceSinceLastStep >= requiredDistance)
-        //    {
-        //        AudioManager.PlaySFX(SFXTYPE.PLAYER_FOOTSTEP);
-        //        moveDistanceSinceLastStep = 0f;
-        //    }
-        //}
-        //else
-        //{
-        //    // Reset when not moving
-        //    moveDistanceSinceLastStep = 0f;
-        //}
 
         lastPosition = transform.position;
 
@@ -373,7 +366,7 @@ public class PlayerController : MonoBehaviour
             velocity = knockbackVelocity;
             knockbackTimer -= Time.deltaTime;
             knockbackVelocity -= knockbackVelocity * Time.fixedDeltaTime;
-            if(knockbackTimer < 0)
+            if(knockbackTimer < 0 && currentKnockdownPhase <= 0)
             {
                 isInKnockback = false;
                 externalVelocityOverride = false;
@@ -525,8 +518,9 @@ public class PlayerController : MonoBehaviour
 
     public void OnDash()
     {
-        if (skills != null && skills.IsChargeLocked) return;
+        if (skills != null && skills.IsUsingSkill) return;
         if (combat != null && combat.isAttacking) return;
+        if (isInCutscene) return;
         if (dashCooldownTimer > 0f) return;
         if (dashesRemaining <= 0) return;
 

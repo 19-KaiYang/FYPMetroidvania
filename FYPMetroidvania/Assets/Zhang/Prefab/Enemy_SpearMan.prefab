@@ -366,6 +366,7 @@ MonoBehaviour:
   finalDamage: 0
   attackDamage: 0
   knockback: 8
+  ccTime: 0.5
 --- !u!1 &1658455315795194318
 GameObject:
   m_ObjectHideFlags: 0
@@ -5574,7 +5575,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_TargetDisplay: 0
 --- !u!114 &8887687681319729728
 MonoBehaviour:
@@ -5666,7 +5667,7 @@ RectTransform:
   m_Father: {fileID: 5589993661541007395}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 1.666687, y: 0}
   m_SizeDelta: {x: -1.666687, y: 0}
   m_Pivot: {x: 0, y: 0.5}
@@ -5949,7 +5950,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 5
+  m_SortingOrder: 2
   m_Sprite: {fileID: -5894443344383225481, guid: 14211d720ff2f19479c2e887d0d61bf6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -6246,7 +6247,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   moveSpeed: 3
-  attackDamage: 8
+  attackDamage: 6
   isFacingRight: 1
   isFacingLeft: 0
   distanceToPlayer: {x: 0, y: 0}
@@ -6263,8 +6264,8 @@ MonoBehaviour:
   playerEscapeOffset: {x: 0, y: 0.62}
   attackArea: {x: 3, y: 2}
   attackAreaOffset: {x: 2.1, y: 0}
-  groundCheckSize: 0
-  groundCheckOffset: {x: 0, y: 0}
+  groundCheckSize: 0.1
+  groundCheckOffset: {x: -0.1, y: -0.95}
   playerDetected: 0
   inDetectArea: 0
   inAttackArea: 0
@@ -6316,7 +6317,9 @@ MonoBehaviour:
   knockdownLanded: 0
   stunImmune: 0
   knockdownImmune: 0
+  ccTimer: 0
   invincibilityDuration: 0.3
+  invincible: 0
   isBloodMarked: 0
   bloodMarkHealAmount: 10
   bloodMarkIcon: {fileID: 0}

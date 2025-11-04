@@ -32,7 +32,7 @@ public class UpgradeSelectionUI : MonoBehaviour
     {
         Time.timeScale = 0f;
         gameObject.SetActive(true);
-        AudioManager.PlaySFX(SFXTYPE.UPGRADE_POPUP);
+        AudioManager.PlaySFX(SFXTYPE.UPGRADE_POPUP, 0.3f);
         ShowRandomUpgrades();
     }
 

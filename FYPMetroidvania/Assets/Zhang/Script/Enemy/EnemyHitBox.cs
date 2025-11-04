@@ -9,7 +9,7 @@ public class EnemyHitBox : MonoBehaviour
     private Spearman owner;
     [SerializeField] private float attackDamage;
     public float knockback;
-
+    public float ccTime = 0.5f;
 
     private void Awake()
     {
@@ -32,8 +32,9 @@ public class EnemyHitBox : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             Health p = collision.GetComponent<Health>();
+            if (p.invincible) return;
             Vector2 dir = (collision.transform.position - enemy.transform.position).normalized; dir.y = 0f;
-            p.TakeDamage(finalDamage, dir * knockback, true, currentCCState, 0.5f);
+            p.TakeDamage(finalDamage, dir * knockback, true, currentCCState, ccTime);
 
             //if (currentCCState == CrowdControlState.Stunned) p.ApplyStun(1, dir);
             //else if (currentCCState == CrowdControlState.Knockdown) p.ApplyKnockdown(1, false, dir);

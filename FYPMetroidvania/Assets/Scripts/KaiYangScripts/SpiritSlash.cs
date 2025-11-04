@@ -10,6 +10,7 @@ public class SpiritSlash : MonoBehaviour
     public float hitDelay = 0.3f;
     public float hitCooldown = 0.5f;
     public float spiritSlashBloodCost = 10f;
+    public float bloodMarkHeal = 20f;
 
     [Header("Hitbox")]
     public GameObject hitboxObject;
@@ -54,11 +55,12 @@ public class SpiritSlash : MonoBehaviour
 
     private bool isFullyInitialized = false;
 
-    public void Init(Transform playerTransform, Transform target, LayerMask enemyMask)
+    public void Init(Transform playerTransform, Transform target, LayerMask enemyMask, float healAmount)
     {
         player = playerTransform;
         currentTarget = target;
         this.enemyMask = enemyMask;
+        bloodMarkHeal = healAmount;
 
         if (player != null)
         {
@@ -89,6 +91,12 @@ public class SpiritSlash : MonoBehaviour
 
     private void Update()
     {
+        // Debug to not get softlocked
+        if(Input.GetKeyDown(KeyCode.Plus))
+        {
+            Time.timeScale = 1.0f;
+        }
+
         // Don't move until fully initialized (after cutin + dramatic spawn)
         if (!isFullyInitialized) return;
 
@@ -158,15 +166,7 @@ public class SpiritSlash : MonoBehaviour
                                    stunKnockbackMultiplier, knockdownKnockbackMultiplier);
             }
 
-            h.ApplyBloodMark();
-
-            Health playerHealth = player.GetComponent<Health>();
-            if (playerHealth != null && spiritSlashBloodCost > 0f)
-            {
-                float safeCost = Mathf.Min(spiritSlashBloodCost, playerHealth.CurrentHealth - 1f);
-                if (safeCost > 0f)
-                    playerHealth.TakeDamage(safeCost);
-            }
+            h.ApplyBloodMark(bloodMarkHeal);
         }
     }
 
@@ -333,7 +333,7 @@ public class SpiritSlash : MonoBehaviour
         yield return new WaitForSecondsRealtime(0.05f);
 
         yield return StartCoroutine(DramaticSpawn());
-
+        PlayerController.instance.SetHitstop(false);
         // Restore time after everything
         Time.timeScale = originalTimeScale;
 

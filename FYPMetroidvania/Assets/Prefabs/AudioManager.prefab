@@ -45,7 +45,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -175,12 +175,12 @@ AudioSource:
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1
-  m_Pitch: 1
+  m_Pitch: 1.0562447
   Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 128
+  Priority: 30
   DopplerLevel: 1
   MinDistance: 1
   MaxDistance: 500
@@ -268,6 +268,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3431853532848201924}
   - component: {fileID: 8085505828373033780}
+  - component: {fileID: 887392358450580238}
   m_Layer: 0
   m_Name: AudioManager
   m_TagString: Untagged
@@ -373,5 +374,57 @@ MonoBehaviour:
   - key: 21
     clips:
     - {fileID: 8300000, guid: ac55bf4e27998c7498859fb83827f269, type: 3}
+  BGMList:
+  - key: 0
+    audio: {fileID: 8300000, guid: 4decf866f62e53348b47e2ba4fa4d677, type: 3}
+    volume: 0.5
+  - key: 1
+    audio: {fileID: 8300000, guid: fbc22e29c7449804d88cbc9c1958dcf8, type: 3}
+    volume: 0.5
   SFXSource: {fileID: 1761867828731093951}
   BGMSource: {fileID: 6418425531255162442}
+--- !u!114 &887392358450580238
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8610806389538218911}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Timeline::UnityEngine.Timeline.SignalReceiver
+  m_Events:
+    m_Signals:
+    - {fileID: 11400000, guid: 8d7c4c734bc02b94ebd983ce3197e557, type: 2}
+    - {fileID: 11400000, guid: 405c04fab69791744ae443ff546b51aa, type: 2}
+    m_Events:
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 8085505828373033780}
+          m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
+          m_MethodName: PlayBGM
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: OPENING_CUTSCENE
+            m_BoolArgument: 0
+          m_CallState: 2
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 8085505828373033780}
+          m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
+          m_MethodName: StopBGM
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
