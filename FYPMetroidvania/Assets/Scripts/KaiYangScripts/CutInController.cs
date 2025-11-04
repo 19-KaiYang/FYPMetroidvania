@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class CutInController : MonoBehaviour
 {
+    private static CutInController instance;
     private Animator animator;
     private SpiritSlash pendingSlash;
     private Transform pendingPlayer;
@@ -17,7 +18,12 @@ public class CutInController : MonoBehaviour
 
     private void Awake()
     {
-        DontDestroyOnLoad(gameObject);
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else Destroy(gameObject);
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
