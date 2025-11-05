@@ -35,7 +35,7 @@ public class Enemy : MonoBehaviour
     //[SerializeField] private Vector2 groundCheckOffset;
 
     //cc
-    protected Health health;
+    public Health health;
     [Header("Damaged effect")]
     [SerializeField] protected GameObject damageParticle;
     [SerializeField] protected GameObject bloodParticle;

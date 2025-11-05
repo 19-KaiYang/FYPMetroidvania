@@ -12,7 +12,12 @@ public class EnemyAnimationEvent : MonoBehaviour
         spearman = GetComponentInParent<Spearman>();
         enemy = GetComponentInParent<Enemy>();
     }
-
+    private void ResetSuperArmour()
+    {
+        enemy.health.spriteRenderer.color = Color.white;
+        enemy.health.knockdownImmune = false;
+        enemy.health.stunImmune = false;
+    }
     private void BrawlerClawFinished()
     {
         brawler.isAttackFinished = true;

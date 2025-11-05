@@ -258,7 +258,7 @@ public class Health : MonoBehaviour
         updateUI?.Invoke(this, amount, damageNumberColor.HasValue ? damageNumberColor.Value : Color.white);
         if (triggerEffects) damageTaken?.Invoke(this);
 
-        if (spriteRenderer != null && gameObject.activeInHierarchy)
+        if (spriteRenderer != null && gameObject.activeInHierarchy && spriteRenderer.color == Color.white)
             StartCoroutine(FlashRed());
 
         bool shouldPreserveVelocity = (forceCC == CrowdControlState.Knockdown && useRawForce);
@@ -266,7 +266,7 @@ public class Health : MonoBehaviour
         Debug.Log($"{gameObject.name} took {amount} damage. Current HP = {currentHealth}");
 
         // Apply knockback 
-        if (rb != null && hitDirection.HasValue)
+        if (rb != null && hitDirection.HasValue && !stunImmune)
         {
             if (isPlayer)
             {
