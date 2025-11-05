@@ -71,6 +71,7 @@ public class SceneTransition : MonoBehaviour
 
     private void HandleUpgradeChosen()
     {
+        if (SceneTransitionManager.instance.currentSceneName == "GoblinCamp") AudioManager.instance.StopBGM();
         UpgradeSelectionUI.OnUpgradeChosen -= HandleUpgradeChosen;
 
         SceneTransitionManager.instance.isTrasition = true;

@@ -31,7 +31,7 @@ AnimationClip:
         inWeight: 0
         outWeight: 0
       - serializedVersion: 3
-        time: 1
+        time: 0.85714287
         value: 1
         inSlope: Infinity
         outSlope: Infinity
@@ -40,7 +40,7 @@ AnimationClip:
         inWeight: 0
         outWeight: 0
       - serializedVersion: 3
-        time: 1.1666666
+        time: 1
         value: 0
         inSlope: Infinity
         outSlope: Infinity
@@ -70,7 +70,7 @@ AnimationClip:
         inWeight: 0
         outWeight: 0
       - serializedVersion: 3
-        time: 1.1666666
+        time: 1
         value: 1
         inSlope: Infinity
         outSlope: Infinity
@@ -93,28 +93,28 @@ AnimationClip:
       value: {fileID: 5476305336094542033, guid: 65274a659d8845f45a66d7a758aa8f32, type: 3}
     - time: 0
       value: {fileID: -989099072282237985, guid: 65274a659d8845f45a66d7a758aa8f32, type: 3}
-    - time: 0.16666667
+    - time: 0.14285715
       value: {fileID: 8488178591369417504, guid: 65274a659d8845f45a66d7a758aa8f32, type: 3}
-    - time: 0.33333334
+    - time: 0.2857143
       value: {fileID: -6932318037426846094, guid: 65274a659d8845f45a66d7a758aa8f32, type: 3}
-    - time: 0.5
+    - time: 0.42857143
       value: {fileID: -7218196365276682927, guid: 65274a659d8845f45a66d7a758aa8f32, type: 3}
-    - time: 0.6666667
+    - time: 0.5714286
       value: {fileID: -7705573031437599928, guid: 65274a659d8845f45a66d7a758aa8f32, type: 3}
-    - time: 0.8333333
+    - time: 0.71428573
       value: {fileID: 5357891414994466218, guid: 65274a659d8845f45a66d7a758aa8f32, type: 3}
-    - time: 1
+    - time: 0.85714287
       value: {fileID: 5799468789167037489, guid: 65274a659d8845f45a66d7a758aa8f32, type: 3}
-    - time: 1.1666666
+    - time: 1
       value: {fileID: 626597231878775636, guid: 65274a659d8845f45a66d7a758aa8f32, type: 3}
-    - time: 1.3333334
+    - time: 1.1428572
       value: {fileID: -7114815304750540477, guid: 65274a659d8845f45a66d7a758aa8f32, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
     script: {fileID: 0}
     flags: 2
-  m_SampleRate: 6
+  m_SampleRate: 7
   m_WrapMode: 0
   m_Bounds:
     m_Center: {x: 0, y: 0, z: 0}
@@ -164,7 +164,7 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 1.5
+    m_StopTime: 1.2857144
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -194,7 +194,7 @@ AnimationClip:
         inWeight: 0
         outWeight: 0
       - serializedVersion: 3
-        time: 1
+        time: 0.85714287
         value: 1
         inSlope: Infinity
         outSlope: Infinity
@@ -203,7 +203,7 @@ AnimationClip:
         inWeight: 0
         outWeight: 0
       - serializedVersion: 3
-        time: 1.1666666
+        time: 1
         value: 0
         inSlope: Infinity
         outSlope: Infinity
@@ -233,7 +233,7 @@ AnimationClip:
         inWeight: 0
         outWeight: 0
       - serializedVersion: 3
-        time: 1.1666666
+        time: 1
         value: 1
         inSlope: Infinity
         outSlope: Infinity
@@ -253,8 +253,15 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 0.33333334
+  - time: 0.2857143
     functionName: PlayAttackFlash
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.85714287
+    functionName: BrawlerClawSFX
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
@@ -267,14 +274,7 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 1.1666666
-    functionName: BrawlerClawSFX
-    data: 
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
-  - time: 1.3333334
+  - time: 1.1428572
     functionName: BrawlerClawFinished
     data: 
     objectReferenceParameter: {fileID: 0}

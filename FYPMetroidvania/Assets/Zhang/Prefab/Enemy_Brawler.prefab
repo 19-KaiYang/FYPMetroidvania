@@ -975,11 +975,11 @@ MonoBehaviour:
     m_Bits: 128
   groundleLayer:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 640
   platformLayer:
     serializedVersion: 2
     m_Bits: 512
-  moveSpeed: 5
+  moveSpeed: 6
   attackDamage: 5
   isFacingRight: 1
   isFacingLeft: 0
@@ -993,7 +993,7 @@ MonoBehaviour:
   knockdownStep: 0
   getUp: 0
   currentState: 
-  detectSize: {x: 13.27, y: 6}
+  detectSize: {x: 20, y: 10}
   detectOffset: {x: 0, y: 0}
   playerEscapeSize: {x: 27.7, y: 5.42}
   playerEscapeOffset: {x: 0, y: 1}
@@ -1005,12 +1005,12 @@ MonoBehaviour:
   inDetectArea: 0
   inAttackArea: 0
   isGround: 0
-  jumpForceY: 8
+  jumpForceY: 9
   jumpForceX: 0
   gravityA: 3
   gravityB: 3
-  distanceOffset: 4
-  maxJumpRange: 50
+  distanceOffset: 3
+  maxJumpRange: 10
   jumpHitbox: {fileID: 7688238546090216199}
   jumpTrail: {fileID: 5057681478030813393}
   meleeAttackCooldown: 0
@@ -1042,6 +1042,7 @@ MonoBehaviour:
   defaultDamageColor: {r: 0, g: 0, b: 0, a: 0}
   arcKnockdownGravity: 15
   isInArcKnockdown: 0
+  juggleTime: 0
   knockbackForce: 5
   stunPushbackForce: 5
   groundCheckValue: 1

@@ -392,11 +392,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b95fea1b004c7247878e15342cdb73d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHitBox
-  currentCCState: 1
+  currentCCState: 2
   attackMultiplier: 1.5
   finalDamage: 0
   attackDamage: 0
-  knockback: 8
+  knockback: 10
   ccTime: 0.5
 --- !u!1 &1658455315795194318
 GameObject:
@@ -5444,7 +5444,7 @@ ParticleSystemRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_RenderMode: 0
   m_MeshDistribution: 0
   m_SortMode: 0
@@ -6278,7 +6278,7 @@ MonoBehaviour:
     m_Bits: 128
   groundleLayer:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 640
   platformLayer:
     serializedVersion: 2
     m_Bits: 512
@@ -6296,7 +6296,7 @@ MonoBehaviour:
   knockdownStep: 0
   getUp: 0
   currentState: 
-  detectSize: {x: 15, y: 2}
+  detectSize: {x: 30, y: 10}
   detectOffset: {x: 0, y: 0}
   playerEscapeSize: {x: 30, y: 4}
   playerEscapeOffset: {x: 0, y: 0.62}
@@ -6344,6 +6344,7 @@ MonoBehaviour:
   defaultDamageColor: {r: 0, g: 0, b: 0, a: 0}
   arcKnockdownGravity: 15
   isInArcKnockdown: 0
+  juggleTime: 0
   knockbackForce: 5
   stunPushbackForce: 5
   groundCheckValue: 1

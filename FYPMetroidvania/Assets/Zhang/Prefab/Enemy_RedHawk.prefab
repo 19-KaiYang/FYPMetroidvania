@@ -286,18 +286,18 @@ MonoBehaviour:
   knockdownStep: 0
   getUp: 0
   originalPosiiton: {x: 0, y: 0}
-  chaseSpeed: 3
+  chaseSpeed: 6
   waveAmplitude: 0.3
   waveFrequency: 3
   canFlip: 1
-  attackProbability: 0.6
-  attackCheckCooldown: 2
+  attackProbability: 0.7
+  attackCheckCooldown: 0.75
   startAttack: 0
   attackMoveSpeed: 20
-  attackRestTime: 1
-  playerDetectDistance: 8
+  attackRestTime: 1.5
+  playerDetectDistance: 20
   attackDistance: 11
-  playerEscapeDistance: 12
+  playerEscapeDistance: 50
   playerDetected: 0
   inDetectArea: 0
   inAttackArea: 0
@@ -327,6 +327,7 @@ MonoBehaviour:
   defaultDamageColor: {r: 0, g: 0, b: 0, a: 0}
   arcKnockdownGravity: 15
   isInArcKnockdown: 0
+  juggleTime: 0
   knockbackForce: 5
   stunPushbackForce: 5
   groundCheckValue: 1
@@ -1155,7 +1156,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b95fea1b004c7247878e15342cdb73d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHitBox
-  currentCCState: 1
+  currentCCState: 2
   attackMultiplier: 1
   finalDamage: 0
   attackDamage: 0
@@ -1195,7 +1196,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.12865925, y: -0.33396578}
+  m_Offset: {x: -0.02172494, y: -0.32683665}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -1205,7 +1206,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.67698336, y: 1.1970942}
+  m_Size: {x: 1.6037505, y: 1.7246388}
   m_EdgeRadius: 0
 --- !u!1001 &7171260689622529444
 PrefabInstance:

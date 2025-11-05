@@ -402,7 +402,7 @@ public class CombatSystem : MonoBehaviour
 
         comboStep = 0;
         attackCooldownTimer = attackCooldown;
-
+        controller.StopDash();
         isAttacking = true;
         controller.externalVelocityOverride = true;
         if (controller.IsGrounded) controller.SetVelocity(Vector2.zero);
@@ -442,6 +442,7 @@ public class CombatSystem : MonoBehaviour
             }
             else if (swordDownHitbox != null)
             {
+                controller.StopDash();
                 isAttacking = true;
                 controller.externalVelocityOverride = true;
                 animator.SetBool("IsAttacking", true);
@@ -465,6 +466,7 @@ public class CombatSystem : MonoBehaviour
             }
         }
         if (!controller.IsGrounded && !isAttacking) {
+            controller.StopDash();
             isAttacking = true;
             controller.externalVelocityOverride = true;
             animator.SetBool("IsAttacking", true);
@@ -480,6 +482,7 @@ public class CombatSystem : MonoBehaviour
             isBuffered = true;
             if(!isAttacking && comboStep == 1)
             {
+                controller.StopDash();
                 comboTimer = 1f;
                 animator.SetBool("IsAttacking", true);
                 animator.SetTrigger("DoAttack");

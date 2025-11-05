@@ -167,7 +167,8 @@ public class PlayerController : MonoBehaviour
                     combat.DisableAllHitboxes();
                 }
                 combat.isAttacking = false;
-                animator.SetBool("IsAttacking", false); 
+                animator.SetBool("IsAttacking", false);
+                combat.DisableAllHitboxes();
             }
             IsGrounded = true;
             IsOnPlatform = ground.collider.CompareTag("Platform");
@@ -240,11 +241,14 @@ public class PlayerController : MonoBehaviour
         // Stop player movement and input while CC active
         if (health != null && health.currentCCState != CrowdControlState.None)
         {
-            velocity.x = 0f;
+            //velocity.x = 0f;
 
             // Allow knockdown animation updates to still play
             if (health.currentCCState != CrowdControlState.Knockdown)
+            {
+                Move(velocity * Time.deltaTime);
                 return;
+            }
         }
 
         animator.SetBool("IsUsingSkill", skills != null && skills.IsUsingSkill);
@@ -268,11 +272,7 @@ public class PlayerController : MonoBehaviour
             dashTimer -= Time.deltaTime;
             if (dashTimer <= 0f)
             {
-                isDashing = false;
-                animator.SetBool("isDashing", false);
-                dashTrail.emitting = false;
-                if (Mathf.Abs(velocity.y) > 0.1f)
-                    velocity.y *= 0.3f;
+                StopDash();
             }
         }
 
@@ -368,11 +368,11 @@ public class PlayerController : MonoBehaviour
 
         var health = GetComponent<Health>();
         bool inArcKnockdown = health != null && health.isInArcKnockdown;
-        if (isInKnockback)
+        if (isInKnockback && !inArcKnockdown)
         {
             velocity = knockbackVelocity;
             knockbackTimer -= Time.fixedDeltaTime;
-            knockbackVelocity -= knockbackVelocity * Time.deltaTime;
+            knockbackVelocity -= knockbackVelocity * Time.fixedDeltaTime;
             if(knockbackTimer < 0 && currentKnockdownPhase <= 0)
             {
                 isInKnockback = false;
@@ -392,9 +392,13 @@ public class PlayerController : MonoBehaviour
             jumpBufferCounter -= Time.fixedDeltaTime;
     }
 
-    private void HandleMovement()
+    public void StopDash()
     {
-
+        isDashing = false;
+        animator.SetBool("isDashing", false);
+        dashTrail.emitting = false;
+        if (Mathf.Abs(velocity.y) > 0.1f)
+            velocity.y *= 0.3f;
     }
     public void Move(Vector2 moveAmount)
     {
@@ -548,7 +552,8 @@ public class PlayerController : MonoBehaviour
         dashesRemaining--;
         if (combat != null && combat.isAttacking){
             combat.SetCanTransition(1);
-            animator.SetBool("IsAttacking", false);
+            ResetState();
+            SetHitstop(false);
             combat.HideVFX();
             combat.DisableAllHitboxes();
         }
@@ -623,7 +628,11 @@ public class PlayerController : MonoBehaviour
     {
         combat.isAttacking = false;
         animator.SetBool("IsAttacking", false);
-        
+        combat.DisableAllHitboxes();
+        externalVelocityOverride = false;
+        velocity = Vector2.zero;
+        skills.ResetValues();
+        StopDash();
     }
     private void OnDrawGizmosSelected()
     {

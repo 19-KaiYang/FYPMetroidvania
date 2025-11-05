@@ -35,6 +35,7 @@ public class Health : MonoBehaviour
     [Header("Arc Knockdown")]
     public float arcKnockdownGravity = 15f;
     public bool isInArcKnockdown = false;
+    public float juggleTime = 0f;
 
     [Header("Default Knockback")]
     public float knockbackForce = 5f;
@@ -146,6 +147,7 @@ public class Health : MonoBehaviour
                 {
                     if (landed) invincible = true;
                     ccTimer -= Time.deltaTime;
+                    if(isPlayer && landed) pc.SetVelocity(new Vector2(0f, pc.GetVelocity().y));
                     if (ccTimer <= 0f)
                     {
                         currentCCState = CrowdControlState.None;
@@ -157,6 +159,7 @@ public class Health : MonoBehaviour
                             {
                                 pc.externalVelocityOverride = false;
                                 pc.isInKnockback = false;
+                                pc.animator.SetBool("Stunned", false);
                             }
 
                             // Also reset any stuck skill states
@@ -187,6 +190,7 @@ public class Health : MonoBehaviour
                             {
                                 pc.externalVelocityOverride = false;
                                 pc.isInKnockback = false;
+                                pc.animator.SetBool("Stunned", false);
                             }
 
                             // Also reset any stuck skill states
@@ -203,12 +207,14 @@ public class Health : MonoBehaviour
         }
         else
         {
+            invincible = false;
             // NOT IN CC STATE - make sure player isn't stuck
             if (isPlayer)
             {
                 // Safety check: if not in CC and not using skill, clear override
                 if (pc != null && skills != null)
                 {
+                    pc.animator.SetBool("Stunned", false);
                     if (!skills.IsUsingSkill && pc.externalVelocityOverride && !pc.isInKnockback && !combat.isAttacking && !pc.isDashing)
                     {
                         if (Time.time - pc.lastExternalVelocitySetTime > 0.5f)
@@ -299,7 +305,7 @@ public class Health : MonoBehaviour
                     {
                         ApplyKnockdown(forceCCDuration, airborne, hitDirection, shouldPreserveVelocity);
                     }
-                    else
+                    else if(!stunImmune)
                         ApplyStun(forceCCDuration, hitDirection);
                 }
             }
@@ -539,6 +545,7 @@ public class Health : MonoBehaviour
     public void ApplyStun(float duration, Vector2? hitDirection = null, float knockbackMultiplier = 1f)
     {
         if(currentCCState == CrowdControlState.None) currentCCState = CrowdControlState.Stunned;
+        if (isPlayer) pc.animator.SetBool("Stunned", true);
         ccTimer = duration;
     }
 
@@ -551,6 +558,7 @@ public class Health : MonoBehaviour
      Vector2? hitDirection = null, bool preserveVelocity = false, float knockbackMultiplier = 1f)
     {
         currentCCState = CrowdControlState.Knockdown;
+        if (isPlayer) pc.animator.SetBool("Stunned", false);
         ccTimer = duration;
 
         if (isPlayer)
@@ -637,7 +645,8 @@ public class Health : MonoBehaviour
             {
                 // Apply custom gravity
                 Vector2 currentVel = rb.linearVelocity;
-                currentVel.y -= arcKnockdownGravity * Time.deltaTime;
+                float gravityMult = 0.75f + (juggleTime * 0.35f);
+                currentVel.y -= arcKnockdownGravity * gravityMult * Time.deltaTime;
                 rb.linearVelocity = currentVel;
 
             }

@@ -26,6 +26,7 @@ public class Dagger : ProjectileBase
         if (playerPosition.x < transform.position.x) f.y = -1;
         else f.y = 1;
         transform.localScale = f;
+        timer = 0f;
     }
     public void SetOwner(DaggerCultist enemy)
     {
@@ -64,6 +65,7 @@ public class Dagger : ProjectileBase
         R.Rotate(0,0,1200 * Time.deltaTime, Space.Self);
 
         timer += Time.deltaTime;
+        if (timer > 2.5f) Despawn();
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -89,15 +91,15 @@ public class Dagger : ProjectileBase
             Vector2 dir;
             dir = (collision.transform.position - this.transform.position).normalized;
 
-            p.TakeDamage(finalDamage, dir, true, CrowdControlState.Knockdown, 1f);
+            p.TakeDamage(finalDamage, dir, true, CrowdControlState.Stunned, 0.5f);
 
 
             Despawn();
         }
 
-        if (!collision.CompareTag("Enemy") && !collision.CompareTag("Hurtbox") && timer >= 0.5f)
-        {
-            Despawn();
-        }
+        //if (!collision.CompareTag("Enemy") && !collision.CompareTag("Hurtbox") && timer >= 0.5f)
+        //{
+        //    Despawn();
+        //}
     }
 }

@@ -72,7 +72,7 @@ public class DaggerCultist : Enemy
         float distance = Vector2.Distance(transform.position, player.transform.position);
         RaycastHit2D ray = Physics2D.Raycast(transform.position, dir, distance, obstacleLayer);
 
-        if (pDetected != null && ray.collider == null)
+        if (pDetected != null)
         {
             inDetectArea = true;
             playerDetected = true;
@@ -82,7 +82,7 @@ public class DaggerCultist : Enemy
             playerDetected = false;
             inDetectArea = false;
         }
-        else if (playerDetected && ray.collider != null)
+        else if (playerDetected)
         {
             playerDetected = false;
         }
@@ -283,6 +283,7 @@ public class DaggerCultist : Enemy
                 {
                     enemy.animator.SetTrigger("land");
                     enemy.animator.ResetTrigger("knockdown");
+                    enemy.health.invincible = true;
                 }
                 else
                 {
@@ -308,6 +309,7 @@ public class DaggerCultist : Enemy
             enemy.animator.SetBool("isStun", false);
             enemy.animator.ResetTrigger("land");
             enemy.animator.ResetTrigger("getup");
+            enemy.health.invincible = false;
         }
     }
 }

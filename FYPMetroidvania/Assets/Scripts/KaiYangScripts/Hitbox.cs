@@ -81,7 +81,7 @@ public class Hitbox : MonoBehaviour
         if (other.CompareTag("Hurtbox"))
         {
             Health h = other.GetComponentInParent<Health>();
-            if (h != null && !hitEnemies.Contains(h))
+            if (h != null && !hitEnemies.Contains(h) && !h.invincible)
             {
                 if(sfx != SFXTYPE.NONE) AudioManager.PlaySFX(sfx, 0.3f);
                 hitEnemies.Add(h);
