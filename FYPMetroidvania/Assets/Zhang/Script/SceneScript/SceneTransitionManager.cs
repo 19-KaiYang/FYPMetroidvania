@@ -56,6 +56,7 @@ public class SceneTransitionManager : MonoBehaviour
     }
     public IEnumerator FadeAndLoadScene(FadeDirection _fadeDir, string _sceneName)
     {
+        if (currentSceneName == "GoblinCamp") AudioManager.instance.StopBGM();
         fadeImage.enabled = true;
         //string random = GetRandomRoom();
         //if (random != null) _sceneName = random;
@@ -191,7 +192,7 @@ public class SceneTransitionManager : MonoBehaviour
         currentSceneName = scene.name;
         roomLoaded?.Invoke(currentSceneName);
         if (currentSceneName == progressionData.startingScene) PlayerController.instance.isInCutscene = true;
-        else if(currentSceneName != progressionData.EndingScene && currentSceneName != progressionData.startingScene) AudioManager.instance.PlayBGM(BGMType.TOWN_COMBAT);
+        else if(progressionData.rooms.Contains(currentSceneName) && !AudioManager.instance.BGMSource.isPlaying) AudioManager.instance.PlayBGM(BGMType.TOWN_COMBAT);
     }
     #endregion
 }

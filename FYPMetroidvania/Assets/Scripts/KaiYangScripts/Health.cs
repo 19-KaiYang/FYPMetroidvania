@@ -35,6 +35,7 @@ public class Health : MonoBehaviour
     [Header("Arc Knockdown")]
     public float arcKnockdownGravity = 15f;
     public bool isInArcKnockdown = false;
+    public float juggleTime = 0f;
 
     [Header("Default Knockback")]
     public float knockbackForce = 5f;
@@ -157,6 +158,7 @@ public class Health : MonoBehaviour
                             {
                                 pc.externalVelocityOverride = false;
                                 pc.isInKnockback = false;
+                                pc.SetVelocity(new Vector2(0f, pc.GetVelocity().y));
                             }
 
                             // Also reset any stuck skill states
@@ -203,6 +205,7 @@ public class Health : MonoBehaviour
         }
         else
         {
+            invincible = false;
             // NOT IN CC STATE - make sure player isn't stuck
             if (isPlayer)
             {
@@ -634,7 +637,8 @@ public class Health : MonoBehaviour
             {
                 // Apply custom gravity
                 Vector2 currentVel = rb.linearVelocity;
-                currentVel.y -= arcKnockdownGravity * Time.deltaTime;
+                float gravityMult = 0.75f + (juggleTime * 0.35f);
+                currentVel.y -= arcKnockdownGravity * gravityMult * Time.deltaTime;
                 rb.linearVelocity = currentVel;
 
             }

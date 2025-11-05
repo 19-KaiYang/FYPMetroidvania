@@ -975,7 +975,7 @@ MonoBehaviour:
     m_Bits: 128
   groundleLayer:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 640
   platformLayer:
     serializedVersion: 2
     m_Bits: 512
@@ -993,7 +993,7 @@ MonoBehaviour:
   knockdownStep: 0
   getUp: 0
   currentState: 
-  detectSize: {x: 13.27, y: 6}
+  detectSize: {x: 20, y: 10}
   detectOffset: {x: 0, y: 0}
   playerEscapeSize: {x: 27.7, y: 5.42}
   playerEscapeOffset: {x: 0, y: 1}
@@ -1042,6 +1042,7 @@ MonoBehaviour:
   defaultDamageColor: {r: 0, g: 0, b: 0, a: 0}
   arcKnockdownGravity: 15
   isInArcKnockdown: 0
+  juggleTime: 0
   knockbackForce: 5
   stunPushbackForce: 5
   groundCheckValue: 1

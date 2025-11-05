@@ -22,18 +22,18 @@ AnimationClip:
     curve:
     - time: 0
       value: {fileID: 4837983245466882408, guid: 3b7b8d9780f8d064b8a00ba6eb4f5ed4, type: 3}
-    - time: 0.083333336
+    - time: 0.0625
       value: {fileID: -4609036988491115131, guid: 2a8f8dffca5060848b3002904de51cc0, type: 3}
-    - time: 0.25
+    - time: 0.1875
       value: {fileID: 1006242169783366575, guid: 2a8f8dffca5060848b3002904de51cc0, type: 3}
-    - time: 0.41666666
+    - time: 0.3125
       value: {fileID: -3317696340012476557, guid: 2a8f8dffca5060848b3002904de51cc0, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
     script: {fileID: 0}
     flags: 2
-  m_SampleRate: 12
+  m_SampleRate: 16
   m_WrapMode: 0
   m_Bounds:
     m_Center: {x: 0, y: 0, z: 0}
@@ -59,7 +59,7 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.5833333
+    m_StopTime: 0.4375
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -86,42 +86,42 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.25
+  - time: 0.1875
     functionName: PlayVFX
     data: Ground Combo 2
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.25
+  - time: 0.1875
     functionName: EnableHitbox
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 1
     messageOptions: 0
-  - time: 0.41666666
+  - time: 0.3125
     functionName: DisableHitbox
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 1
     messageOptions: 0
-  - time: 0.5
+  - time: 0.375
     functionName: HideVFX
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.5
+  - time: 0.375
     functionName: SetCanTransition
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.5833333
+  - time: 0.4375
     functionName: EndAnimation
     data: 
     objectReferenceParameter: {fileID: 0}

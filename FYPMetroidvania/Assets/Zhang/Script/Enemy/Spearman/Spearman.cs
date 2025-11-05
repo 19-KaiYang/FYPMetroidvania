@@ -84,7 +84,7 @@ public class Spearman : Enemy
         float distance = Vector2.Distance(transform.position, player.transform.position);
         RaycastHit2D ray = Physics2D.Raycast(transform.position, dir, distance, obstacleLayer);
 
-        if (pDetected != null && ray.collider == null)
+        if (pDetected != null)
         {
             inDetectArea = true;
             playerDetected = true;
@@ -94,7 +94,7 @@ public class Spearman : Enemy
             playerDetected = false;
             inDetectArea = false;
         }
-        else if (playerDetected && ray.collider != null)
+        else if (playerDetected)
         {
             playerDetected = false;
         }
@@ -180,8 +180,8 @@ public class Spearman : Enemy
         }
         public void OnEnter()
         {
-            enemy.thrustCooldown = Random.Range(1f, 2f);
-            enemy.throwCooldown = Random.Range(1f, 3f);
+            enemy.thrustCooldown = Random.Range(0.5f, 1.5f);
+            enemy.throwCooldown = Random.Range(1f, 2f);
         }
         public void OnUpdate()
         {
@@ -352,6 +352,7 @@ public class Spearman : Enemy
                 {
                     enemy.animator.SetTrigger("land");
                     enemy.animator.ResetTrigger("knockdown");
+                    enemy.health.invincible = true;
                 }
                 else
                 {
@@ -377,6 +378,7 @@ public class Spearman : Enemy
             enemy.animator.SetBool("isStun", false);
             enemy.animator.ResetTrigger("land");
             enemy.animator.ResetTrigger("getup");
+            enemy.health.invincible = false;
         }
     }
 }

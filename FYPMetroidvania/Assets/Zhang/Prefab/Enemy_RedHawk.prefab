@@ -286,18 +286,18 @@ MonoBehaviour:
   knockdownStep: 0
   getUp: 0
   originalPosiiton: {x: 0, y: 0}
-  chaseSpeed: 3
+  chaseSpeed: 6
   waveAmplitude: 0.3
   waveFrequency: 3
   canFlip: 1
-  attackProbability: 0.6
-  attackCheckCooldown: 2
+  attackProbability: 0.7
+  attackCheckCooldown: 0.75
   startAttack: 0
   attackMoveSpeed: 20
-  attackRestTime: 1
-  playerDetectDistance: 8
+  attackRestTime: 1.5
+  playerDetectDistance: 20
   attackDistance: 11
-  playerEscapeDistance: 12
+  playerEscapeDistance: 50
   playerDetected: 0
   inDetectArea: 0
   inAttackArea: 0
@@ -327,6 +327,7 @@ MonoBehaviour:
   defaultDamageColor: {r: 0, g: 0, b: 0, a: 0}
   arcKnockdownGravity: 15
   isInArcKnockdown: 0
+  juggleTime: 0
   knockbackForce: 5
   stunPushbackForce: 5
   groundCheckValue: 1

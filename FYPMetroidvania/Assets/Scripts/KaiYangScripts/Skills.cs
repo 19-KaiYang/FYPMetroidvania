@@ -567,27 +567,27 @@ public class Skills : MonoBehaviour
 
         AudioManager.PlaySFX(SFXTYPE.SWORD_DASH, 0.5f);
         // --- Hook into hitbox for Sword Dash specific logic ---
-        void OnDashHit(Hitbox hb, Health h)
-        {
-            if (h == null || h.isPlayer) return;
+        //void OnDashHit(Hitbox hb, Health h)
+        //{
+        //    if (h == null || h.isPlayer) return;
 
-            //Vector2 knockDir = 
+        //    //Vector2 knockDir = 
 
-            //h.TakeDamage(dashFlatDamage, knockDir, false, CrowdControlState.None, 0f, true, false, 0f);
+        //    //h.TakeDamage(dashFlatDamage, knockDir, false, CrowdControlState.None, 0f, true, false, 0f);
 
-            // Spirit + BloodMark + HealthCost (only Sword)
-            h.ApplyBloodMark(bloodMarkHealAmount);
-            GainSpirit(spiritGainPerHit);
+        //    // Spirit + BloodMark + HealthCost (only Sword)
+        //    h.ApplyBloodMark(bloodMarkHealAmount);
+        //    GainSpirit(spiritGainPerHit);
 
-            // Local hitstop
-            //if (hitstop > 0f)
-            //{
-            //    StartCoroutine(LocalHitstop(h.GetComponent<Rigidbody2D>(), hitstop));
-            //    StartCoroutine(LocalHitstop(rb, hitstop));
-            //}
-        }
+        //    // Local hitstop
+        //    //if (hitstop > 0f)
+        //    //{
+        //    //    StartCoroutine(LocalHitstop(h.GetComponent<Rigidbody2D>(), hitstop));
+        //    //    StartCoroutine(LocalHitstop(rb, hitstop));
+        //    //}
+        //}
 
-        Hitbox.OnHit += OnDashHit;
+        Hitbox.OnHit += OnSkillHit;
         //SKILL START, SKILL HIT, SKILL END
         Coroutine hitboxRoutine = StartCoroutine(ActivateSkillHitbox(swordDashHitbox, dashDuration));
         dashParticle.Play();
@@ -628,7 +628,7 @@ public class Skills : MonoBehaviour
         if (hitboxRoutine != null)
             yield return hitboxRoutine; 
 
-        Hitbox.OnHit -= OnDashHit;
+        Hitbox.OnHit -= OnSkillHit;
 
         if (collisionToggled)
             Physics2D.IgnoreLayerCollision(playerLayer, enemyLayer, false);
@@ -679,16 +679,14 @@ public class Skills : MonoBehaviour
         float forward = controller.facingRight ? uppercutForwardSpeed : -uppercutForwardSpeed;
 
         // --- Hook into hitbox for Uppercut specific logic ---
-        void OnUppercutHit(Hitbox hb, Health h)
-        {
-            if (h == null || h.isPlayer) return;
-            h.ApplyBloodMark(bloodMarkHealAmount);
-            GainSpirit(spiritGainPerHit);
-        }
+        //void OnUppercutHit(Hitbox hb, Health h)
+        //{
+        //    if (h == null || h.isPlayer) return;
+        //    h.ApplyBloodMark(bloodMarkHealAmount);
+        //    GainSpirit(spiritGainPerHit);
+        //}
 
-        Hitbox.OnHit += OnUppercutHit;
-
-       
+        Hitbox.OnHit += OnSkillHit;
 
         // --- Phase 1: short forward dash ---
         controller.animator.SetTrigger("Sword Uppercut");
@@ -715,7 +713,7 @@ public class Skills : MonoBehaviour
             yield return hitboxRoutine;
 
         // Cleanup
-        Hitbox.OnHit -= OnUppercutHit;
+        Hitbox.OnHit -= OnSkillHit;
 
         // Restore collisions
         if (collisionToggled)
@@ -725,6 +723,20 @@ public class Skills : MonoBehaviour
         usingSkill = false;
     }
 
+    public void OnSkillHit(Hitbox hb, Health h)
+    {
+        if (h == null || h.isPlayer) return;
+        h.ApplyBloodMark(bloodMarkHealAmount);
+        GainSpirit(spiritGainPerHit);
+    }
+    public void ResetValues()
+    {
+        usingSkill = false;
+        StopAllCoroutines();
+        Hitbox.OnHit -= OnSkillHit;
+        StartCoroutine(ActivateSkillHitbox(swordUppercutHitbox, 0f));
+        StartCoroutine(ActivateSkillHitbox(swordDashHitbox, 0f));
+    }
     public void SetUppercut_Start(int start)
     {
         uppercutStart = start == 0 ? false : true;

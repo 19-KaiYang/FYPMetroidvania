@@ -192,7 +192,7 @@ MonoBehaviour:
   hitstopDuration: 0.2
   applyHitstop: 1
   X_Knockback: 12
-  Y_Knockback: 3
+  Y_Knockback: 9
   facingRight: 0
   CCType: 2
   CCDuration: 0.5
@@ -267,7 +267,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.9752399, y: 0.4636885}
+  m_Offset: {x: -0.9752399, y: 0.40953195}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -277,7 +277,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.71347356, y: 0.6416676}
+  m_Size: {x: 0.71347356, y: 0.7499807}
   m_EdgeRadius: 0
 --- !u!114 &5788203806030980929
 MonoBehaviour:
@@ -331,7 +331,7 @@ Transform:
   m_GameObject: {fileID: 585280313049604082}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.236, y: 0.046, z: 0}
+  m_LocalPosition: {x: 0.033, y: 0.046, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -546,7 +546,7 @@ MonoBehaviour:
   X_Knockback: 0.5
   Y_Knockback: 0
   facingRight: 0
-  CCType: 1
+  CCType: 0
   CCDuration: 0.5
   sfx: 7
   applyBloodMark: 0
@@ -789,6 +789,7 @@ MonoBehaviour:
   rb: {fileID: 7721234354411303025}
   animator: {fileID: 8233210284631527292}
   moveInput: {x: 0, y: 0}
+  isDashing: 0
   wasGroundedLastFrame: 0
   externalVelocityOverride: 0
   isInCutscene: 0
@@ -942,6 +943,7 @@ MonoBehaviour:
   defaultDamageColor: {r: 0, g: 0, b: 0, a: 0}
   arcKnockdownGravity: 30
   isInArcKnockdown: 0
+  juggleTime: 0
   knockbackForce: 5
   stunPushbackForce: 3
   groundCheckValue: 2
@@ -1006,8 +1008,8 @@ MonoBehaviour:
   swordDashCooldown: 0
   swordDashCost: 20
   uppercutUpSpeed: 18
-  uppercutForwardSpeed: 1.5
-  uppercutDuration: 0.05
+  uppercutForwardSpeed: 1
+  uppercutDuration: 0.065
   uppercutFlatDamage: 10
   swordUppercutHealthCost: 8
   swordUppercutGroundedCC: 2
@@ -11799,7 +11801,7 @@ MonoBehaviour:
   X_Knockback: 0.5
   Y_Knockback: 0
   facingRight: 0
-  CCType: 1
+  CCType: 0
   CCDuration: 0.5
   sfx: 7
   applyBloodMark: 0
@@ -11977,7 +11979,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -1.0297997, y: -0.326266}
+  m_Offset: {x: -1.0162609, y: -0.26533994}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -11987,7 +11989,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.7500386, y: 0.5343207}
+  m_Size: {x: 1.1155956, y: 0.6561728}
   m_EdgeRadius: 0
 --- !u!114 &7174681093743753349
 MonoBehaviour:
@@ -12007,7 +12009,7 @@ MonoBehaviour:
   hitstopDuration: 0.08
   applyHitstop: 0
   X_Knockback: 5
-  Y_Knockback: 8
+  Y_Knockback: 9
   facingRight: 0
   CCType: 1
   CCDuration: 0.5
@@ -12282,7 +12284,7 @@ MonoBehaviour:
   hitstopDuration: 0.2
   applyHitstop: 1
   X_Knockback: 10
-  Y_Knockback: 4
+  Y_Knockback: 10
   facingRight: 0
   CCType: 2
   CCDuration: 0.5
@@ -12462,7 +12464,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.7241091, y: 0.09852992}
+  m_Offset: {x: -0.77826566, y: 0.13576251}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -12472,7 +12474,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1.0074543, y: 0.76713777}
+  m_Size: {x: 1.1157674, y: 0.8416029}
   m_EdgeRadius: 0
 --- !u!114 &7956545279806126887
 MonoBehaviour:
@@ -12492,7 +12494,7 @@ MonoBehaviour:
   hitstopDuration: 0.1
   applyHitstop: 1
   X_Knockback: 5
-  Y_Knockback: 2
+  Y_Knockback: 5
   facingRight: 0
   CCType: 1
   CCDuration: 0.5
@@ -12598,7 +12600,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.82943803, y: 0.32194483}
+  m_Offset: {x: -0.82943803, y: 0.4437969}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -12608,7 +12610,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.7213515, y: 1.0045216}
+  m_Size: {x: 0.7213515, y: 0.76081747}
   m_EdgeRadius: 0
 --- !u!114 &5992295364396435484
 MonoBehaviour:
@@ -12626,11 +12628,11 @@ MonoBehaviour:
   damage: 10
   isCritical: 0
   hitstopDuration: 0.15
-  applyHitstop: 1
+  applyHitstop: 0
   X_Knockback: 5
   Y_Knockback: 17
   facingRight: 0
-  CCType: 2
+  CCType: 1
   CCDuration: 0.5
   sfx: 8
   applyBloodMark: 0
