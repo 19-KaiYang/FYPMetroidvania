@@ -979,7 +979,7 @@ MonoBehaviour:
   platformLayer:
     serializedVersion: 2
     m_Bits: 512
-  moveSpeed: 5
+  moveSpeed: 6
   attackDamage: 5
   isFacingRight: 1
   isFacingLeft: 0
@@ -1005,12 +1005,12 @@ MonoBehaviour:
   inDetectArea: 0
   inAttackArea: 0
   isGround: 0
-  jumpForceY: 8
+  jumpForceY: 9
   jumpForceX: 0
   gravityA: 3
   gravityB: 3
-  distanceOffset: 4
-  maxJumpRange: 50
+  distanceOffset: 3
+  maxJumpRange: 10
   jumpHitbox: {fileID: 7688238546090216199}
   jumpTrail: {fileID: 5057681478030813393}
   meleeAttackCooldown: 0

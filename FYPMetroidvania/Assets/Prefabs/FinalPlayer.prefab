@@ -192,7 +192,7 @@ MonoBehaviour:
   hitstopDuration: 0.2
   applyHitstop: 1
   X_Knockback: 12
-  Y_Knockback: 9
+  Y_Knockback: 11
   facingRight: 0
   CCType: 2
   CCDuration: 0.5
@@ -546,8 +546,8 @@ MonoBehaviour:
   X_Knockback: 0.5
   Y_Knockback: 0
   facingRight: 0
-  CCType: 0
-  CCDuration: 0.5
+  CCType: 1
+  CCDuration: 0.25
   sfx: 7
   applyBloodMark: 0
   isSkillHitbox: 0
@@ -573,8 +573,6 @@ GameObject:
   - component: {fileID: 5268254380248255037}
   - component: {fileID: 1279543683446778900}
   - component: {fileID: 7621129067624534827}
-  - component: {fileID: 6563075640411928745}
-  - component: {fileID: 2410184887729232841}
   - component: {fileID: 5052374980784339615}
   m_Layer: 8
   m_Name: FinalPlayer
@@ -1101,7 +1099,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnergySystem
   maxEnergy: 100
-  regenPerSecond: 30
+  regenPerSecond: 10
 --- !u!114 &5268254380248255037
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1131,39 +1129,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeManager
   AttackUpgrade: {fileID: 0}
-  SkillUpgrade: {fileID: 11400000, guid: 6afc6af62f0b7f445884eeb30f50a1b3, type: 2}
+  SkillUpgrade: {fileID: 0}
   SpiritUpgrade: {fileID: 0}
   MobilityUpgrade: {fileID: 0}
   MiscUpgrades: []
 --- !u!114 &7621129067624534827
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 765186428982251967}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f7dd5ca101a667c4daf85efcf203527d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SpiritGauge
-  maxSpirit: 100
-  drainPerSecond: 20
---- !u!114 &6563075640411928745
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 765186428982251967}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f7dd5ca101a667c4daf85efcf203527d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SpiritGauge
-  maxSpirit: 100
-  drainPerSecond: 20
---- !u!114 &2410184887729232841
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -11801,8 +11771,8 @@ MonoBehaviour:
   X_Knockback: 0.5
   Y_Knockback: 0
   facingRight: 0
-  CCType: 0
-  CCDuration: 0.5
+  CCType: 1
+  CCDuration: 0.25
   sfx: 7
   applyBloodMark: 0
   isSkillHitbox: 0
@@ -12901,6 +12871,30 @@ MonoBehaviour:
             m_FloatArgument: 0
             m_StringArgument: 
             m_BoolArgument: 1
+          m_CallState: 2
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_MethodName: SetActive
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 1
+          m_CallState: 2
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_MethodName: SetActive
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
           m_CallState: 2
 --- !u!1 &8360528964084505704
 GameObject:

@@ -734,8 +734,23 @@ public class Skills : MonoBehaviour
         usingSkill = false;
         StopAllCoroutines();
         Hitbox.OnHit -= OnSkillHit;
-        StartCoroutine(ActivateSkillHitbox(swordUppercutHitbox, 0f));
-        StartCoroutine(ActivateSkillHitbox(swordDashHitbox, 0f));
+        if (swordDashHitbox != null) swordDashHitbox.SetActive(false);
+        if (swordUppercutHitbox != null) swordUppercutHitbox.SetActive(false);
+        if (dashParticle != null) dashParticle.Stop();
+        if (dashTrails != null)
+        {
+            foreach (var trail in dashTrails)
+            {
+                if (trail != null) trail.emitting = false;
+            }
+        }
+
+        waveStart = false;
+        uppercutStart = false;
+        lungeStart = false;
+        Hitbox.OnHit -= null;
+        //StartCoroutine(ActivateSkillHitbox(swordUppercutHitbox, 0f));
+        //StartCoroutine(ActivateSkillHitbox(swordDashHitbox, 0f));
     }
     public void SetUppercut_Start(int start)
     {

@@ -91,7 +91,7 @@ public class Dagger : ProjectileBase
             Vector2 dir;
             dir = (collision.transform.position - this.transform.position).normalized;
 
-            p.TakeDamage(finalDamage, dir, true, CrowdControlState.Knockdown, 1f);
+            p.TakeDamage(finalDamage, dir, true, CrowdControlState.Stunned, 0.5f);
 
 
             Despawn();

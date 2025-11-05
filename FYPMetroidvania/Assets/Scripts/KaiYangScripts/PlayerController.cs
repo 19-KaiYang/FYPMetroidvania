@@ -628,6 +628,7 @@ public class PlayerController : MonoBehaviour
         externalVelocityOverride = false;
         velocity = Vector2.zero;
         skills.ResetValues();
+        StopDash();
     }
     private void OnDrawGizmosSelected()
     {
