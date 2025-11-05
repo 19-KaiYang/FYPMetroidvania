@@ -357,6 +357,8 @@ public class PlayerController : MonoBehaviour
             if (wallCoyoteCounter > 0)
                 wallCoyoteCounter -= Time.deltaTime;
         }
+
+        Move(velocity * Time.deltaTime);
     }
     private void FixedUpdate()
     {
@@ -367,8 +369,8 @@ public class PlayerController : MonoBehaviour
         if (isInKnockback)
         {
             velocity = knockbackVelocity;
-            knockbackTimer -= Time.deltaTime;
-            knockbackVelocity -= knockbackVelocity * Time.fixedDeltaTime;
+            knockbackTimer -= Time.fixedDeltaTime;
+            knockbackVelocity -= knockbackVelocity * Time.deltaTime;
             if(knockbackTimer < 0 && currentKnockdownPhase <= 0)
             {
                 isInKnockback = false;
@@ -381,14 +383,17 @@ public class PlayerController : MonoBehaviour
             velocity.y += Time.fixedDeltaTime * (isFloating ? floatGravity : gravity);
 
         // Move the character
-        Move(velocity * Time.fixedDeltaTime);
+        //Move(velocity * Time.deltaTime);
 
         // Tick down jump buffer
         if (jumpBufferCounter > 0)
             jumpBufferCounter -= Time.fixedDeltaTime;
     }
 
+    private void HandleMovement()
+    {
 
+    }
     public void Move(Vector2 moveAmount)
     {
         // Horizontal
@@ -541,6 +546,7 @@ public class PlayerController : MonoBehaviour
             combat.SetCanTransition(1);
             animator.SetBool("IsAttacking", false);
             combat.HideVFX();
+            combat.DisableAllHitboxes();
         }
         AudioManager.PlaySFX(SFXTYPE.PLAYER_DASH);
 

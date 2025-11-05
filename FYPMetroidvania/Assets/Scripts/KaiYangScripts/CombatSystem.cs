@@ -146,6 +146,8 @@ public class CombatSystem : MonoBehaviour
         int enemyLayer = LayerMask.NameToLayer("EnemyLayer");
         Physics2D.IgnoreLayerCollision(playerLayer, enemyLayer, true);
 
+        if (isAttacking) controller.externalVelocityOverride = true;
+
         if (attackCooldownTimer > 0f)
             attackCooldownTimer -= Time.deltaTime;
 
@@ -476,7 +478,19 @@ public class CombatSystem : MonoBehaviour
             comboStep++;
             animator.SetInteger("ComboStep", comboStep);
             isBuffered = true;
-            //if (comboStep > 3) ResetCombo();
+            if(!isAttacking && comboStep == 1)
+            {
+                comboTimer = 1f;
+                animator.SetBool("IsAttacking", true);
+                animator.SetTrigger("DoAttack");
+
+                Debug.Log($"Performing Combo Step {comboStep} with {currentWeapon}");
+                canTransition = false;
+                isAttacking = true;
+                controller.externalVelocityOverride = true;
+                if (controller.IsGrounded) controller.SetVelocity(Vector2.zero);
+                //isBuffered = false;
+            }
         }
     }
 
@@ -501,6 +515,7 @@ public class CombatSystem : MonoBehaviour
         foreach(var hitbox in activeHitboxes)
             hitbox.SetActive(false);
     }
+    #region old methods
     public void DisableSwordUpHitbox()
     {
         if (swordUpHitbox != null)
@@ -563,6 +578,7 @@ public class CombatSystem : MonoBehaviour
         }
         AudioManager.PlaySFX(SFXTYPE.SWORD_SWING, 1.0f);
     }
+    #endregion
     public void PlayVFX(string Name)
     {
         if (particleEffectsObject == null) return;
@@ -602,7 +618,7 @@ public class CombatSystem : MonoBehaviour
         };
     }
 
-    private void ResetCombo()
+    public void ResetCombo()
     {
         comboStep = 0;
         comboTimer = 0f;
