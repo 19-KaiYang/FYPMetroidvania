@@ -211,8 +211,11 @@ public class Health : MonoBehaviour
                 {
                     if (!skills.IsUsingSkill && pc.externalVelocityOverride && !pc.isInKnockback && !combat.isAttacking && !pc.isDashing)
                     {
-                        Debug.LogWarning("Detected stuck state - clearing externalVelocityOverride");
-                        pc.externalVelocityOverride = false;
+                        if (Time.time - pc.lastExternalVelocitySetTime > 0.5f)
+                        {
+                            Debug.LogWarning("Detected stuck state - clearing externalVelocityOverride");
+                            pc.externalVelocityOverride = false;
+                        }
                     }
                 }
             }

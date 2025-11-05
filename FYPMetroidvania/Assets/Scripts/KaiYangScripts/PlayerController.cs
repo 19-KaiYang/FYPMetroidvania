@@ -90,6 +90,7 @@ public class PlayerController : MonoBehaviour
     private float knockdownPhaseTimer = 0f;
 
     public bool externalVelocityOverride = false;
+    public float lastExternalVelocitySetTime = 0f;
 
     // Jump control
     private bool jumpLocked = false;
@@ -328,6 +329,7 @@ public class PlayerController : MonoBehaviour
         // Movement logic (only runs if NOT in CC state)
         if (!externalVelocityOverride)
         {
+            Debug.Log("Overriding velocity in Update!");  
             if (skills != null && skills.IsChargeLocked)
                 velocity.x = 0f;
             else if (!isDashing)
@@ -505,6 +507,7 @@ public class PlayerController : MonoBehaviour
                         wallJumpDirection.y * wallJumpForce
                     );
 
+                    Debug.Log($"Wall jump velocity set: {velocity}"); 
                     StartCoroutine(WallJumpBuffer());
                 }
             }
@@ -520,6 +523,7 @@ public class PlayerController : MonoBehaviour
     private IEnumerator WallJumpBuffer()
     {
         externalVelocityOverride = true;
+        lastExternalVelocitySetTime = Time.time;
         yield return new WaitForSeconds(0.2f);
         externalVelocityOverride = false;
     }
