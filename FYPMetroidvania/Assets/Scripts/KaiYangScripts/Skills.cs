@@ -427,6 +427,7 @@ public class Skills : MonoBehaviour
     // Ultimates
     public void TryUseSwordUltimate()
     {
+        if(controller.isInCutscene) return;
         if (usingUltimate) return;
         if (spirit == null || spirit.IsEmpty) return;
 

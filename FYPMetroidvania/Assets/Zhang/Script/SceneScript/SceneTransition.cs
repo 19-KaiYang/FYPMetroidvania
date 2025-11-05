@@ -94,11 +94,9 @@ public class SceneTransition : MonoBehaviour
 
                 if (!needPress && _other.CompareTag("Player"))
                 {
-                    if(upgradeMenuPrefab == null)
+                    if (upgradeMenuPrefab == null)
                     {
                         HandleUpgradeChosen();
-                        if(SceneTransitionManager.instance.currentSceneName == "Goblin Camp")
-                            AudioManager.instance.StopBGM();
                         return;
                     }
                     GameObject menuObj = Instantiate(upgradeMenuPrefab);

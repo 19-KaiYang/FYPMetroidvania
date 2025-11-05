@@ -40,6 +40,7 @@ public class AnimationEventRelay : MonoBehaviour
     public void DisableGauntletDownHitbox() => combatSystem?.DisableGauntletDownHitbox();
 #endregion
     public void SetCanTransition(int comboEnd) => combatSystem?.SetCanTransition(comboEnd);
+    public void ResetCombo() => combatSystem?.ResetCombo();
     public void SetCanBuffer() => combatSystem?.SetCanBuffer();
     public void SetUppercutStart(int start) => skills?.SetUppercut_Start(start);
     public void SetLungeStart() => skills?.SetLunge_Start();

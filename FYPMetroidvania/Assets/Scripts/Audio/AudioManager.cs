@@ -12,6 +12,7 @@ public class AudioManager : MonoBehaviour
     public static AudioManager instance;
     public AudioSource SFXSource;
     public AudioSource BGMSource;
+    public bool isPlayingBGM;
 
     private void Awake()
     {
@@ -41,6 +42,7 @@ public class AudioManager : MonoBehaviour
                 BGMDictionary.Add(bgm.key, bgm);
             }
         }
+        isPlayingBGM = false;
     }
     private void Update()
     {
@@ -64,11 +66,12 @@ public class AudioManager : MonoBehaviour
     public void PlayBGM(BGMType type)
     {
         if (!BGMDictionary.ContainsKey(type) || instance.BGMSource == null) return;
-
+        StopBGM();
         BGM bgm = BGMDictionary[type];
         BGMSource.clip = bgm.audio;
         BGMSource.volume = bgm.volume;
         BGMSource.Play();
+        isPlayingBGM = true;
     }
     public void PlayBGM(string keyname)
     {
@@ -79,10 +82,12 @@ public class AudioManager : MonoBehaviour
         BGMSource.clip = bgm.audio;
         BGMSource.volume = bgm.volume;
         BGMSource.Play();
+        isPlayingBGM = true;
     }
     public void StopBGM()
     {
         BGMSource.Stop();
+        isPlayingBGM = false;
     }
 }
 
