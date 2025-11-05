@@ -181,7 +181,7 @@ public class Spearman : Enemy
         public void OnEnter()
         {
             enemy.thrustCooldown = Random.Range(0.5f, 1.5f);
-            enemy.throwCooldown = Random.Range(1f, 2f);
+            enemy.throwCooldown = Random.Range(1.5f, 2.5f);
         }
         public void OnUpdate()
         {
@@ -253,6 +253,9 @@ public class Spearman : Enemy
             enemy.animator.SetTrigger("thrust");
             enemy.isThrustFinished = false;
             enemy.thrustTimer = 0;
+            enemy.health.spriteRenderer.color = Color.orange;
+            enemy.health.knockdownImmune = true;
+            enemy.health.stunImmune = true;
             //AudioManager.PlaySFX(SFXTYPE.SPEARMAN_CHARGE, 0.2f);
         }
         public void OnUpdate()
@@ -269,7 +272,8 @@ public class Spearman : Enemy
         }
         public void OnExit()
         {
-
+            enemy.health.knockdownImmune = false;
+            enemy.health.stunImmune = false;
         }
     }
     public void ThrustVFX()

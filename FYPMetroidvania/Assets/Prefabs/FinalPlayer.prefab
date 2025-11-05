@@ -771,7 +771,7 @@ MonoBehaviour:
   dashTrail: {fileID: 2633044670583900417}
   wallCheckDistance: 0.3
   wallJumpForce: 15
-  wallJumpDirection: {x: 1, y: 1.2}
+  wallJumpDirection: {x: 0.8, y: 1.2}
   groundCheck: {fileID: 4587435243054224353}
   groundCheckRadius: 0.1
   groundLayer:
@@ -790,6 +790,7 @@ MonoBehaviour:
   isDashing: 0
   wasGroundedLastFrame: 0
   externalVelocityOverride: 0
+  lastExternalVelocitySetTime: 0
   isInCutscene: 0
 --- !u!114 &1835037867212476304
 MonoBehaviour:

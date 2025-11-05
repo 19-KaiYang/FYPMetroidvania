@@ -386,6 +386,9 @@ public class MeleeEnemy : Enemy
             enemy.isAttackFinished = false;
             enemy.meleeAttackTimer = 0;
             enemy.rb.linearVelocity = Vector3.zero;
+            enemy.health.spriteRenderer.color = Color.orange;
+            enemy.health.knockdownImmune = true;
+            enemy.health.stunImmune = true;
             //AudioManager.PlaySFX(SFXTYPE.BRALWER_CHARGE, 0.2f);
         }
         public void OnUpdate()
@@ -402,7 +405,8 @@ public class MeleeEnemy : Enemy
         }
         public void OnExit()
         {
-
+            enemy.health.knockdownImmune = false;
+            enemy.health.stunImmune = false;
         }
     }
     public class MeleeEnemyCCState : IState
