@@ -60,6 +60,13 @@ public class TooltipSystem : MonoBehaviour
     {
         tooltipDatabase.Add("bleed", "Deals flat damage every time the enemy is hit by an attack. \nDeals higher damage when reapplied");
         tooltipDatabase.Add("pixie dust", "Deals damage over time. \nCan be stacked up to 10 times to increase DPS");
+        tooltipDatabase.Add("wind slash",
+        "A short ranged projectile that deals moderate damage and applies <color=#FFD700>Bleed</color>\"\n" +
+        "<color=#FFD700>Deals flat damage every time the enemy is hit by an attack and deals higher damage when reapplied</color>");
+        tooltipDatabase.Add("pixie bolt",
+        "All attacks have a 10% chance to fire out a <color=#FFD700>Pixie Bolt</color> straight forwards\"\n" +
+         "<color=#FFD700>Deals low damage and applies 1 stack of Pixie Dust, stopping on first enemy hit</color>");
+
     }
 
     public void ShowTooltip(string keyword, Vector2 position)
