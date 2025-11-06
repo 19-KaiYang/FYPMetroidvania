@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -107,7 +108,7 @@ public class AudioManager : MonoBehaviour
         switch (scene.name)
         {
             case "Room1":
-                PlayBGM(BGMType.TOWN_COMBAT);
+                StartCoroutine(FadeToBGM(BGMType.TOWN_COMBAT));
                 break;
 
             default:
@@ -115,6 +116,26 @@ public class AudioManager : MonoBehaviour
                 break;
         }
     }
+
+    public IEnumerator FadeToBGM(BGMType newBGM, float fadeTime = 1f)
+    {
+        float startVol = BGMSource.volume;
+        while (BGMSource.volume > 0f)
+        {
+            BGMSource.volume -= startVol * Time.deltaTime / fadeTime;
+            yield return null;
+        }
+
+        PlayBGM(newBGM);
+
+        BGMSource.volume = 0f;
+        while (BGMSource.volume < startVol)
+        {
+            BGMSource.volume += startVol * Time.deltaTime / fadeTime;
+            yield return null;
+        }
+    }
+
 
 }
 
