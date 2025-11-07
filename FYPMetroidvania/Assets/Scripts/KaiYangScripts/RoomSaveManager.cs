@@ -12,6 +12,7 @@ public class RoomSaveManager : MonoBehaviour
     [SerializeField] private GameObject finalUpdatedCanvasPrefab;
     [SerializeField] private GameObject upgradeDescriptionUIPrefab;
     [SerializeField] private GameObject sceneTransitionManagerPrefab;
+    [SerializeField] private GameObject audioManagerPrefab;
 
     [Header("All Available Upgrades")]
     [SerializeField] private Upgrade[] allUpgrades;
@@ -20,9 +21,10 @@ public class RoomSaveManager : MonoBehaviour
 
     private void Awake()
     {
-        // Ensure player UI and SceneTransitionManager exists when loading into any room
+        // Ensure player UI and managers exist when loading into any room
         EnsurePlayerUIExists();
         EnsureSceneTransitionManagerExists();
+        EnsureAudioManagerExists();
 
         // Subscribe to scene loaded event
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -104,6 +106,18 @@ public class RoomSaveManager : MonoBehaviour
                 SceneTransitionManager.instance.roomIndex = savedRoomIndex;
                 Debug.Log($"Loaded room index into SceneTransitionManager: {savedRoomIndex}");
             }
+        }
+    }
+
+    private void EnsureAudioManagerExists()
+    {
+        // Check if AudioManager exists, if not, instantiate it
+        if (AudioManager.instance == null && audioManagerPrefab != null)
+        {
+            GameObject manager = Instantiate(audioManagerPrefab);
+            manager.name = "AudioManager";
+            DontDestroyOnLoad(manager);
+            Debug.Log("Created missing AudioManager");
         }
     }
 

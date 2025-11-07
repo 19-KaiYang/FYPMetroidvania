@@ -28,7 +28,6 @@ public class UpgradeSaveData
         mobilityUpgradeName = "";
         miscUpgradeNames = new List<string>();
 
-        // Default stats (will be overwritten when saving)
         currentHealth = 100f;
         maxHealth = 100f;
         currentEnergy = 100f;

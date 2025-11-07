@@ -72,11 +72,10 @@ public class UpgradeManager : MonoBehaviour
         if (AttackUpgrade != null)
             AttackUpgrade.TryEffects(Trigger.OnStart, context);
 
-        // Trigger both OnStart (for backwards compatibility) and OnAttackStart for misc upgrades
         foreach (Upgrade misc in MiscUpgrades)
         {
-            misc.TryEffects(Trigger.OnStart, context);      // Keep old behavior
-            misc.TryEffects(Trigger.OnAttackStart, context); // New specific trigger
+            misc.TryEffects(Trigger.OnStart, context);      
+            misc.TryEffects(Trigger.OnAttackStart, context); 
         }
     }
 
@@ -124,7 +123,6 @@ public class UpgradeManager : MonoBehaviour
         if (SkillUpgrade != null)
             SkillUpgrade.TryEffects(Trigger.OnStart, context);
 
-        // Use ONLY OnSkillStart for misc upgrades - do NOT use OnStart
         foreach (Upgrade misc in MiscUpgrades)
             misc.TryEffects(Trigger.OnSkillStart, context);
     }
@@ -136,7 +134,6 @@ public class UpgradeManager : MonoBehaviour
         if (SkillUpgrade != null)
             SkillUpgrade.TryEffects(Trigger.OnEnd, ctx);
 
-        // Trigger OnSkillEnd for misc upgrades
         foreach (Upgrade misc in MiscUpgrades)
             misc.TryEffects(Trigger.OnSkillEnd, ctx);
     }
