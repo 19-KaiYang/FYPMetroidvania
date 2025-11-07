@@ -1,6 +1,8 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
 public class AudioManager : MonoBehaviour
@@ -89,6 +91,52 @@ public class AudioManager : MonoBehaviour
         BGMSource.Stop();
         isPlayingBGM = false;
     }
+
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+
+        switch (scene.name)
+        {
+            case "Room1":
+                StartCoroutine(FadeToBGM(BGMType.TOWN_COMBAT));
+                break;
+
+            default:
+                StopBGM();
+                break;
+        }
+    }
+
+    public IEnumerator FadeToBGM(BGMType newBGM, float fadeTime = 1f)
+    {
+        float startVol = BGMSource.volume;
+        while (BGMSource.volume > 0f)
+        {
+            BGMSource.volume -= startVol * Time.deltaTime / fadeTime;
+            yield return null;
+        }
+
+        PlayBGM(newBGM);
+
+        BGMSource.volume = 0f;
+        while (BGMSource.volume < startVol)
+        {
+            BGMSource.volume += startVol * Time.deltaTime / fadeTime;
+            yield return null;
+        }
+    }
+
+
 }
 
 [Serializable]

@@ -26,6 +26,15 @@ public class UpgradeSelectionUI : MonoBehaviour
     {
         upgradeManager = FindAnyObjectByType<UpgradeManager>();
         gameObject.SetActive(false);
+
+        // Add TooltipTrigger to all description labels
+        foreach (var descLabel in descriptionLabels)
+        {
+            if (descLabel != null && descLabel.GetComponent<TooltipTrigger>() == null)
+            {
+                descLabel.gameObject.AddComponent<TooltipTrigger>();
+            }
+        }
     }
 
     public void ShowMenu()
@@ -89,6 +98,10 @@ public class UpgradeSelectionUI : MonoBehaviour
 
     private void SelectUpgrade(Upgrade upgrade)
     {
+        // Hide tooltip when selecting upgrade
+        if (TooltipSystem.Instance != null)
+            TooltipSystem.Instance.HideTooltip();
+
         // Assign to correct category
         if (upgrade is PixieWingsUpgrade || upgrade is FleetOfFootUpgrade)
         {

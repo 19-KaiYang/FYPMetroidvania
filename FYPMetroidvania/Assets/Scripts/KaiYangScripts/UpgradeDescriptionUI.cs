@@ -9,18 +9,18 @@ public class UpgradeDescriptionUI : MonoBehaviour
 
     [Header("UI References")]
     [SerializeField] private GameObject panelBackground;
-    [SerializeField] private GameObject upgradePanel;    
-    [SerializeField] private GameObject skillPanel;      
-    [SerializeField] private Transform contentParent;     
+    [SerializeField] private GameObject upgradePanel;
+    [SerializeField] private GameObject skillPanel;
+    [SerializeField] private Transform contentParent;
     [SerializeField] private GameObject upgradeEntryPrefab;
 
     [Header("Toggle Button")]
-    [SerializeField] private Button toggleButton;         
-    [SerializeField] private TextMeshProUGUI buttonText;  
+    [SerializeField] private Button toggleButton;
+    [SerializeField] private TextMeshProUGUI buttonText;
 
     private UpgradeManager upgradeManager;
     private bool isOpen = false;
-    private bool showingUpgrade = true; 
+    private bool showingUpgrade = true;
 
     void Awake()
     {
@@ -44,7 +44,7 @@ public class UpgradeDescriptionUI : MonoBehaviour
         if (panelBackground) panelBackground.SetActive(false);
         if (upgradePanel) upgradePanel.SetActive(false);
         if (skillPanel) skillPanel.SetActive(false);
-        if(toggleButton) toggleButton.gameObject.SetActive(false);
+        if (toggleButton) toggleButton.gameObject.SetActive(false);
     }
 
     void Update()
@@ -59,7 +59,7 @@ public class UpgradeDescriptionUI : MonoBehaviour
         isOpen = !isOpen;
 
         if (panelBackground) panelBackground.SetActive(isOpen);
-        if (toggleButton) toggleButton.gameObject.SetActive(isOpen); 
+        if (toggleButton) toggleButton.gameObject.SetActive(isOpen);
 
         if (isOpen)
         {
@@ -77,6 +77,10 @@ public class UpgradeDescriptionUI : MonoBehaviour
             upgradePanel.SetActive(false);
             skillPanel.SetActive(false);
             ClearUI();
+
+            // Hide tooltip when closing menu
+            if (TooltipSystem.Instance != null)
+                TooltipSystem.Instance.HideTooltip();
         }
     }
 
@@ -116,9 +120,9 @@ public class UpgradeDescriptionUI : MonoBehaviour
         if (!upgradeManager || !contentParent || !upgradeEntryPrefab) return;
 
         List<Upgrade> allUpgrades = new List<Upgrade>();
-        if (upgradeManager.AttackUpgrade)   allUpgrades.Add(upgradeManager.AttackUpgrade);
-        if (upgradeManager.SkillUpgrade)    allUpgrades.Add(upgradeManager.SkillUpgrade);
-        if (upgradeManager.SpiritUpgrade)   allUpgrades.Add(upgradeManager.SpiritUpgrade);
+        if (upgradeManager.AttackUpgrade) allUpgrades.Add(upgradeManager.AttackUpgrade);
+        if (upgradeManager.SkillUpgrade) allUpgrades.Add(upgradeManager.SkillUpgrade);
+        if (upgradeManager.SpiritUpgrade) allUpgrades.Add(upgradeManager.SpiritUpgrade);
         if (upgradeManager.MobilityUpgrade) allUpgrades.Add(upgradeManager.MobilityUpgrade);
         allUpgrades.AddRange(upgradeManager.MiscUpgrades);
 
@@ -134,7 +138,15 @@ public class UpgradeDescriptionUI : MonoBehaviour
             if (nameText != null)
                 nameText.text = upgrade.displayName;
             if (descText != null)
+            {
                 descText.text = upgrade.description;
+
+                // Add TooltipTrigger component to enable tooltips
+                if (descText.GetComponent<TooltipTrigger>() == null)
+                {
+                    descText.gameObject.AddComponent<TooltipTrigger>();
+                }
+            }
         }
     }
 
