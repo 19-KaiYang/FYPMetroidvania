@@ -8,7 +8,7 @@ public class MainMenuUI : MonoBehaviour
     [SerializeField] private GameObject pausePanel;
     [SerializeField] private GameObject settingPanel;
     [SerializeField] private GameObject MainMenu;
-    [SerializeField] private GameObject continueButton; // Add this to enable/disable the continue button
+    [SerializeField] private GameObject continueButton; 
 
     private bool isPause = false;
     private bool otherPanel = false;
@@ -25,7 +25,7 @@ public class MainMenuUI : MonoBehaviour
 
     private void Start()
     {
-        // Only update button state if we're in the main menu
+        
         if (SceneManager.GetActiveScene().name == "MainMenu")
         {
             UpdateContinueButtonState();
@@ -44,7 +44,7 @@ public class MainMenuUI : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // Update continue button state when main menu loads
+    
         if (scene.name == "MainMenu")
         {
             MainMenu.SetActive(true);
@@ -54,7 +54,7 @@ public class MainMenuUI : MonoBehaviour
         }
         else
         {
-            // Hide main menu UI when in gameplay scenes
+            
             MainMenu.SetActive(false);
             pausePanel.SetActive(false);
             settingPanel.SetActive(false);
@@ -63,7 +63,7 @@ public class MainMenuUI : MonoBehaviour
 
     private void UpdateContinueButtonState()
     {
-        // Enable/disable the continue button based on whether save data exists
+     
         if (continueButton != null)
         {
             continueButton.SetActive(RoomSaveManager.HasSaveData());
@@ -106,8 +106,6 @@ public class MainMenuUI : MonoBehaviour
         Time.timeScale = 1f;
         isPause = false;
     }
-
-    // NEW: Continue button for main menu (loads last saved room)
     public void ContinueGameButton()
     {
         string lastRoom = RoomSaveManager.GetLastSavedRoom();
@@ -118,16 +116,28 @@ public class MainMenuUI : MonoBehaviour
 
         SceneManager.LoadScene(lastRoom);
     }
-
-    // NEW: Start new game button (clears save and starts from beginning)
     public void NewGameButton()
     {
         RoomSaveManager.ClearSaveData();
 
-        // Hide main menu UI before loading
-        MainMenu.SetActive(false);
+        if (SceneTransitionManager.instance != null)
+        {
+            SceneTransitionManager.instance.roomIndex = 0;
+            SceneTransitionManager.instance.currentSceneName = "GoblinCamp";
+            SceneTransitionManager.instance.lastSceneName = "";
+        }
+        if (SceneTransitionManager.instance != null)
+        {
+            Destroy(SceneTransitionManager.instance.gameObject);
+            SceneTransitionManager.instance = null;
+        }
 
-        SceneManager.LoadScene("Goblin Camp"); // Your starting room
+        // Hide UI and start game
+        MainMenu.SetActive(false);
+        Time.timeScale = 1f;
+
+        Debug.Log("=== Starting New Game from Goblin Camp ===");
+        SceneManager.LoadScene("Goblin Camp");
     }
 
     public void MainMenuButton()
@@ -137,18 +147,20 @@ public class MainMenuUI : MonoBehaviour
 
         Time.timeScale = 1f;
         isPause = false;
-        SceneManager.LoadScene("MainMenu");
+        if (SceneTransitionManager.instance != null)
+        {
+            Destroy(SceneTransitionManager.instance.gameObject);
+            SceneTransitionManager.instance = null;
+        }
 
-        // Update continue button when returning to main menu
-        UpdateContinueButtonState();
+
+        SceneManager.LoadScene("MainMenu");
+        Debug.Log("=== Returned to Main Menu ===");
     }
 
     public void StartGameBtn()
     {
-        // Hide main menu UI before loading
         MainMenu.SetActive(false);
-
-        // This can now call NewGameButton or you can keep it as is
         SceneManager.LoadScene("Goblin Camp");
     }
 

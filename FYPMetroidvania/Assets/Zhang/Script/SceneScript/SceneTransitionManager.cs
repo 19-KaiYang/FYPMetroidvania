@@ -2,7 +2,6 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using NUnit.Framework;
 using System.Collections.Generic;
 
 public class SceneTransitionManager : MonoBehaviour
@@ -19,7 +18,7 @@ public class SceneTransitionManager : MonoBehaviour
 
     [Header("Room Handling")]
     public List<string> rooms;
-    [SerializeField] ProgressionData progressionData;
+    [SerializeField] public ProgressionData progressionData;
     public int roomIndex = 0;
     public static System.Action<string> roomLoaded;
 
@@ -40,20 +39,26 @@ public class SceneTransitionManager : MonoBehaviour
     void Start()
     {
         currentSceneName = SceneManager.GetActiveScene().name;
-        roomIndex = 0;
-        rooms = new List<string>(progressionData.rooms);
-        //rooms.RemoveAt(0);
-        //ShuffleRooms();
+
+        // Initialize rooms list
+        if (progressionData != null)
+        {
+            rooms = new List<string>(progressionData.rooms);
+        }
+
+        Debug.Log($"SceneTransitionManager initialized with room index: {roomIndex}");
     }
 
     void Update()
     {
 
     }
+
     public enum FadeDirection
     {
         IN, OUT
     }
+
     public IEnumerator FadeAndLoadScene(FadeDirection _fadeDir, string _sceneName)
     {
         // SAVE UPGRADES BEFORE CHANGING SCENES
@@ -61,20 +66,24 @@ public class SceneTransitionManager : MonoBehaviour
 
         if (currentSceneName == "GoblinCamp") AudioManager.instance.StopBGM();
         fadeImage.enabled = true;
-        //string random = GetRandomRoom();
-        //if (random != null) _sceneName = random;
+
         if (roomIndex < rooms.Count)
         {
             _sceneName = rooms[roomIndex];
             if (currentSceneName != progressionData.startingScene) roomIndex++;
         }
-        else _sceneName = progressionData.EndingScene;
+        else
+        {
+            _sceneName = progressionData.EndingScene;
+        }
+
         if (_sceneName != null)
         {
             yield return Fade(_fadeDir);
             SceneManager.LoadScene(_sceneName);
         }
     }
+
     public IEnumerator Fade(FadeDirection _fadeDir)
     {
         float startAlpha = _fadeDir == FadeDirection.OUT ? 1f : 0f;
@@ -100,6 +109,7 @@ public class SceneTransitionManager : MonoBehaviour
                                 endAlpha);
 
     }
+
     void SetColorImage(ref float _alpha, FadeDirection _fadeDir)
     {
         fadeImage.color = new Color(fadeImage.color.r,
@@ -126,8 +136,6 @@ public class SceneTransitionManager : MonoBehaviour
                 exitDir.x = PlayerController.instance.spriteTransform.localScale.x > 0 ? 1 : -1;
             }
             player.moveInput.x = exitDir.x > 0 ? 1 : -1;
-
-            //rb.linearVelocity = new Vector2(exitDir.x * 15, rb.linearVelocity.y);
         }
 
         if ((exitDir.x > 0 && !player.facingRight) || (exitDir.x < 0 && player.facingRight))
@@ -142,11 +150,9 @@ public class SceneTransitionManager : MonoBehaviour
 
     private string GetRandomRoom()
     {
-
         if (progressionData == null) return null;
         if (progressionData.rooms.Count < 2) return null;
 
-        //string sceneName = "";
         while (true)
         {
             string scene = progressionData.rooms[Random.Range(0, progressionData.rooms.Count)];
@@ -164,27 +170,12 @@ public class SceneTransitionManager : MonoBehaviour
         for (int i = 0; i < rooms.Count; i++)
         {
             string temp = rooms[i];
-            //if (temp == currentSceneName)
-            //{
-            //    rooms.Remove(temp);
-            //    continue;
-            //}
             int randomIndex = Random.Range(i, rooms.Count);
             rooms[i] = rooms[randomIndex];
             rooms[randomIndex] = temp;
         }
     }
 
-    #region get current scene
-    private void OnEnable()
-    {
-        //SceneManager.sceneLoaded += OnSceneLoaded;
-    }
-
-    private void OnDisable()
-    {
-        //SceneManager.sceneLoaded -= OnSceneLoaded;
-    }
     private void OnDestroy()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
@@ -194,8 +185,13 @@ public class SceneTransitionManager : MonoBehaviour
     {
         currentSceneName = scene.name;
         roomLoaded?.Invoke(currentSceneName);
-        if (currentSceneName == progressionData.startingScene) PlayerController.instance.isInCutscene = true;
-        else if (progressionData.rooms.Contains(currentSceneName) && !AudioManager.instance.BGMSource.isPlaying) AudioManager.instance.PlayBGM(BGMType.TOWN_COMBAT);
+        if (currentSceneName == progressionData.startingScene)
+        {
+            PlayerController.instance.isInCutscene = true;
+        }
+        else if (progressionData.rooms.Contains(currentSceneName) && !AudioManager.instance.BGMSource.isPlaying)
+        {
+            AudioManager.instance.PlayBGM(BGMType.TOWN_COMBAT);
+        }
     }
-    #endregion
 }

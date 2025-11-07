@@ -11,6 +11,7 @@ public class RoomSaveManager : MonoBehaviour
     [Header("Required Player UI Prefabs (Optional)")]
     [SerializeField] private GameObject finalUpdatedCanvasPrefab;
     [SerializeField] private GameObject upgradeDescriptionUIPrefab;
+    [SerializeField] private GameObject sceneTransitionManagerPrefab;
 
     [Header("All Available Upgrades")]
     [SerializeField] private Upgrade[] allUpgrades;
@@ -19,8 +20,9 @@ public class RoomSaveManager : MonoBehaviour
 
     private void Awake()
     {
-        // Ensure player UI exists when loading into any room
+        // Ensure player UI and SceneTransitionManager exists when loading into any room
         EnsurePlayerUIExists();
+        EnsureSceneTransitionManagerExists();
 
         // Subscribe to scene loaded event
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -82,6 +84,26 @@ public class RoomSaveManager : MonoBehaviour
             ui.name = "UpgradeDescriptionUI";
             DontDestroyOnLoad(ui);
             Debug.Log("Created missing UpgradeDescriptionUI");
+        }
+    }
+
+    private void EnsureSceneTransitionManagerExists()
+    {
+        // Check if SceneTransitionManager exists, if not, instantiate it
+        if (SceneTransitionManager.instance == null && sceneTransitionManagerPrefab != null)
+        {
+            GameObject manager = Instantiate(sceneTransitionManagerPrefab);
+            manager.name = "SceneTransitionManager";
+            DontDestroyOnLoad(manager);
+            Debug.Log("Created missing SceneTransitionManager");
+
+            // Load the saved room index if continuing
+            if (HasSaveData())
+            {
+                int savedRoomIndex = PlayerPrefs.GetInt(ROOM_INDEX_KEY, 0);
+                SceneTransitionManager.instance.roomIndex = savedRoomIndex;
+                Debug.Log($"Loaded room index into SceneTransitionManager: {savedRoomIndex}");
+            }
         }
     }
 
