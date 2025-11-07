@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class UpgradeDescriptionUI : MonoBehaviour
 {
@@ -34,17 +35,44 @@ public class UpgradeDescriptionUI : MonoBehaviour
         if (toggleButton)
             toggleButton.onClick.AddListener(TogglePanels);
 
+        // Subscribe to scene loaded to refresh UpgradeManager reference
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // Find the new UpgradeManager when a scene loads
+        FindUpgradeManager();
     }
 
     void Start()
     {
-        upgradeManager = FindAnyObjectByType<UpgradeManager>();
+        FindUpgradeManager();
 
         // Hide everything at start
         if (panelBackground) panelBackground.SetActive(false);
         if (upgradePanel) upgradePanel.SetActive(false);
         if (skillPanel) skillPanel.SetActive(false);
         if (toggleButton) toggleButton.gameObject.SetActive(false);
+    }
+
+    // Helper method to find the current UpgradeManager
+    void FindUpgradeManager()
+    {
+        upgradeManager = FindAnyObjectByType<UpgradeManager>();
+        if (upgradeManager != null)
+        {
+            Debug.Log($"UpgradeDescriptionUI found UpgradeManager on: {upgradeManager.gameObject.name}");
+        }
+        else
+        {
+            Debug.LogWarning("UpgradeDescriptionUI could not find UpgradeManager");
+        }
     }
 
     void Update()
@@ -56,6 +84,12 @@ public class UpgradeDescriptionUI : MonoBehaviour
     // ---------- MENU OPEN/CLOSE ----------
     void ToggleMenu()
     {
+        // Refresh UpgradeManager reference in case it changed
+        if (upgradeManager == null)
+        {
+            FindUpgradeManager();
+        }
+
         isOpen = !isOpen;
 
         if (panelBackground) panelBackground.SetActive(isOpen);

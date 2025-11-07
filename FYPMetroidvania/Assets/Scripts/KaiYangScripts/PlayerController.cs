@@ -118,8 +118,11 @@ public class PlayerController : MonoBehaviour
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
-            if(SceneManager.GetActiveScene().name == "Goblin Camp")
+
+            if (SceneManager.GetActiveScene().name == "Goblin Camp" && !RoomSaveManager.HasSaveData())
                 isInCutscene = true;
+            else
+                isInCutscene = false;
         }
         else
         {
@@ -132,7 +135,7 @@ public class PlayerController : MonoBehaviour
 
         skills = GetComponentInChildren<Skills>();
         combat = GetComponentInChildren<CombatSystem>();
-        if(animator == null) animator = GetComponentInChildren<Animator>();
+        if (animator == null) animator = GetComponentInChildren<Animator>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
 
         if (groundCheck != null)

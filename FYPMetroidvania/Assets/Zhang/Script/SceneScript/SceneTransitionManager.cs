@@ -48,7 +48,7 @@ public class SceneTransitionManager : MonoBehaviour
 
     void Update()
     {
-        
+
     }
     public enum FadeDirection
     {
@@ -56,6 +56,9 @@ public class SceneTransitionManager : MonoBehaviour
     }
     public IEnumerator FadeAndLoadScene(FadeDirection _fadeDir, string _sceneName)
     {
+        // SAVE UPGRADES BEFORE CHANGING SCENES
+        RoomSaveManager.PrepareForSceneChange();
+
         if (currentSceneName == "GoblinCamp") AudioManager.instance.StopBGM();
         fadeImage.enabled = true;
         //string random = GetRandomRoom();
@@ -63,7 +66,7 @@ public class SceneTransitionManager : MonoBehaviour
         if (roomIndex < rooms.Count)
         {
             _sceneName = rooms[roomIndex];
-            if(currentSceneName != progressionData.startingScene) roomIndex++;
+            if (currentSceneName != progressionData.startingScene) roomIndex++;
         }
         else _sceneName = progressionData.EndingScene;
         if (_sceneName != null)
@@ -95,7 +98,7 @@ public class SceneTransitionManager : MonoBehaviour
                                 fadeImage.color.g,
                                 fadeImage.color.b,
                                 endAlpha);
-        
+
     }
     void SetColorImage(ref float _alpha, FadeDirection _fadeDir)
     {
@@ -140,14 +143,14 @@ public class SceneTransitionManager : MonoBehaviour
     private string GetRandomRoom()
     {
 
-        if(progressionData == null) return null;
+        if (progressionData == null) return null;
         if (progressionData.rooms.Count < 2) return null;
 
         //string sceneName = "";
         while (true)
         {
             string scene = progressionData.rooms[Random.Range(0, progressionData.rooms.Count)];
-            if(scene != SceneManager.GetActiveScene().name)
+            if (scene != SceneManager.GetActiveScene().name)
             {
                 return scene;
             }
@@ -192,7 +195,7 @@ public class SceneTransitionManager : MonoBehaviour
         currentSceneName = scene.name;
         roomLoaded?.Invoke(currentSceneName);
         if (currentSceneName == progressionData.startingScene) PlayerController.instance.isInCutscene = true;
-        else if(progressionData.rooms.Contains(currentSceneName) && !AudioManager.instance.BGMSource.isPlaying) AudioManager.instance.PlayBGM(BGMType.TOWN_COMBAT);
+        else if (progressionData.rooms.Contains(currentSceneName) && !AudioManager.instance.BGMSource.isPlaying) AudioManager.instance.PlayBGM(BGMType.TOWN_COMBAT);
     }
     #endregion
 }

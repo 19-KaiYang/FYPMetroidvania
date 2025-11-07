@@ -24,25 +24,30 @@ public class UpgradeManager : MonoBehaviour
         player = GetComponent<PlayerController>();
         combatSystem = GetComponent<CombatSystem>();
         skillManager = GetComponent<Skills>();
+        health = GetComponent<Health>();
 
-        // Temp for testing
-        if (MobilityUpgrade != null) MobilityUpgrade.OnApply(this);
-        foreach(Upgrade upgrade in MiscUpgrades)
+        if (!RoomSaveManager.HasSaveData())
         {
-            upgrade.OnApply(this);
+            if (MobilityUpgrade != null) MobilityUpgrade.OnApply(this);
+            foreach (Upgrade upgrade in MiscUpgrades)
+            {
+                upgrade.OnApply(this);
+            }
         }
     }
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Tab))
         {
-            if(MobilityUpgrade != null)
+            if (MobilityUpgrade != null)
             {
                 MobilityUpgrade.OnRemove(this);
                 MobilityUpgrade = null;
             }
-        }   
+        }
     }
+
     private void OnEnable()
     {
         CombatSystem.basicAttackStart += OnBasicAttackStart;
@@ -96,7 +101,7 @@ public class UpgradeManager : MonoBehaviour
             hitbox.gameObject == skillManager.swordUppercutHitbox ||
             hitbox.gameObject == skillManager.gauntletShockwaveHitbox)
         {
-            return; 
+            return;
         }
 
         Debug.Log("Hit!");
@@ -199,6 +204,7 @@ public class UpgradeManager : MonoBehaviour
             projectile.GetComponent<SpriteRenderer>().flipX = player.facingRight ? false : true;
         }
     }
+
     private void OnDestroy()
     {
         CombatSystem.basicAttackStart -= OnBasicAttackStart;
@@ -212,11 +218,5 @@ public class UpgradeManager : MonoBehaviour
         Skills.OnUltimateStart -= OnUltimateStart;
         Skills.OnUltimateHit -= OnUltimateHit;
         Skills.OnUltimateEnd -= OnUltimateEnd;
-
-
-        foreach (Upgrade upgrade in MiscUpgrades)
-        {
-            upgrade.OnRemove(this);
-        }
     }
 }
