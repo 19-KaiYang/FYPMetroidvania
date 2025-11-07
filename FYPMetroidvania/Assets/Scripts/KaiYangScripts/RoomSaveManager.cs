@@ -52,7 +52,7 @@ public class RoomSaveManager : MonoBehaviour
             // Load upgrades if continuing - load immediately
             if (HasSaveData())
             {
-                Debug.Log("Save data found, loading");
+                Debug.Log("Save data found, loading upgrades...");
                 LoadUpgrades();
             }
             else
@@ -66,6 +66,7 @@ public class RoomSaveManager : MonoBehaviour
 
     private void EnsurePlayerUIExists()
     {
+        // Check if FinalUpdatedCanvas exists, if not, instantiate it
         if (GameObject.Find("FinalUpdatedCanvas") == null && finalUpdatedCanvasPrefab != null)
         {
             GameObject canvas = Instantiate(finalUpdatedCanvasPrefab);
@@ -73,6 +74,8 @@ public class RoomSaveManager : MonoBehaviour
             DontDestroyOnLoad(canvas);
             Debug.Log("Created missing FinalUpdatedCanvas");
         }
+
+        // Check if UpgradeDescriptionUI exists, if not, instantiate it
         if (GameObject.Find("UpgradeDescriptionUI") == null && upgradeDescriptionUIPrefab != null)
         {
             GameObject ui = Instantiate(upgradeDescriptionUIPrefab);
@@ -115,48 +118,69 @@ public class RoomSaveManager : MonoBehaviour
         // Load AttackUpgrade
         if (!string.IsNullOrEmpty(saveData.attackUpgradeName))
         {
+            Debug.Log($"Attempting to load AttackUpgrade: {saveData.attackUpgradeName}");
             Upgrade upgrade = FindUpgradeByName(saveData.attackUpgradeName);
             if (upgrade != null)
             {
                 upgradeManager.AttackUpgrade = upgrade;
                 upgrade.OnApply(upgradeManager);
+                Debug.Log($" Successfully loaded and applied AttackUpgrade: {saveData.attackUpgradeName}");
+            }
+            else
+            {
+                Debug.LogError($" Failed to find AttackUpgrade: {saveData.attackUpgradeName}");
             }
         }
 
         // Load SkillUpgrade
         if (!string.IsNullOrEmpty(saveData.skillUpgradeName))
         {
+            Debug.Log($"Attempting to load SkillUpgrade: {saveData.skillUpgradeName}");
             Upgrade upgrade = FindUpgradeByName(saveData.skillUpgradeName);
             if (upgrade != null)
             {
                 upgradeManager.SkillUpgrade = upgrade;
                 upgrade.OnApply(upgradeManager);
+                Debug.Log($" Successfully loaded and applied SkillUpgrade: {saveData.skillUpgradeName}");
+            }
+            else
+            {
+                Debug.LogError($" Failed to find SkillUpgrade: {saveData.skillUpgradeName}");
             }
         }
 
         // Load SpiritUpgrade
         if (!string.IsNullOrEmpty(saveData.spiritUpgradeName))
         {
+            Debug.Log($"Attempting to load SpiritUpgrade: {saveData.spiritUpgradeName}");
             Upgrade upgrade = FindUpgradeByName(saveData.spiritUpgradeName);
             if (upgrade != null)
             {
                 upgradeManager.SpiritUpgrade = upgrade;
                 upgrade.OnApply(upgradeManager);
-
+                Debug.Log($" Successfully loaded and applied SpiritUpgrade: {saveData.spiritUpgradeName}");
             }
-
+            else
+            {
+                Debug.LogError($" Failed to find SpiritUpgrade: {saveData.spiritUpgradeName}");
+            }
         }
 
         // Load MobilityUpgrade
         if (!string.IsNullOrEmpty(saveData.mobilityUpgradeName))
         {
+            Debug.Log($"Attempting to load MobilityUpgrade: {saveData.mobilityUpgradeName}");
             Upgrade upgrade = FindUpgradeByName(saveData.mobilityUpgradeName);
             if (upgrade != null)
             {
                 upgradeManager.MobilityUpgrade = upgrade;
                 upgrade.OnApply(upgradeManager);
+                Debug.Log($" Successfully loaded and applied MobilityUpgrade: {saveData.mobilityUpgradeName}");
             }
-
+            else
+            {
+                Debug.LogError($" Failed to find MobilityUpgrade: {saveData.mobilityUpgradeName}");
+            }
         }
 
         // Load MiscUpgrades
@@ -164,12 +188,45 @@ public class RoomSaveManager : MonoBehaviour
         upgradeManager.MiscUpgrades.Clear();
         foreach (string upgradeName in saveData.miscUpgradeNames)
         {
+            Debug.Log($"Attempting to load MiscUpgrade: {upgradeName}");
             Upgrade upgrade = FindUpgradeByName(upgradeName);
             if (upgrade != null)
             {
                 upgradeManager.MiscUpgrades.Add(upgrade);
                 upgrade.OnApply(upgradeManager);
+                Debug.Log($" Successfully loaded and applied MiscUpgrade: {upgradeName}");
             }
+            else
+            {
+                Debug.LogError($" Failed to find MiscUpgrade: {upgradeName}");
+            }
+        }
+
+        // Load Player Stats
+        Debug.Log("=== Loading Player Stats ===");
+
+        var health = player.GetComponent<Health>();
+        if (health != null)
+        {
+            health.maxHealth = saveData.maxHealth;
+            health.currentHealth = saveData.currentHealth;
+            Debug.Log($"Loaded Health: {saveData.currentHealth}/{saveData.maxHealth}");
+        }
+
+        var energy = player.GetComponent<EnergySystem>();
+        if (energy != null)
+        {
+            energy.maxEnergy = saveData.maxEnergy;
+            energy.SetCurrentEnergy(saveData.currentEnergy);
+            Debug.Log($"Loaded Energy: {saveData.currentEnergy}/{saveData.maxEnergy}");
+        }
+
+        var spirit = player.GetComponent<SpiritGauge>();
+        if (spirit != null)
+        {
+            spirit.maxSpirit = saveData.maxSpirit;
+            spirit.SetCurrentSpirit(saveData.currentSpirit);
+            Debug.Log($"Loaded Spirit: {saveData.currentSpirit}/{saveData.maxSpirit}");
         }
 
         Debug.Log("=== UPGRADE LOAD COMPLETE ===");
@@ -243,11 +300,19 @@ public class RoomSaveManager : MonoBehaviour
             saveData.attackUpgradeName = upgradeManager.AttackUpgrade.name;
             Debug.Log($"Saving AttackUpgrade: {saveData.attackUpgradeName}");
         }
+        else
+        {
+            Debug.Log("AttackUpgrade is null, not saving");
+        }
 
         if (upgradeManager.SkillUpgrade != null)
         {
             saveData.skillUpgradeName = upgradeManager.SkillUpgrade.name;
             Debug.Log($"Saving SkillUpgrade: {saveData.skillUpgradeName}");
+        }
+        else
+        {
+            Debug.Log("SkillUpgrade is null, not saving");
         }
 
         if (upgradeManager.SpiritUpgrade != null)
@@ -255,10 +320,19 @@ public class RoomSaveManager : MonoBehaviour
             saveData.spiritUpgradeName = upgradeManager.SpiritUpgrade.name;
             Debug.Log($"Saving SpiritUpgrade: {saveData.spiritUpgradeName}");
         }
+        else
+        {
+            Debug.Log("SpiritUpgrade is null, not saving");
+        }
+
         if (upgradeManager.MobilityUpgrade != null)
         {
             saveData.mobilityUpgradeName = upgradeManager.MobilityUpgrade.name;
             Debug.Log($"Saving MobilityUpgrade: {saveData.mobilityUpgradeName}");
+        }
+        else
+        {
+            Debug.Log("MobilityUpgrade is null, not saving");
         }
 
         // Save misc upgrades
@@ -270,6 +344,33 @@ public class RoomSaveManager : MonoBehaviour
                 saveData.miscUpgradeNames.Add(misc.name);
                 Debug.Log($"Saving MiscUpgrade: {misc.name}");
             }
+        }
+
+        // Save Player Stats
+        Debug.Log("=== Saving Player Stats ===");
+
+        var health = player.GetComponent<Health>();
+        if (health != null)
+        {
+            saveData.maxHealth = health.maxHealth;
+            saveData.currentHealth = health.currentHealth;
+            Debug.Log($"Saved Health: {saveData.currentHealth}/{saveData.maxHealth}");
+        }
+
+        var energy = player.GetComponent<EnergySystem>();
+        if (energy != null)
+        {
+            saveData.maxEnergy = energy.GetMaxEnergy();
+            saveData.currentEnergy = energy.GetCurrentEnergy();
+            Debug.Log($"Saved Energy: {saveData.currentEnergy}/{saveData.maxEnergy}");
+        }
+
+        var spirit = player.GetComponent<SpiritGauge>();
+        if (spirit != null)
+        {
+            saveData.maxSpirit = spirit.GetMaxSpirit();
+            saveData.currentSpirit = spirit.GetCurrentSpirit();
+            Debug.Log($"Saved Spirit: {saveData.currentSpirit}/{saveData.maxSpirit}");
         }
 
         string json = JsonUtility.ToJson(saveData);
@@ -285,7 +386,7 @@ public class RoomSaveManager : MonoBehaviour
         {
             return PlayerPrefs.GetString(LAST_ROOM_KEY, "Goblin Camp");
         }
-        return "Goblin Camp"; 
+        return "Goblin Camp"; // Default starting room
     }
 
     public static bool HasSaveData()
