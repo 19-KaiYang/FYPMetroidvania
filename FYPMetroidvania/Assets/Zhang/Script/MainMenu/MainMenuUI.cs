@@ -118,6 +118,11 @@ public class MainMenuUI : MonoBehaviour
     }
     public void NewGameButton()
     {
+        if (AudioManager.instance != null)
+        {
+            AudioManager.instance.StopBGM();
+        }
+
         RoomSaveManager.ClearSaveData();
 
         if (SceneTransitionManager.instance != null)
@@ -142,22 +147,26 @@ public class MainMenuUI : MonoBehaviour
 
     public void MainMenuButton()
     {
+        if (AudioManager.instance != null)
+        {
+            AudioManager.instance.StopBGM();
+        }
+
         var player = GameObject.FindWithTag("Player");
         if (player != null) Destroy(player);
 
         Time.timeScale = 1f;
         isPause = false;
+
         if (SceneTransitionManager.instance != null)
         {
             Destroy(SceneTransitionManager.instance.gameObject);
             SceneTransitionManager.instance = null;
         }
 
-
         SceneManager.LoadScene("MainMenu");
         Debug.Log("=== Returned to Main Menu ===");
     }
-
     public void StartGameBtn()
     {
         MainMenu.SetActive(false);

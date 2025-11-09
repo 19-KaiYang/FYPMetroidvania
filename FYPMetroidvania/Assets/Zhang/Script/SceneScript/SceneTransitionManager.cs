@@ -205,8 +205,34 @@ public class SceneTransitionManager : MonoBehaviour
     {
         currentSceneName = scene.name;
         roomLoaded?.Invoke(currentSceneName);
-        if (currentSceneName == progressionData.startingScene) PlayerController.instance.isInCutscene = true;
-        else if (progressionData.rooms.Contains(currentSceneName) && !AudioManager.instance.BGMSource.isPlaying) AudioManager.instance.PlayBGM(BGMType.TOWN_COMBAT);
+
+        // Stop BGM when entering main menu
+        if (currentSceneName == "MainMenu")
+        {
+            if (AudioManager.instance != null)
+            {
+                AudioManager.instance.StopBGM();
+            }
+            return;
+        }
+        if (currentSceneName == progressionData.startingScene)
+        {
+            if (PlayerController.instance != null)
+            {
+                PlayerController.instance.isInCutscene = true;
+            }
+            if (AudioManager.instance != null)
+            {
+                AudioManager.instance.PlayBGM(BGMType.OPENING_CUTSCENE);
+            }
+        }
+        else if (progressionData != null && progressionData.rooms.Contains(currentSceneName))
+        {
+            if (AudioManager.instance != null)
+            {
+                AudioManager.instance.PlayBGM(BGMType.TOWN_COMBAT);
+            }
+        }
     }
     #endregion
 }

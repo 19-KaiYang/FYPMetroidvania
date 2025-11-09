@@ -58,6 +58,12 @@ public class PlayerController : MonoBehaviour
     private bool hasWallJumped;
     private float lastWallJumpDirection = 0f;
 
+
+    public bool canWallSlide = true;
+    public float wallSlideSpeed = 2f;
+    private bool isWallSliding = false;
+
+
     [Header("Ground Check")]
     public Transform groundCheck;
     public float groundCheckRadius = 0.2f;
@@ -91,6 +97,7 @@ public class PlayerController : MonoBehaviour
 
     public bool externalVelocityOverride = false;
     public float lastExternalVelocitySetTime = 0f;
+    private bool justWallJumped = false;
 
     // Jump control
     private bool jumpLocked = false;
@@ -264,7 +271,15 @@ public class PlayerController : MonoBehaviour
             else
                 animator.SetFloat("Speed", 0f);
 
-            animator.SetBool("IsFalling", !IsGrounded && velocity.y < -0.1f);
+            if (IsGrounded)
+            {
+                animator.SetBool("IsFalling", false);
+                justWallJumped = false;
+            }
+            else
+            {
+                animator.SetBool("IsFalling", velocity.y < -0.1f || justWallJumped);
+            }
         }
 
         lastPosition = transform.position;
@@ -298,6 +313,7 @@ public class PlayerController : MonoBehaviour
             HasAirUppercut = false;
             hasWallJumped = false;
             lastWallJumpDirection = 0f;
+
 
             if (velocity.y < 0) velocity.y = -1f;
 
@@ -362,6 +378,18 @@ public class PlayerController : MonoBehaviour
             if (wallCoyoteCounter > 0)
                 wallCoyoteCounter -= Time.deltaTime;
         }
+
+        if (canWallSlide && IsTouchingWall() && !IsGrounded && velocity.y < 0 && !isDashing && !externalVelocityOverride)
+        {
+            isWallSliding = true;
+            velocity.y = Mathf.Max(velocity.y, -wallSlideSpeed);
+        }
+        else
+        {
+            isWallSliding = false;
+        }
+        animator.SetBool("IsWallSliding", isWallSliding);
+        Debug.Log($"IsWallSliding parameter set to: {isWallSliding}");
 
         Move(velocity * Time.deltaTime);
     }
@@ -514,7 +542,8 @@ public class PlayerController : MonoBehaviour
                         wallJumpDirection.y * wallJumpForce
                     );
 
-                    Debug.Log($"Wall jump velocity set: {velocity}"); 
+                    animator.SetTrigger("Jump");
+                    Debug.Log($"Wall jump velocity set: {velocity}");
                     StartCoroutine(WallJumpBuffer());
                 }
             }
@@ -531,8 +560,11 @@ public class PlayerController : MonoBehaviour
     {
         externalVelocityOverride = true;
         lastExternalVelocitySetTime = Time.time;
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.2f); 
+        justWallJumped = true; 
+        yield return new WaitForSeconds(0.1f); 
         externalVelocityOverride = false;
+        justWallJumped = false;
     }
 
     public void OnDash()

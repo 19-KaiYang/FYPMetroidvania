@@ -8,7 +8,7 @@ public class RoomSaveManager : MonoBehaviour
     private const string UPGRADE_SAVE_KEY = "UpgradeSave";
     private const string ROOM_INDEX_KEY = "RoomIndex";
 
-    [Header("Required Player UI Prefabs (Optional)")]
+    [Header("Required Player UI Prefabs")]
     [SerializeField] private GameObject finalUpdatedCanvasPrefab;
     [SerializeField] private GameObject upgradeDescriptionUIPrefab;
     [SerializeField] private GameObject sceneTransitionManagerPrefab;
@@ -48,12 +48,10 @@ public class RoomSaveManager : MonoBehaviour
         // Save the current room when entering it
         string currentScene = SceneManager.GetActiveScene().name;
 
-        // Only save if it's a gameplay room (not MainMenu)
         if (currentScene != "MainMenu")
         {
             SaveCurrentRoom(currentScene);
 
-            // Load upgrades if continuing - load immediately
             if (HasSaveData())
             {
                 Debug.Log("Save data found, loading upgrades...");
@@ -70,7 +68,6 @@ public class RoomSaveManager : MonoBehaviour
 
     private void EnsurePlayerUIExists()
     {
-        // Check if FinalUpdatedCanvas exists, if not, instantiate it
         if (GameObject.Find("FinalUpdatedCanvas") == null && finalUpdatedCanvasPrefab != null)
         {
             GameObject canvas = Instantiate(finalUpdatedCanvasPrefab);
@@ -79,7 +76,6 @@ public class RoomSaveManager : MonoBehaviour
             Debug.Log("Created missing FinalUpdatedCanvas");
         }
 
-        // Check if UpgradeDescriptionUI exists, if not, instantiate it
         if (GameObject.Find("UpgradeDescriptionUI") == null && upgradeDescriptionUIPrefab != null)
         {
             GameObject ui = Instantiate(upgradeDescriptionUIPrefab);
@@ -91,7 +87,6 @@ public class RoomSaveManager : MonoBehaviour
 
     private void EnsureSceneTransitionManagerExists()
     {
-        // Check if SceneTransitionManager exists, if not, instantiate it
         if (SceneTransitionManager.instance == null && sceneTransitionManagerPrefab != null)
         {
             GameObject manager = Instantiate(sceneTransitionManagerPrefab);
@@ -99,7 +94,6 @@ public class RoomSaveManager : MonoBehaviour
             DontDestroyOnLoad(manager);
             Debug.Log("Created missing SceneTransitionManager");
 
-            // Load the saved room index if continuing
             if (HasSaveData())
             {
                 int savedRoomIndex = PlayerPrefs.GetInt(ROOM_INDEX_KEY, 0);
@@ -111,7 +105,6 @@ public class RoomSaveManager : MonoBehaviour
 
     private void EnsureAudioManagerExists()
     {
-        // Check if AudioManager exists, if not, instantiate it
         if (AudioManager.instance == null && audioManagerPrefab != null)
         {
             GameObject manager = Instantiate(audioManagerPrefab);
@@ -296,8 +289,6 @@ public class RoomSaveManager : MonoBehaviour
         PlayerPrefs.Save();
         Debug.Log($"Saved room: {roomName}");
     }
-
-    // Call this method BEFORE loading a new scene
     public static void PrepareForSceneChange()
     {
         if (!isChangingScene)
@@ -422,7 +413,7 @@ public class RoomSaveManager : MonoBehaviour
         {
             return PlayerPrefs.GetString(LAST_ROOM_KEY, "Goblin Camp");
         }
-        return "Goblin Camp"; // Default starting room
+        return "Goblin Camp"; 
     }
 
     public static bool HasSaveData()
@@ -437,6 +428,12 @@ public class RoomSaveManager : MonoBehaviour
         PlayerPrefs.DeleteKey(UPGRADE_SAVE_KEY);
         PlayerPrefs.DeleteKey(ROOM_INDEX_KEY);
         PlayerPrefs.Save();
+
+        if (AudioManager.instance != null)
+        {
+            AudioManager.instance.StopBGM();
+        }
+
         Debug.Log("Save data cleared");
     }
 }

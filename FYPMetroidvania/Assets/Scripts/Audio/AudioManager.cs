@@ -105,16 +105,16 @@ public class AudioManager : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
 
-        switch (scene.name)
-        {
-            case "Room1":
-                StartCoroutine(FadeToBGM(BGMType.TOWN_COMBAT));
-                break;
+        //switch (scene.name)
+        //{
+        //    case "Room1":
+        //        StartCoroutine(FadeToBGM(BGMType.TOWN_COMBAT));
+        //        break;
 
-            default:
-                StopBGM();
-                break;
-        }
+        //    default:
+        //        StopBGM();
+        //        break;
+        //}
     }
 
     public IEnumerator FadeToBGM(BGMType newBGM, float fadeTime = 1f)
