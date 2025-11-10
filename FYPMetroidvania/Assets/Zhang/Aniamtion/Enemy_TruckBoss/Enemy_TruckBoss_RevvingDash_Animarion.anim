@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Enemy_TruckBoss_ForwaLoop_Animarion
+  m_Name: Enemy_TruckBoss_RevvingDash_Animarion
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -34,7 +34,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsActive
-    path: HitBox/attack
+    path: HitBox/RevvingDash
     classID: 1
     script: {fileID: 0}
     flags: 0
@@ -42,9 +42,17 @@ AnimationClip:
   - serializedVersion: 2
     curve:
     - time: 0
-      value: {fileID: 2183036044493906855, guid: 1767b639d541ebc4ebf34638acd376b2, type: 3}
+      value: {fileID: 2160388004809716147, guid: e14a4359833971047affd548969c76b4, type: 3}
     - time: 0.05
-      value: {fileID: 6427587970468209250, guid: 1767b639d541ebc4ebf34638acd376b2, type: 3}
+      value: {fileID: -4209663797512027763, guid: e14a4359833971047affd548969c76b4, type: 3}
+    - time: 0.1
+      value: {fileID: -6583678379823940143, guid: e14a4359833971047affd548969c76b4, type: 3}
+    - time: 0.15
+      value: {fileID: -4158982115507871082, guid: e14a4359833971047affd548969c76b4, type: 3}
+    - time: 0.2
+      value: {fileID: -2187295625045381467, guid: e14a4359833971047affd548969c76b4, type: 3}
+    - time: 0.25
+      value: {fileID: 8269466458321599282, guid: e14a4359833971047affd548969c76b4, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -58,7 +66,7 @@ AnimationClip:
   m_ClipBindingConstant:
     genericBindings:
     - serializedVersion: 2
-      path: 3123553676
+      path: 48615365
       attribute: 2086281974
       script: {fileID: 0}
       typeID: 1
@@ -76,14 +84,18 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     pptrCurveMapping:
-    - {fileID: 2183036044493906855, guid: 1767b639d541ebc4ebf34638acd376b2, type: 3}
-    - {fileID: 6427587970468209250, guid: 1767b639d541ebc4ebf34638acd376b2, type: 3}
+    - {fileID: 2160388004809716147, guid: e14a4359833971047affd548969c76b4, type: 3}
+    - {fileID: -4209663797512027763, guid: e14a4359833971047affd548969c76b4, type: 3}
+    - {fileID: -6583678379823940143, guid: e14a4359833971047affd548969c76b4, type: 3}
+    - {fileID: -4158982115507871082, guid: e14a4359833971047affd548969c76b4, type: 3}
+    - {fileID: -2187295625045381467, guid: e14a4359833971047affd548969c76b4, type: 3}
+    - {fileID: 8269466458321599282, guid: e14a4359833971047affd548969c76b4, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.1
+    m_StopTime: 0.3
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -116,7 +128,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsActive
-    path: HitBox/attack
+    path: HitBox/RevvingDash
     classID: 1
     script: {fileID: 0}
     flags: 0
