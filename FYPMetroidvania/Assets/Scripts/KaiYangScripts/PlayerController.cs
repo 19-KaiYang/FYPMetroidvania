@@ -85,10 +85,10 @@ public class PlayerController : MonoBehaviour
 
     public Vector2 moveInput;
     private Vector2 dashDirection;
-    private Vector2 velocity;
+    public Vector2 velocity;
 
     public bool isDashing;
-    private float dashTimer;
+    public float dashTimer;
     private float dashCooldownTimer;
 
     private int currentKnockdownPhase = 0;
@@ -251,7 +251,11 @@ public class PlayerController : MonoBehaviour
         // Stop player movement and input while CC active
         if (health != null && health.currentCCState != CrowdControlState.None)
         {
-            //velocity.x = 0f;
+            // Stop horizontal movement when stunned (prevents air gliding)
+            if (health.currentCCState == CrowdControlState.Stunned)
+            {
+                velocity.x = 0f;
+            }
 
             // Allow knockdown animation updates to still play
             if (health.currentCCState != CrowdControlState.Knockdown)
@@ -577,6 +581,10 @@ public class PlayerController : MonoBehaviour
     {
         if (skills != null && skills.IsUsingSkill) return;
         if (isInCutscene) return;
+
+        var health = GetComponent<Health>();
+        if (health != null && health.currentCCState == CrowdControlState.Knockdown) return;
+
         if (dashCooldownTimer > 0f) return;
         if (dashesRemaining <= 0) return;
 

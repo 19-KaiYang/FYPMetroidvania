@@ -544,8 +544,17 @@ public class Health : MonoBehaviour
 
     public void ApplyStun(float duration, Vector2? hitDirection = null, float knockbackMultiplier = 1f)
     {
-        if(currentCCState == CrowdControlState.None) currentCCState = CrowdControlState.Stunned;
-        if (isPlayer) pc.animator.SetBool("Stunned", true);
+        if (currentCCState == CrowdControlState.None) currentCCState = CrowdControlState.Stunned;
+        if (isPlayer)
+        {
+            pc.animator.SetBool("Stunned", true);
+            if (!PlayerController.instance.IsGrounded)
+            {
+                pc.isInKnockback = false;
+                pc.externalVelocityOverride = false;
+                pc.velocity = new Vector2(0f, pc.velocity.y); 
+            }
+        }
         ccTimer = duration;
     }
 
@@ -567,6 +576,11 @@ public class Health : MonoBehaviour
             if (pc != null)
             {
                 Debug.Log("arc knockdown");
+
+                pc.StopDash();
+                pc.isDashing = false;
+                pc.dashTimer = 0f;
+
                 pc.SetVelocity(Vector2.zero);
                 float xDir = pc.facingRight ? -1f : 1f;
                 Vector2 arcKnockback = new Vector2(xDir * 10f, 8f) * knockbackMult;
