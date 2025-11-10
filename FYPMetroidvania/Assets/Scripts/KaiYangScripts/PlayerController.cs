@@ -564,11 +564,18 @@ public class PlayerController : MonoBehaviour
     private IEnumerator WallJumpBuffer()
     {
         externalVelocityOverride = true;
-        justWallJumped = true;
+        justWallJumped = false;
         lastExternalVelocitySetTime = Time.time;
 
         yield return new WaitForSeconds(0.2f);
         externalVelocityOverride = false;
+
+        while (velocity.y > 0f && !IsGrounded)
+        {
+            yield return null;
+        }
+
+        justWallJumped = true;
 
         while (velocity.y > -2f && !IsGrounded)
         {
