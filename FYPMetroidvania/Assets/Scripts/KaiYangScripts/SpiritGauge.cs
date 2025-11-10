@@ -9,7 +9,7 @@ public class SpiritGauge : MonoBehaviour
     private float currentSpirit;
     private bool draining = false;
 
-    public bool IsEmpty => currentSpirit <= 0f;  
+    public bool IsEmpty => currentSpirit <= 0f;
     public bool IsFull => currentSpirit >= maxSpirit;
 
     private void Awake()
@@ -24,8 +24,6 @@ public class SpiritGauge : MonoBehaviour
             currentSpirit -= drainPerSecond * Time.deltaTime;
             if (currentSpirit < 0f) currentSpirit = 0f;
         }
-
-
     }
 
     public void StartDrain()
@@ -46,6 +44,11 @@ public class SpiritGauge : MonoBehaviour
     public void ResetGauge()
     {
         currentSpirit = maxSpirit;
+    }
+
+    public void SetCurrentSpirit(float value)
+    {
+        currentSpirit = Mathf.Clamp(value, 0f, maxSpirit);
     }
 
     public float GetCurrentSpirit() => currentSpirit;

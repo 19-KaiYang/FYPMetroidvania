@@ -31,6 +31,7 @@ public class SceneTransition : MonoBehaviour
         }
     }
 
+
     private void OnEnable()
     {
         SceneTransitionManager.roomLoaded += SetPlayerSpawnPos;

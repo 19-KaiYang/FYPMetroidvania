@@ -25,9 +25,9 @@ public class EnergySystem : MonoBehaviour
         if (currentEnergy >= amount)
         {
             currentEnergy -= amount;
-            return true; 
+            return true;
         }
-        return false; 
+        return false;
     }
 
     private void Regenerate()
@@ -42,6 +42,12 @@ public class EnergySystem : MonoBehaviour
     public void ResetEnergy()
     {
         currentEnergy = maxEnergy;
+    }
+
+
+    public void SetCurrentEnergy(float value)
+    {
+        currentEnergy = Mathf.Clamp(value, 0f, maxEnergy);
     }
 
     public float GetCurrentEnergy() => currentEnergy;

@@ -24,25 +24,30 @@ public class UpgradeManager : MonoBehaviour
         player = GetComponent<PlayerController>();
         combatSystem = GetComponent<CombatSystem>();
         skillManager = GetComponent<Skills>();
+        health = GetComponent<Health>();
 
-        // Temp for testing
-        if (MobilityUpgrade != null) MobilityUpgrade.OnApply(this);
-        foreach(Upgrade upgrade in MiscUpgrades)
+        if (!RoomSaveManager.HasSaveData())
         {
-            upgrade.OnApply(this);
+            if (MobilityUpgrade != null) MobilityUpgrade.OnApply(this);
+            foreach (Upgrade upgrade in MiscUpgrades)
+            {
+                upgrade.OnApply(this);
+            }
         }
     }
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Tab))
         {
-            if(MobilityUpgrade != null)
+            if (MobilityUpgrade != null)
             {
                 MobilityUpgrade.OnRemove(this);
                 MobilityUpgrade = null;
             }
-        }   
+        }
     }
+
     private void OnEnable()
     {
         CombatSystem.basicAttackStart += OnBasicAttackStart;
@@ -67,11 +72,10 @@ public class UpgradeManager : MonoBehaviour
         if (AttackUpgrade != null)
             AttackUpgrade.TryEffects(Trigger.OnStart, context);
 
-        // Trigger both OnStart (for backwards compatibility) and OnAttackStart for misc upgrades
         foreach (Upgrade misc in MiscUpgrades)
         {
-            misc.TryEffects(Trigger.OnStart, context);      // Keep old behavior
-            misc.TryEffects(Trigger.OnAttackStart, context); // New specific trigger
+            misc.TryEffects(Trigger.OnStart, context);      
+            misc.TryEffects(Trigger.OnAttackStart, context); 
         }
     }
 
@@ -96,7 +100,7 @@ public class UpgradeManager : MonoBehaviour
             hitbox.gameObject == skillManager.swordUppercutHitbox ||
             hitbox.gameObject == skillManager.gauntletShockwaveHitbox)
         {
-            return; 
+            return;
         }
 
         Debug.Log("Hit!");
@@ -119,7 +123,6 @@ public class UpgradeManager : MonoBehaviour
         if (SkillUpgrade != null)
             SkillUpgrade.TryEffects(Trigger.OnStart, context);
 
-        // Use ONLY OnSkillStart for misc upgrades - do NOT use OnStart
         foreach (Upgrade misc in MiscUpgrades)
             misc.TryEffects(Trigger.OnSkillStart, context);
     }
@@ -131,7 +134,6 @@ public class UpgradeManager : MonoBehaviour
         if (SkillUpgrade != null)
             SkillUpgrade.TryEffects(Trigger.OnEnd, ctx);
 
-        // Trigger OnSkillEnd for misc upgrades
         foreach (Upgrade misc in MiscUpgrades)
             misc.TryEffects(Trigger.OnSkillEnd, ctx);
     }
@@ -199,6 +201,7 @@ public class UpgradeManager : MonoBehaviour
             projectile.GetComponent<SpriteRenderer>().flipX = player.facingRight ? false : true;
         }
     }
+
     private void OnDestroy()
     {
         CombatSystem.basicAttackStart -= OnBasicAttackStart;
@@ -212,11 +215,5 @@ public class UpgradeManager : MonoBehaviour
         Skills.OnUltimateStart -= OnUltimateStart;
         Skills.OnUltimateHit -= OnUltimateHit;
         Skills.OnUltimateEnd -= OnUltimateEnd;
-
-
-        foreach (Upgrade upgrade in MiscUpgrades)
-        {
-            upgrade.OnRemove(this);
-        }
     }
 }

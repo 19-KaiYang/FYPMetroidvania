@@ -58,6 +58,12 @@ public class PlayerController : MonoBehaviour
     private bool hasWallJumped;
     private float lastWallJumpDirection = 0f;
 
+
+    public bool canWallSlide = true;
+    public float wallSlideSpeed = 2f;
+    private bool isWallSliding = false;
+
+
     [Header("Ground Check")]
     public Transform groundCheck;
     public float groundCheckRadius = 0.2f;
@@ -79,10 +85,10 @@ public class PlayerController : MonoBehaviour
 
     public Vector2 moveInput;
     private Vector2 dashDirection;
-    private Vector2 velocity;
+    public Vector2 velocity;
 
     public bool isDashing;
-    private float dashTimer;
+    public float dashTimer;
     private float dashCooldownTimer;
 
     private int currentKnockdownPhase = 0;
@@ -91,6 +97,7 @@ public class PlayerController : MonoBehaviour
 
     public bool externalVelocityOverride = false;
     public float lastExternalVelocitySetTime = 0f;
+    private bool justWallJumped = false;
 
     // Jump control
     private bool jumpLocked = false;
@@ -118,8 +125,11 @@ public class PlayerController : MonoBehaviour
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
-            if(SceneManager.GetActiveScene().name == "Goblin Camp")
+
+            if (SceneManager.GetActiveScene().name == "Goblin Camp" && !RoomSaveManager.HasSaveData())
                 isInCutscene = true;
+            else
+                isInCutscene = false;
         }
         else
         {
@@ -132,7 +142,7 @@ public class PlayerController : MonoBehaviour
 
         skills = GetComponentInChildren<Skills>();
         combat = GetComponentInChildren<CombatSystem>();
-        if(animator == null) animator = GetComponentInChildren<Animator>();
+        if (animator == null) animator = GetComponentInChildren<Animator>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
 
         if (groundCheck != null)
@@ -241,7 +251,11 @@ public class PlayerController : MonoBehaviour
         // Stop player movement and input while CC active
         if (health != null && health.currentCCState != CrowdControlState.None)
         {
-            //velocity.x = 0f;
+            // Stop horizontal movement when stunned (prevents air gliding)
+            if (health.currentCCState == CrowdControlState.Stunned)
+            {
+                velocity.x = 0f;
+            }
 
             // Allow knockdown animation updates to still play
             if (health.currentCCState != CrowdControlState.Knockdown)
@@ -261,7 +275,15 @@ public class PlayerController : MonoBehaviour
             else
                 animator.SetFloat("Speed", 0f);
 
-            animator.SetBool("IsFalling", !IsGrounded && velocity.y < -0.1f);
+            if (IsGrounded)
+            {
+                animator.SetBool("IsFalling", false);
+                justWallJumped = false;
+            }
+            else
+            {
+                animator.SetBool("IsFalling", velocity.y < -0.1f || justWallJumped);
+            }
         }
 
         lastPosition = transform.position;
@@ -295,6 +317,7 @@ public class PlayerController : MonoBehaviour
             HasAirUppercut = false;
             hasWallJumped = false;
             lastWallJumpDirection = 0f;
+
 
             if (velocity.y < 0) velocity.y = -1f;
 
@@ -359,6 +382,18 @@ public class PlayerController : MonoBehaviour
             if (wallCoyoteCounter > 0)
                 wallCoyoteCounter -= Time.deltaTime;
         }
+
+        if (canWallSlide && IsTouchingWall() && !IsGrounded && velocity.y < 0 && !isDashing && !externalVelocityOverride)
+        {
+            isWallSliding = true;
+            velocity.y = Mathf.Max(velocity.y, -wallSlideSpeed);
+        }
+        else
+        {
+            isWallSliding = false;
+        }
+        animator.SetBool("IsWallSliding", isWallSliding);
+        Debug.Log($"IsWallSliding parameter set to: {isWallSliding}");
 
         Move(velocity * Time.deltaTime);
     }
@@ -505,13 +540,15 @@ public class PlayerController : MonoBehaviour
                 {
                     hasWallJumped = true;
                     lastWallJumpDirection = jumpDirection;
+                    justWallJumped = true; 
 
                     velocity = new Vector2(
                         jumpDirection * wallJumpDirection.x * wallJumpForce,
                         wallJumpDirection.y * wallJumpForce
                     );
 
-                    Debug.Log($"Wall jump velocity set: {velocity}"); 
+                    animator.SetTrigger("Jump");
+                    Debug.Log($"Wall jump velocity set: {velocity}");
                     StartCoroutine(WallJumpBuffer());
                 }
             }
@@ -527,15 +564,27 @@ public class PlayerController : MonoBehaviour
     private IEnumerator WallJumpBuffer()
     {
         externalVelocityOverride = true;
+        justWallJumped = true;
         lastExternalVelocitySetTime = Time.time;
+
         yield return new WaitForSeconds(0.2f);
         externalVelocityOverride = false;
-    }
 
+        while (velocity.y > -2f && !IsGrounded)
+        {
+            yield return null;
+        }
+
+        justWallJumped = false;
+    }
     public void OnDash()
     {
         if (skills != null && skills.IsUsingSkill) return;
         if (isInCutscene) return;
+
+        var health = GetComponent<Health>();
+        if (health != null && health.currentCCState == CrowdControlState.Knockdown) return;
+
         if (dashCooldownTimer > 0f) return;
         if (dashesRemaining <= 0) return;
 
