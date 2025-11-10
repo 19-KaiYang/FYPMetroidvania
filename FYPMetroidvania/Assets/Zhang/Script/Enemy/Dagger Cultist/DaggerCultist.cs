@@ -283,7 +283,7 @@ public class DaggerCultist : Enemy
                 {
                     enemy.animator.SetTrigger("land");
                     enemy.animator.ResetTrigger("knockdown");
-                    enemy.health.invincible = true;
+                    enemy.health.stunImmune = true;
                 }
                 else
                 {
@@ -309,7 +309,7 @@ public class DaggerCultist : Enemy
             enemy.animator.SetBool("isStun", false);
             enemy.animator.ResetTrigger("land");
             enemy.animator.ResetTrigger("getup");
-            enemy.health.invincible = false;
+            enemy.health.stunImmune = false;
         }
     }
 }

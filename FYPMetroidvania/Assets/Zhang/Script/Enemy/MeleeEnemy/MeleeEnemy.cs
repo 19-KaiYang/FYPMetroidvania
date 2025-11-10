@@ -117,7 +117,7 @@ public class MeleeEnemy : Enemy
         float g = Mathf.Abs(Physics2D.gravity.y * _rb.gravityScale);
 
         Vector2 enemyPos = _enemy.position;
-        Vector2 playerPos = _player.position;
+        Vector2 playerPos = player.transform.position;
 
         float VelocitY = _jumpForceY;
 
@@ -125,9 +125,9 @@ public class MeleeEnemy : Enemy
 
         float direction = Mathf.Sign(playerPos.x - enemyPos.x);
         float targetX = playerPos.x + direction * offsetX;
-        targetX = Mathf.Clamp(targetX, -maxJumpRange, maxJumpRange);
+        targetX = Mathf.Clamp(targetX - enemyPos.x, -maxJumpRange, maxJumpRange);
+        float velocitX = targetX / time;
 
-        float velocitX = (targetX - enemyPos.x) / time;
 
         _rb.linearVelocity = new Vector2(velocitX, VelocitY);
     }
@@ -244,7 +244,7 @@ public class MeleeEnemy : Enemy
                 {
                     enemy.animator.SetBool("isWalk", false);
                 }
-                if (enemy.inAttackArea)
+                if (enemy.inAttackArea && enemy.distanceToPlayer.y < 2f)
                 {
                     if (Mathf.Abs(enemy.distanceToPlayer.x) < 99 && Mathf.Abs(enemy.distanceToPlayer.x) > Mathf.Abs(enemy.attackAreaOffset.x * 2))
                     {
@@ -254,7 +254,7 @@ public class MeleeEnemy : Enemy
                             enemy.stateMachine.ChangeState(new MeleeEnemyAttackState(enemy));
                         }
                     }
-                    else
+                    else if (Mathf.Abs(enemy.distanceToPlayer.x) <= enemy.attackArea.x)
                     {
                         enemy.meleeAttackTimer += Time.deltaTime;
 
@@ -337,15 +337,6 @@ public class MeleeEnemy : Enemy
             }
             if (hasJumped && exit && enemy.isGround)
             {
-                //switch (state)
-                //{
-                //    case < 2:
-                //        enemy.stateMachine.ChangeState(new MeleeEnemyIdleState(enemy));
-                //        break;
-                //    case >= 2:
-                //        enemy.stateMachine.ChangeState(new MeleeEnemyIdleState(enemy));
-                //        break;
-                //}
                 enemy.stateMachine.ChangeState(new MeleeEnemyIdleState(enemy));
             }   
         }
@@ -454,7 +445,7 @@ public class MeleeEnemy : Enemy
                     enemy.animator.SetTrigger("land");
                     enemy.animator.ResetTrigger("knockdown");
                     enemy.health.juggleTime = 0f;
-                    enemy.health.invincible = true;
+                    enemy.health.stunImmune = true;
                 }
                 else
                 {
@@ -469,7 +460,6 @@ public class MeleeEnemy : Enemy
                 {
                     enemy.animator.ResetTrigger("land");
                     enemy.animator.SetTrigger("getup");
-                    enemy.health.invincible = false;
                     if(enemy.getUp) enemy.stateMachine.ChangeState(new MeleeEnemyChaseState(enemy));
                     return;
                 }
@@ -484,7 +474,7 @@ public class MeleeEnemy : Enemy
             enemy.animator.ResetTrigger("getup");
             enemy.health.isInArcKnockdown = false;
             enemy.health.juggleTime = 0f;
-            enemy.health.invincible = false;
+            enemy.health.stunImmune = false;
         }
     }
 }
