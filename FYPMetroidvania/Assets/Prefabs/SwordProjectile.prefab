@@ -271,11 +271,10 @@ MonoBehaviour:
   direction: {x: 0, y: 0}
   maxDistance: 5
   bloodCost: 10
-  groundedCC: 1
-  airborneCC: 2
+  crowdControl: 1
   ccDuration: 1
-  stunKnockbackMultiplier: 1
-  knockdownKnockbackMultiplier: 1
+  X_Knockback: 7
+  Y_Knockback: 4
 --- !u!114 &1552869594930794101
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -291,17 +290,13 @@ MonoBehaviour:
   damage: 0
   isCritical: 0
   hitstopDuration: 0.08
-  applyHitstopToEnemy: 1
-  applyHitstopToPlayer: 1
-  forceUpKnockback: 0
-  customKnockback: {x: 0, y: 0}
-  isSweepHitbox: 0
-  sweepKnockbackForce: 12
+  applyHitstop: 0
   X_Knockback: 0
   Y_Knockback: 0
   facingRight: 0
   CCType: 0
   CCDuration: 1
+  sfx: 0
   applyBloodMark: 1
   isSkillHitbox: 1
   isUltimateHitbox: 0

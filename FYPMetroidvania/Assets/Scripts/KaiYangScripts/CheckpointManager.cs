@@ -14,7 +14,7 @@ public class CheckpointManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-        Instance = this;
+        Instance = this; //hi
         DontDestroyOnLoad(gameObject);
     }
 
