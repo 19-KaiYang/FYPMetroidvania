@@ -67,7 +67,7 @@ public class Enemy : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         //animator = GetComponent<Animator>();
         animator = GetComponentInChildren<Animator>();
-        player = FindFirstObjectByType<PlayerController>();
+        player = PlayerController.instance;
         health = GetComponent<Health>();
     }
 

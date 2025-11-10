@@ -11,6 +11,7 @@ using UnityEngine.UI;
 
 public class DialogueSystem : MonoBehaviour, IPointerClickHandler
 {
+    public GameObject postCutsceneObject;
     [SerializeField] PlayableDirector cutscenePlayer;
     [SerializeField] private Canvas DialogueCanvas;
     [SerializeField] private Image characterImage;
@@ -68,6 +69,7 @@ public class DialogueSystem : MonoBehaviour, IPointerClickHandler
         //currentDialogueStep = null;
         DialogueCanvas.enabled = true;
         dialogueActive = true;
+        PlayerController.instance.isInCutscene = true;
         StartCoroutine(DialogueCoroutine(dialogueData));
     }
     IEnumerator DialogueCoroutine(DialogueTextSO dialogueData, int startstep = 0)
@@ -105,10 +107,12 @@ public class DialogueSystem : MonoBehaviour, IPointerClickHandler
         }
         DialogueCanvas.enabled = false;
         dialogueActive = false;
-        if(dialogueData.hasCutscene)
+        if (dialogueData.hasCutscene)
         {
             cutscenePlayer.Resume();
         }
+        else PlayerController.instance.isInCutscene = false;
+        if (postCutsceneObject != null) postCutsceneObject.SetActive(true);
     }
     IEnumerator DialogueTextCoroutine(DialogueStep dialoguestep)
     {
@@ -236,5 +240,14 @@ public class DialogueSystem : MonoBehaviour, IPointerClickHandler
             return;
         }
         else nextInputbuffer = true;
+    }
+
+    public void StartDialogueInteraction(DialogueTextSO dialogueData, GameObject postCutsceneObj = null)
+    {
+        dialogueActive = true;
+        DialogueData = dialogueData;
+        if (postCutsceneObj != null) postCutsceneObject = postCutsceneObj;
+        else postCutsceneObject = null;
+        StartDialogue(DialogueData);
     }
 }
