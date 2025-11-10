@@ -11,6 +11,10 @@ public class Pickup : MonoBehaviour
     public float floatSpeed = 2f;
     public float floatHeight = 0.2f;
 
+    [Header("Particle Effects")]
+    public GameObject healthParticlePrefab;
+    public GameObject spiritParticlePrefab;
+
     private Vector3 startPos;
     private Transform player;
 
@@ -45,6 +49,12 @@ public class Pickup : MonoBehaviour
                 {
                     health.Heal(healAmount);
                     Debug.Log($"Healed {healAmount} HP");
+
+                    if (healthParticlePrefab != null)
+                    {
+                        GameObject fx = Instantiate(healthParticlePrefab, collision.transform.position, Quaternion.identity);
+                        Destroy(fx, 2f);
+                    }
                 }
             }
             else
@@ -54,6 +64,12 @@ public class Pickup : MonoBehaviour
                 {
                     spirit.Refill(spiritAmount);
                     Debug.Log($"Restored {spiritAmount} Spirit");
+
+                    if (spiritParticlePrefab != null)
+                    {
+                        GameObject fx = Instantiate(spiritParticlePrefab, collision.transform.position, Quaternion.identity);
+                        Destroy(fx, 2f);
+                    }
                 }
             }
 

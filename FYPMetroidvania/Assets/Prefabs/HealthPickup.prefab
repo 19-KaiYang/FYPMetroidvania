@@ -110,6 +110,8 @@ MonoBehaviour:
   spiritAmount: 30
   floatSpeed: 2
   floatHeight: 0.2
+  healthParticlePrefab: {fileID: 5056888575716864066, guid: 60666fa469cbfcd4b833306db721741a, type: 3}
+  spiritParticlePrefab: {fileID: 0}
 --- !u!61 &2610565856231610016
 BoxCollider2D:
   m_ObjectHideFlags: 0
