@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using Unity.Cinemachine;
 
 public class Hitbox : MonoBehaviour
 {
@@ -32,6 +33,11 @@ public class Hitbox : MonoBehaviour
     public bool applyBloodMark = false;
     public bool isSkillHitbox = false;
     public bool isUltimateHitbox = false;
+
+    [Header("Screenshake")]
+    public bool screenshake = false;
+    public CinemachineImpulseSource impulseSource;
+    public float screenshakeForce = 0.5f;
 
     private Collider2D col;
     private HashSet<Health> hitEnemies = new HashSet<Health>();
@@ -89,10 +95,15 @@ public class Hitbox : MonoBehaviour
                 OnHit?.Invoke(this, h);
                 float directionalXknockback = PlayerController.instance.facingRight ? X_Knockback : -X_Knockback;
                 h.TakeDamage(damage, new Vector2(directionalXknockback, Y_Knockback), false, CCType, CCDuration);
+                if (screenshake && impulseSource != null)
+                {
+                    impulseSource.GenerateImpulse(screenshakeForce);
+                }
                 if (applyHitstop)
                 {
                     StartCoroutine(LocalHitstop(owner.GetComponent<Rigidbody2D>(), hitstopDuration));
                 }
+                
                 //// hitstop 
                 //if (skills != null)
                 //{

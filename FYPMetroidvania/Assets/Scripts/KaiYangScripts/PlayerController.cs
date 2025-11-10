@@ -135,7 +135,7 @@ public class PlayerController : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
+        Unity.Cinemachine.CinemachineImpulseManager.Instance.IgnoreTimeScale = true;
         rb = GetComponent<Rigidbody2D>();
         rb.bodyType = RigidbodyType2D.Kinematic;
         rb.simulated = true;
