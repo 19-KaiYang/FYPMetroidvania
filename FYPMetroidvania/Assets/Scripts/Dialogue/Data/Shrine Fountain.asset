@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 413d64d7f6ce4c54c942e901f83eb9b4, type: 3}
+  m_Name: Shrine Fountain
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueTextSO
+  SpeakerType: 0
+  defaultPlayerImage: {fileID: 1639174027949059371, guid: 89a0eb1b45e47c740aa21bd41d73cb21, type: 3}
+  defaultNPCImage: {fileID: 0}
+  hasCutscene: 0
+  Steps:
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: 3516079381801495997, guid: b0206ccead3847d49911a68f16ebc122, type: 3}
+    Text: What the...
+    sfx: 14
+    pitch: 0.8
+    autoskip: 0
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: 3516079381801495997, guid: b0206ccead3847d49911a68f16ebc122, type: 3}
+    Text: Don't tell me those skeletons are from...
+    sfx: 14
+    pitch: 0.8
+    autoskip: 0
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: -4905368094546260507, guid: 848122712e8a84f489950c10d12034ef, type: 3}
+    Text: Just how crazy are these guys?!
+    sfx: 14
+    pitch: 0.8
+    autoskip: 0
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: 3516079381801495997, guid: b0206ccead3847d49911a68f16ebc122, type: 3}
+    Text: And this fountain...
+    sfx: 14
+    pitch: 0.8
+    autoskip: 0
+  - SpeakerType: 2
+    Name: Narrator
+    SpeakerImage: {fileID: 0}
+    Text: The red colour and grim smell are far from reassuring.
+    sfx: 0
+    pitch: 0.8
+    autoskip: 0
+  - SpeakerType: 2
+    Name: Cultists
+    SpeakerImage: {fileID: 0}
+    Text: Hey! Intruder!
+    sfx: 14
+    pitch: 0.9
+    autoskip: 0
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: 1639174027949059371, guid: 89a0eb1b45e47c740aa21bd41d73cb21, type: 3}
+    Text: ...
+    sfx: 14
+    pitch: 0.8
+    autoskip: 0
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: -4905368094546260507, guid: 848122712e8a84f489950c10d12034ef, type: 3}
+    Text: Come at me, you psychopaths!
+    sfx: 14
+    pitch: 0.8
+    autoskip: 0

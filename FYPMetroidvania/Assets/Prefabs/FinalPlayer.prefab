@@ -138,6 +138,9 @@ MonoBehaviour:
   applyBloodMark: 0
   isSkillHitbox: 0
   isUltimateHitbox: 0
+  screenshake: 0
+  impulseSource: {fileID: 0}
+  screenshakeForce: 0.5
 --- !u!1 &613459650842412414
 GameObject:
   m_ObjectHideFlags: 0
@@ -243,6 +246,9 @@ MonoBehaviour:
   applyBloodMark: 0
   isSkillHitbox: 0
   isUltimateHitbox: 0
+  screenshake: 0
+  impulseSource: {fileID: 0}
+  screenshakeForce: 0.5
 --- !u!1 &1119032721914120589
 GameObject:
   m_ObjectHideFlags: 0
@@ -348,6 +354,9 @@ MonoBehaviour:
   applyBloodMark: 0
   isSkillHitbox: 0
   isUltimateHitbox: 0
+  screenshake: 0
+  impulseSource: {fileID: 0}
+  screenshakeForce: 0.5
 --- !u!1 &1339265248037613808
 GameObject:
   m_ObjectHideFlags: 0
@@ -453,6 +462,9 @@ MonoBehaviour:
   applyBloodMark: 0
   isSkillHitbox: 0
   isUltimateHitbox: 0
+  screenshake: 0
+  impulseSource: {fileID: 0}
+  screenshakeForce: 0.5
 --- !u!1 &1584003255236296248
 GameObject:
   m_ObjectHideFlags: 0
@@ -673,6 +685,8 @@ MonoBehaviour:
   wallCheckDistance: 0.3
   wallJumpForce: 15
   wallJumpDirection: {x: 0.8, y: 1.2}
+  canWallSlide: 1
+  wallSlideSpeed: 2
   groundCheck: {fileID: 9178771473843012663}
   groundCheckRadius: 0.1
   groundLayer:
@@ -688,7 +702,9 @@ MonoBehaviour:
   rb: {fileID: 5026382670184603693}
   animator: {fileID: 2266569670154968804}
   moveInput: {x: 0, y: 0}
+  velocity: {x: 0, y: 0}
   isDashing: 0
+  dashTimer: 0
   wasGroundedLastFrame: 0
   externalVelocityOverride: 0
   lastExternalVelocitySetTime: 0
@@ -1464,6 +1480,9 @@ MonoBehaviour:
   applyBloodMark: 0
   isSkillHitbox: 0
   isUltimateHitbox: 0
+  screenshake: 0
+  impulseSource: {fileID: 0}
+  screenshakeForce: 0.5
 --- !u!1 &3035858919961589078
 GameObject:
   m_ObjectHideFlags: 0
@@ -6476,6 +6495,9 @@ MonoBehaviour:
   applyBloodMark: 0
   isSkillHitbox: 0
   isUltimateHitbox: 0
+  screenshake: 0
+  impulseSource: {fileID: 0}
+  screenshakeForce: 0.5
 --- !u!1 &4316675194609422197
 GameObject:
   m_ObjectHideFlags: 0
@@ -6581,6 +6603,9 @@ MonoBehaviour:
   applyBloodMark: 0
   isSkillHitbox: 1
   isUltimateHitbox: 0
+  screenshake: 0
+  impulseSource: {fileID: 0}
+  screenshakeForce: 0.5
 --- !u!1 &4844146160451681373
 GameObject:
   m_ObjectHideFlags: 0
@@ -6592,6 +6617,7 @@ GameObject:
   - component: {fileID: 2701590998191923302}
   - component: {fileID: 8232950846792331949}
   - component: {fileID: 2210188781539357983}
+  - component: {fileID: 2240046582288963860}
   m_Layer: 0
   m_Name: Slash3Hitbox
   m_TagString: Untagged
@@ -6686,6 +6712,62 @@ MonoBehaviour:
   applyBloodMark: 0
   isSkillHitbox: 0
   isUltimateHitbox: 0
+  screenshake: 1
+  impulseSource: {fileID: 2240046582288963860}
+  screenshakeForce: 0.1
+--- !u!114 &2240046582288963860
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4844146160451681373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineImpulseSource
+  ImpulseDefinition:
+    ImpulseChannel: 1
+    ImpulseShape: 2
+    CustomImpulseShape:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    ImpulseDuration: 0.1
+    ImpulseType: 0
+    DissipationRate: 0.25
+    RawSignal: {fileID: 0}
+    AmplitudeGain: 1
+    FrequencyGain: 1
+    RepeatMode: 0
+    Randomize: 1
+    TimeEnvelope:
+      AttackShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      DecayShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      AttackTime: 0
+      SustainTime: 0.2
+      DecayTime: 0.7
+      ScaleWithImpact: 1
+      HoldForever: 0
+    ImpactRadius: 100
+    DirectionMode: 0
+    DissipationMode: 2
+    DissipationDistance: 100
+    PropagationSpeed: 343
+  DefaultVelocity: {x: 1, y: -1, z: 0}
 --- !u!1 &4881343761230479941
 GameObject:
   m_ObjectHideFlags: 0
@@ -7117,6 +7199,9 @@ MonoBehaviour:
   applyBloodMark: 0
   isSkillHitbox: 1
   isUltimateHitbox: 0
+  screenshake: 0
+  impulseSource: {fileID: 0}
+  screenshakeForce: 0.5
 --- !u!1 &6177915347031290458
 GameObject:
   m_ObjectHideFlags: 0
@@ -7364,6 +7449,9 @@ MonoBehaviour:
   applyBloodMark: 0
   isSkillHitbox: 0
   isUltimateHitbox: 0
+  screenshake: 0
+  impulseSource: {fileID: 0}
+  screenshakeForce: 0.5
 --- !u!1 &6954466886211328479
 GameObject:
   m_ObjectHideFlags: 0
@@ -7469,6 +7557,9 @@ MonoBehaviour:
   applyBloodMark: 0
   isSkillHitbox: 0
   isUltimateHitbox: 0
+  screenshake: 0
+  impulseSource: {fileID: 0}
+  screenshakeForce: 0.5
 --- !u!1 &6985671973155756693
 GameObject:
   m_ObjectHideFlags: 0
@@ -7574,6 +7665,9 @@ MonoBehaviour:
   applyBloodMark: 0
   isSkillHitbox: 0
   isUltimateHitbox: 0
+  screenshake: 0
+  impulseSource: {fileID: 0}
+  screenshakeForce: 0.5
 --- !u!1 &7062804495788167731
 GameObject:
   m_ObjectHideFlags: 0
@@ -7679,6 +7773,9 @@ MonoBehaviour:
   applyBloodMark: 0
   isSkillHitbox: 0
   isUltimateHitbox: 0
+  screenshake: 0
+  impulseSource: {fileID: 0}
+  screenshakeForce: 0.5
 --- !u!1 &7118308677116225262
 GameObject:
   m_ObjectHideFlags: 0
@@ -7769,6 +7866,9 @@ MonoBehaviour:
   applyBloodMark: 0
   isSkillHitbox: 1
   isUltimateHitbox: 0
+  screenshake: 0
+  impulseSource: {fileID: 0}
+  screenshakeForce: 0.5
 --- !u!58 &6390144128000081450
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -7847,6 +7947,7 @@ GameObject:
   - component: {fileID: 8247888067001785964}
   - component: {fileID: 706415783291158460}
   - component: {fileID: 4857290530876081791}
+  - component: {fileID: 4799895844113451317}
   m_Layer: 0
   m_Name: SwordDashHitbox
   m_TagString: Untagged
@@ -7941,6 +8042,62 @@ MonoBehaviour:
   applyBloodMark: 0
   isSkillHitbox: 1
   isUltimateHitbox: 0
+  screenshake: 1
+  impulseSource: {fileID: 4799895844113451317}
+  screenshakeForce: 0.2
+--- !u!114 &4799895844113451317
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7652153731754429865}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineImpulseSource
+  ImpulseDefinition:
+    ImpulseChannel: 1
+    ImpulseShape: 2
+    CustomImpulseShape:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    ImpulseDuration: 0.2
+    ImpulseType: 0
+    DissipationRate: 0.25
+    RawSignal: {fileID: 0}
+    AmplitudeGain: 1
+    FrequencyGain: 1
+    RepeatMode: 0
+    Randomize: 1
+    TimeEnvelope:
+      AttackShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      DecayShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      AttackTime: 0
+      SustainTime: 0.2
+      DecayTime: 0.7
+      ScaleWithImpact: 1
+      HoldForever: 0
+    ImpactRadius: 100
+    DirectionMode: 0
+    DissipationMode: 2
+    DissipationDistance: 100
+    PropagationSpeed: 343
+  DefaultVelocity: {x: -1, y: 1, z: 0}
 --- !u!1 &7806502095612087952
 GameObject:
   m_ObjectHideFlags: 0

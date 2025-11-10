@@ -279,6 +279,7 @@ MonoBehaviour:
   distanceToPlayer: {x: 0, y: 0}
   groundCheck: {fileID: 2306154919855101203}
   groundCheckRadius: 0
+  health: {fileID: 0}
   damageParticle: {fileID: 6966180119663813987, guid: edda90ab5a07d484ca1c0c2ce435f1a7, type: 3}
   bloodParticle: {fileID: 3786330769736489564, guid: 132d3cf110e334a4586f49391eea9df5, type: 3}
   damageParticlePos: {fileID: 2306154919855101203}
@@ -293,7 +294,7 @@ MonoBehaviour:
   attackProbability: 0.7
   attackCheckCooldown: 0.75
   startAttack: 0
-  attackMoveSpeed: 20
+  attackMoveSpeed: 17
   attackRestTime: 1.5
   playerDetectDistance: 20
   attackDistance: 11

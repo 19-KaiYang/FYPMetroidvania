@@ -5,6 +5,7 @@ public class CameraTransition : MonoBehaviour
 {
     [SerializeField] CinemachineCamera Camera1;
     [SerializeField] CinemachineCamera Camera2;
+    [SerializeField] bool disableonactivate;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -19,5 +20,6 @@ public class CameraTransition : MonoBehaviour
             Camera1.gameObject.SetActive(true);
             Camera2.gameObject.SetActive(false);
         }
+        if(disableonactivate) gameObject.SetActive(false);
     }
 }
