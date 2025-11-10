@@ -536,6 +536,7 @@ public class PlayerController : MonoBehaviour
                 {
                     hasWallJumped = true;
                     lastWallJumpDirection = jumpDirection;
+                    justWallJumped = true; 
 
                     velocity = new Vector2(
                         jumpDirection * wallJumpDirection.x * wallJumpForce,
@@ -559,14 +560,19 @@ public class PlayerController : MonoBehaviour
     private IEnumerator WallJumpBuffer()
     {
         externalVelocityOverride = true;
+        justWallJumped = true;
         lastExternalVelocitySetTime = Time.time;
-        yield return new WaitForSeconds(0.2f); 
-        justWallJumped = true; 
-        yield return new WaitForSeconds(0.1f); 
+
+        yield return new WaitForSeconds(0.2f);
         externalVelocityOverride = false;
+
+        while (velocity.y > -2f && !IsGrounded)
+        {
+            yield return null;
+        }
+
         justWallJumped = false;
     }
-
     public void OnDash()
     {
         if (skills != null && skills.IsUsingSkill) return;
