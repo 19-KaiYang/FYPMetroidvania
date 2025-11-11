@@ -31,6 +31,7 @@ public class SceneTransition : MonoBehaviour
         }
     }
 
+
     private void OnEnable()
     {
         SceneTransitionManager.roomLoaded += SetPlayerSpawnPos;
@@ -65,10 +66,13 @@ public class SceneTransition : MonoBehaviour
 
         StartCoroutine(SceneTransitionManager.instance.MoveToNewScene(exitDirection, jumpForce, exitTime, dir));
         StartCoroutine(SceneTransitionManager.instance.Fade(SceneTransitionManager.FadeDirection.OUT));
+
+        
     }
 
     private void HandleUpgradeChosen()
     {
+        if (SceneTransitionManager.instance.currentSceneName == "GoblinCamp") AudioManager.instance.StopBGM();
         UpgradeSelectionUI.OnUpgradeChosen -= HandleUpgradeChosen;
 
         SceneTransitionManager.instance.isTrasition = true;
@@ -92,6 +96,11 @@ public class SceneTransition : MonoBehaviour
 
                 if (!needPress && _other.CompareTag("Player"))
                 {
+                    if (upgradeMenuPrefab == null)
+                    {
+                        HandleUpgradeChosen();
+                        return;
+                    }
                     GameObject menuObj = Instantiate(upgradeMenuPrefab);
                     UpgradeSelectionUI ui = menuObj.GetComponent<UpgradeSelectionUI>();
                     ui.ShowMenu();

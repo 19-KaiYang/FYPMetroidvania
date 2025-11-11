@@ -60,7 +60,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 22.0408, y: 1.5081, z: 0}
-  m_LocalScale: {x: 18.039104, y: 6.9252696, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8823459440748132936}
@@ -191,7 +191,8 @@ MonoBehaviour:
       spawnTime: 0.5
       spawnVFX: {fileID: 3087038589746573262, guid: e7ea6b877f982424c91cbeb56d5e0a0e, type: 3}
   waveWaitTime: 1
-  door: {fileID: 0}
+  doors: []
+  currWave: 0
 --- !u!1 &4026008930142207380
 GameObject:
   m_ObjectHideFlags: 0

@@ -34,7 +34,7 @@ AnimationClip:
       value: {fileID: 9000581235108693434, guid: 06809104e1e2ff043beb5738056dd324, type: 3}
     - time: 0.33333334
       value: {fileID: 1083720938738288366, guid: 06809104e1e2ff043beb5738056dd324, type: 3}
-    - time: 0.45833334
+    - time: 0.375
       value: {fileID: 1083720938738288366, guid: 06809104e1e2ff043beb5738056dd324, type: 3}
     attribute: m_Sprite
     path: 
@@ -71,7 +71,7 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.5
+    m_StopTime: 0.41666666
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -98,7 +98,7 @@ AnimationClip:
     floatParameter: 0
     intParameter: 1
     messageOptions: 0
-  - time: 0.29166666
+  - time: 0.33333334
     functionName: SetUppercutStart
     data: 
     objectReferenceParameter: {fileID: 0}

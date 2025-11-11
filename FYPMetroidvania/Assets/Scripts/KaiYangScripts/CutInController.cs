@@ -1,40 +1,61 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CutInController : MonoBehaviour
 {
+    private static CutInController instance;
     private Animator animator;
     private SpiritSlash pendingSlash;
     private Transform pendingPlayer;
     private Transform pendingTarget;
     private LayerMask pendingEnemyMask;
+    private float pendingHealAmount;
 
     void Start()
     {
         animator = GetComponent<Animator>();
     }
 
-    // Call this INSTEAD of calling Init directly
-    public void PlayCutInThenInit(SpiritSlash slash, Transform player, Transform target, LayerMask enemyMask)
+    private void Awake()
     {
-        // Store the parameters
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else Destroy(gameObject);
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == "MainMenu")
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    public void PlayCutInThenInit(SpiritSlash slash, Transform player, Transform target, LayerMask enemyMask, float healamount)
+    {
         pendingSlash = slash;
         pendingPlayer = player;
         pendingTarget = target;
         pendingEnemyMask = enemyMask;
+        pendingHealAmount = healamount;
 
-        // Play the cut-in animation
-        animator.SetTrigger("PlayCutIn"); // Adjust trigger name if needed
+        animator.SetTrigger("PlayCutIn");
     }
 
-    // This method will be called by the Animation Event
     public void OnCutInComplete()
     {
         if (pendingSlash != null)
         {
-            // NOW call Init - this starts the spirit slash effects
-            pendingSlash.Init(pendingPlayer, pendingTarget, pendingEnemyMask);
-
-            // Clear references
+            pendingSlash.Init(pendingPlayer, pendingTarget, pendingEnemyMask,pendingHealAmount);
             pendingSlash = null;
             pendingPlayer = null;
             pendingTarget = null;

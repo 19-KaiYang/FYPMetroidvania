@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using Unity.Cinemachine;
 
 public class Hitbox : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class Hitbox : MonoBehaviour
     private Skills skills;
 
     [Header("Damage")]
+    public float baseDamage;
     public float damage;
     public bool isCritical = false;
 
@@ -32,6 +34,11 @@ public class Hitbox : MonoBehaviour
     public bool isSkillHitbox = false;
     public bool isUltimateHitbox = false;
 
+    [Header("Screenshake")]
+    public bool screenshake = false;
+    public CinemachineImpulseSource impulseSource;
+    public float screenshakeForce = 0.5f;
+
     private Collider2D col;
     private HashSet<Health> hitEnemies = new HashSet<Health>();
 
@@ -49,9 +56,9 @@ public class Hitbox : MonoBehaviour
     {
         hitEnemies.Clear();
         isCritical = false;
-        if (!isSkillHitbox && owner != null)
+        if (owner != null)
         {
-            damage = owner.GetAttackDamage(owner.CurrentComboStep);
+            damage = baseDamage;
             facingRight = PlayerController.instance.facingRight;
         }
     }
@@ -80,7 +87,7 @@ public class Hitbox : MonoBehaviour
         if (other.CompareTag("Hurtbox"))
         {
             Health h = other.GetComponentInParent<Health>();
-            if (h != null && !hitEnemies.Contains(h))
+            if (h != null && !hitEnemies.Contains(h) && !h.invincible)
             {
                 if(sfx != SFXTYPE.NONE) AudioManager.PlaySFX(sfx, 0.3f);
                 hitEnemies.Add(h);
@@ -88,15 +95,15 @@ public class Hitbox : MonoBehaviour
                 OnHit?.Invoke(this, h);
                 float directionalXknockback = PlayerController.instance.facingRight ? X_Knockback : -X_Knockback;
                 h.TakeDamage(damage, new Vector2(directionalXknockback, Y_Knockback), false, CCType, CCDuration);
-
-                if (!h.isPlayer && applyBloodMark)
+                if (screenshake && impulseSource != null)
                 {
-                    h.ApplyBloodMark();
+                    impulseSource.GenerateImpulse(screenshakeForce);
                 }
                 if (applyHitstop)
                 {
                     StartCoroutine(LocalHitstop(owner.GetComponent<Rigidbody2D>(), hitstopDuration));
                 }
+                
                 //// hitstop 
                 //if (skills != null)
                 //{

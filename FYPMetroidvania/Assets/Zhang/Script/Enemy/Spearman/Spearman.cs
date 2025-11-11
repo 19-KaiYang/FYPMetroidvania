@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Rendering;
+using static MeleeEnemy;
 
 public class Spearman : Enemy
 {
@@ -16,9 +17,13 @@ public class Spearman : Enemy
     [SerializeField] private Vector2 attackArea;
     [SerializeField] private Vector2 attackAreaOffset;
     [Space]
+    [SerializeField] private float groundCheckSize;
+    [SerializeField] private Vector2 groundCheckOffset;
+    [Space]
     [SerializeField] private bool playerDetected;
     [SerializeField] private bool inDetectArea;
     [SerializeField] private bool inAttackArea;
+    [SerializeField] private bool isGround;
 
     [Header("Attack")]
     [SerializeField] private float thrustCooldown;
@@ -66,6 +71,11 @@ public class Spearman : Enemy
 
     private void DetectPlayer()
     {
+        Collider2D ground = Physics2D.OverlapCircle((Vector2)transform.position + groundCheckOffset, groundCheckSize, groundleLayer);
+        if (ground != null) isGround = true;
+        else isGround = false;
+        if (isOnPlatform) isGround = true;
+
         Collider2D pDetected = Physics2D.OverlapBox((Vector2)transform.position + detectOffset, detectSize, 0f, playerLayer);
         Collider2D pEscaped = Physics2D.OverlapBox((Vector2)transform.position + playerEscapeOffset, playerEscapeSize, 0f, playerLayer);
         Collider2D attack = Physics2D.OverlapBox((Vector2)transform.position + attackAreaOffset * transform.localScale.x, attackArea, 0f, playerLayer);
@@ -74,7 +84,7 @@ public class Spearman : Enemy
         float distance = Vector2.Distance(transform.position, player.transform.position);
         RaycastHit2D ray = Physics2D.Raycast(transform.position, dir, distance, obstacleLayer);
 
-        if (pDetected != null && ray.collider == null)
+        if (pDetected != null)
         {
             inDetectArea = true;
             playerDetected = true;
@@ -84,7 +94,7 @@ public class Spearman : Enemy
             playerDetected = false;
             inDetectArea = false;
         }
-        else if (playerDetected && ray.collider != null)
+        else if (playerDetected)
         {
             playerDetected = false;
         }
@@ -170,8 +180,8 @@ public class Spearman : Enemy
         }
         public void OnEnter()
         {
-            enemy.thrustCooldown = Random.Range(1f, 2f);
-            enemy.throwCooldown = Random.Range(1f, 3f);
+            enemy.thrustCooldown = Random.Range(0.5f, 1.5f);
+            enemy.throwCooldown = Random.Range(1.5f, 2.5f);
         }
         public void OnUpdate()
         {
@@ -243,6 +253,9 @@ public class Spearman : Enemy
             enemy.animator.SetTrigger("thrust");
             enemy.isThrustFinished = false;
             enemy.thrustTimer = 0;
+            enemy.health.spriteRenderer.color = Color.orange;
+            enemy.health.knockdownImmune = true;
+            enemy.health.stunImmune = true;
             //AudioManager.PlaySFX(SFXTYPE.SPEARMAN_CHARGE, 0.2f);
         }
         public void OnUpdate()
@@ -259,7 +272,8 @@ public class Spearman : Enemy
         }
         public void OnExit()
         {
-
+            enemy.health.knockdownImmune = false;
+            enemy.health.stunImmune = false;
         }
     }
     public void ThrustVFX()
@@ -301,6 +315,8 @@ public class Spearman : Enemy
     public class SpearmanCCState : IState
     {
         private Spearman enemy;
+        private bool knockdown;
+        private float elapsed;
         public SpearmanCCState(Spearman _enemy) 
         { 
             enemy = _enemy; 
@@ -308,15 +324,55 @@ public class Spearman : Enemy
 
         public void OnEnter()
         {
-            //enemy.rb.linearVelocity = Vector2.zero;
-            //enemy.animator.SetTrigger("Stun");
-            enemy.animator.SetBool("isStun", true);
+            elapsed = 0f;
+            //enemy.animator.SetTrigger("Stunned");
+            if (enemy.health.currentCCState == CrowdControlState.Stunned)
+            {
+                enemy.animator.SetBool("isStun", true);
+                knockdown = false;
+            }
+            else if (enemy.health.currentCCState == CrowdControlState.Knockdown)
+            {
+                enemy.animator.SetTrigger("knockdown");
+                knockdown = true;
+                enemy.getUp = false;
+            }
         }
 
         public void OnUpdate()
         {
+            if (elapsed < 0.2f)
+            {
+                elapsed += Time.deltaTime;
+                return;
+            }
+            if (!knockdown)
+            {
+                if (enemy.health.currentCCState == CrowdControlState.Knockdown) enemy.stateMachine.ChangeState(new SpearmanCCState(enemy));
+            }
+            if (enemy.health.currentCCState == CrowdControlState.Knockdown)
+            {
+                if (enemy.isGround)
+                {
+                    enemy.animator.SetTrigger("land");
+                    enemy.animator.ResetTrigger("knockdown");
+                    enemy.health.stunImmune = true;
+                }
+                else
+                {
+                    enemy.animator.SetTrigger("knockdown");
+                    enemy.animator.ResetTrigger("land");
+                }
+            }
             if (enemy.health.currentCCState == CrowdControlState.None)
             {
+                if (knockdown)
+                {
+                    enemy.animator.ResetTrigger("land");
+                    enemy.animator.SetTrigger("getup");
+                    if (enemy.getUp) enemy.stateMachine.ChangeState(new SpearmanChaseState(enemy));
+                    return;
+                }
                 enemy.stateMachine.ChangeState(new SpearmanChaseState(enemy));
             }
         }
@@ -324,6 +380,9 @@ public class Spearman : Enemy
         public void OnExit()
         {
             enemy.animator.SetBool("isStun", false);
+            enemy.animator.ResetTrigger("land");
+            enemy.animator.ResetTrigger("getup");
+            enemy.health.stunImmune = false;
         }
     }
 }

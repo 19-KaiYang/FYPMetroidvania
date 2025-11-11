@@ -11,6 +11,7 @@ public class EnergyBarUI : MonoBehaviour
 
     private void Start()
     {
+        playerEnergy = PlayerController.instance.GetComponent<EnergySystem>();
         if (fillTransform != null)
             fullWidth = fillTransform.sizeDelta.x;
     }

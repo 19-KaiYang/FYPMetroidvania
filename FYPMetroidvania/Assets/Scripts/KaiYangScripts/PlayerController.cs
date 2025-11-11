@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -48,6 +49,7 @@ public class PlayerController : MonoBehaviour
     public float dashCooldown = 1f;
     public int dashCount = 1;
     public int dashesRemaining;
+    public TrailRenderer dashTrail;
 
     [Header("Wall Jump")]
     public float wallCheckDistance = 0.3f;
@@ -55,6 +57,12 @@ public class PlayerController : MonoBehaviour
     public Vector2 wallJumpDirection = new Vector2(1, 1);
     private bool hasWallJumped;
     private float lastWallJumpDirection = 0f;
+
+
+    public bool canWallSlide = true;
+    public float wallSlideSpeed = 2f;
+    private bool isWallSliding = false;
+
 
     [Header("Ground Check")]
     public Transform groundCheck;
@@ -77,17 +85,19 @@ public class PlayerController : MonoBehaviour
 
     public Vector2 moveInput;
     private Vector2 dashDirection;
-    private Vector2 velocity;
+    public Vector2 velocity;
 
-    private bool isDashing;
-    private float dashTimer;
+    public bool isDashing;
+    public float dashTimer;
     private float dashCooldownTimer;
 
     private int currentKnockdownPhase = 0;
-    private bool wasGroundedLastFrame = false;
+    public bool wasGroundedLastFrame = false;
     private float knockdownPhaseTimer = 0f;
 
-    [HideInInspector] public bool externalVelocityOverride = false;
+    public bool externalVelocityOverride = false;
+    public float lastExternalVelocitySetTime = 0f;
+    private bool justWallJumped = false;
 
     // Jump control
     private bool jumpLocked = false;
@@ -105,8 +115,9 @@ public class PlayerController : MonoBehaviour
 
     public bool isInHitstop { get; private set; }
     public Vector2 GetVelocity() => velocity;
-
     public Vector2 CurrentVelocity => velocity;
+
+    public bool isInCutscene;
 
     private void Awake()
     {
@@ -114,19 +125,24 @@ public class PlayerController : MonoBehaviour
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
+
+            if (SceneManager.GetActiveScene().name == "Goblin Camp" && !RoomSaveManager.HasSaveData())
+                isInCutscene = true;
+            else
+                isInCutscene = false;
         }
         else
         {
             Destroy(gameObject);
         }
-
+        Unity.Cinemachine.CinemachineImpulseManager.Instance.IgnoreTimeScale = true;
         rb = GetComponent<Rigidbody2D>();
         rb.bodyType = RigidbodyType2D.Kinematic;
         rb.simulated = true;
 
         skills = GetComponentInChildren<Skills>();
         combat = GetComponentInChildren<CombatSystem>();
-        if(animator == null) animator = GetComponentInChildren<Animator>();
+        if (animator == null) animator = GetComponentInChildren<Animator>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
 
         if (groundCheck != null)
@@ -138,11 +154,13 @@ public class PlayerController : MonoBehaviour
         lastPosition = transform.position;
         // Initialize dash count
         dashesRemaining = dashCount;
+        if (dashTrail != null) dashTrail.emitting = false;
     }
 
     private void Update()
     {
         if (isInHitstop) return;
+        if (isInCutscene) return;
 
         var health = GetComponent<Health>();
 
@@ -153,13 +171,14 @@ public class PlayerController : MonoBehaviour
             if (!IsGrounded)
             {
                 AudioManager.PlaySFX(SFXTYPE.PLAYER_LAND, 0.5f);
-                animator.SetBool("IsAttacking", false);
                 if (combat.isAttacking)
                 {
-                    combat.isAttacking = false;
                     externalVelocityOverride = false;
                     combat.DisableAllHitboxes();
                 }
+                combat.isAttacking = false;
+                animator.SetBool("IsAttacking", false);
+                combat.DisableAllHitboxes();
             }
             IsGrounded = true;
             IsOnPlatform = ground.collider.CompareTag("Platform");
@@ -169,15 +188,21 @@ public class PlayerController : MonoBehaviour
             IsGrounded = false;
             IsOnPlatform = false;
         }
-
+        //if (currentKnockdownPhase >= 3)
+        //{
+        //    currentKnockdownPhase = 0;
+        //    animator.SetInteger("KnockdownPhase", 0);
+        //}
         if (health != null && health.currentCCState == CrowdControlState.Knockdown)
         {
             if (currentKnockdownPhase == 0)
             {
+                externalVelocityOverride = true;
                 currentKnockdownPhase = 1;
-                knockdownPhaseTimer = 0.1f; 
+                knockdownPhaseTimer = 0.1f;
                 animator.SetInteger("KnockdownPhase", 1);
                 Debug.Log("Knockdown Started - Phase 1: Launch");
+                wasGroundedLastFrame = false;
             }
             else
             {
@@ -186,26 +211,28 @@ public class PlayerController : MonoBehaviour
                 switch (currentKnockdownPhase)
                 {
                     case 1: 
-                        if (knockdownPhaseTimer <= 0 && velocity.y < -0.1f)
+                        if (knockdownPhaseTimer <= 0 && velocity.y < 0.1f)
                         {
                             currentKnockdownPhase = 2;
                             animator.SetInteger("KnockdownPhase", 2);
                             Debug.Log("Knockdown Phase 2: Falling");
+                            wasGroundedLastFrame = false;
                         }
                         break;
 
                     case 2: 
                            
-                        if (IsGrounded && !wasGroundedLastFrame)
+                        if (IsGrounded && currentKnockdownPhase < 3)
                         {
                             AudioManager.PlaySFX(SFXTYPE.PLAYER_LAND);
                             currentKnockdownPhase = 3;
                             animator.SetInteger("KnockdownPhase", 3);
                             Debug.Log("Knockdown Phase 3: Landing");
+                            health.isInArcKnockdown = false;
                         }
                         break;
 
-                    case 3: 
+                    case 3:
                         break;
                 }
             }
@@ -224,45 +251,42 @@ public class PlayerController : MonoBehaviour
         // Stop player movement and input while CC active
         if (health != null && health.currentCCState != CrowdControlState.None)
         {
-            velocity.x = 0f;
+            // Stop horizontal movement when stunned (prevents air gliding)
+            if (health.currentCCState == CrowdControlState.Stunned)
+            {
+                velocity.x = 0f;
+            }
 
             // Allow knockdown animation updates to still play
             if (health.currentCCState != CrowdControlState.Knockdown)
+            {
+                Move(velocity * Time.deltaTime);
                 return;
+            }
         }
 
         animator.SetBool("IsUsingSkill", skills != null && skills.IsUsingSkill);
 
-        if (IsGrounded)
-            animator.SetFloat("Speed", Mathf.Abs(moveInput.x));
-        else
-            animator.SetFloat("Speed", 0f);
+        // === ONLY UPDATE THESE ANIMATIONS IF NOT USING SKILL ===
+        if (skills == null || !skills.IsUsingSkill)
+        {
+            if (IsGrounded)
+                animator.SetFloat("Speed", Mathf.Abs(moveInput.x));
+            else
+                animator.SetFloat("Speed", 0f);
 
-        // === FOOTSTEP SOUND ===
-        //if (IsGrounded && Mathf.Abs(velocity.x) > 0.1f)
-        //{
-        //    // Track actual distance moved
-        //    float distanceMoved = Vector3.Distance(transform.position, lastPosition);
-        //    moveDistanceSinceLastStep += distanceMoved;
-
-        //    // Only play footstep if we've moved enough distance
-        //    float requiredDistance = moveSpeed * footstepInterval;
-        //    if (moveDistanceSinceLastStep >= requiredDistance)
-        //    {
-        //        AudioManager.PlaySFX(SFXTYPE.PLAYER_FOOTSTEP);
-        //        moveDistanceSinceLastStep = 0f;
-        //    }
-        //}
-        //else
-        //{
-        //    // Reset when not moving
-        //    moveDistanceSinceLastStep = 0f;
-        //}
+            if (IsGrounded)
+            {
+                animator.SetBool("IsFalling", false);
+                justWallJumped = false;
+            }
+            else
+            {
+                animator.SetBool("IsFalling", velocity.y < -0.1f || justWallJumped);
+            }
+        }
 
         lastPosition = transform.position;
-
-
-        animator.SetBool("IsFalling", !IsGrounded && velocity.y < -0.1f);
 
         // Dash timers
         if (isDashing)
@@ -270,9 +294,7 @@ public class PlayerController : MonoBehaviour
             dashTimer -= Time.deltaTime;
             if (dashTimer <= 0f)
             {
-                isDashing = false;
-                if (Mathf.Abs(velocity.y) > 0.1f)
-                    velocity.y *= 0.3f;
+                StopDash();
             }
         }
 
@@ -296,14 +318,17 @@ public class PlayerController : MonoBehaviour
             hasWallJumped = false;
             lastWallJumpDirection = 0f;
 
+
             if (velocity.y < 0) velocity.y = -1f;
 
             if (jumpBufferCounter > 0f && !jumpLocked && !platformDropping && !combat.isAttacking)
             {
+                Debug.Log("Jump1");
                 animator.SetBool("IsAttacking", false);
                 velocity.y = jumpForce;
                 jumpLocked = true;
                 jumpBufferCounter = 0f;
+                externalVelocityOverride = false;
                 AudioManager.PlaySFX(SFXTYPE.PLAYER_JUMP);
             }
         }
@@ -327,6 +352,7 @@ public class PlayerController : MonoBehaviour
         // Movement logic (only runs if NOT in CC state)
         if (!externalVelocityOverride)
         {
+            Debug.Log("Overriding velocity in Update!");  
             if (skills != null && skills.IsChargeLocked)
                 velocity.x = 0f;
             else if (!isDashing)
@@ -338,7 +364,7 @@ public class PlayerController : MonoBehaviour
         //Flipping of sprites
         bool isKnockedDown = health != null && health.currentCCState == CrowdControlState.Knockdown;
 
-        if (!isKnockedDown)
+        if (!isKnockedDown && !skills.IsUsingSkill && !combat.isAttacking)
         {
             if (moveInput.x > 0 && !facingRight)
                 Flip();
@@ -356,6 +382,20 @@ public class PlayerController : MonoBehaviour
             if (wallCoyoteCounter > 0)
                 wallCoyoteCounter -= Time.deltaTime;
         }
+
+        if (canWallSlide && IsTouchingWall() && !IsGrounded && velocity.y < 0 && !isDashing && !externalVelocityOverride)
+        {
+            isWallSliding = true;
+            velocity.y = Mathf.Max(velocity.y, -wallSlideSpeed);
+        }
+        else
+        {
+            isWallSliding = false;
+        }
+        animator.SetBool("IsWallSliding", isWallSliding);
+        Debug.Log($"IsWallSliding parameter set to: {isWallSliding}");
+
+        Move(velocity * Time.deltaTime);
     }
     private void FixedUpdate()
     {
@@ -363,12 +403,12 @@ public class PlayerController : MonoBehaviour
 
         var health = GetComponent<Health>();
         bool inArcKnockdown = health != null && health.isInArcKnockdown;
-        if (isInKnockback)
+        if (isInKnockback && !inArcKnockdown)
         {
             velocity = knockbackVelocity;
-            knockbackTimer -= Time.deltaTime;
+            knockbackTimer -= Time.fixedDeltaTime;
             knockbackVelocity -= knockbackVelocity * Time.fixedDeltaTime;
-            if(knockbackTimer < 0)
+            if(knockbackTimer < 0 && currentKnockdownPhase <= 0)
             {
                 isInKnockback = false;
                 externalVelocityOverride = false;
@@ -380,14 +420,21 @@ public class PlayerController : MonoBehaviour
             velocity.y += Time.fixedDeltaTime * (isFloating ? floatGravity : gravity);
 
         // Move the character
-        Move(velocity * Time.fixedDeltaTime);
+        //Move(velocity * Time.deltaTime);
 
         // Tick down jump buffer
         if (jumpBufferCounter > 0)
             jumpBufferCounter -= Time.fixedDeltaTime;
     }
 
-
+    public void StopDash()
+    {
+        isDashing = false;
+        animator.SetBool("isDashing", false);
+        dashTrail.emitting = false;
+        if (Mathf.Abs(velocity.y) > 0.1f)
+            velocity.y *= 0.3f;
+    }
     public void Move(Vector2 moveAmount)
     {
         // Horizontal
@@ -453,8 +500,9 @@ public class PlayerController : MonoBehaviour
                 platformDropTimer = platformDropDuration;
                 velocity.y = -platformDropSpeed;
             }
-            else if (!jumpLocked && !combat.isAttacking)
+            else if (!jumpLocked && !combat.isAttacking && !externalVelocityOverride)
             {
+                Debug.Log("Jump1");
                 velocity.y = jumpForce;
                 jumpLocked = true;
                 airJumpsDone = 0;
@@ -492,12 +540,15 @@ public class PlayerController : MonoBehaviour
                 {
                     hasWallJumped = true;
                     lastWallJumpDirection = jumpDirection;
+                    justWallJumped = true; 
 
                     velocity = new Vector2(
                         jumpDirection * wallJumpDirection.x * wallJumpForce,
                         wallJumpDirection.y * wallJumpForce
                     );
 
+                    animator.SetTrigger("Jump");
+                    Debug.Log($"Wall jump velocity set: {velocity}");
                     StartCoroutine(WallJumpBuffer());
                 }
             }
@@ -513,13 +564,34 @@ public class PlayerController : MonoBehaviour
     private IEnumerator WallJumpBuffer()
     {
         externalVelocityOverride = true;
+        justWallJumped = false;
+        lastExternalVelocitySetTime = Time.time;
+
         yield return new WaitForSeconds(0.2f);
         externalVelocityOverride = false;
-    }
 
+        while (velocity.y > 0f && !IsGrounded)
+        {
+            yield return null;
+        }
+
+        justWallJumped = true;
+
+        while (velocity.y > -2f && !IsGrounded)
+        {
+            yield return null;
+        }
+
+        justWallJumped = false;
+    }
     public void OnDash()
     {
-        if (skills != null && skills.IsChargeLocked) return;
+        if (skills != null && skills.IsUsingSkill) return;
+        if (isInCutscene) return;
+
+        var health = GetComponent<Health>();
+        if (health != null && health.currentCCState == CrowdControlState.Knockdown) return;
+
         if (dashCooldownTimer > 0f) return;
         if (dashesRemaining <= 0) return;
 
@@ -531,9 +603,16 @@ public class PlayerController : MonoBehaviour
         isDashing = true;
         dashTimer = dashDuration;
         velocity = dashDirection * dashSpeed;
-
+        animator.SetBool("isDashing", true);
+        dashTrail.emitting = true;
         dashesRemaining--;
-
+        if (combat != null && combat.isAttacking){
+            combat.SetCanTransition(1);
+            ResetState();
+            SetHitstop(false);
+            combat.HideVFX();
+            combat.DisableAllHitboxes();
+        }
         AudioManager.PlaySFX(SFXTYPE.PLAYER_DASH);
 
 
@@ -601,6 +680,16 @@ public class PlayerController : MonoBehaviour
         else Time.timeScale = 1f;
     }
 
+    public void ResetState()
+    {
+        combat.isAttacking = false;
+        animator.SetBool("IsAttacking", false);
+        combat.DisableAllHitboxes();
+        externalVelocityOverride = false;
+        velocity = Vector2.zero;
+        skills.ResetValues();
+        StopDash();
+    }
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;

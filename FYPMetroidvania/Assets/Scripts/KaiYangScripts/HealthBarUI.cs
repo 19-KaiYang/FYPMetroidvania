@@ -12,6 +12,7 @@ public class HealthBarUI : MonoBehaviour
 
     private void Start()
     {
+        playerHealth = PlayerController.instance.gameObject.GetComponent<Health>();
         fullWidth = fillTransform.sizeDelta.x;
     }
 

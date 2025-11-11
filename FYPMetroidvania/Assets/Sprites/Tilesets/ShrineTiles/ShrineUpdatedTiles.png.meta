@@ -1,0 +1,5750 @@
+fileFormatVersion: 2
+guid: a7d452e730cbaf94d9ca5ed55e0bf479
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 5663061954668274717
+    second: tileset_0
+  - first:
+      213: 6007627129536956325
+    second: tileset_1
+  - first:
+      213: -7486092956772349302
+    second: tileset_2
+  - first:
+      213: -3627264120405484348
+    second: tileset_3
+  - first:
+      213: -4815885190406460031
+    second: tileset_4
+  - first:
+      213: 7477116942032994148
+    second: tileset_5
+  - first:
+      213: -396035294860175646
+    second: tileset_6
+  - first:
+      213: 8233071653059976297
+    second: tileset_7
+  - first:
+      213: -7775419718026629507
+    second: tileset_8
+  - first:
+      213: -781294158744790408
+    second: tileset_9
+  - first:
+      213: 9061651696941551919
+    second: tileset_10
+  - first:
+      213: -6985117363303071740
+    second: tileset_11
+  - first:
+      213: 8642771837104280003
+    second: tileset_12
+  - first:
+      213: -1762573714345474896
+    second: tileset_13
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 3100
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 077bc9fafbbef3e48b811bc42f411f18
+      internalID: 1322825677
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_1
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 3100
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 82d17a94a2d1b34438f1ec9b804c86b3
+      internalID: 2080852333
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_2
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 3100
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 745899b0025d3644aa24d4055098351a
+      internalID: 951174228
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_3
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 3100
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a3db431344ed273458ae84667fbea68f
+      internalID: 1892861448
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_4
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 3100
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9e7ce839de7c55d4db3108c31b114a07
+      internalID: 692821904
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_5
+      rect:
+        serializedVersion: 2
+        x: 500
+        y: 3100
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5356191063e49cf4ca6238e31c37757d
+      internalID: -1561261494
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_6
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 3100
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 11a52cdba9a555948b86cbaa88585100
+      internalID: 1416220111
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_7
+      rect:
+        serializedVersion: 2
+        x: 1500
+        y: 3100
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e4940ff3f7f36fa45b6a55a396ddcb9d
+      internalID: 1257716905
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_8
+      rect:
+        serializedVersion: 2
+        x: 1600
+        y: 3100
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0b637bab87055604b8ace433b3d76b8d
+      internalID: -1522008388
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_9
+      rect:
+        serializedVersion: 2
+        x: 1700
+        y: 3100
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 77a8c2fda91533b4eaf2ead5051ce7db
+      internalID: 691218311
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_10
+      rect:
+        serializedVersion: 2
+        x: 1800
+        y: 3100
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1f4e2ac5c6841884ea7858686fc4aa74
+      internalID: -142672031
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_11
+      rect:
+        serializedVersion: 2
+        x: 1900
+        y: 3100
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c4b02c3641ab9e94cb55b3b534e0b402
+      internalID: 1493554375
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_12
+      rect:
+        serializedVersion: 2
+        x: 3100
+        y: 3100
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 78b82aa433f1dd445a5563a1d3a9f08a
+      internalID: 1209870004
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_13
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 3000
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5fd8e085da67e8542baf9b6b103fd16f
+      internalID: -1383236729
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_14
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 3000
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a6a31bce2ab72d745b33a84c8af7dc26
+      internalID: -1240810023
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_15
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 3000
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d6b77b0d8538d024aaee1b89f857ba3a
+      internalID: -995484988
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_16
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 3000
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d8ed9344bdcb155409c5a1f0c5a29c1d
+      internalID: -215719474
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_17
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 3000
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 75887d1b80d23eb40b6aaa91a4aa4435
+      internalID: 419603073
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_18
+      rect:
+        serializedVersion: 2
+        x: 500
+        y: 3000
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d8ee4cdfe1098a34587c5fda2f19a8f4
+      internalID: -765061884
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_19
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 3000
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d2a95a7bd21d18443bd9712e249dfacd
+      internalID: 657088313
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_20
+      rect:
+        serializedVersion: 2
+        x: 700
+        y: 3000
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3672a4f190840cb49b53bdf45e8eac7c
+      internalID: -559931866
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_21
+      rect:
+        serializedVersion: 2
+        x: 800
+        y: 3000
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a3592133a47f2f745a8315204890fe62
+      internalID: 1285445597
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_22
+      rect:
+        serializedVersion: 2
+        x: 900
+        y: 3000
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8cfd5501d13d98140b1c3ad749173ba3
+      internalID: -1025255271
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_23
+      rect:
+        serializedVersion: 2
+        x: 1000
+        y: 3000
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dbdcb88742b4047438dcb1acf3d990e6
+      internalID: 1146949485
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_24
+      rect:
+        serializedVersion: 2
+        x: 1100
+        y: 3000
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f80db17b01fe33348baab51b97d18d92
+      internalID: -1340526150
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_25
+      rect:
+        serializedVersion: 2
+        x: 1400
+        y: 3000
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5171d9ddfa508f24e9b13d778e81da2e
+      internalID: -1441653072
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_26
+      rect:
+        serializedVersion: 2
+        x: 1500
+        y: 3000
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0d6952f6da03e374e93a6c8469ac789c
+      internalID: 391166285
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_27
+      rect:
+        serializedVersion: 2
+        x: 1600
+        y: 3000
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 408acd601043ccd4688965b17edf67e8
+      internalID: 846674476
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_28
+      rect:
+        serializedVersion: 2
+        x: 1700
+        y: 3000
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a50fff58fdc162b4d999dfdb1734ced1
+      internalID: 895134229
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_29
+      rect:
+        serializedVersion: 2
+        x: 1800
+        y: 3000
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7f5232742d3187147a86dde4cd187e95
+      internalID: 104019558
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_30
+      rect:
+        serializedVersion: 2
+        x: 1900
+        y: 3000
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6e6d60185a86ed941bd3a1487f728879
+      internalID: -1375274159
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_31
+      rect:
+        serializedVersion: 2
+        x: 2000
+        y: 3000
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4d012349485d6cf4fbe161d0688085d2
+      internalID: -1668366859
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_32
+      rect:
+        serializedVersion: 2
+        x: 2100
+        y: 3000
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3f893a11cc62f644fb878d9a687c435d
+      internalID: 34832486
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_33
+      rect:
+        serializedVersion: 2
+        x: 2200
+        y: 3000
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eef502dca6456cf40aa3db3af0f95489
+      internalID: 1697124595
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_34
+      rect:
+        serializedVersion: 2
+        x: 2300
+        y: 3000
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1bf43abb6a51de344a69893efedaf2ac
+      internalID: -27594352
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_35
+      rect:
+        serializedVersion: 2
+        x: 3100
+        y: 3000
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ca805d8eb7a59eb4e990537b035c3bd2
+      internalID: 766967281
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_36
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2900
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ecf5a32b11bd6ce43857f2d1cd4da938
+      internalID: 765122308
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_37
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 2900
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d684fbda070d9774c89013f39fb13634
+      internalID: 335124332
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_38
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 2900
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 981d4547d7ff2c647b3c100cad1b02b3
+      internalID: -1514121463
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_39
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 2900
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 44530b89124be44478ab3c138c406849
+      internalID: -1598289770
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_40
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 2900
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e9956e0bd50083e49b4b25f8a45b9e89
+      internalID: -144759516
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_41
+      rect:
+        serializedVersion: 2
+        x: 500
+        y: 2900
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 363df756706d0cf42bea1ca768e4d724
+      internalID: 1032122636
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_42
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 2900
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3db81a580edcf6d40b6eb61578a1c8d9
+      internalID: -354119912
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_43
+      rect:
+        serializedVersion: 2
+        x: 700
+        y: 2900
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d86bf62b587983947813d44de319bc55
+      internalID: 1057640129
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_44
+      rect:
+        serializedVersion: 2
+        x: 800
+        y: 2900
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9640f2fdc3afe5f4bb17703c000da495
+      internalID: -1296046826
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_45
+      rect:
+        serializedVersion: 2
+        x: 900
+        y: 2900
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 72fd97e7cc007cb4cb19e96c6c8b04b4
+      internalID: 2140603213
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_46
+      rect:
+        serializedVersion: 2
+        x: 1000
+        y: 2900
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4bb6be096ac42264291b2ba7bc0e4299
+      internalID: 2065571491
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_47
+      rect:
+        serializedVersion: 2
+        x: 1100
+        y: 2900
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ae230657ecbc2e14abb4b153202c2f2d
+      internalID: 778082764
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_48
+      rect:
+        serializedVersion: 2
+        x: 1200
+        y: 2900
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 03fc149fe53d312478f437d1df188fcb
+      internalID: -628760608
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_49
+      rect:
+        serializedVersion: 2
+        x: 1400
+        y: 2900
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fffcf48666d335e4cbc5fcf31b4d647e
+      internalID: -302096264
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_50
+      rect:
+        serializedVersion: 2
+        x: 1500
+        y: 2900
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fb9f7fd7d309db14190a3e4a30d239df
+      internalID: -445382792
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_51
+      rect:
+        serializedVersion: 2
+        x: 1600
+        y: 2900
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ab665fce00849644a8b2af0428a314ce
+      internalID: 743411394
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_52
+      rect:
+        serializedVersion: 2
+        x: 1700
+        y: 2900
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 001a83d6e8285ec4eb33032ea88b1330
+      internalID: -291285406
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_53
+      rect:
+        serializedVersion: 2
+        x: 1800
+        y: 2900
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7b4a5f73f94057b4bbf2b5b6266a654a
+      internalID: -1790314735
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_54
+      rect:
+        serializedVersion: 2
+        x: 1900
+        y: 2900
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 826c7bd53e9279e4996875d1e2ac38f2
+      internalID: -466696624
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_55
+      rect:
+        serializedVersion: 2
+        x: 2000
+        y: 2900
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: badbabc92e919524ba64a2baad72473b
+      internalID: 1054818176
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_56
+      rect:
+        serializedVersion: 2
+        x: 2100
+        y: 2900
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8a46fe0faab3b7243a40559847b6c989
+      internalID: -945524047
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_57
+      rect:
+        serializedVersion: 2
+        x: 2200
+        y: 2900
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2f96a12c214851948bdaff3f5b0051cb
+      internalID: -1474485643
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_58
+      rect:
+        serializedVersion: 2
+        x: 2300
+        y: 2900
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 29f7ffbb0db4e734faa1241b09b4816d
+      internalID: -780916439
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_59
+      rect:
+        serializedVersion: 2
+        x: 3100
+        y: 2900
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 39702d0430b6f6646b0a000b2bf013c2
+      internalID: 1053899544
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_60
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2800
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0bc9357e61690584683622e591868a1a
+      internalID: 1633711889
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_61
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 2800
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7bde018f6f4d9a248beb56a5556d5543
+      internalID: 1802171768
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_62
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 2800
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 72cf8cc12a982b144a3b02ae2587064e
+      internalID: 747319679
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_63
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 2800
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 270f621b98e7c77428f5b46f124f9a72
+      internalID: 1981272704
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_64
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 2800
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 604b19d9e12798d4ca7779cb9937fbfc
+      internalID: 1826752533
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_65
+      rect:
+        serializedVersion: 2
+        x: 500
+        y: 2800
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0359024afaef6ae4e94d2f8138652d04
+      internalID: -1974477846
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_66
+      rect:
+        serializedVersion: 2
+        x: 700
+        y: 2800
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 25b0e0a0c4525b34e9d3f6aa6053e678
+      internalID: 2138011126
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_67
+      rect:
+        serializedVersion: 2
+        x: 800
+        y: 2800
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 271c63d95a9b6324c8b84535e588ae36
+      internalID: -97143235
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_68
+      rect:
+        serializedVersion: 2
+        x: 900
+        y: 2800
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4d701f8e4928c564fb8dc8879197cb15
+      internalID: -194136710
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_69
+      rect:
+        serializedVersion: 2
+        x: 1000
+        y: 2800
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f8675c085a4d40148a46cb75e4684287
+      internalID: 105289344
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_70
+      rect:
+        serializedVersion: 2
+        x: 1100
+        y: 2800
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4f215e8b5ffea2147876f37e55ce538d
+      internalID: -970580025
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_71
+      rect:
+        serializedVersion: 2
+        x: 1200
+        y: 2800
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e73718033d4901e468bdf375df0ea0cc
+      internalID: 1377535670
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_72
+      rect:
+        serializedVersion: 2
+        x: 1400
+        y: 2800
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8a7f3020afb290548832362088dd868b
+      internalID: -354108206
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_73
+      rect:
+        serializedVersion: 2
+        x: 1500
+        y: 2800
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 51ad3ada3883bba4ca49148e986d6109
+      internalID: -127879417
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_74
+      rect:
+        serializedVersion: 2
+        x: 1600
+        y: 2800
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fedc8c301d4ee7d45994a8305f362ce5
+      internalID: -956213594
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_75
+      rect:
+        serializedVersion: 2
+        x: 1700
+        y: 2800
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3539a41c750f3564f9546404c28f3d91
+      internalID: 1214814815
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_76
+      rect:
+        serializedVersion: 2
+        x: 1800
+        y: 2800
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7e76184bfe66aff4589b394bc7ee3ace
+      internalID: 1733400753
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_77
+      rect:
+        serializedVersion: 2
+        x: 1900
+        y: 2800
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d6aa51ec433d8d349946e302a34c9a9b
+      internalID: 2124549690
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_78
+      rect:
+        serializedVersion: 2
+        x: 2000
+        y: 2800
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3abba08a94ac1934092c094c99c5153e
+      internalID: 1138932983
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_79
+      rect:
+        serializedVersion: 2
+        x: 2100
+        y: 2800
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: deae41ae60fa47e4daaa5adc17c35ba3
+      internalID: -1170783257
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_80
+      rect:
+        serializedVersion: 2
+        x: 2200
+        y: 2800
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c4531e68cb8283242a56d05f4d9c4a5a
+      internalID: 388300942
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_81
+      rect:
+        serializedVersion: 2
+        x: 2300
+        y: 2800
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ce17e162ca6e9ae43bcf62f7dd31889d
+      internalID: -1083555046
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_82
+      rect:
+        serializedVersion: 2
+        x: 3100
+        y: 2800
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fe806ff933ca2694cb4bc29dba32b423
+      internalID: 1108304215
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_83
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 2700
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0cc4703aaa78fd147abb2cb93c8ddbd4
+      internalID: 99723842
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_84
+      rect:
+        serializedVersion: 2
+        x: 500
+        y: 2700
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ca2ad8609c6271442a9c0b235021428a
+      internalID: 1470981938
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_85
+      rect:
+        serializedVersion: 2
+        x: 700
+        y: 2700
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 94917093e96cbde408d062e61e9db9f3
+      internalID: 635857538
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_86
+      rect:
+        serializedVersion: 2
+        x: 800
+        y: 2700
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8c47087a30c9f8e439f027413a232171
+      internalID: -927841617
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_87
+      rect:
+        serializedVersion: 2
+        x: 900
+        y: 2700
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a26e404bc99781b4b91c83e15eed6e16
+      internalID: 54772092
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_88
+      rect:
+        serializedVersion: 2
+        x: 1000
+        y: 2700
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d97e94565a9c5e7479da63c472bb23a9
+      internalID: 1499660760
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_89
+      rect:
+        serializedVersion: 2
+        x: 1100
+        y: 2700
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ca9aa0846986df641bb434ed0689af7d
+      internalID: 425698967
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_90
+      rect:
+        serializedVersion: 2
+        x: 1200
+        y: 2700
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b229cc4920d7a2c4c81b02ae2aa9cdf6
+      internalID: -2061667549
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_91
+      rect:
+        serializedVersion: 2
+        x: 1400
+        y: 2700
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 06e97f03f71404b408ac2ce520ecbf42
+      internalID: 973782645
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_92
+      rect:
+        serializedVersion: 2
+        x: 1500
+        y: 2700
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 430eb6fcbec33e946965dc0068bb75eb
+      internalID: -567846121
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_93
+      rect:
+        serializedVersion: 2
+        x: 1600
+        y: 2700
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2043d65770ba4ff48a12efa3ef5ca931
+      internalID: 802166627
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_94
+      rect:
+        serializedVersion: 2
+        x: 1700
+        y: 2700
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 07ad25096015a5e4982b5aa6773bca9b
+      internalID: -2082011460
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_95
+      rect:
+        serializedVersion: 2
+        x: 1800
+        y: 2700
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d7a78bc499028e142b2f145b5729e1f4
+      internalID: -1181668033
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_96
+      rect:
+        serializedVersion: 2
+        x: 1900
+        y: 2700
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: abe73a4ba30bcd446b974293b1268fe0
+      internalID: -1986457443
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_97
+      rect:
+        serializedVersion: 2
+        x: 2000
+        y: 2700
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 16c5803bc03583547911dc5275eea92d
+      internalID: 1467290597
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_98
+      rect:
+        serializedVersion: 2
+        x: 2100
+        y: 2700
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bf179847beaf33f418914d3dad9b528d
+      internalID: -1967691301
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_99
+      rect:
+        serializedVersion: 2
+        x: 2200
+        y: 2700
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dacbb1262aaf93345b172443fb4ca806
+      internalID: -1554826835
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_100
+      rect:
+        serializedVersion: 2
+        x: 2300
+        y: 2700
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2fbd894750231ca4ca775678d923b46c
+      internalID: 610180990
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_101
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 2600
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2a2288bf0a1683e4faa5ba5a28a91308
+      internalID: 1774457691
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_102
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 2600
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 979ac44b956bcf84e8288abc49d31e73
+      internalID: -216262194
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_103
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 2600
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7f8a1a0a85ad00446b1a2dd70f43ac8a
+      internalID: -1573024387
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_104
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 2600
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 301e43ab3bf1eb2419fd66f6b64f9fc5
+      internalID: -1454293638
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_105
+      rect:
+        serializedVersion: 2
+        x: 500
+        y: 2600
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a67e01f15789ffe46b72dc4e0937de6e
+      internalID: 1993441897
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_106
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 2600
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 76fd25051b6d7fe43b5fd2218f1b028c
+      internalID: -501196795
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_107
+      rect:
+        serializedVersion: 2
+        x: 700
+        y: 2600
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2f85ffcb501ac944cb600e784d11373b
+      internalID: 1575964263
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_108
+      rect:
+        serializedVersion: 2
+        x: 800
+        y: 2600
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 902b9875fef284249a930413bd9c2381
+      internalID: -572578844
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_109
+      rect:
+        serializedVersion: 2
+        x: 900
+        y: 2600
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e75384aeb3902ee408088d14ee460939
+      internalID: -1370777845
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_110
+      rect:
+        serializedVersion: 2
+        x: 1000
+        y: 2600
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b1eab16ac224f7948a49bef277178660
+      internalID: 1089401988
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_111
+      rect:
+        serializedVersion: 2
+        x: 1100
+        y: 2600
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6515ebafbf73ac74c8ffcfd1cfdb12bd
+      internalID: 1180332533
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_112
+      rect:
+        serializedVersion: 2
+        x: 1400
+        y: 2600
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9a69d1c709e477d408d7eb1be10f98f9
+      internalID: 1485890643
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_113
+      rect:
+        serializedVersion: 2
+        x: 1500
+        y: 2600
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 284f5ad6f1a512d40ab1fffa3f9f1e64
+      internalID: 898715422
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_114
+      rect:
+        serializedVersion: 2
+        x: 1600
+        y: 2600
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0c2a9ca2e746eab4a8c5167841e92cef
+      internalID: -1154161880
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_115
+      rect:
+        serializedVersion: 2
+        x: 1700
+        y: 2600
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e8ba939c10f6ee34eac313ae8cc6c0b0
+      internalID: -2017044247
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_116
+      rect:
+        serializedVersion: 2
+        x: 1800
+        y: 2600
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0bf70764eb034ca47a4338b5df80cb49
+      internalID: 478704736
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_117
+      rect:
+        serializedVersion: 2
+        x: 1900
+        y: 2600
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: db542ff500baaf74bba58e68ab124b24
+      internalID: -1793460772
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_118
+      rect:
+        serializedVersion: 2
+        x: 2000
+        y: 2600
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9602650d44bdcec43bbb17844be066eb
+      internalID: 354598434
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_119
+      rect:
+        serializedVersion: 2
+        x: 2100
+        y: 2600
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c9b750e716b6962419882e7b7fe92244
+      internalID: -1763209937
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_120
+      rect:
+        serializedVersion: 2
+        x: 2200
+        y: 2600
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 07bbd7e32674c5446af7bd057d3e2f38
+      internalID: -450690485
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_121
+      rect:
+        serializedVersion: 2
+        x: 2300
+        y: 2600
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 25a1ea828bd26574683e387385434918
+      internalID: 889250468
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_122
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2500
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7cc4a88dd268ab9479a0e0ea3c16051b
+      internalID: -678727210
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_123
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 2500
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e0962ae868ebbc2468623b6b1114a57d
+      internalID: 139871343
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_124
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 2500
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fe3245b43c13ac0489b7714d0a27d40f
+      internalID: -1301551176
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_125
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 2500
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 35cdc22217946474392c5354077c8f98
+      internalID: 40064521
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_126
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 2500
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 86eb5b1546c0cc241a9817cbe9f8c1c4
+      internalID: -1929196825
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_127
+      rect:
+        serializedVersion: 2
+        x: 500
+        y: 2500
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c477ee92381d19842b0c92044d012dbd
+      internalID: 807672889
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_128
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 2500
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1e7bd8f9cdc699b45a54a09d056adb5f
+      internalID: -33620696
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_129
+      rect:
+        serializedVersion: 2
+        x: 700
+        y: 2500
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5439e4d4bb4655f47b5f5517d62bbdb4
+      internalID: -1670241556
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_130
+      rect:
+        serializedVersion: 2
+        x: 800
+        y: 2500
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a5662ad2adae3d2439497f9b55dd8196
+      internalID: -1479034838
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_131
+      rect:
+        serializedVersion: 2
+        x: 900
+        y: 2500
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 886e3bd6d52752b419394fa5141b5fde
+      internalID: -6332447
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_132
+      rect:
+        serializedVersion: 2
+        x: 1000
+        y: 2500
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2218dd598aa9a77418b63975264ae202
+      internalID: 150955661
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_133
+      rect:
+        serializedVersion: 2
+        x: 1100
+        y: 2500
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 025106dcc096a5c45a55f783329073ef
+      internalID: 1218030566
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_134
+      rect:
+        serializedVersion: 2
+        x: 1400
+        y: 2500
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 304c2e8f939d49645a28d6e4d007b9d0
+      internalID: 125988042
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_135
+      rect:
+        serializedVersion: 2
+        x: 1500
+        y: 2500
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5088d5be0687c224cb7a3e7d9519266c
+      internalID: -915484668
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_136
+      rect:
+        serializedVersion: 2
+        x: 1600
+        y: 2500
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9e31b74a4949b7b4d9a70a55caa31f0c
+      internalID: 892111164
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_137
+      rect:
+        serializedVersion: 2
+        x: 1700
+        y: 2500
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: faed1585e83d3f846a6f62e8d4f7a9ab
+      internalID: 46491822
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_138
+      rect:
+        serializedVersion: 2
+        x: 1800
+        y: 2500
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3feadc654ef4145409bd3706987752b9
+      internalID: -717628462
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_139
+      rect:
+        serializedVersion: 2
+        x: 1900
+        y: 2500
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: af6b1a3be84bcc74491b32314b80d54e
+      internalID: -1587882484
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_140
+      rect:
+        serializedVersion: 2
+        x: 2000
+        y: 2500
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b16ef7bc6d06a6b48b816cb8850566b8
+      internalID: -1936562383
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_141
+      rect:
+        serializedVersion: 2
+        x: 2100
+        y: 2500
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7eb17c6772bb98f4199b6a11f8f34c67
+      internalID: 150024150
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_142
+      rect:
+        serializedVersion: 2
+        x: 2200
+        y: 2500
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3d928b0fafc1e4d40ba0aead862c2ba4
+      internalID: -1068804243
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_143
+      rect:
+        serializedVersion: 2
+        x: 2300
+        y: 2500
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a2a06ed9cdac8ae46b33160e39227759
+      internalID: -1548499069
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_144
+      rect:
+        serializedVersion: 2
+        x: 3100
+        y: 2500
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 997de3b4c5d8dae44ad93cf2e8be2308
+      internalID: -868903965
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_145
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2400
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 39595792017de06419ca85574c130600
+      internalID: -594827930
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_146
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 2400
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e78a4ae5d5b06a4429cbd437ad1eb81c
+      internalID: -1642656941
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_147
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 2400
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 10ccd8b1ab1535c48a6a265d55e20b3d
+      internalID: 1688364370
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_148
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 2400
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3d76bcc15a6ad6948a6f06bfeef343c8
+      internalID: -925445324
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_149
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 2400
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7c9aa6f560e673d4e8a08de4805af172
+      internalID: 1512322563
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_150
+      rect:
+        serializedVersion: 2
+        x: 500
+        y: 2400
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6ed3e1fe1dcc64441b8bf31abbd38a96
+      internalID: -833603871
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_151
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 2400
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 80626b38f124f0e459ad4afd26a976ad
+      internalID: -2046432540
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_152
+      rect:
+        serializedVersion: 2
+        x: 700
+        y: 2400
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f636e3ed9faf7714f83e43cafa4e1892
+      internalID: -2041355306
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_153
+      rect:
+        serializedVersion: 2
+        x: 800
+        y: 2400
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cb9bcdbfb32ab7a45b2386ad109cc003
+      internalID: 55660391
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_154
+      rect:
+        serializedVersion: 2
+        x: 900
+        y: 2400
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9e4c8f71ffc6f6048bea66f362970b1d
+      internalID: 1617998708
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_155
+      rect:
+        serializedVersion: 2
+        x: 1000
+        y: 2400
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9119422dc71c5554390794b4380b84b8
+      internalID: 395259517
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_156
+      rect:
+        serializedVersion: 2
+        x: 1100
+        y: 2400
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5fab28ea5462e2d4ba270f2a2c577701
+      internalID: 1258624001
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_157
+      rect:
+        serializedVersion: 2
+        x: 3100
+        y: 2400
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: be1757495e98dc24fb7b816218c9c2bc
+      internalID: -1077481832
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_158
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2300
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6041f8bd38c47f645a54b5f6ca6a8ed1
+      internalID: -102867344
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_159
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 2300
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 75f346dad4b60d446af5d5e5571038c8
+      internalID: -2050024611
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_160
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 2300
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 916d9e55363ce1141b46646300971159
+      internalID: -993621805
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_161
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 2300
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 501f2d389f872254c9c2a86191812887
+      internalID: -192952467
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_162
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 2300
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f6a580684aa4b1544bb66a7b738b2abb
+      internalID: 1337196692
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_163
+      rect:
+        serializedVersion: 2
+        x: 500
+        y: 2300
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4a533ee4019a107458062e9e6519ba28
+      internalID: 958067179
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_164
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 2300
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 16b50c6994461344298629ab438c7c81
+      internalID: -1498369862
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_165
+      rect:
+        serializedVersion: 2
+        x: 700
+        y: 2300
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a74cf3c9d8e4cbb4f90181fa71d25815
+      internalID: -1225345877
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_166
+      rect:
+        serializedVersion: 2
+        x: 800
+        y: 2300
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7f41b72ba7c7cd244a7e53a9cda931b5
+      internalID: 798225561
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_167
+      rect:
+        serializedVersion: 2
+        x: 900
+        y: 2300
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: abf75960e8d0b604d92b2f04aa2b1d32
+      internalID: 499945783
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_168
+      rect:
+        serializedVersion: 2
+        x: 1000
+        y: 2300
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2813756956d20dd47bf6986b1b8e5d28
+      internalID: 2076223557
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_169
+      rect:
+        serializedVersion: 2
+        x: 1100
+        y: 2300
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 22893adafb9857841bf49698dca0d522
+      internalID: -1351490947
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_170
+      rect:
+        serializedVersion: 2
+        x: 1200
+        y: 2300
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d0707dc84352e70449088d939c98942e
+      internalID: 76035776
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_171
+      rect:
+        serializedVersion: 2
+        x: 1300
+        y: 2300
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 70b304b7f39c876489dac8d49f33622c
+      internalID: 158047589
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_172
+      rect:
+        serializedVersion: 2
+        x: 3100
+        y: 2300
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 489e91bd93525eb419db613a19a9f289
+      internalID: -1975027895
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_173
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2200
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 627a189cfbc3f2447a8f82e0a3e7ff7e
+      internalID: 1154753992
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_174
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 2200
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f371763c50179214e8c2eae6b348e24d
+      internalID: -1453430837
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_175
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 2200
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ac97943c43cb9554cbe5a539ed8234fa
+      internalID: -387951484
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_176
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 2200
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e17dfecdcf3b1bd4f8ce45c90dd14a09
+      internalID: 306586057
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_177
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 2200
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c3ab0501e2a862348ba9da3ad57c3917
+      internalID: -2039439033
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_178
+      rect:
+        serializedVersion: 2
+        x: 500
+        y: 2200
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 735ceea420511a143a33b301497fbb4a
+      internalID: -787242998
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_179
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 2200
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 13971732ff4f4ee478fa13c01346187e
+      internalID: -866988216
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_180
+      rect:
+        serializedVersion: 2
+        x: 700
+        y: 2200
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b2a40c59d6cb3704c9a5cfcfe0b25d3a
+      internalID: 1816631680
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_181
+      rect:
+        serializedVersion: 2
+        x: 800
+        y: 2200
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 523cb4ba29b7a814c94f54da1d3ed597
+      internalID: -1348691810
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_182
+      rect:
+        serializedVersion: 2
+        x: 900
+        y: 2200
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ac446eacd05b9c0499f069688f58f18e
+      internalID: -2030648150
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_183
+      rect:
+        serializedVersion: 2
+        x: 1000
+        y: 2200
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fc54837b48a0d254c86dfcca1a64ef53
+      internalID: 351073994
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_184
+      rect:
+        serializedVersion: 2
+        x: 1100
+        y: 2200
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0c817a5c1c2f76b48a5adc40d8119be4
+      internalID: 1185244140
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_185
+      rect:
+        serializedVersion: 2
+        x: 1200
+        y: 2200
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8dc40896f5921354ea413f87f47a5f7a
+      internalID: 1315978142
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_186
+      rect:
+        serializedVersion: 2
+        x: 1300
+        y: 2200
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ddeef98546af6844c8380ab998fde849
+      internalID: 338035384
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_187
+      rect:
+        serializedVersion: 2
+        x: 1400
+        y: 2200
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2b7171b521eaab84085a2c36752e44d3
+      internalID: -2009695729
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_188
+      rect:
+        serializedVersion: 2
+        x: 3100
+        y: 2200
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4001b4dcc2adaff408a873f34f21fb08
+      internalID: 515800748
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_189
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2100
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 764d523f32f626346b16ecbfdab72b36
+      internalID: -1075333093
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_190
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 2100
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2d71da3a8dde1ce409dca022c3702d56
+      internalID: 1752209582
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_191
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 2100
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d4082992b3f9d69429c7c47a8237e40d
+      internalID: -611356816
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_192
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 2100
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0f4a4de849802484ea32c88a9fa66ea4
+      internalID: -468347317
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_193
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 2100
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 45c8fdd963a158e4ba64c48857357d53
+      internalID: 1901855512
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_194
+      rect:
+        serializedVersion: 2
+        x: 500
+        y: 2100
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c4fd7dd510d41d34fbc8aeaab9fb1a22
+      internalID: 1854592981
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_195
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 2100
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d860fedbbe0cb7d4aacb513bfc965f6d
+      internalID: -1620068353
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_196
+      rect:
+        serializedVersion: 2
+        x: 700
+        y: 2100
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a98023525798c984b95bd5034507516d
+      internalID: 1462502580
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_197
+      rect:
+        serializedVersion: 2
+        x: 800
+        y: 2100
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2e407356ec19d714aa80841324906626
+      internalID: -782429324
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_198
+      rect:
+        serializedVersion: 2
+        x: 900
+        y: 2100
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b3e4ff188b479d2429619dd5f7375c08
+      internalID: -116373622
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_199
+      rect:
+        serializedVersion: 2
+        x: 1000
+        y: 2100
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bbb5d066410fd1f42a3695b819c910d7
+      internalID: -1662358408
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_200
+      rect:
+        serializedVersion: 2
+        x: 1100
+        y: 2100
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f130665b891d72a4ebd4549d962f3da3
+      internalID: 171205012
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_201
+      rect:
+        serializedVersion: 2
+        x: 1200
+        y: 2100
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ca5a4e30cda39ff4f877a40aab181ccf
+      internalID: 953105305
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_202
+      rect:
+        serializedVersion: 2
+        x: 1300
+        y: 2100
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 437ee8ccb47df6440bbbc67fa23d2c57
+      internalID: -2033439395
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_203
+      rect:
+        serializedVersion: 2
+        x: 1400
+        y: 2100
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1ef65fdf1be345c49932a105328b57d0
+      internalID: 1990644242
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_204
+      rect:
+        serializedVersion: 2
+        x: 3100
+        y: 2100
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6c711495a9a60574aaf090b4c34f6d26
+      internalID: 2041799018
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_205
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2000
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2cb073501136f33489f3675cd7995809
+      internalID: -1471564138
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_206
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 2000
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a395bc05dc678ce45abe65e09c51e676
+      internalID: 1398581719
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_207
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 2000
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c84da587001d5134c862ac50795471da
+      internalID: -2093625865
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_208
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 2000
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4eb0b020859205b43b47303bdc592d22
+      internalID: 1710241390
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_209
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 2000
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3d7a12aae5101724ca18448b9adecb93
+      internalID: -122302964
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_210
+      rect:
+        serializedVersion: 2
+        x: 500
+        y: 2000
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 95917da6f9572bf4887613744c38182b
+      internalID: -1423874730
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_211
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 2000
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 499667e25b71d97439f3adb3c09a41a8
+      internalID: -2030604134
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_212
+      rect:
+        serializedVersion: 2
+        x: 700
+        y: 2000
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c3b78469542d2fa438cbc202decedb38
+      internalID: -1889020461
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_213
+      rect:
+        serializedVersion: 2
+        x: 800
+        y: 2000
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b8559643e9b906d449b52029ac26e75b
+      internalID: 2006842239
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_214
+      rect:
+        serializedVersion: 2
+        x: 900
+        y: 2000
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3968bd23355dd52489397593dae36e00
+      internalID: 1474328561
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_215
+      rect:
+        serializedVersion: 2
+        x: 1000
+        y: 2000
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1795aa4c6d4ed9148bc1acc3f98b23c4
+      internalID: -1170958860
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_216
+      rect:
+        serializedVersion: 2
+        x: 1100
+        y: 2000
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 006943106c78e31458b001fb42c97430
+      internalID: 1877029547
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_217
+      rect:
+        serializedVersion: 2
+        x: 1200
+        y: 2000
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bbd2b023564c4d7458ef4adae669f95d
+      internalID: -1371378043
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_218
+      rect:
+        serializedVersion: 2
+        x: 1300
+        y: 2000
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8eb8079cf520d8b4a885e95c65017b1f
+      internalID: 1323960315
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_219
+      rect:
+        serializedVersion: 2
+        x: 1400
+        y: 2000
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f30200b86acc9a94ab4132b83846421e
+      internalID: -336109780
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_220
+      rect:
+        serializedVersion: 2
+        x: 3100
+        y: 2000
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b9cf881adfc877b4db0f948024927fdf
+      internalID: -1597761255
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_221
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1900
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bcf2ef21b64c3674d90a68054eaec444
+      internalID: -719219631
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_222
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 1900
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 717d9c217380db349a235670c3017441
+      internalID: 1095631933
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_223
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 1900
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1a0a4db859a7fed44adbf9a7616f38b7
+      internalID: 180508250
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_224
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 1900
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9854d5701326be3489bc6819a06bee3d
+      internalID: -1044424970
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_225
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 1900
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 096d1d6766743bd47845bb50c8f672bb
+      internalID: 1499568873
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_226
+      rect:
+        serializedVersion: 2
+        x: 500
+        y: 1900
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5ed1b5bcda52fd647ac83dc2784b1481
+      internalID: 1512628088
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_227
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 1900
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: febafc5d1dc5c3e4d874d418442d6fb1
+      internalID: -1916881313
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_228
+      rect:
+        serializedVersion: 2
+        x: 700
+        y: 1900
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e969269a387907b418430d60d8b545c8
+      internalID: -16860083
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_229
+      rect:
+        serializedVersion: 2
+        x: 800
+        y: 1900
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 44d3e900c04583441b0cf1913a7efbea
+      internalID: 1406146998
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_230
+      rect:
+        serializedVersion: 2
+        x: 900
+        y: 1900
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c24b94d3ff5de584b93c018e48175b94
+      internalID: -1250211000
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_231
+      rect:
+        serializedVersion: 2
+        x: 1000
+        y: 1900
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8f63380b1f871eb43ae1a7b5e93a6b3d
+      internalID: -645746848
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_232
+      rect:
+        serializedVersion: 2
+        x: 1100
+        y: 1900
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 50c4ec82aa687e043a05d71f33cc9d14
+      internalID: 1028612079
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_233
+      rect:
+        serializedVersion: 2
+        x: 1200
+        y: 1900
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1f6f0bde44ddc4e418c887c07569e674
+      internalID: -119811069
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_234
+      rect:
+        serializedVersion: 2
+        x: 1300
+        y: 1900
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d719fc54652933e4786bcfa1d092a37e
+      internalID: 1189168505
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_235
+      rect:
+        serializedVersion: 2
+        x: 1400
+        y: 1900
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 58cdfb7e15511944c888c674d7b914d0
+      internalID: 1563377361
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_236
+      rect:
+        serializedVersion: 2
+        x: 3100
+        y: 1900
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cf971c292a76fe7429d3f8b2839057a6
+      internalID: 1060047884
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_237
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dbca8d713322290439e7ceea18f0d0c8
+      internalID: 1720385532
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_238
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 0
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d27a35259569def49b8f7b8345cb480b
+      internalID: 711513601
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_239
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 0
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4f891184438cd7e4e874a3b266188f43
+      internalID: 1953254240
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_240
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 0
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9184ce2693f268f4db124ca77d38fadf
+      internalID: -295085334
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_241
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 0
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e1e621fd395f94e4a9c5a914cbf5016b
+      internalID: 1105691059
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShrineUpdatedTiles_242
+      rect:
+        serializedVersion: 2
+        x: 500
+        y: 0
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7d486f0a50bd39f49bd715a6d1910670
+      internalID: -1737519874
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: d28a0e84b7004b44dba4115e9bb50b00
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":100.0,"y":100.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      ShrineUpdatedTiles_0: 1322825677
+      ShrineUpdatedTiles_1: 2080852333
+      ShrineUpdatedTiles_10: -142672031
+      ShrineUpdatedTiles_100: 610180990
+      ShrineUpdatedTiles_101: 1774457691
+      ShrineUpdatedTiles_102: -216262194
+      ShrineUpdatedTiles_103: -1573024387
+      ShrineUpdatedTiles_104: -1454293638
+      ShrineUpdatedTiles_105: 1993441897
+      ShrineUpdatedTiles_106: -501196795
+      ShrineUpdatedTiles_107: 1575964263
+      ShrineUpdatedTiles_108: -572578844
+      ShrineUpdatedTiles_109: -1370777845
+      ShrineUpdatedTiles_11: 1493554375
+      ShrineUpdatedTiles_110: 1089401988
+      ShrineUpdatedTiles_111: 1180332533
+      ShrineUpdatedTiles_112: 1485890643
+      ShrineUpdatedTiles_113: 898715422
+      ShrineUpdatedTiles_114: -1154161880
+      ShrineUpdatedTiles_115: -2017044247
+      ShrineUpdatedTiles_116: 478704736
+      ShrineUpdatedTiles_117: -1793460772
+      ShrineUpdatedTiles_118: 354598434
+      ShrineUpdatedTiles_119: -1763209937
+      ShrineUpdatedTiles_12: 1209870004
+      ShrineUpdatedTiles_120: -450690485
+      ShrineUpdatedTiles_121: 889250468
+      ShrineUpdatedTiles_122: -678727210
+      ShrineUpdatedTiles_123: 139871343
+      ShrineUpdatedTiles_124: -1301551176
+      ShrineUpdatedTiles_125: 40064521
+      ShrineUpdatedTiles_126: -1929196825
+      ShrineUpdatedTiles_127: 807672889
+      ShrineUpdatedTiles_128: -33620696
+      ShrineUpdatedTiles_129: -1670241556
+      ShrineUpdatedTiles_13: -1383236729
+      ShrineUpdatedTiles_130: -1479034838
+      ShrineUpdatedTiles_131: -6332447
+      ShrineUpdatedTiles_132: 150955661
+      ShrineUpdatedTiles_133: 1218030566
+      ShrineUpdatedTiles_134: 125988042
+      ShrineUpdatedTiles_135: -915484668
+      ShrineUpdatedTiles_136: 892111164
+      ShrineUpdatedTiles_137: 46491822
+      ShrineUpdatedTiles_138: -717628462
+      ShrineUpdatedTiles_139: -1587882484
+      ShrineUpdatedTiles_14: -1240810023
+      ShrineUpdatedTiles_140: -1936562383
+      ShrineUpdatedTiles_141: 150024150
+      ShrineUpdatedTiles_142: -1068804243
+      ShrineUpdatedTiles_143: -1548499069
+      ShrineUpdatedTiles_144: -868903965
+      ShrineUpdatedTiles_145: -594827930
+      ShrineUpdatedTiles_146: -1642656941
+      ShrineUpdatedTiles_147: 1688364370
+      ShrineUpdatedTiles_148: -925445324
+      ShrineUpdatedTiles_149: 1512322563
+      ShrineUpdatedTiles_15: -995484988
+      ShrineUpdatedTiles_150: -833603871
+      ShrineUpdatedTiles_151: -2046432540
+      ShrineUpdatedTiles_152: -2041355306
+      ShrineUpdatedTiles_153: 55660391
+      ShrineUpdatedTiles_154: 1617998708
+      ShrineUpdatedTiles_155: 395259517
+      ShrineUpdatedTiles_156: 1258624001
+      ShrineUpdatedTiles_157: -1077481832
+      ShrineUpdatedTiles_158: -102867344
+      ShrineUpdatedTiles_159: -2050024611
+      ShrineUpdatedTiles_16: -215719474
+      ShrineUpdatedTiles_160: -993621805
+      ShrineUpdatedTiles_161: -192952467
+      ShrineUpdatedTiles_162: 1337196692
+      ShrineUpdatedTiles_163: 958067179
+      ShrineUpdatedTiles_164: -1498369862
+      ShrineUpdatedTiles_165: -1225345877
+      ShrineUpdatedTiles_166: 798225561
+      ShrineUpdatedTiles_167: 499945783
+      ShrineUpdatedTiles_168: 2076223557
+      ShrineUpdatedTiles_169: -1351490947
+      ShrineUpdatedTiles_17: 419603073
+      ShrineUpdatedTiles_170: 76035776
+      ShrineUpdatedTiles_171: 158047589
+      ShrineUpdatedTiles_172: -1975027895
+      ShrineUpdatedTiles_173: 1154753992
+      ShrineUpdatedTiles_174: -1453430837
+      ShrineUpdatedTiles_175: -387951484
+      ShrineUpdatedTiles_176: 306586057
+      ShrineUpdatedTiles_177: -2039439033
+      ShrineUpdatedTiles_178: -787242998
+      ShrineUpdatedTiles_179: -866988216
+      ShrineUpdatedTiles_18: -765061884
+      ShrineUpdatedTiles_180: 1816631680
+      ShrineUpdatedTiles_181: -1348691810
+      ShrineUpdatedTiles_182: -2030648150
+      ShrineUpdatedTiles_183: 351073994
+      ShrineUpdatedTiles_184: 1185244140
+      ShrineUpdatedTiles_185: 1315978142
+      ShrineUpdatedTiles_186: 338035384
+      ShrineUpdatedTiles_187: -2009695729
+      ShrineUpdatedTiles_188: 515800748
+      ShrineUpdatedTiles_189: -1075333093
+      ShrineUpdatedTiles_19: 657088313
+      ShrineUpdatedTiles_190: 1752209582
+      ShrineUpdatedTiles_191: -611356816
+      ShrineUpdatedTiles_192: -468347317
+      ShrineUpdatedTiles_193: 1901855512
+      ShrineUpdatedTiles_194: 1854592981
+      ShrineUpdatedTiles_195: -1620068353
+      ShrineUpdatedTiles_196: 1462502580
+      ShrineUpdatedTiles_197: -782429324
+      ShrineUpdatedTiles_198: -116373622
+      ShrineUpdatedTiles_199: -1662358408
+      ShrineUpdatedTiles_2: 951174228
+      ShrineUpdatedTiles_20: -559931866
+      ShrineUpdatedTiles_200: 171205012
+      ShrineUpdatedTiles_201: 953105305
+      ShrineUpdatedTiles_202: -2033439395
+      ShrineUpdatedTiles_203: 1990644242
+      ShrineUpdatedTiles_204: 2041799018
+      ShrineUpdatedTiles_205: -1471564138
+      ShrineUpdatedTiles_206: 1398581719
+      ShrineUpdatedTiles_207: -2093625865
+      ShrineUpdatedTiles_208: 1710241390
+      ShrineUpdatedTiles_209: -122302964
+      ShrineUpdatedTiles_21: 1285445597
+      ShrineUpdatedTiles_210: -1423874730
+      ShrineUpdatedTiles_211: -2030604134
+      ShrineUpdatedTiles_212: -1889020461
+      ShrineUpdatedTiles_213: 2006842239
+      ShrineUpdatedTiles_214: 1474328561
+      ShrineUpdatedTiles_215: -1170958860
+      ShrineUpdatedTiles_216: 1877029547
+      ShrineUpdatedTiles_217: -1371378043
+      ShrineUpdatedTiles_218: 1323960315
+      ShrineUpdatedTiles_219: -336109780
+      ShrineUpdatedTiles_22: -1025255271
+      ShrineUpdatedTiles_220: -1597761255
+      ShrineUpdatedTiles_221: -719219631
+      ShrineUpdatedTiles_222: 1095631933
+      ShrineUpdatedTiles_223: 180508250
+      ShrineUpdatedTiles_224: -1044424970
+      ShrineUpdatedTiles_225: 1499568873
+      ShrineUpdatedTiles_226: 1512628088
+      ShrineUpdatedTiles_227: -1916881313
+      ShrineUpdatedTiles_228: -16860083
+      ShrineUpdatedTiles_229: 1406146998
+      ShrineUpdatedTiles_23: 1146949485
+      ShrineUpdatedTiles_230: -1250211000
+      ShrineUpdatedTiles_231: -645746848
+      ShrineUpdatedTiles_232: 1028612079
+      ShrineUpdatedTiles_233: -119811069
+      ShrineUpdatedTiles_234: 1189168505
+      ShrineUpdatedTiles_235: 1563377361
+      ShrineUpdatedTiles_236: 1060047884
+      ShrineUpdatedTiles_237: 1720385532
+      ShrineUpdatedTiles_238: 711513601
+      ShrineUpdatedTiles_239: 1953254240
+      ShrineUpdatedTiles_24: -1340526150
+      ShrineUpdatedTiles_240: -295085334
+      ShrineUpdatedTiles_241: 1105691059
+      ShrineUpdatedTiles_242: -1737519874
+      ShrineUpdatedTiles_25: -1441653072
+      ShrineUpdatedTiles_26: 391166285
+      ShrineUpdatedTiles_27: 846674476
+      ShrineUpdatedTiles_28: 895134229
+      ShrineUpdatedTiles_29: 104019558
+      ShrineUpdatedTiles_3: 1892861448
+      ShrineUpdatedTiles_30: -1375274159
+      ShrineUpdatedTiles_31: -1668366859
+      ShrineUpdatedTiles_32: 34832486
+      ShrineUpdatedTiles_33: 1697124595
+      ShrineUpdatedTiles_34: -27594352
+      ShrineUpdatedTiles_35: 766967281
+      ShrineUpdatedTiles_36: 765122308
+      ShrineUpdatedTiles_37: 335124332
+      ShrineUpdatedTiles_38: -1514121463
+      ShrineUpdatedTiles_39: -1598289770
+      ShrineUpdatedTiles_4: 692821904
+      ShrineUpdatedTiles_40: -144759516
+      ShrineUpdatedTiles_41: 1032122636
+      ShrineUpdatedTiles_42: -354119912
+      ShrineUpdatedTiles_43: 1057640129
+      ShrineUpdatedTiles_44: -1296046826
+      ShrineUpdatedTiles_45: 2140603213
+      ShrineUpdatedTiles_46: 2065571491
+      ShrineUpdatedTiles_47: 778082764
+      ShrineUpdatedTiles_48: -628760608
+      ShrineUpdatedTiles_49: -302096264
+      ShrineUpdatedTiles_5: -1561261494
+      ShrineUpdatedTiles_50: -445382792
+      ShrineUpdatedTiles_51: 743411394
+      ShrineUpdatedTiles_52: -291285406
+      ShrineUpdatedTiles_53: -1790314735
+      ShrineUpdatedTiles_54: -466696624
+      ShrineUpdatedTiles_55: 1054818176
+      ShrineUpdatedTiles_56: -945524047
+      ShrineUpdatedTiles_57: -1474485643
+      ShrineUpdatedTiles_58: -780916439
+      ShrineUpdatedTiles_59: 1053899544
+      ShrineUpdatedTiles_6: 1416220111
+      ShrineUpdatedTiles_60: 1633711889
+      ShrineUpdatedTiles_61: 1802171768
+      ShrineUpdatedTiles_62: 747319679
+      ShrineUpdatedTiles_63: 1981272704
+      ShrineUpdatedTiles_64: 1826752533
+      ShrineUpdatedTiles_65: -1974477846
+      ShrineUpdatedTiles_66: 2138011126
+      ShrineUpdatedTiles_67: -97143235
+      ShrineUpdatedTiles_68: -194136710
+      ShrineUpdatedTiles_69: 105289344
+      ShrineUpdatedTiles_7: 1257716905
+      ShrineUpdatedTiles_70: -970580025
+      ShrineUpdatedTiles_71: 1377535670
+      ShrineUpdatedTiles_72: -354108206
+      ShrineUpdatedTiles_73: -127879417
+      ShrineUpdatedTiles_74: -956213594
+      ShrineUpdatedTiles_75: 1214814815
+      ShrineUpdatedTiles_76: 1733400753
+      ShrineUpdatedTiles_77: 2124549690
+      ShrineUpdatedTiles_78: 1138932983
+      ShrineUpdatedTiles_79: -1170783257
+      ShrineUpdatedTiles_8: -1522008388
+      ShrineUpdatedTiles_80: 388300942
+      ShrineUpdatedTiles_81: -1083555046
+      ShrineUpdatedTiles_82: 1108304215
+      ShrineUpdatedTiles_83: 99723842
+      ShrineUpdatedTiles_84: 1470981938
+      ShrineUpdatedTiles_85: 635857538
+      ShrineUpdatedTiles_86: -927841617
+      ShrineUpdatedTiles_87: 54772092
+      ShrineUpdatedTiles_88: 1499660760
+      ShrineUpdatedTiles_89: 425698967
+      ShrineUpdatedTiles_9: 691218311
+      ShrineUpdatedTiles_90: -2061667549
+      ShrineUpdatedTiles_91: 973782645
+      ShrineUpdatedTiles_92: -567846121
+      ShrineUpdatedTiles_93: 802166627
+      ShrineUpdatedTiles_94: -2082011460
+      ShrineUpdatedTiles_95: -1181668033
+      ShrineUpdatedTiles_96: -1986457443
+      ShrineUpdatedTiles_97: 1467290597
+      ShrineUpdatedTiles_98: -1967691301
+      ShrineUpdatedTiles_99: -1554826835
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -95,7 +95,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &7908290132464564940
 Transform:
   m_ObjectHideFlags: 0
@@ -162,7 +162,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 5
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -269,31 +269,36 @@ MonoBehaviour:
   groundleLayer:
     serializedVersion: 2
     m_Bits: 128
-  maxHealth: 0
-  currentHealth: 0
-  isDead: 0
+  platformLayer:
+    serializedVersion: 2
+    m_Bits: 512
   moveSpeed: 0
-  attackDamage: 0
+  attackDamage: 3
   isFacingRight: 1
   isFacingLeft: 0
   distanceToPlayer: {x: 0, y: 0}
+  groundCheck: {fileID: 2306154919855101203}
+  groundCheckRadius: 0
+  health: {fileID: 0}
   damageParticle: {fileID: 6966180119663813987, guid: edda90ab5a07d484ca1c0c2ce435f1a7, type: 3}
   bloodParticle: {fileID: 3786330769736489564, guid: 132d3cf110e334a4586f49391eea9df5, type: 3}
   damageParticlePos: {fileID: 2306154919855101203}
   bloodParticlePos: {fileID: 2177094167119367268}
+  knockdownStep: 0
+  getUp: 0
   originalPosiiton: {x: 0, y: 0}
-  chaseSpeed: 3
+  chaseSpeed: 6
   waveAmplitude: 0.3
   waveFrequency: 3
   canFlip: 1
-  attackProbability: 0.6
-  attackCheckCooldown: 2
+  attackProbability: 0.7
+  attackCheckCooldown: 0.75
   startAttack: 0
-  attackMoveSpeed: 20
-  attackRestTime: 1
-  playerDetectDistance: 8
+  attackMoveSpeed: 17
+  attackRestTime: 1.5
+  playerDetectDistance: 20
   attackDistance: 11
-  playerEscapeDistance: 12
+  playerEscapeDistance: 50
   playerDetected: 0
   inDetectArea: 0
   inAttackArea: 0
@@ -323,6 +328,7 @@ MonoBehaviour:
   defaultDamageColor: {r: 0, g: 0, b: 0, a: 0}
   arcKnockdownGravity: 15
   isInArcKnockdown: 0
+  juggleTime: 0
   knockbackForce: 5
   stunPushbackForce: 5
   groundCheckValue: 1
@@ -331,12 +337,15 @@ MonoBehaviour:
   defaultKnockdownDuration: 2
   knockdownRecoveryTime: 1
   currentCCState: 0
+  knockdownLanded: 0
   stunImmune: 0
   knockdownImmune: 0
+  ccTimer: 0
   invincibilityDuration: 0.3
+  invincible: 0
   isBloodMarked: 0
   bloodMarkHealAmount: 10
-  bloodMarkIcon: {fileID: 0}
+  bloodMarkIcon: {fileID: 2157129410843927454}
   debuffVFXs: []
 --- !u!1 &1981627848854830774
 GameObject:
@@ -403,6 +412,7 @@ RectTransform:
   m_Children:
   - {fileID: 7135425625150219306}
   - {fileID: 6211499928420922631}
+  - {fileID: 2490989237449529737}
   m_Father: {fileID: 7908290132464564940}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -431,7 +441,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_TargetDisplay: 0
 --- !u!114 &7867645686880319307
 MonoBehaviour:
@@ -485,7 +495,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f46901909107214abd2c804612974fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealthUI
-  health: {fileID: 0}
+  health: {fileID: 2147258704753745474}
   healthBar: {fileID: 7089389750150765214}
   damageNumberTransform: {fileID: 6211499928420922631}
   damageNumberObjPool: []
@@ -664,7 +674,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -0.14}
+  m_AnchoredPosition: {x: 0, y: -0.4}
   m_SizeDelta: {x: 60, y: 9.4035}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6809565560761264272
@@ -859,7 +869,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_Sprite: {fileID: -7166554217582577909, guid: 30ed57690d9982e45bc7fa8512d65788, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -1147,11 +1157,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b95fea1b004c7247878e15342cdb73d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHitBox
-  currentCCState: 1
+  currentCCState: 2
   attackMultiplier: 1
   finalDamage: 0
   attackDamage: 0
   knockback: 0
+  ccTime: 0.5
 --- !u!61 &5754736961652110007
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1186,7 +1197,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.12865925, y: -0.33396578}
+  m_Offset: {x: -0.02172494, y: -0.32683665}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -1196,5 +1207,112 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.67698336, y: 1.1970942}
+  m_Size: {x: 1.6037505, y: 1.7246388}
   m_EdgeRadius: 0
+--- !u!1001 &7171260689622529444
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 341596727534003466}
+    m_Modifications:
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_Pivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_Pivot.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0.8345
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0.8345
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9570669
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.28986716
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 33.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 9109311307756738106, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_Name
+      value: Blood Mark
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+--- !u!1 &2157129410843927454 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9109311307756738106, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+  m_PrefabInstance: {fileID: 7171260689622529444}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &2490989237449529737 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+  m_PrefabInstance: {fileID: 7171260689622529444}
+  m_PrefabAsset: {fileID: 0}

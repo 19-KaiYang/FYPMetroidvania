@@ -79,6 +79,7 @@ public class MeleeEnemy : Enemy
         Collider2D ground = Physics2D.OverlapCircle((Vector2)transform.position + groundCheckOffset, groundCheckSize, groundleLayer);
         if (ground != null) isGround = true;
         else isGround = false;
+        if (isOnPlatform) isGround = true;
 
         Collider2D pDetected = Physics2D.OverlapBox((Vector2)transform.position + detectOffset, detectSize, 0f, playerLayer);
         Collider2D pEscaped = Physics2D.OverlapBox((Vector2)transform.position + playerEscapeOffset, playerEscapeSize, 0f, playerLayer);
@@ -86,25 +87,28 @@ public class MeleeEnemy : Enemy
 
         Vector2 dir = (player.transform.position - transform.position).normalized;
         float distance = Vector2.Distance(transform.position, player.transform.position);
-        RaycastHit2D ray = Physics2D.Raycast(transform.position, dir, distance, obstacleLayer);
+        RaycastHit2D ray = Physics2D.Raycast(transform.position, dir, distance * 2, obstacleLayer);
 
-        if (pDetected != null && ray.collider == null)
+        if (pDetected != null)
         {
             inDetectArea = true;
             playerDetected = true;
+            if (ray.collider == null) inAttackArea = true;
+            else inAttackArea = false;
         }
         else if (pEscaped == null)
         {
             playerDetected = false;
             inDetectArea = false;
         }
-        else if (playerDetected && ray.collider != null)
+        else if (playerDetected)
         {
             playerDetected = false;
+            //inAttackArea = false;
         }
 
-        if (attack != null) inAttackArea = true;
-        else if (attack == null) inAttackArea = false;
+        //if (attack != null) inAttackArea = true;
+        //else if (attack == null) inAttackArea = false;
     }
     private void JumpToPlayer(Rigidbody2D _rb, Transform _enemy, Transform _player, float _jumpForceY, float offsetX)
     {
@@ -113,7 +117,7 @@ public class MeleeEnemy : Enemy
         float g = Mathf.Abs(Physics2D.gravity.y * _rb.gravityScale);
 
         Vector2 enemyPos = _enemy.position;
-        Vector2 playerPos = _player.position;
+        Vector2 playerPos = player.transform.position;
 
         float VelocitY = _jumpForceY;
 
@@ -121,9 +125,9 @@ public class MeleeEnemy : Enemy
 
         float direction = Mathf.Sign(playerPos.x - enemyPos.x);
         float targetX = playerPos.x + direction * offsetX;
-        targetX = Mathf.Clamp(targetX, -maxJumpRange, maxJumpRange);
+        targetX = Mathf.Clamp(targetX - enemyPos.x, -maxJumpRange, maxJumpRange);
+        float velocitX = targetX / time;
 
-        float velocitX = (targetX - enemyPos.x) / time;
 
         _rb.linearVelocity = new Vector2(velocitX, VelocitY);
     }
@@ -212,7 +216,7 @@ public class MeleeEnemy : Enemy
         }
         public void OnEnter()
         {
-            enemy.meleeAttackCooldown = Random.Range(1f, 2f);
+            enemy.meleeAttackCooldown = Random.Range(0.5f, 1.5f);
             enemy.jumpCooldown = Random.Range(1f, 2f);
         }
         public void OnUpdate()
@@ -224,7 +228,7 @@ public class MeleeEnemy : Enemy
             if (enemy.playerDetected)
             {
 
-                if (Mathf.Abs(enemy.distanceToPlayer.x) >= Mathf.Abs(enemy.attackAreaOffset.x) && enemy.health.currentCCState == CrowdControlState.None)
+                if (Mathf.Abs(enemy.distanceToPlayer.x) >= Mathf.Abs(enemy.attackAreaOffset.x) && enemy.health.currentCCState == CrowdControlState.None && enemy.distanceToPlayer.x < 8f)
                 {
                     enemy.animator.SetBool("isWalk", true);
                     enemy.FaceToPlayer();
@@ -240,22 +244,24 @@ public class MeleeEnemy : Enemy
                 {
                     enemy.animator.SetBool("isWalk", false);
                 }
-
-                if (Mathf.Abs(enemy.distanceToPlayer.x) < 99 && Mathf.Abs(enemy.distanceToPlayer.x) > Mathf.Abs(enemy.attackAreaOffset.x * 2))
+                if (enemy.inAttackArea && enemy.distanceToPlayer.y < 2f)
                 {
-                    enemy.jumpTimer += Time.deltaTime;
-                    if (enemy.jumpTimer >= enemy.jumpCooldown)
+                    if (Mathf.Abs(enemy.distanceToPlayer.x) < 99 && Mathf.Abs(enemy.distanceToPlayer.x) > Mathf.Abs(enemy.attackAreaOffset.x * 2))
                     {
-                        enemy.stateMachine.ChangeState(new MeleeEnemyAttackState(enemy));
+                        enemy.jumpTimer += Time.deltaTime;
+                        if (enemy.jumpTimer >= enemy.jumpCooldown)
+                        {
+                            enemy.stateMachine.ChangeState(new MeleeEnemyAttackState(enemy));
+                        }
                     }
-                }
-                else
-                {
-                    enemy.meleeAttackTimer += Time.deltaTime;
-
-                    if (enemy.meleeAttackTimer >= enemy.meleeAttackCooldown)
+                    else if (Mathf.Abs(enemy.distanceToPlayer.x) <= enemy.attackArea.x)
                     {
-                        enemy.stateMachine.ChangeState(new MeleeEnemyAttack2State(enemy));
+                        enemy.meleeAttackTimer += Time.deltaTime;
+
+                        if (enemy.meleeAttackTimer >= enemy.meleeAttackCooldown)
+                        {
+                            enemy.stateMachine.ChangeState(new MeleeEnemyAttack2State(enemy));
+                        }
                     }
                 }
             }
@@ -306,7 +312,7 @@ public class MeleeEnemy : Enemy
                 enemy.stateMachine.ChangeState(new MeleeEnemyCCState(enemy));
             }
 
-            if (chargeTime < 1.25f && !exit)
+            if (chargeTime < 1f && !exit)
             {
                 chargeTime += Time.deltaTime;
             }
@@ -331,15 +337,6 @@ public class MeleeEnemy : Enemy
             }
             if (hasJumped && exit && enemy.isGround)
             {
-                //switch (state)
-                //{
-                //    case < 2:
-                //        enemy.stateMachine.ChangeState(new MeleeEnemyIdleState(enemy));
-                //        break;
-                //    case >= 2:
-                //        enemy.stateMachine.ChangeState(new MeleeEnemyIdleState(enemy));
-                //        break;
-                //}
                 enemy.stateMachine.ChangeState(new MeleeEnemyIdleState(enemy));
             }   
         }
@@ -380,6 +377,9 @@ public class MeleeEnemy : Enemy
             enemy.isAttackFinished = false;
             enemy.meleeAttackTimer = 0;
             enemy.rb.linearVelocity = Vector3.zero;
+            enemy.health.spriteRenderer.color = Color.orange;
+            enemy.health.knockdownImmune = true;
+            enemy.health.stunImmune = true;
             //AudioManager.PlaySFX(SFXTYPE.BRALWER_CHARGE, 0.2f);
         }
         public void OnUpdate()
@@ -396,12 +396,15 @@ public class MeleeEnemy : Enemy
         }
         public void OnExit()
         {
-
+            enemy.health.knockdownImmune = false;
+            enemy.health.stunImmune = false;
         }
     }
     public class MeleeEnemyCCState : IState
     {
         private MeleeEnemy enemy;
+        private bool knockdown = false;
+        private float elapsed;
         public MeleeEnemyCCState(MeleeEnemy _enemy)
         {
             enemy = _enemy;
@@ -409,14 +412,57 @@ public class MeleeEnemy : Enemy
 
         public void OnEnter()
         {
+            elapsed = 0f;
             //enemy.animator.SetTrigger("Stunned");
-            enemy.animator.SetBool("isStun", true);
+            if (enemy.health.currentCCState == CrowdControlState.Stunned)
+            {
+                enemy.animator.SetBool("isStun", true);
+                knockdown = false;
+            }
+            else if (enemy.health.currentCCState == CrowdControlState.Knockdown)
+            {
+                enemy.animator.SetTrigger("knockdown");
+                knockdown = true;
+                enemy.getUp = false;
+            }
         }
 
         public void OnUpdate()
         {
+            if(elapsed < 0.2f)
+            {
+                elapsed += Time.deltaTime;
+                return;
+            }
+            if (!knockdown)
+            {
+                if(enemy.health.currentCCState == CrowdControlState.Knockdown) enemy.stateMachine.ChangeState(new MeleeEnemyCCState(enemy));
+            }
+            if(enemy.health.currentCCState == CrowdControlState.Knockdown)
+            {
+                if (enemy.isGround)
+                {
+                    enemy.animator.SetTrigger("land");
+                    enemy.animator.ResetTrigger("knockdown");
+                    enemy.health.juggleTime = 0f;
+                    enemy.health.stunImmune = true;
+                }
+                else
+                {
+                    enemy.animator.SetTrigger("knockdown");
+                    enemy.animator.ResetTrigger("land");
+                    enemy.health.juggleTime += Time.deltaTime;
+                }
+            }
             if (enemy.health.currentCCState == CrowdControlState.None)
             {
+                if (knockdown)
+                {
+                    enemy.animator.ResetTrigger("land");
+                    enemy.animator.SetTrigger("getup");
+                    if(enemy.getUp) enemy.stateMachine.ChangeState(new MeleeEnemyChaseState(enemy));
+                    return;
+                }
                 enemy.stateMachine.ChangeState(new MeleeEnemyChaseState(enemy));
             }
         }
@@ -424,6 +470,11 @@ public class MeleeEnemy : Enemy
         public void OnExit()
         {
             enemy.animator.SetBool("isStun", false);
+            enemy.animator.ResetTrigger("land");
+            enemy.animator.ResetTrigger("getup");
+            enemy.health.isInArcKnockdown = false;
+            enemy.health.juggleTime = 0f;
+            enemy.health.stunImmune = false;
         }
     }
 }

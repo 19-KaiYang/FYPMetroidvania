@@ -12,7 +12,11 @@ public enum CrowdControlState
     Knockdown
 }
 public class Health : MonoBehaviour
-{
+{   
+    private PlayerController pc;
+    private Skills skills;
+    private CombatSystem combat;
+
     [Header("Health Settings")]
     public float maxHealth = 100f;
     public bool destroyOnDeath = true;
@@ -31,6 +35,7 @@ public class Health : MonoBehaviour
     [Header("Arc Knockdown")]
     public float arcKnockdownGravity = 15f;
     public bool isInArcKnockdown = false;
+    public float juggleTime = 0f;
 
     [Header("Default Knockback")]
     public float knockbackForce = 5f;
@@ -48,15 +53,16 @@ public class Health : MonoBehaviour
 
     [Header("Combat States")]
     public CrowdControlState currentCCState = CrowdControlState.None;
+    public bool knockdownLanded = false;
     public bool stunImmune = false;
     public bool knockdownImmune = false;
 
-    private float ccTimer = 0f;
+    public float ccTimer = 0f;
 
     public float invincibilityDuration = 0.3f; // player only
     private Animator animator;
 
-    private bool invincible = false;
+    public bool invincible = false;
 
     //Enemy Use
     [Header("Blood Mark")]
@@ -84,12 +90,29 @@ public class Health : MonoBehaviour
         currentHealth = maxHealth;
         rb = GetComponent<Rigidbody2D>();
         audioSource = GetComponent<AudioSource>();
-        animator = GetComponentInChildren<Animator>();
+
+
+        Transform spriteTransform = transform.Find("Sprite");
+        if (spriteTransform != null)
+        {
+            animator = spriteTransform.GetComponent<Animator>();
+        }
+        else
+        {
+            animator = GetComponentInChildren<Animator>();
+        }
         if (spriteRenderer == null)
         {
             spriteRenderer = GetComponent<SpriteRenderer>();
         }
         originalColor = spriteRenderer.color;
+        pc = GetComponent<PlayerController>();
+        skills = GetComponent<Skills>();
+        combat = GetComponent<CombatSystem>();
+        if (bloodMarkIcon != null)
+        {
+            bloodMarkIcon.SetActive(false);
+        }
     }
 
     private void Update()
@@ -117,59 +140,88 @@ public class Health : MonoBehaviour
                     bool stoppedFalling = rb != null && Mathf.Abs(rb.linearVelocity.y) < 0.1f;
 
                     landed = touchingGround && stoppedFalling;
-
-                    //Debug.Log($"{gameObject.name} - TouchingGround: {touchingGround}, StoppedFalling: {stoppedFalling}, Y velocity: {(rb ? rb.linearVelocity.y : 0f)}");
                 }
-
-
-                // if in air knockdown, don't count down timer 
-                if (isInArcKnockdown)
-                {
-                    if (landed)
-                    {
-                        ccTimer = knockdownRecoveryTime;
-                        isInArcKnockdown = false;
-                        //Debug.Log($"{gameObject.name} landed from air knockdown, starting recovery timer ({knockdownRecoveryTime}s)");
-                    }
-                    else
-                    {
-                        //Debug.Log($"{gameObject.name} still in air knockdown");
-                    }
-                   
-                    return;
-                }
-
                 // Regular knockdown timer countdown (only when grounded)
-                if (ccTimer > 0f)
+
+                if (ccTimer > 0f && !(isPlayer && isInArcKnockdown) && landed)
                 {
+                    if (landed) invincible = true;
                     ccTimer -= Time.deltaTime;
-                    //Debug.Log($"{gameObject.name} knockdown recovery timer: {ccTimer:F2}s remaining");
+                    if(isPlayer && landed) pc.SetVelocity(new Vector2(0f, pc.GetVelocity().y));
                     if (ccTimer <= 0f)
                     {
                         currentCCState = CrowdControlState.None;
-
+                        invincible = false;
                         // Clear external velocity override for player
                         if (isPlayer)
                         {
-                            var pc = GetComponent<PlayerController>();
                             if (pc != null)
+                            {
                                 pc.externalVelocityOverride = false;
+                                pc.isInKnockback = false;
+                                pc.animator.SetBool("Stunned", false);
+                            }
+
+                            // Also reset any stuck skill states
+                            if (skills != null)
+                            {
+                                skills.ResetState();
+                            }
                         }
 
-                        //Debug.Log($"{gameObject.name} recovered from knockdown - can move again!");
+                        Debug.Log($"{gameObject.name} recovered from knockdown - can move again!");
                     }
                 }
             }
             else
             {
                 // For stun and other CC states, count down normally
-                if (ccTimer > 0f)
+                if (ccTimer >= 0f)
                 {
                     ccTimer -= Time.deltaTime;
                     if (ccTimer <= 0f)
                     {
                         currentCCState = CrowdControlState.None;
-                       // Debug.Log($"{gameObject.name} recovered from CC state");
+
+                        // IMPORTANT: Clear external velocity override for player
+                        if (isPlayer)
+                        {
+                            if (pc != null)
+                            {
+                                pc.externalVelocityOverride = false;
+                                pc.isInKnockback = false;
+                                pc.animator.SetBool("Stunned", false);
+                            }
+
+                            // Also reset any stuck skill states
+                            if (skills != null)
+                            {
+                                skills.ResetState();
+                            }
+                        }
+
+                        Debug.Log($"{gameObject.name} recovered from CC state");
+                    }
+                }
+            }
+        }
+        else
+        {
+            invincible = false;
+            // NOT IN CC STATE - make sure player isn't stuck
+            if (isPlayer)
+            {
+                // Safety check: if not in CC and not using skill, clear override
+                if (pc != null && skills != null)
+                {
+                    pc.animator.SetBool("Stunned", false);
+                    if (!skills.IsUsingSkill && pc.externalVelocityOverride && !pc.isInKnockback && !combat.isAttacking && !pc.isDashing)
+                    {
+                        if (Time.time - pc.lastExternalVelocitySetTime > 0.5f)
+                        {
+                            Debug.LogWarning("Detected stuck state - clearing externalVelocityOverride");
+                            pc.externalVelocityOverride = false;
+                        }
                     }
                 }
             }
@@ -218,7 +270,7 @@ public class Health : MonoBehaviour
         updateUI?.Invoke(this, amount, damageNumberColor.HasValue ? damageNumberColor.Value : Color.white);
         if (triggerEffects) damageTaken?.Invoke(this);
 
-        if (spriteRenderer != null && gameObject.activeInHierarchy)
+        if (spriteRenderer != null && gameObject.activeInHierarchy && spriteRenderer.color == Color.white)
             StartCoroutine(FlashRed());
 
         bool shouldPreserveVelocity = (forceCC == CrowdControlState.Knockdown && useRawForce);
@@ -226,11 +278,13 @@ public class Health : MonoBehaviour
         Debug.Log($"{gameObject.name} took {amount} damage. Current HP = {currentHealth}");
 
         // Apply knockback 
-        if (rb != null && hitDirection.HasValue)
+        if (rb != null && hitDirection.HasValue && !stunImmune)
         {
             if (isPlayer)
             {
                 PlayerController pc = GetComponent<PlayerController>();
+                pc.ResetState();
+                pc.externalVelocityOverride = false;
                 pc.SetKnockback(hitDirection.Value, forceCCDuration);
                 AudioManager.PlaySFX(SFXTYPE.PLAYER_HURT,0.3f);
             }
@@ -251,9 +305,11 @@ public class Health : MonoBehaviour
         {
             if (forceCC != CrowdControlState.None)
             {
-                if (forceCC == CrowdControlState.Stunned && !stunImmune && !airborne)
+                if (forceCC == CrowdControlState.Stunned && !stunImmune)
                 {
-                    ApplyStun(forceCCDuration, hitDirection);
+                    if (!airborne)
+                        ApplyStun(forceCCDuration, hitDirection);
+                    else ApplyKnockdown(forceCCDuration, airborne, hitDirection, shouldPreserveVelocity);
                 }
                 else if (forceCC == CrowdControlState.Knockdown)
                 {
@@ -261,7 +317,7 @@ public class Health : MonoBehaviour
                     {
                         ApplyKnockdown(forceCCDuration, airborne, hitDirection, shouldPreserveVelocity);
                     }
-                    else
+                    else if(!stunImmune)
                         ApplyStun(forceCCDuration, hitDirection);
                 }
             }
@@ -278,6 +334,13 @@ public class Health : MonoBehaviour
         }
     }
 
+    public void SelfDamage(float amount)
+    {
+        currentHealth -= amount;
+        if (currentHealth <= 0f) currentHealth = 1f;
+        if (spriteRenderer != null && gameObject.activeInHierarchy)
+            StartCoroutine(FlashRed());
+    }
     private void UpdateDebuffs()
     {
         if(debuffs.Count == 0) return;
@@ -337,8 +400,6 @@ public class Health : MonoBehaviour
 
         if (bloodMarkIcon != null)
         {
-            var sr = bloodMarkIcon.GetComponent<SpriteRenderer>();
-            if (sr != null) sr.enabled = false;
             bloodMarkIcon.SetActive(false);
         }
 
@@ -480,25 +541,32 @@ public class Health : MonoBehaviour
         spriteRenderer.color = originalColor;
     }
 
-    public void ApplyBloodMark()
+    public void ApplyBloodMark(float healAmount)
     {
         if (!isPlayer && !isBloodMarked)
         {
             isBloodMarked = true;
-
+            bloodMarkHealAmount = healAmount;
             if (bloodMarkIcon != null)
             {
                 bloodMarkIcon.SetActive(true);
-
-                var sr = bloodMarkIcon.GetComponent<SpriteRenderer>();
-                if (sr != null) sr.enabled = true;
             }
         }
     }
 
     public void ApplyStun(float duration, Vector2? hitDirection = null, float knockbackMultiplier = 1f)
     {
-        currentCCState = CrowdControlState.Stunned;
+        if (currentCCState == CrowdControlState.None) currentCCState = CrowdControlState.Stunned;
+        if (isPlayer)
+        {
+            pc.animator.SetBool("Stunned", true);
+            if (!PlayerController.instance.IsGrounded)
+            {
+                pc.isInKnockback = false;
+                pc.externalVelocityOverride = false;
+                pc.velocity = new Vector2(0f, pc.velocity.y); 
+            }
+        }
         ccTimer = duration;
     }
 
@@ -511,6 +579,7 @@ public class Health : MonoBehaviour
      Vector2? hitDirection = null, bool preserveVelocity = false, float knockbackMultiplier = 1f)
     {
         currentCCState = CrowdControlState.Knockdown;
+        if (isPlayer) pc.animator.SetBool("Stunned", false);
         ccTimer = duration;
 
         if (isPlayer)
@@ -518,6 +587,12 @@ public class Health : MonoBehaviour
             var pc = GetComponent<PlayerController>();
             if (pc != null)
             {
+                Debug.Log("arc knockdown");
+
+                pc.StopDash();
+                pc.isDashing = false;
+                pc.dashTimer = 0f;
+
                 pc.SetVelocity(Vector2.zero);
                 float xDir = pc.facingRight ? -1f : 1f;
                 Vector2 arcKnockback = new Vector2(xDir * 10f, 8f) * knockbackMult;
@@ -586,17 +661,7 @@ public class Health : MonoBehaviour
             {
                 Vector2 currentVel = pc.GetVelocity();
                 currentVel.y -= arcKnockdownGravity * Time.deltaTime;
-                pc.SetVelocity(currentVel);
-
-                if (pc.IsGrounded && isInArcKnockdown)
-                {
-
-                    if (currentCCState == CrowdControlState.None)
-                    {
-                        pc.externalVelocityOverride = false;
-                        isInArcKnockdown = false;
-                    }
-                }
+                pc.SetKnockback(currentVel, pc.knockbackTimer);
             }
         }
         else
@@ -606,7 +671,8 @@ public class Health : MonoBehaviour
             {
                 // Apply custom gravity
                 Vector2 currentVel = rb.linearVelocity;
-                currentVel.y -= arcKnockdownGravity * Time.deltaTime;
+                float gravityMult = 0.75f + (juggleTime * 0.35f);
+                currentVel.y -= arcKnockdownGravity * gravityMult * Time.deltaTime;
                 rb.linearVelocity = currentVel;
 
             }

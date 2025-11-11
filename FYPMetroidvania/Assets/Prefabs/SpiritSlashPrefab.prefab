@@ -104,6 +104,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85f2735b1d4274748ae03c2735e0e881, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hitbox
+  baseDamage: 0
   damage: 20
   isCritical: 0
   hitstopDuration: 0.08
@@ -246,7 +247,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 6
   m_Sprite: {fileID: 418053761, guid: 78cf0a6803a23434096dacd2478e40ff, type: 3}
   m_Color: {r: 0.91194963, g: 0.10610718, b: 0.10610718, a: 1}
   m_FlipX: 0
@@ -276,13 +277,14 @@ MonoBehaviour:
   hitDelay: 0.3
   hitCooldown: 0.3
   spiritSlashBloodCost: 0
+  bloodMarkHeal: 20
   hitboxObject: {fileID: 6504239084146648602}
   stunKnockbackMultiplier: 1
   knockdownKnockbackMultiplier: 1
   groundedCC: 1
   airborneCC: 2
   ccDuration: 1.5
-  cutinCanvasName: UpdatedPlayerUICanvas
+  cutinCanvasName: FinalUpdatedCanvas
   cutinTriggerName: PlayCutIn
   cutinDuration: 1
   freezeDuration: 0.3

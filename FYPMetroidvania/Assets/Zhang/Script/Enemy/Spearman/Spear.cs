@@ -87,13 +87,10 @@ public class Spear : ProjectileBase
         {
             Health p = collision.GetComponent<Health>();
             Vector2 dir;
+            if (p.invincible) return;
             dir = (collision.transform.position - this.transform.position).normalized;
 
-            p.TakeDamage(finalDamage, dir, true, CrowdControlState.Knockdown, 0f);
-
-            if (currentCCState == CrowdControlState.Stunned) p.ApplyStun(1, dir);
-            else if (currentCCState == CrowdControlState.Knockdown) p.ApplyKnockdown(1, false, dir);
-
+            p.TakeDamage(finalDamage, dir * 8, true, CrowdControlState.Knockdown, 1f);
         }
     }
     private IEnumerator Destroy()

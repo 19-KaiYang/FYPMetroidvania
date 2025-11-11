@@ -14,6 +14,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected LayerMask playerLayer;
     [SerializeField] protected LayerMask obstacleLayer;
     [SerializeField] protected LayerMask groundleLayer;
+    [SerializeField] protected LayerMask platformLayer;
 
     [Header("-")]
     //[SerializeField] public float maxHealth;
@@ -26,17 +27,24 @@ public class Enemy : MonoBehaviour
     [SerializeField] public bool isFacingRight;
     [SerializeField] public bool isFacingLeft;
     [SerializeField] public Vector2 distanceToPlayer;
+    [SerializeField] public Transform groundCheck;
+    [SerializeField] private float groundCheckRadius;
+    protected bool isOnPlatform;
     //[Space]
     //[SerializeField] private float groundCheckSize;
     //[SerializeField] private Vector2 groundCheckOffset;
 
     //cc
-    protected Health health;
+    public Health health;
     [Header("Damaged effect")]
     [SerializeField] protected GameObject damageParticle;
     [SerializeField] protected GameObject bloodParticle;
     [SerializeField] protected Transform damageParticlePos;
     [SerializeField] protected Transform bloodParticlePos;
+
+    [Header("Knockdown State")]
+    public float knockdownStep = 0;
+    public bool getUp = false;
 
     protected virtual void OnEnable()
     {
@@ -59,7 +67,7 @@ public class Enemy : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         //animator = GetComponent<Animator>();
         animator = GetComponentInChildren<Animator>();
-        player = FindFirstObjectByType<PlayerController>();
+        player = PlayerController.instance;
         health = GetComponent<Health>();
     }
 
@@ -71,6 +79,13 @@ public class Enemy : MonoBehaviour
     protected virtual void Update()
     {
         distanceToPlayer = transform.position - player.transform.position;
+        RaycastHit2D platform = Physics2D.Raycast(groundCheck.position, Vector2.down, groundCheckRadius, platformLayer);
+        if (platform)
+        {
+            isOnPlatform = true;
+            if (rb.linearVelocityY < 0) rb.linearVelocityY = 0;
+        }
+        else isOnPlatform = false;
     }
 
     protected virtual void SpawnParticle(Health health)

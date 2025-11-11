@@ -15,7 +15,12 @@ public class EnemyAnimationEvent : MonoBehaviour
         boss = GetComponentInParent<TruckBoss>();
         enemy = GetComponentInParent<Enemy>();
     }
-
+    private void ResetSuperArmour()
+    {
+        enemy.health.spriteRenderer.color = Color.white;
+        enemy.health.knockdownImmune = false;
+        enemy.health.stunImmune = false;
+    }
     private void BrawlerClawFinished()
     {
         brawler.isAttackFinished = true;
@@ -23,6 +28,10 @@ public class EnemyAnimationEvent : MonoBehaviour
     private void BrawlerClawSFX()
     {
         AudioManager.PlaySFX(SFXTYPE.BRAWLER_ATTACK, 0.35f, pitch: Random.Range(0.9f,1.1f));
+    }
+    private void GetUp()
+    {
+        enemy.getUp = true;
     }
     private void SpearmanThrustSFX()
     {

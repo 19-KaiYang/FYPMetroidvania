@@ -11,6 +11,8 @@ public class EnemyHitBox : MonoBehaviour
     public float KnockdownX = 10;
     public float KnockdownY = 5;
 
+    public float knockback;
+    public float ccTime = 0.5f;
 
     private void Awake()
     {
@@ -36,6 +38,10 @@ public class EnemyHitBox : MonoBehaviour
             dir.x = Mathf.Sign(dir.x) * KnockdownX; dir.y = KnockdownY;
             //p.TakeDamage(finalDamage, dir * knockback, true, currentCCState, 0.5f, true, false, 1.0f);
             p.TakeDamage(finalDamage, dir, false, currentCCState, 0.5f);
+            if (p.invincible) return;
+            Vector2 dir = (collision.transform.position - enemy.transform.position).normalized; dir.y = 0f;
+            p.TakeDamage(finalDamage, dir * knockback, true, currentCCState, ccTime);
+
             //if (currentCCState == CrowdControlState.Stunned) p.ApplyStun(1, dir);
             //else if (currentCCState == CrowdControlState.Knockdown) p.ApplyKnockdown(1, false, dir);
 

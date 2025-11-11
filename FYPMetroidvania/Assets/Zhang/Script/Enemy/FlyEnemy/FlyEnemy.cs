@@ -77,7 +77,7 @@ public class FlyEnemy : Enemy
         float distance = Vector2.Distance(transform.position, player.transform.position);
         RaycastHit2D ray = Physics2D.Raycast(transform.position, dir, distance, obstacleLayer);
 
-        if (pDetected != null && ray.collider == null)
+        if (pDetected != null)
         {
             inDetectArea = true;
             playerDetected = true;
@@ -87,7 +87,7 @@ public class FlyEnemy : Enemy
             playerDetected = false;
             inDetectArea = false;
         }
-        else if (playerDetected && ray.collider != null)
+        else if (playerDetected)
         {
             playerDetected = false;
         }
@@ -261,11 +261,16 @@ public class FlyEnemy : Enemy
             enemy.animator.SetBool("isIdle", false);
             enemy.canFlip = false;
             enemy.dashDir = (enemy.player.transform.position - enemy.transform.position).normalized;
-            enemy.StartCoroutine(WaitToAttack(1.6f));
+            enemy.StartCoroutine(WaitToAttack(1f));
 
         }
         public void OnUpdate()
         {
+            if (!isAttacking && !enemy.stopAttack)
+            {
+                enemy.rb.linearVelocity = Vector2.zero;
+                if(enemy.player.transform.position.y > enemy.transform.position.y) enemy.stateMachine.ChangeState(new FlyEnemyChaseState(enemy));
+            }
             if (isAttacking)
             {
                 attackDuration += Time.deltaTime;
@@ -287,6 +292,7 @@ public class FlyEnemy : Enemy
         }
         public IEnumerator WaitToAttack(float _time)
         {
+            enemy.rb.linearVelocity = Vector2.zero;
             yield return new WaitForSeconds(_time);
             isAttacking = true;
             enemy.rb.linearVelocity = enemy.dashDir * enemy.attackMoveSpeed;

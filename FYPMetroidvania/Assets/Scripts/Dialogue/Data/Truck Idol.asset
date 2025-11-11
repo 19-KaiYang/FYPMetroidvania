@@ -1,0 +1,102 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 413d64d7f6ce4c54c942e901f83eb9b4, type: 3}
+  m_Name: Truck Idol
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueTextSO
+  SpeakerType: 0
+  defaultPlayerImage: {fileID: 3516079381801495997, guid: b0206ccead3847d49911a68f16ebc122, type: 3}
+  defaultNPCImage: {fileID: 0}
+  hasCutscene: 0
+  Steps:
+  - SpeakerType: 2
+    Name: Narrator
+    SpeakerImage: {fileID: 0}
+    Text: You look upon a stone statue that seems out of place for a medieval city
+      like this. You're pretty sure trucks didn't exist didn't exits during these
+      times. Not like you ever listened during history class though.
+    sfx: 0
+    pitch: 0
+    autoskip: 0
+  - SpeakerType: 2
+    Name: Narrator
+    SpeakerImage: {fileID: 0}
+    Text: But you know exactly why this is here.
+    sfx: 0
+    pitch: 0
+    autoskip: 0
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: 3516079381801495997, guid: b0206ccead3847d49911a68f16ebc122, type: 3}
+    Text: Pretty sure the truck I got hit by was way bigger than that. Like a transport
+      truck or something, not a pick-up.
+    sfx: 14
+    pitch: 0.8
+    autoskip: 0
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: 3516079381801495997, guid: b0206ccead3847d49911a68f16ebc122, type: 3}
+    Text: What the heck are these guys even doing, worshipping a damn truck...
+    sfx: 14
+    pitch: 0.8
+    autoskip: 0
+  - SpeakerType: 2
+    Name: Narrator
+    SpeakerImage: {fileID: 0}
+    Text: You look closer at some words on the base of the statue,
+    sfx: 0
+    pitch: 0.8
+    autoskip: 0
+  - SpeakerType: 2
+    Name: Narrator
+    SpeakerImage: {fileID: 0}
+    Text: '"To the almighty one. May its wheels be blessed and ever turning, its
+      engine never stalling and its fumes choking our enemies. All glory and power
+      to the Truck of Trucks!'
+    sfx: 0
+    pitch: 0.8
+    autoskip: 0
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: 1639174027949059371, guid: 89a0eb1b45e47c740aa21bd41d73cb21, type: 3}
+    Text: .....
+    sfx: 14
+    pitch: 0.8
+    autoskip: 1
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: 1639174027949059371, guid: 89a0eb1b45e47c740aa21bd41d73cb21, type: 3}
+    Text: Psychos.
+    sfx: 14
+    pitch: 0.8
+    autoskip: 0
+  - SpeakerType: 2
+    Name: Knights
+    SpeakerImage: {fileID: 0}
+    Text: Hey! You dare speak against our God?
+    sfx: 14
+    pitch: 0.7
+    autoskip: 0
+  - SpeakerType: 2
+    Name: Knights
+    SpeakerImage: {fileID: 0}
+    Text: Its power is far beyond your imagination! Who are you to cross us, its
+      noble servants?
+    sfx: 14
+    pitch: 0.7
+    autoskip: 0
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: 1639174027949059371, guid: 89a0eb1b45e47c740aa21bd41d73cb21, type: 3}
+    Text: Ah great, the fun squad is here.
+    sfx: 14
+    pitch: 0.8
+    autoskip: 0

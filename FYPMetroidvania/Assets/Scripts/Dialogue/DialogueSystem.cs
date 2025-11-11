@@ -11,6 +11,7 @@ using UnityEngine.UI;
 
 public class DialogueSystem : MonoBehaviour, IPointerClickHandler
 {
+    public GameObject postCutsceneObject;
     [SerializeField] PlayableDirector cutscenePlayer;
     [SerializeField] private Canvas DialogueCanvas;
     [SerializeField] private Image characterImage;
@@ -68,18 +69,19 @@ public class DialogueSystem : MonoBehaviour, IPointerClickHandler
         //currentDialogueStep = null;
         DialogueCanvas.enabled = true;
         dialogueActive = true;
+        PlayerController.instance.isInCutscene = true;
         StartCoroutine(DialogueCoroutine(dialogueData));
     }
     IEnumerator DialogueCoroutine(DialogueTextSO dialogueData, int startstep = 0)
     {
         //foreach (var button in optionButtons) button.gameObject.SetActive(false);
         dialogueActive = true;
-        characterImage.enabled = true;
-        npcImage.enabled = true;
         namePanel.enabled = true;
         textPanel.gameObject.SetActive(true);
         characterImage.sprite = dialogueData.defaultPlayerImage;
         npcImage.sprite = dialogueData.defaultNPCImage;
+        if (characterImage.sprite != null) characterImage.enabled = true;
+        if (npcImage.sprite != null) npcImage.enabled = true;
         //characterImage.rectTransform.anchoredPosition = characterOffscreenPos.anchoredPosition;
         string currSpeaker = null;
         bool animate = true;
@@ -105,10 +107,12 @@ public class DialogueSystem : MonoBehaviour, IPointerClickHandler
         }
         DialogueCanvas.enabled = false;
         dialogueActive = false;
-        if(dialogueData.hasCutscene)
+        if (dialogueData.hasCutscene)
         {
             cutscenePlayer.Resume();
         }
+        else PlayerController.instance.isInCutscene = false;
+        if (postCutsceneObject != null) postCutsceneObject.SetActive(true);
     }
     IEnumerator DialogueTextCoroutine(DialogueStep dialoguestep)
     {
@@ -145,7 +149,7 @@ public class DialogueSystem : MonoBehaviour, IPointerClickHandler
     {
         DOTween.CompleteAll();
         textDone = false;
-        if (currentDialogueStep == null || currentDialogueStep.Name == "") ;
+        if (currentDialogueStep == null || currentDialogueStep.Name == "") 
         {
             Debug.Log("start");
             StartCoroutine(DialogueTextCoroutine(nextStep));
@@ -169,7 +173,15 @@ public class DialogueSystem : MonoBehaviour, IPointerClickHandler
             DG.Tweening.Sequence animationSeq = DOTween.Sequence();
             Image portraitToAnimate = nextStep.SpeakerType == SPEAKER_TYPE.PLAYER ? characterImage : npcImage;
             float offscreenFactor = nextStep.SpeakerType == SPEAKER_TYPE.PLAYER ? -1 : 1;
-            TweenCallback tweenCallback = new TweenCallback(() => { portraitToAnimate.sprite = nextStep.SpeakerImage; StartCoroutine(DialogueTextCoroutine(nextStep)); });
+            TweenCallback tweenCallback = new TweenCallback(() => {
+                if (nextStep.SpeakerImage != null)
+                {
+                    portraitToAnimate.enabled = true;
+                    portraitToAnimate.sprite = nextStep.SpeakerImage;
+                }
+                else portraitToAnimate.enabled = false;
+                StartCoroutine(DialogueTextCoroutine(nextStep)); 
+            });
             animationSeq.Append(portraitToAnimate.rectTransform.DOAnchorPosX((offscreenFactor * inactiveXposition) * 2f, duration / 2));
             animationSeq.AppendCallback(tweenCallback);
             animationSeq.Append(portraitToAnimate.rectTransform.DOAnchorPosX(offscreenFactor * activeXposition, duration / 2));
@@ -181,7 +193,12 @@ public class DialogueSystem : MonoBehaviour, IPointerClickHandler
         switch (speakertype)
         {
             case SPEAKER_TYPE.PLAYER:
-                characterImage.sprite = nextSprite;
+                if (nextSprite != null)
+                {
+                    characterImage.enabled = true;
+                    characterImage.sprite = nextSprite;
+                }
+                else characterImage.enabled = false;
                 characterImage.rectTransform.DOAnchorPosX(-activeXposition, duration).SetEase(Ease.OutCubic);
                 characterImage.rectTransform.DOScale(1f, duration * 0.5f);
                 characterImage.color = Color.white;
@@ -190,7 +207,12 @@ public class DialogueSystem : MonoBehaviour, IPointerClickHandler
                 npcImage.color = Color.gray;
                 break;
             case SPEAKER_TYPE.NPC:
-                npcImage.sprite = nextSprite;
+                if (nextSprite != null)
+                {
+                    npcImage.enabled = true;
+                    npcImage.sprite = nextSprite;
+                }
+                else npcImage.enabled = false;
                 npcImage.rectTransform.DOAnchorPosX(activeXposition, duration).SetEase(Ease.OutCubic);
                 npcImage.rectTransform.DOScale(1f, duration * 0.5f);
                 npcImage.color = Color.white;
@@ -218,5 +240,14 @@ public class DialogueSystem : MonoBehaviour, IPointerClickHandler
             return;
         }
         else nextInputbuffer = true;
+    }
+
+    public void StartDialogueInteraction(DialogueTextSO dialogueData, GameObject postCutsceneObj = null)
+    {
+        dialogueActive = true;
+        DialogueData = dialogueData;
+        if (postCutsceneObj != null) postCutsceneObject = postCutsceneObj;
+        else postCutsceneObject = null;
+        StartDialogue(DialogueData);
     }
 }

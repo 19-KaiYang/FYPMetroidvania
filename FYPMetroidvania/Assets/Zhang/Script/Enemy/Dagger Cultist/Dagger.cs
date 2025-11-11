@@ -15,10 +15,18 @@ public class Dagger : ProjectileBase
 
     public float timer;
 
-    public void Init(float _attackDamage, DaggerCultist _enemy)
+    public void Init(float _attackDamage, DaggerCultist _enemy, Vector2 dir)
     {
         ownerAttackDamage = _attackDamage;
         owner = _enemy;
+        rb.linearVelocity = dir * speed;
+
+        playerPosition = PlayerController.instance.transform.position;
+        Vector3 f = transform.localScale;
+        if (playerPosition.x < transform.position.x) f.y = -1;
+        else f.y = 1;
+        transform.localScale = f;
+        timer = 0f;
     }
     public void SetOwner(DaggerCultist enemy)
     {
@@ -28,15 +36,7 @@ public class Dagger : ProjectileBase
     protected override void Awake()
     {
         base.Awake();
-        player = FindFirstObjectByType<PlayerController>();
-        playerPosition = player.transform.position;
-        Vector2 dir = (playerPosition - transform.position).normalized;
-        rb.linearVelocity = dir * speed;
-
-        Vector3 f = transform.localScale;
-        if (playerPosition.x < transform.position.x) f.y = -1;
-        else f.y = 1;
-        transform.localScale = f;
+        
     }
     private void Start()
     {
@@ -65,6 +65,7 @@ public class Dagger : ProjectileBase
         R.Rotate(0,0,1200 * Time.deltaTime, Space.Self);
 
         timer += Time.deltaTime;
+        if (timer > 2.5f) Despawn();
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -86,21 +87,19 @@ public class Dagger : ProjectileBase
         if (collision.CompareTag("Player"))
         {
             Health p = collision.GetComponent<Health>();
+            if (p.invincible) return;
             Vector2 dir;
             dir = (collision.transform.position - this.transform.position).normalized;
 
-            p.TakeDamage(finalDamage, dir, true, CrowdControlState.Knockdown, 0f);
-
-            if (currentCCState == CrowdControlState.Stunned) p.ApplyStun(1, dir);
-            else if (currentCCState == CrowdControlState.Knockdown) p.ApplyKnockdown(1, false, dir);
+            p.TakeDamage(finalDamage, dir, true, CrowdControlState.Stunned, 0.5f);
 
 
             Despawn();
         }
 
-        if (!collision.CompareTag("Enemy") && !collision.CompareTag("Hurtbox") && timer >= 0.5f)
-        {
-            Despawn();
-        }
+        //if (!collision.CompareTag("Enemy") && !collision.CompareTag("Hurtbox") && timer >= 0.5f)
+        //{
+        //    Despawn();
+        //}
     }
 }

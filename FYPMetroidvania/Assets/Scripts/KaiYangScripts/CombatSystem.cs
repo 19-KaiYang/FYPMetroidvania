@@ -76,7 +76,7 @@ public class CombatSystem : MonoBehaviour
 
     private List<GameObject> activeHitboxes;
 
-    private Animator animator;
+    [SerializeField] private Animator animator;
     private SpriteRenderer spriteRenderer;
     private PlayerController controller;
 
@@ -116,12 +116,13 @@ public class CombatSystem : MonoBehaviour
     private void Awake()
     {
         // Auto-find Animator & SpriteRenderer 
-        animator = GetComponentInChildren<Animator>();
+        //animator = GetComponentInChildren<Animator>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         skills = GetComponentInChildren<Skills>();
         overheat = GetComponent<OverheatSystem>();
 
         controller = GetComponent<PlayerController>();
+        animator = controller.animator;
 
         var pi = GetComponent<PlayerInput>();
         _skill3ChargeAction = pi.actions["Skill3Charge"];
@@ -140,9 +141,12 @@ public class CombatSystem : MonoBehaviour
 
     private void Update()
     {
+        if (controller.isInCutscene) return;
         int playerLayer = gameObject.layer;
         int enemyLayer = LayerMask.NameToLayer("EnemyLayer");
         Physics2D.IgnoreLayerCollision(playerLayer, enemyLayer, true);
+
+        if (isAttacking) controller.externalVelocityOverride = true;
 
         if (attackCooldownTimer > 0f)
             attackCooldownTimer -= Time.deltaTime;
@@ -371,18 +375,20 @@ public class CombatSystem : MonoBehaviour
         if (skills != null && skills.IsUsingSkill && !skills.IsUsingUltimate) return;
         if (currentWeapon == WeaponType.None) return;
         if (attackCooldownTimer > 0f) return;
-
+        if (controller.isInCutscene) return;
 
         bool up = Keyboard.current.wKey.isPressed;
         bool down = Keyboard.current.sKey.isPressed;
 
         if (up)
         {
-            PerformUpAttack();
+            if (controller.IsGrounded) PerformUpAttack();
+            else PerformAttack();
         }
         else if (down)
         {
-            PerformDownAttack();
+            if (!controller.IsGrounded) PerformDownAttack();
+            else PerformAttack();
         }
         else
         {
@@ -396,7 +402,7 @@ public class CombatSystem : MonoBehaviour
 
         comboStep = 0;
         attackCooldownTimer = attackCooldown;
-
+        controller.StopDash();
         isAttacking = true;
         controller.externalVelocityOverride = true;
         if (controller.IsGrounded) controller.SetVelocity(Vector2.zero);
@@ -436,6 +442,7 @@ public class CombatSystem : MonoBehaviour
             }
             else if (swordDownHitbox != null)
             {
+                controller.StopDash();
                 isAttacking = true;
                 controller.externalVelocityOverride = true;
                 animator.SetBool("IsAttacking", true);
@@ -459,6 +466,7 @@ public class CombatSystem : MonoBehaviour
             }
         }
         if (!controller.IsGrounded && !isAttacking) {
+            controller.StopDash();
             isAttacking = true;
             controller.externalVelocityOverride = true;
             animator.SetBool("IsAttacking", true);
@@ -472,7 +480,20 @@ public class CombatSystem : MonoBehaviour
             comboStep++;
             animator.SetInteger("ComboStep", comboStep);
             isBuffered = true;
-            //if (comboStep > 3) ResetCombo();
+            if(!isAttacking && comboStep == 1)
+            {
+                controller.StopDash();
+                comboTimer = 1f;
+                animator.SetBool("IsAttacking", true);
+                animator.SetTrigger("DoAttack");
+
+                Debug.Log($"Performing Combo Step {comboStep} with {currentWeapon}");
+                canTransition = false;
+                isAttacking = true;
+                controller.externalVelocityOverride = true;
+                if (controller.IsGrounded) controller.SetVelocity(Vector2.zero);
+                //isBuffered = false;
+            }
         }
     }
 
@@ -497,6 +518,7 @@ public class CombatSystem : MonoBehaviour
         foreach(var hitbox in activeHitboxes)
             hitbox.SetActive(false);
     }
+    #region old methods
     public void DisableSwordUpHitbox()
     {
         if (swordUpHitbox != null)
@@ -559,6 +581,7 @@ public class CombatSystem : MonoBehaviour
         }
         AudioManager.PlaySFX(SFXTYPE.SWORD_SWING, 1.0f);
     }
+    #endregion
     public void PlayVFX(string Name)
     {
         if (particleEffectsObject == null) return;
@@ -598,7 +621,7 @@ public class CombatSystem : MonoBehaviour
         };
     }
 
-    private void ResetCombo()
+    public void ResetCombo()
     {
         comboStep = 0;
         comboTimer = 0f;
@@ -612,7 +635,6 @@ public class CombatSystem : MonoBehaviour
         canTransition = true;
         isBuffered = false;
     }
-
     public void SetCanTransition(int comboEnd)
     {
         Debug.Log("attack can be cancelled");
@@ -628,8 +650,7 @@ public class CombatSystem : MonoBehaviour
     }
     public void SetEndAnimation()
     {
-        Debug.Log("End of attack animation");
-        //isAttacking = false;
+        //if(isAttacking) isAttacking = false;
         animator.SetBool("IsAttacking", false);
     }
     public float GetAttackDamage(int attackNumber)

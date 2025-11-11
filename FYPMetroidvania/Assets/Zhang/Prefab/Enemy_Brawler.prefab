@@ -157,7 +157,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Sprite: {fileID: -8171068775573993944, guid: 7b2f1f6ada005db478230a1c006c332c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -216,7 +216,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.2D.Runtime::UnityEngine.Rendering.Universal.ShadowCaster2D
   m_ShadowGroup: 0
-  m_Priority: 1
+  m_Priority: 2
   m_ComponentVersion: 5
   m_HasRenderer: 1
   m_UseRendererSilhouette: 1
@@ -594,6 +594,7 @@ RectTransform:
   m_Children:
   - {fileID: 7067308921444624326}
   - {fileID: 9005422149735966451}
+  - {fileID: 5599313873272040467}
   m_Father: {fileID: 5033397307062096171}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -622,7 +623,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_TargetDisplay: 0
 --- !u!114 &2740024696592295223
 MonoBehaviour:
@@ -730,7 +731,8 @@ MonoBehaviour:
   attackMultiplier: 2
   finalDamage: 0
   attackDamage: 0
-  knockback: 6
+  knockback: 8
+  ccTime: 0.5
 --- !u!61 &2147137083326911622
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -797,7 +799,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5033397307062096171
 Transform:
   m_ObjectHideFlags: 0
@@ -818,6 +820,7 @@ Transform:
   - {fileID: 5314991759159687320}
   - {fileID: 3678444156151696554}
   - {fileID: 9105326469659285072}
+  - {fileID: 22063871076426698}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &4864612437076488930
@@ -866,7 +869,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 5
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -972,38 +975,42 @@ MonoBehaviour:
     m_Bits: 128
   groundleLayer:
     serializedVersion: 2
-    m_Bits: 128
-  maxHealth: 0
-  currentHealth: 0
-  isDead: 0
-  moveSpeed: 5
-  attackDamage: 10
+    m_Bits: 640
+  platformLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  moveSpeed: 6
+  attackDamage: 5
   isFacingRight: 1
   isFacingLeft: 0
   distanceToPlayer: {x: 0, y: 0}
+  groundCheck: {fileID: 22063871076426698}
+  groundCheckRadius: 0.1
   damageParticle: {fileID: 6966180119663813987, guid: edda90ab5a07d484ca1c0c2ce435f1a7, type: 3}
   bloodParticle: {fileID: 3786330769736489564, guid: 132d3cf110e334a4586f49391eea9df5, type: 3}
   damageParticlePos: {fileID: 4020999845850698724}
   bloodParticlePos: {fileID: 5775245395168690232}
+  knockdownStep: 0
+  getUp: 0
   currentState: 
-  detectSize: {x: 13.27, y: 1.93}
+  detectSize: {x: 20, y: 10}
   detectOffset: {x: 0, y: 0}
   playerEscapeSize: {x: 27.7, y: 5.42}
   playerEscapeOffset: {x: 0, y: 1}
-  attackArea: {x: 2, y: 1.93}
-  attackAreaOffset: {x: 1.61, y: 0}
+  attackArea: {x: 3.44, y: 1.93}
+  attackAreaOffset: {x: 1.63, y: 0}
   groundCheckSize: 0.1
   groundCheckOffset: {x: -0.12, y: -0.94}
   playerDetected: 0
   inDetectArea: 0
   inAttackArea: 0
   isGround: 0
-  jumpForceY: 8
+  jumpForceY: 9
   jumpForceX: 0
   gravityA: 3
   gravityB: 3
-  distanceOffset: 2
-  maxJumpRange: 50
+  distanceOffset: 3
+  maxJumpRange: 10
   jumpHitbox: {fileID: 7688238546090216199}
   jumpTrail: {fileID: 5057681478030813393}
   meleeAttackCooldown: 0
@@ -1022,7 +1029,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af196f38ea8868b40a61bf0922e5bf00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Health
-  maxHealth: 1000
+  maxHealth: 175
   destroyOnDeath: 0
   isPlayer: 0
   currentHealth: 0
@@ -1035,6 +1042,7 @@ MonoBehaviour:
   defaultDamageColor: {r: 0, g: 0, b: 0, a: 0}
   arcKnockdownGravity: 15
   isInArcKnockdown: 0
+  juggleTime: 0
   knockbackForce: 5
   stunPushbackForce: 5
   groundCheckValue: 1
@@ -1043,12 +1051,15 @@ MonoBehaviour:
   defaultKnockdownDuration: 2
   knockdownRecoveryTime: 1
   currentCCState: 0
+  knockdownLanded: 0
   stunImmune: 0
   knockdownImmune: 0
+  ccTimer: 0
   invincibilityDuration: 0.3
+  invincible: 0
   isBloodMarked: 0
   bloodMarkHealAmount: 10
-  bloodMarkIcon: {fileID: 0}
+  bloodMarkIcon: {fileID: 8271615029836355076}
   debuffVFXs: []
 --- !u!1 &4944658150897055525
 GameObject:
@@ -1280,11 +1291,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b95fea1b004c7247878e15342cdb73d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHitBox
-  currentCCState: 0
+  currentCCState: 1
   attackMultiplier: 1
   finalDamage: 0
   attackDamage: 0
   knockback: 0
+  ccTime: 0.5
 --- !u!61 &1884260015455104130
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1331,6 +1343,37 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 6.668277, y: 4.2120247}
   m_EdgeRadius: 0
+--- !u!1 &7184091978939774946
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 22063871076426698}
+  m_Layer: 6
+  m_Name: GroundCheck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &22063871076426698
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7184091978939774946}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.808, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5033397307062096171}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7201207688564687193
 GameObject:
   m_ObjectHideFlags: 0
@@ -1596,11 +1639,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b95fea1b004c7247878e15342cdb73d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHitBox
-  currentCCState: 1
+  currentCCState: 2
   attackMultiplier: 1
   finalDamage: 0
   attackDamage: 0
   knockback: 8
+  ccTime: 1
 --- !u!61 &8130619938128346494
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1680,7 +1724,7 @@ RectTransform:
   m_Father: {fileID: 7067308921444624326}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 1.666687, y: 0}
   m_SizeDelta: {x: -1.666687, y: 0}
   m_Pivot: {x: 0, y: 0.5}
@@ -1722,3 +1766,110 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1001 &909841836651544638
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 9105326469659285072}
+    m_Modifications:
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_Pivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_Pivot.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0.8345
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0.8345
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9570669
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.28986716
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0.035
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.5594
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 33.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 9109311307756738106, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+      propertyPath: m_Name
+      value: Blood Mark
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+--- !u!224 &5599313873272040467 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+  m_PrefabInstance: {fileID: 909841836651544638}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8271615029836355076 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9109311307756738106, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
+  m_PrefabInstance: {fileID: 909841836651544638}
+  m_PrefabAsset: {fileID: 0}

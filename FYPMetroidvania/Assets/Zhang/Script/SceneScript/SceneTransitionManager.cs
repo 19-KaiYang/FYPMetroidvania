@@ -40,13 +40,26 @@ public class SceneTransitionManager : MonoBehaviour
     void Start()
     {
         currentSceneName = SceneManager.GetActiveScene().name;
-        roomIndex = 0;
-        ShuffleRooms();
+
+        if (PlayerPrefs.HasKey("RoomIndex"))
+        {
+            roomIndex = PlayerPrefs.GetInt("RoomIndex");
+            Debug.Log($"[SceneTransitionManager] Loaded room index: {roomIndex}");
+        }
+        else
+        {
+            roomIndex = 0;
+            Debug.Log("[SceneTransitionManager] No saved room index, starting from 0");
+        }
+
+        rooms = new List<string>(progressionData.rooms);
+        //rooms.RemoveAt(0);
+        //ShuffleRooms();
     }
 
     void Update()
     {
-        
+
     }
     public enum FadeDirection
     {
@@ -54,13 +67,17 @@ public class SceneTransitionManager : MonoBehaviour
     }
     public IEnumerator FadeAndLoadScene(FadeDirection _fadeDir, string _sceneName)
     {
+        // SAVE UPGRADES BEFORE CHANGING SCENES
+        RoomSaveManager.PrepareForSceneChange();
+
+        if (currentSceneName == "GoblinCamp") AudioManager.instance.StopBGM();
         fadeImage.enabled = true;
         //string random = GetRandomRoom();
         //if (random != null) _sceneName = random;
         if (roomIndex < rooms.Count)
         {
             _sceneName = rooms[roomIndex];
-            roomIndex++;
+            if (currentSceneName != progressionData.startingScene) roomIndex++;
         }
         else _sceneName = progressionData.EndingScene;
         if (_sceneName != null)
@@ -92,7 +109,7 @@ public class SceneTransitionManager : MonoBehaviour
                                 fadeImage.color.g,
                                 fadeImage.color.b,
                                 endAlpha);
-        
+
     }
     void SetColorImage(ref float _alpha, FadeDirection _fadeDir)
     {
@@ -137,14 +154,14 @@ public class SceneTransitionManager : MonoBehaviour
     private string GetRandomRoom()
     {
 
-        if(progressionData == null) return null;
+        if (progressionData == null) return null;
         if (progressionData.rooms.Count < 2) return null;
 
         //string sceneName = "";
         while (true)
         {
             string scene = progressionData.rooms[Random.Range(0, progressionData.rooms.Count)];
-            if(scene != SceneManager.GetActiveScene().name)
+            if (scene != SceneManager.GetActiveScene().name)
             {
                 return scene;
             }
@@ -188,6 +205,34 @@ public class SceneTransitionManager : MonoBehaviour
     {
         currentSceneName = scene.name;
         roomLoaded?.Invoke(currentSceneName);
+
+        // Stop BGM when entering main menu
+        if (currentSceneName == "MainMenu")
+        {
+            if (AudioManager.instance != null)
+            {
+                AudioManager.instance.StopBGM();
+            }
+            return;
+        }
+        if (currentSceneName == progressionData.startingScene)
+        {
+            if (PlayerController.instance != null)
+            {
+                PlayerController.instance.isInCutscene = true;
+            }
+            if (AudioManager.instance != null)
+            {
+                AudioManager.instance.PlayBGM(BGMType.OPENING_CUTSCENE);
+            }
+        }
+        else if (progressionData != null && progressionData.rooms.Contains(currentSceneName))
+        {
+            if (AudioManager.instance != null)
+            {
+                AudioManager.instance.PlayBGM(BGMType.TOWN_COMBAT);
+            }
+        }
     }
     #endregion
 }
