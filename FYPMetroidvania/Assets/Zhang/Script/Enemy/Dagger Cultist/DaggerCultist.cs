@@ -284,11 +284,13 @@ public class DaggerCultist : Enemy
                     enemy.animator.SetTrigger("land");
                     enemy.animator.ResetTrigger("knockdown");
                     enemy.health.stunImmune = true;
+                    enemy.health.juggleTime = 0f;
                 }
                 else
                 {
                     enemy.animator.SetTrigger("knockdown");
                     enemy.animator.ResetTrigger("land");
+                    enemy.health.juggleTime += Time.deltaTime;
                 }
             }
             if (enemy.health.currentCCState == CrowdControlState.None)

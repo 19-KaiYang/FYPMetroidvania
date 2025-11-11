@@ -295,7 +295,10 @@ public class Skills : MonoBehaviour
             skillTimer = 0f; 
         }
 
-
+        if(health.currentCCState != CrowdControlState.None && IsUsingSkill)
+        {
+            ResetState();
+        }
     }
 
     #region CombatSystem API

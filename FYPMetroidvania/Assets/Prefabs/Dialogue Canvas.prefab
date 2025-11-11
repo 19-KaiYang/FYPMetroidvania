@@ -89,13 +89,14 @@ GameObject:
   - component: {fileID: 6902729171894881084}
   - component: {fileID: 1157292113256525979}
   - component: {fileID: 2636638282966784905}
+  - component: {fileID: 1993006000906979435}
   m_Layer: 5
   m_Name: Dialogue Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2638298095338467157
 RectTransform:
   m_ObjectHideFlags: 0
@@ -194,7 +195,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9321805b7bb76e4bb4f2f051ba82837, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Dialogue
+  postCutsceneObject: {fileID: 0}
   cutscenePlayer: {fileID: 0}
+  impulseSource: {fileID: 1993006000906979435}
   DialogueCanvas: {fileID: 3742596856257271148}
   characterImage: {fileID: 6245114320966432874}
   npcImage: {fileID: 1605764161497465507}
@@ -218,6 +221,7 @@ MonoBehaviour:
     sfx: 0
     pitch: 1
     autoskip: 0
+    screenshake: 0
   currentStepIndex: 0
   skipSpace: 1
   DebugClick: 0
@@ -241,6 +245,7 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 8d7c4c734bc02b94ebd983ce3197e557, type: 2}
     - {fileID: 11400000, guid: 11c24b142523e5a42a18bba85aeb968d, type: 2}
     - {fileID: 11400000, guid: 0e18a84733c06d7479725f621b9a42a3, type: 2}
+    - {fileID: 11400000, guid: 54957cfb1c7e0b44fab45b2d8aa0bab0, type: 2}
     m_Events:
     - m_PersistentCalls:
         m_Calls: []
@@ -286,6 +291,85 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1157292113256525979}
+          m_TargetAssemblyTypeName: DialogueSystem, Assembly-CSharp
+          m_MethodName: StartDialogue
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 11400000, guid: ba1fc7435f05e584d88ab665246a2dc5, type: 2}
+            m_ObjectArgumentAssemblyTypeName: DialogueTextSO, Assembly-CSharp
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: UnityEngine.Playables.PlayableDirector, UnityEngine
+          m_MethodName: Pause
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+--- !u!114 &1993006000906979435
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 482078433249449791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineImpulseSource
+  ImpulseDefinition:
+    ImpulseChannel: 1
+    ImpulseShape: 2
+    CustomImpulseShape:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    ImpulseDuration: 0.3
+    ImpulseType: 0
+    DissipationRate: 0.25
+    RawSignal: {fileID: 0}
+    AmplitudeGain: 1
+    FrequencyGain: 1
+    RepeatMode: 0
+    Randomize: 1
+    TimeEnvelope:
+      AttackShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      DecayShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      AttackTime: 0
+      SustainTime: 0.2
+      DecayTime: 0.7
+      ScaleWithImpact: 1
+      HoldForever: 0
+    ImpactRadius: 100
+    DirectionMode: 0
+    DissipationMode: 2
+    DissipationDistance: 100
+    PropagationSpeed: 343
+  DefaultVelocity: {x: 0.5, y: -0.5, z: 0}
 --- !u!1 &1897346437858762226
 GameObject:
   m_ObjectHideFlags: 0

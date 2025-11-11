@@ -68,6 +68,7 @@ public class Enemy : MonoBehaviour
         //animator = GetComponent<Animator>();
         animator = GetComponentInChildren<Animator>();
         player = PlayerController.instance;
+        if (player == null) player = FindFirstObjectByType<PlayerController>();
         health = GetComponent<Health>();
     }
 
