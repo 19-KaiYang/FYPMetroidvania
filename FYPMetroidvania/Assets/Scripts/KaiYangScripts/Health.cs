@@ -144,11 +144,12 @@ public class Health : MonoBehaviour
                 }
                 // Regular knockdown timer countdown (only when grounded)
                 if (!landed) isInArcKnockdown = true;
+                else if (landed) isInArcKnockdown = false;
                 if (ccTimer > 0f && !(isPlayer && isInArcKnockdown) && landed)
                 {
                     if (landed && isPlayer) invincible = true;
                     ccTimer -= Time.deltaTime;
-                    if(isPlayer && landed) pc.SetVelocity(new Vector2(0f, pc.GetVelocity().y));
+                    if (isPlayer && landed) pc.SetVelocity(new Vector2(0f, pc.GetVelocity().y));
                     if (ccTimer <= 0f)
                     {
                         currentCCState = CrowdControlState.None;

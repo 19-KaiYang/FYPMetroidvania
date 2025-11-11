@@ -26,6 +26,7 @@ MonoBehaviour:
     sfx: 0
     pitch: 0
     autoskip: 0
+    screenshake: 0
   - SpeakerType: 2
     Name: Narrator
     SpeakerImage: {fileID: 0}
@@ -33,6 +34,7 @@ MonoBehaviour:
     sfx: 0
     pitch: 0
     autoskip: 0
+    screenshake: 0
   - SpeakerType: 0
     Name: Player
     SpeakerImage: {fileID: 3516079381801495997, guid: b0206ccead3847d49911a68f16ebc122, type: 3}
@@ -41,6 +43,7 @@ MonoBehaviour:
     sfx: 14
     pitch: 0.8
     autoskip: 0
+    screenshake: 0
   - SpeakerType: 0
     Name: Player
     SpeakerImage: {fileID: 3516079381801495997, guid: b0206ccead3847d49911a68f16ebc122, type: 3}
@@ -48,6 +51,7 @@ MonoBehaviour:
     sfx: 14
     pitch: 0.8
     autoskip: 0
+    screenshake: 0
   - SpeakerType: 2
     Name: Narrator
     SpeakerImage: {fileID: 0}
@@ -55,6 +59,7 @@ MonoBehaviour:
     sfx: 0
     pitch: 0.8
     autoskip: 0
+    screenshake: 0
   - SpeakerType: 2
     Name: Narrator
     SpeakerImage: {fileID: 0}
@@ -64,6 +69,7 @@ MonoBehaviour:
     sfx: 0
     pitch: 0.8
     autoskip: 0
+    screenshake: 0
   - SpeakerType: 0
     Name: Player
     SpeakerImage: {fileID: 1639174027949059371, guid: 89a0eb1b45e47c740aa21bd41d73cb21, type: 3}
@@ -71,6 +77,7 @@ MonoBehaviour:
     sfx: 14
     pitch: 0.8
     autoskip: 1
+    screenshake: 0
   - SpeakerType: 0
     Name: Player
     SpeakerImage: {fileID: 1639174027949059371, guid: 89a0eb1b45e47c740aa21bd41d73cb21, type: 3}
@@ -78,6 +85,7 @@ MonoBehaviour:
     sfx: 14
     pitch: 0.8
     autoskip: 0
+    screenshake: 0
   - SpeakerType: 2
     Name: Knights
     SpeakerImage: {fileID: 0}
@@ -85,6 +93,7 @@ MonoBehaviour:
     sfx: 14
     pitch: 0.7
     autoskip: 0
+    screenshake: 1
   - SpeakerType: 2
     Name: Knights
     SpeakerImage: {fileID: 0}
@@ -93,6 +102,7 @@ MonoBehaviour:
     sfx: 14
     pitch: 0.7
     autoskip: 0
+    screenshake: 0
   - SpeakerType: 0
     Name: Player
     SpeakerImage: {fileID: 1639174027949059371, guid: 89a0eb1b45e47c740aa21bd41d73cb21, type: 3}
@@ -100,3 +110,4 @@ MonoBehaviour:
     sfx: 14
     pitch: 0.8
     autoskip: 0
+    screenshake: 0

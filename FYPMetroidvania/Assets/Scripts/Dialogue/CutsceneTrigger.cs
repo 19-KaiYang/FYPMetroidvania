@@ -14,6 +14,7 @@ public class CutsceneTrigger : MonoBehaviour
     {
         if (!collision.gameObject.CompareTag("Player")) return;
         var animator = collision.gameObject.GetComponent<Animator>();
+        animator.enabled = true;
         var controller = collision.gameObject.GetComponent<PlayerController>();
 
         foreach (var output in director.playableAsset.outputs)
