@@ -69,6 +69,7 @@ public class Health : MonoBehaviour
     public bool isBloodMarked = false;
     public float bloodMarkHealAmount = 10f;
     public GameObject bloodMarkIcon;
+    public float bloodMarkDamageTaken = 0f;
 
     [Header("Debuffs")]
     public List<DebuffInstance> debuffs = new();
@@ -142,10 +143,10 @@ public class Health : MonoBehaviour
                     landed = touchingGround && stoppedFalling;
                 }
                 // Regular knockdown timer countdown (only when grounded)
-
+                if (!landed) isInArcKnockdown = true;
                 if (ccTimer > 0f && !(isPlayer && isInArcKnockdown) && landed)
                 {
-                    if (landed) invincible = true;
+                    if (landed && isPlayer) invincible = true;
                     ccTimer -= Time.deltaTime;
                     if(isPlayer && landed) pc.SetVelocity(new Vector2(0f, pc.GetVelocity().y));
                     if (ccTimer <= 0f)
@@ -207,7 +208,11 @@ public class Health : MonoBehaviour
         }
         else
         {
-            invincible = false;
+            if (isPlayer)
+            {
+                if(!pc.isDashing) invincible = false;
+            }
+            isInArcKnockdown = false;
             // NOT IN CC STATE - make sure player isn't stuck
             if (isPlayer)
             {
@@ -267,6 +272,7 @@ public class Health : MonoBehaviour
         }
 
         currentHealth -= amount;
+        bloodMarkDamageTaken += amount;
         updateUI?.Invoke(this, amount, damageNumberColor.HasValue ? damageNumberColor.Value : Color.white);
         if (triggerEffects) damageTaken?.Invoke(this);
 
@@ -331,6 +337,21 @@ public class Health : MonoBehaviour
                 StartCoroutine(RespawnPlayer());
             else
                 Die();
+        }
+        else if(!isPlayer && isBloodMarked)
+        {
+            if (bloodMarkDamageTaken > 100f)
+            {
+                var player = PlayerController.instance;
+                if (player != null)
+                {
+                    Health playerHealth = player.GetComponent<Health>();
+                    if (playerHealth != null)
+                        playerHealth.Heal(bloodMarkHealAmount);
+                }
+                bloodMarkIcon.SetActive(false);
+                isBloodMarked = false;
+            }
         }
     }
 
@@ -551,6 +572,7 @@ public class Health : MonoBehaviour
             {
                 bloodMarkIcon.SetActive(true);
             }
+            bloodMarkDamageTaken = 0f;
         }
     }
 
@@ -671,7 +693,7 @@ public class Health : MonoBehaviour
             {
                 // Apply custom gravity
                 Vector2 currentVel = rb.linearVelocity;
-                float gravityMult = 0.75f + (juggleTime * 0.35f);
+                float gravityMult = 0.75f + (juggleTime * 0.5f);
                 currentVel.y -= arcKnockdownGravity * gravityMult * Time.deltaTime;
                 rb.linearVelocity = currentVel;
 

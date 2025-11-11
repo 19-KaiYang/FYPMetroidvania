@@ -533,6 +533,7 @@ MonoBehaviour:
   distanceToPlayer: {x: 0, y: 0}
   groundCheck: {fileID: 5685676834778498629}
   groundCheckRadius: 0.1
+  health: {fileID: 0}
   damageParticle: {fileID: 6966180119663813987, guid: edda90ab5a07d484ca1c0c2ce435f1a7, type: 3}
   bloodParticle: {fileID: 3786330769736489564, guid: 132d3cf110e334a4586f49391eea9df5, type: 3}
   damageParticlePos: {fileID: 4834689654429031552}
@@ -556,7 +557,7 @@ MonoBehaviour:
   isAiming: 0
   daggerCooldown: {x: 1, y: 2}
   aimingTime: 1
-  throwingTime: 0.25
+  throwingTime: 0.5
   daggerPrefab: {fileID: 6543586195944055859, guid: 6226b805d007ec94193ac7159cdecc98, type: 3}
   throwPoint: {fileID: 5467460775812442715}
 --- !u!114 &8702589858316454365

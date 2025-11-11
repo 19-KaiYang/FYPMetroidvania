@@ -34,4 +34,5 @@ public class DialogueStep
     [UnityEngine.Range(0.01f, 3f)]
     public float pitch = 1f;
     public bool autoskip;
+    public bool screenshake;
 }

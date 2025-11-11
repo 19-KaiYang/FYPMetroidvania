@@ -2,6 +2,7 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Cinemachine;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -13,6 +14,7 @@ public class DialogueSystem : MonoBehaviour, IPointerClickHandler
 {
     public GameObject postCutsceneObject;
     [SerializeField] PlayableDirector cutscenePlayer;
+    [SerializeField] CinemachineImpulseSource impulseSource;
     [SerializeField] private Canvas DialogueCanvas;
     [SerializeField] private Image characterImage;
     [SerializeField] private Image npcImage;
@@ -119,12 +121,12 @@ public class DialogueSystem : MonoBehaviour, IPointerClickHandler
         _textBox.text = dialoguestep.Text;
         _speakerNameBox.text = dialoguestep.Name;
         currentDialogueStep = dialoguestep;
-        //StartCoroutine(AnimateCharacterImage(moveIn: true, 1f));
-
         int textSize = _textBox.text.Length;
         char[] line = dialoguestep.Text.ToCharArray();
         int textLength = line.Length;
         float speed = 1f / TextSpeed;
+
+        if (dialoguestep.screenshake) impulseSource.GenerateImpulse(0.2f);
         for (int i = 0; i < textLength; i++)
         {
             if (nextInputbuffer)
@@ -169,7 +171,13 @@ public class DialogueSystem : MonoBehaviour, IPointerClickHandler
                 StartCoroutine(DialogueTextCoroutine(nextStep));
                 return;
             }
-
+            else if (nextStep.Name == currentDialogueStep.Name)
+            {
+                Image imageChange = nextStep.SpeakerType == SPEAKER_TYPE.PLAYER ? characterImage : npcImage;
+                imageChange.sprite = nextStep.SpeakerImage;
+                StartCoroutine(DialogueTextCoroutine(nextStep));
+                return;
+            }
             DG.Tweening.Sequence animationSeq = DOTween.Sequence();
             Image portraitToAnimate = nextStep.SpeakerType == SPEAKER_TYPE.PLAYER ? characterImage : npcImage;
             float offscreenFactor = nextStep.SpeakerType == SPEAKER_TYPE.PLAYER ? -1 : 1;
