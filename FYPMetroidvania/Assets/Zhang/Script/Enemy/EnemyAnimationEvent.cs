@@ -93,4 +93,13 @@ public class EnemyAnimationEvent : MonoBehaviour
     {
         AudioManager.PlaySFX(SFXTYPE.HAWK_ATTACK, 0.5f);
     }
+
+    private void EnableHurtBox()
+    {
+        boss.hurtBox.SetActive(true);
+    }
+    private void DisableHurtBox()
+    {
+        boss.hurtBox.SetActive(false);
+    }
 }
