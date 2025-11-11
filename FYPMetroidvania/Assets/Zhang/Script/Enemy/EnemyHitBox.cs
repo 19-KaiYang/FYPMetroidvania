@@ -8,8 +8,8 @@ public class EnemyHitBox : MonoBehaviour
     [SerializeField] private float finalDamage;
     private Spearman owner;
     [SerializeField] private float attackDamage;
-    public float KnockdownX = 10;
-    public float KnockdownY = 5;
+    //public float KnockdownX = 10;
+    //public float KnockdownY = 5;
 
     public float knockback;
     public float ccTime = 0.5f;
