@@ -11,6 +11,9 @@ public class BreakableBox : MonoBehaviour
     public float popForce = 3f;
     public float spreadRadius = 0.5f;
 
+    [Header("Effects")]
+    public GameObject breakParticles; 
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         Hitbox hitbox = collision.GetComponent<Hitbox>();
@@ -27,6 +30,11 @@ public class BreakableBox : MonoBehaviour
 
     private void Break()
     {
+        // Spawn particle effect
+        if (breakParticles != null)
+        {
+            Instantiate(breakParticles, transform.position, Quaternion.identity);
+        }
 
         foreach (GameObject item in itemsInside)
         {

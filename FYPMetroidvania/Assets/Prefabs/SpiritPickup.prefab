@@ -81,7 +81,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_Sprite: {fileID: 21300000, guid: 37e07b1bd28380b4f9cbfa0fc8bd564c, type: 3}
   m_Color: {r: 0, g: 0.9236243, b: 1, a: 1}
   m_FlipX: 0
@@ -110,6 +110,8 @@ MonoBehaviour:
   spiritAmount: 30
   floatSpeed: 2
   floatHeight: 0.2
+  healthParticlePrefab: {fileID: 0}
+  spiritParticlePrefab: {fileID: 5056888575716864066, guid: 1d4e1a3a20265ab4f8c7ac4aaa789e19, type: 3}
 --- !u!61 &8608027003439452298
 BoxCollider2D:
   m_ObjectHideFlags: 0

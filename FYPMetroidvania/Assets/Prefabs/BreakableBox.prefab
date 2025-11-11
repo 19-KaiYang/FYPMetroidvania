@@ -156,6 +156,7 @@ MonoBehaviour:
   - {fileID: 1622971755030136835, guid: d4cb0805c7103454f8a41c3225cd3d04, type: 3}
   popForce: 2
   spreadRadius: 0.5
+  breakParticles: {fileID: 3187023020566543087, guid: 4ec32f89bb628644b9e25aa9f26fbe55, type: 3}
 --- !u!1 &5375726039628527942
 GameObject:
   m_ObjectHideFlags: 0
@@ -235,7 +236,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 11
   m_Sprite: {fileID: -5224099965941723984, guid: 72cf40485b55bfc4883f5a45713e9d82, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -347,7 +348,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_Sprite: {fileID: 8557843765470218937, guid: 94e7dcd553e2f594fa21a15a0dddf81b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
