@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     public static PlayerController instance;
     private CombatSystem combat;
     private Skills skills;
+    private Health health;
 
     [Header("References")]
     public Transform spriteTransform;
@@ -142,6 +143,7 @@ public class PlayerController : MonoBehaviour
 
         skills = GetComponentInChildren<Skills>();
         combat = GetComponentInChildren<CombatSystem>();
+        health = GetComponent<Health>();
         if (animator == null) animator = GetComponentInChildren<Animator>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
 
@@ -430,6 +432,7 @@ public class PlayerController : MonoBehaviour
     public void StopDash()
     {
         isDashing = false;
+        health.invincible = false;
         animator.SetBool("isDashing", false);
         dashTrail.emitting = false;
         if (Mathf.Abs(velocity.y) > 0.1f)
@@ -594,6 +597,7 @@ public class PlayerController : MonoBehaviour
             dashDirection = new Vector2(facingRight ? 1f : -1f, 0f);
 
         isDashing = true;
+        health.invincible = true;
         dashTimer = dashDuration;
         velocity = dashDirection * dashSpeed;
         animator.SetBool("isDashing", true);
