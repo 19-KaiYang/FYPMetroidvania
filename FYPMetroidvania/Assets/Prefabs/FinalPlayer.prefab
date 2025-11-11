@@ -877,6 +877,7 @@ MonoBehaviour:
   isBloodMarked: 0
   bloodMarkHealAmount: 10
   bloodMarkIcon: {fileID: 0}
+  bloodMarkDamageTaken: 0
   debuffVFXs: []
 --- !u!114 &5761402612778462966
 MonoBehaviour:
@@ -910,8 +911,8 @@ MonoBehaviour:
   swordDashHitbox: {fileID: 7652153731754429865}
   swordUppercutHitbox: {fileID: 6025375501182229320}
   gauntletShockwaveHitbox: {fileID: 7128912920565330703}
-  dashSpeed: 30
-  dashDuration: 0.25
+  dashSpeed: 22
+  dashDuration: 0.2
   dashFlatDamage: 23
   swordDashHealthCost: 5
   swordDashGroundedCC: 2

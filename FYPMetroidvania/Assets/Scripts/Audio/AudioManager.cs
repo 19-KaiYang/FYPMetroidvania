@@ -168,7 +168,9 @@ public enum SFXTYPE
     SPEARMAN_CHARGE,
     SPEARMAN_THROW,
     ENEMY_ATTACKFLASH,
-    HAWK_ATTACK
+    HAWK_ATTACK,
+    TRUCK_HORN,
+    IMPACT
 }
 [Serializable]
 public class BGM

@@ -34,16 +34,11 @@ public class EnemyHitBox : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             Health p = collision.GetComponent<Health>();
+            if (p.invincible) return;
             Vector2 dir = (collision.transform.position - enemy.transform.position);
             dir.x = Mathf.Sign(dir.x) * KnockdownX; dir.y = KnockdownY;
             //p.TakeDamage(finalDamage, dir * knockback, true, currentCCState, 0.5f, true, false, 1.0f);
-            p.TakeDamage(finalDamage, dir, false, currentCCState, 0.5f);
-            if (p.invincible) return;
-            Vector2 dir = (collision.transform.position - enemy.transform.position).normalized; dir.y = 0f;
-            p.TakeDamage(finalDamage, dir * knockback, true, currentCCState, ccTime);
-
-            //if (currentCCState == CrowdControlState.Stunned) p.ApplyStun(1, dir);
-            //else if (currentCCState == CrowdControlState.Knockdown) p.ApplyKnockdown(1, false, dir);
+            p.TakeDamage(finalDamage, dir, false, currentCCState, ccTime);
 
         }
     }   
