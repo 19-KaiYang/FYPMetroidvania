@@ -11,12 +11,11 @@ public class TruckBoss : Enemy
     public enum BossPhase { Phase1, Phase2}
     [SerializeField]private BossPhase bossPhase = BossPhase.Phase1;
     private bool phase2 = false;
-    public bool changePhase = false;
-    public float currentHP;
+    
 
     [Space(20)]
     [Header("TruckBoss")]
-    [SerializeField] private string currentState;
+    [SerializeField] public string currentState;
     private Vector2 rampTangent = Vector2.zero;
     private float zAngle = 0f;
     public float rotationSpeed;
@@ -26,6 +25,13 @@ public class TruckBoss : Enemy
     public bool reverse;
     public bool moving = true;
     public bool isGround = true;
+    public float maxArmor = 100;
+    public float currentArmor;
+    public bool armor = false;
+    public bool armorBreak = false;
+    public bool changePhase = false;
+    public float currentHP;
+    public GameObject hurtBox;
 
     [Header("Drive")]//¡ö¡ö¡ö¡ö¡ö¡ö¡ö¡ö¡ö¡ö
     [SerializeField] private bool isDriving = false;
@@ -61,7 +67,10 @@ public class TruckBoss : Enemy
     public LayerMask rampLayer;
     public GameObject rampSpawnPos;
     public GameObject rampPrefab;
+    public GameObject landingHitBox;
+    public bool landing = false;
     public float rampAttackProbability;
+    public float landingHitboxTimer;
     
     private GameObject rightRamp;
     private Vector2 rightRampPos;
@@ -78,6 +87,7 @@ public class TruckBoss : Enemy
         FORWARD,
         WAIT,
         BACKWARD,
+        LANDING,
         END
     }
     [SerializeField] private RampAttackStep rampAttackStep = RampAttackStep.NONE;
@@ -98,7 +108,6 @@ public class TruckBoss : Enemy
     [SerializeField] private GameObject ray;
     
     private float raywidth;
-
     private float delayTimer;
     private float posY; 
     private float gScale; 
@@ -120,7 +129,7 @@ public class TruckBoss : Enemy
     private float slashChargeTimer;
     [SerializeField] public bool slashFinished;
     [SerializeField] public bool startSlash = false;
-    [SerializeField] private bool hasFlipped = true;
+    
 
     private enum SlashComboStep
     {
@@ -163,14 +172,9 @@ public class TruckBoss : Enemy
     [Header("Revving Rampage")]//¡ö¡ö¡ö¡ö¡ö¡ö¡ö¡ö¡ö¡ö
     [SerializeField] private float revChargeTime = 1.5f;
     private float revChargeTimer;
-    [SerializeField] private float revDashSpeed = 25f;
-    [SerializeField] private float revDashDistance = 20f;
     private int revDashCount;
     [SerializeField] private int minDashes = 2;
     [SerializeField] private int maxDashes = 3;
-    private Vector2 revStartPos;
-    private Vector2 revTargetPos;
-    private bool revDashDone;
     public bool startRevving;
 
     private enum RevvingRampageStep
@@ -197,7 +201,7 @@ public class TruckBoss : Enemy
     [SerializeField] private Vector2 groundCheckOffset;
     [SerializeField] private Vector2 rampCheckSize;
     [SerializeField] private Vector2 rampCheckOffset;
-
+    [SerializeField] private bool hasFlipped = true;
     Coroutine myRoutine;
 
     protected override void Awake()
@@ -232,18 +236,34 @@ public class TruckBoss : Enemy
         {
             if (phase2) return;
             
-            //stateMachine.ChangeState(null);
+            //phase
             if(driveAttackStep == DriveAttackStep.NONE &&
                 rampAttackStep == RampAttackStep.NONE &&
                 slashComboStep == SlashComboStep.NONE)
             {
                 phase2 = true;
+                currentArmor = maxArmor;
+                armor = true;
                 bossPhase = BossPhase.Phase2;
                 rb.linearVelocity = Vector2.zero;
                 animator.SetTrigger("changePhase");
 
                 stateMachine.ChangeState(new TruckBossIdleState(this));
             }
+        }
+        if (currentArmor <= 0) armor = false;
+
+        if (bossPhase == BossPhase.Phase2 && armor == false)
+        {
+            if (armorBreak) return;
+
+            armorBreak = true;
+            if(rampageStep!=RampageStep.NONE) rampageStep = RampageStep.END;
+            if(refuelStep != RefuelStep.NONE) refuelStep = RefuelStep.END;
+            if (revvingRampageStep != RevvingRampageStep.NONE) revvingRampageStep = RevvingRampageStep.END;
+            if (slashComboStep != SlashComboStep.NONE) slashComboStep = SlashComboStep.END;
+
+            stateMachine.ChangeState(new TruckBossDizzyState(this));
         }
 
         float dir = transform.localScale.x;
@@ -252,6 +272,15 @@ public class TruckBoss : Enemy
         animator.SetBool("isForward", moving && dir * vel > 0);
         animator.SetBool("isReverse", moving && dir * vel < 0);
 
+        if (landing)
+        {
+            landingHitboxTimer-= Time.deltaTime;
+            if (landingHitboxTimer <= 0)
+            {
+                landingHitBox.SetActive(false);
+                landing = false;
+            }
+        }
 
         if (Input.GetKey(KeyCode.L))
         {
@@ -326,7 +355,7 @@ public class TruckBoss : Enemy
                 return;
 
             case DriveAttackStep.START:
-                float value = new float[] { 0.8f, 1.6f, 2.3f }[Random.Range(0, 3)];
+                float value = new float[] { 0.8f, 1.4f, 2.0f }[Random.Range(0, 3)];
                 driveSpeed = value;
                 FaceToPlayer();
                 if (distanceToPlayer.x >= 0)
@@ -416,6 +445,7 @@ public class TruckBoss : Enemy
             case RampAttackStep.START:
                 FaceToPlayer();
                 rampAttackStep = RampAttackStep.SUMMONRAMP;
+                landingHitboxTimer = 0.2f;
                 break;
 
             case RampAttackStep.SUMMONRAMP:
@@ -461,18 +491,37 @@ public class TruckBoss : Enemy
                 break;
 
             case RampAttackStep.FORWARD:
-                debugTimer-=Time.deltaTime;
+                //debugTimer-=Time.deltaTime;
+                //if (triggerRamp && rb.linearVelocityY == 0 || triggerRamp && isGround)
+                //{
+                //    triggerRamp = false;
+                //    rampAttackStep = RampAttackStep.END;
+                //    landingHitBox.SetActive(true);
+                //    landing = true;
+                //}
+                //else if (debugTimer <= 0)
+                //{
+                //    triggerRamp = false;
+                //    rampAttackStep = RampAttackStep.END;
+                //}
+                if (triggerRamp) rampAttackStep = RampAttackStep.LANDING;
+                break;
+
+            case RampAttackStep.LANDING:
+                debugTimer -= Time.deltaTime;
                 if (triggerRamp && rb.linearVelocityY == 0 || triggerRamp && isGround)
                 {
                     triggerRamp = false;
                     rampAttackStep = RampAttackStep.END;
+                    landingHitBox.SetActive(true);
+                    landing = true;
                 }
                 else if (debugTimer <= 0)
                 {
                     triggerRamp = false;
                     rampAttackStep = RampAttackStep.END;
                 }
-                    break;
+                break;
 
             case RampAttackStep.END:
                 canJump = false;
@@ -556,6 +605,10 @@ public class TruckBoss : Enemy
                 break;
 
             case RampageStep.END:
+                rDetect = false;
+                hitBox.SetActive(false);
+                ray.SetActive(false);
+                rb.gravityScale = gScale;
                 rampageStep = RampageStep.NONE;
                 break;
         }
@@ -682,6 +735,7 @@ public class TruckBoss : Enemy
                 animator.SetBool("isSlashCharging", false);
                 startSlash = false;
                 slashFinished = false;
+
                 slashComboStep = SlashComboStep.NONE;
                 break;
         }
@@ -751,6 +805,7 @@ public class TruckBoss : Enemy
                 {
                     animator.SetBool("isRefuel", false);
                     particle.SetActive(false);
+                    hurtBox.SetActive(true);
                     refuelStep = RefuelStep.DIZZY;
                     dizzyTimer = dizzyTime;
                 }
@@ -789,6 +844,7 @@ public class TruckBoss : Enemy
             case RefuelStep.END:
                 SuccessRefuel = false;
                 enemyDead = false;
+                hurtBox.SetActive(true);
                 refuelStep = RefuelStep.NONE;
                 break;
         }
@@ -862,7 +918,10 @@ public class TruckBoss : Enemy
 
             case RevvingRampageStep.END:
                 hasFlipped = true;
-                if(!isDriving) revvingRampageStep = RevvingRampageStep.NONE;
+                startRevving = false;
+                animator.SetBool("isRevvingCharging", false);
+                animator.SetBool("isDash", false);
+                if (!isDriving) revvingRampageStep = RevvingRampageStep.NONE;
                 break;
         }
     }
@@ -882,7 +941,7 @@ public class TruckBoss : Enemy
             rb.freezeRotation = true;
             Vector3 currentRotation = transform.eulerAngles;
             float newZ = Mathf.LerpAngle(currentRotation.z, 0, Time.deltaTime * rotationSpeed);
-            if (Mathf.Abs(newZ) <= 0.5f) newZ = 0;
+            if (Mathf.Abs(newZ) <= 1.0f) newZ = 0;
             transform.rotation = Quaternion.Euler(new Vector3(currentRotation.x, currentRotation.y, newZ));
         }
         if (ramp != null && ramp.CompareTag("Ramp") && canJump)
@@ -890,6 +949,7 @@ public class TruckBoss : Enemy
             triggerRamp = true;
             RampAttackJump();
             ramp.gameObject.tag = "Untagged";
+            Destroy(ramp.gameObject, 0.5f);
         }
 
         Collider2D pDetected = Physics2D.OverlapBox((Vector2)transform.position + detectOffset, detectSize, 0f, playerLayer);
@@ -1203,7 +1263,6 @@ public class TruckBoss : Enemy
         }
         public void OnEnter()
         {
-
             enemy.StartRampAttack();
         }
         public void OnUpdate()
@@ -1354,4 +1413,37 @@ public class TruckBoss : Enemy
             //enemy.rampageStep = RampageStep.NONE;
         }
     }//phase2
+
+    public class TruckBossDizzyState: IState
+    {
+        private TruckBoss enemy;
+        private float dizzyTime;
+        public TruckBossDizzyState(TruckBoss _enemy)
+        {
+            enemy = _enemy;
+        }
+        public void OnEnter()
+        {
+            dizzyTime = 5;
+            enemy.animator.SetBool("isDizzy", true);
+
+            
+        }
+        public void OnUpdate()
+        {
+            dizzyTime -= Time.deltaTime;
+
+            if(dizzyTime <= 0)
+            {
+                enemy.stateMachine.ChangeState(new TruckBossIdleState(enemy));
+            } 
+        }
+        public void OnExit()
+        {
+            enemy.animator.SetBool("isDizzy", false);
+        }
+    }
+    
 }
+
+

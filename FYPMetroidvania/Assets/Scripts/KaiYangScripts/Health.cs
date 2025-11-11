@@ -202,6 +202,18 @@ public class Health : MonoBehaviour
     {
         if (isPlayer && invincible) return;
 
+        TruckBoss truckBoss = GetComponent<TruckBoss>();
+        if (truckBoss != null && truckBoss.armor)
+        {
+            amount /= 2;
+            float armorDamage = Mathf.Min(truckBoss.currentArmor, amount);
+            truckBoss.currentArmor -= armorDamage;
+            amount -= armorDamage;
+
+            Debug.Log($"Armor take {armorDamage} damage£¬current armor£º{truckBoss.currentArmor}");
+            if (amount <= 0f) return;
+        }
+
         currentHealth -= amount;
         updateUI?.Invoke(this, amount, damageNumberColor.HasValue ? damageNumberColor.Value : Color.white);
         if (triggerEffects) damageTaken?.Invoke(this);

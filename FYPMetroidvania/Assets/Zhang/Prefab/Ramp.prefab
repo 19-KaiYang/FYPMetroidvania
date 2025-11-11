@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7411130134691581148}
   - component: {fileID: 5546970374200963786}
   - component: {fileID: 2833364231366038299}
+  - component: {fileID: 4668991990656967253}
   m_Layer: 11
   m_Name: Ramp
   m_TagString: Ramp
@@ -29,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.502, y: -0.342, z: 0}
-  m_LocalScale: {x: 0.379678, y: 0.34864295, z: 0.34}
+  m_LocalScale: {x: 0.6, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7112107666841100408}
@@ -129,12 +130,12 @@ EdgeCollider2D:
   m_Offset: {x: 0, y: 0}
   m_EdgeRadius: 0
   m_Points:
-  - {x: 1.0513992, y: 1.8281358}
-  - {x: -0.05172038, y: 2.0967374}
-  - {x: -1.0013511, y: 1.8565562}
+  - {x: 2.4758244, y: 0.39857745}
+  - {x: -0.026142746, y: 0.3141483}
+  - {x: -2.538119, y: 0.38222766}
   - {x: -5.0830207, y: -1.965089}
   - {x: 5.008016, y: -1.9539164}
-  - {x: 1.0603426, y: 1.8040249}
+  - {x: 2.438219, y: 0.44543755}
   m_AdjacentStartPoint: {x: 0, y: 0}
   m_AdjacentEndPoint: {x: 0, y: 0}
   m_UseAdjacentStartPoint: 0
@@ -161,6 +162,22 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &4668991990656967253
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7494143192273582778}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 017b720a9b61951429022dfc45ce6938, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Ramp
+  currentCCState: 2
+  ownerAttackDamage: 0
+  attackMultiplier: 0
+  finalDamage: 0
 --- !u!1 &9208490156964025182
 GameObject:
   m_ObjectHideFlags: 0
@@ -170,7 +187,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7112107666841100408}
-  - component: {fileID: 8245882106771103487}
   m_Layer: 11
   m_Name: Ramp
   m_TagString: Ramp
@@ -194,19 +210,3 @@ Transform:
   - {fileID: 8028417074779484670}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8245882106771103487
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9208490156964025182}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 017b720a9b61951429022dfc45ce6938, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Ramp
-  currentCCState: 2
-  ownerAttackDamage: 0
-  attackMultiplier: 1.5
-  finalDamage: 0
