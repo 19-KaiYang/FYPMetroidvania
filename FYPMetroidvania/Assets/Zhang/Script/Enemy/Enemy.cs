@@ -79,7 +79,6 @@ public class Enemy : MonoBehaviour
     protected virtual void Update()
     {
         distanceToPlayer = transform.position - player.transform.position;
-
         RaycastHit2D platform = Physics2D.Raycast(groundCheck.position, Vector2.down, groundCheckRadius, platformLayer);
         if (platform)
         {
