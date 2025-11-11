@@ -6289,6 +6289,7 @@ MonoBehaviour:
   distanceToPlayer: {x: 0, y: 0}
   groundCheck: {fileID: 8345976199276818450}
   groundCheckRadius: 0.1
+  health: {fileID: 0}
   damageParticle: {fileID: 6966180119663813987, guid: edda90ab5a07d484ca1c0c2ce435f1a7, type: 3}
   bloodParticle: {fileID: 3786330769736489564, guid: 132d3cf110e334a4586f49391eea9df5, type: 3}
   damageParticlePos: {fileID: 2738677383517438410}
@@ -6332,7 +6333,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Health
   maxHealth: 100
-  destroyOnDeath: 0
+  destroyOnDeath: 1
   isPlayer: 0
   currentHealth: 0
   spriteRenderer: {fileID: 2320324610197819080}
