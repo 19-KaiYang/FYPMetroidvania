@@ -80,7 +80,15 @@ public class SceneTransition : MonoBehaviour
 
         StartCoroutine(SceneTransitionManager.instance.FadeAndLoadScene(SceneTransitionManager.FadeDirection.IN, nextSceneName));
     }
+    public void ForceSceneChange()
+    {
+        AudioManager.instance.StopBGM();
 
+        SceneTransitionManager.instance.isTrasition = true;
+        SceneTransitionManager.instance.lastSceneName = SceneManager.GetActiveScene().name;
+
+        StartCoroutine(SceneTransitionManager.instance.FadeAndLoadScene(SceneTransitionManager.FadeDirection.IN, nextSceneName));
+    }
     private void OnTriggerEnter2D(Collider2D _other)
     {
         if (!needPress)

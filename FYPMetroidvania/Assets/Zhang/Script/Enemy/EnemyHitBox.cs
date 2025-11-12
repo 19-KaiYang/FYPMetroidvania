@@ -11,7 +11,7 @@ public class EnemyHitBox : MonoBehaviour
     //public float KnockdownX = 10;
     //public float KnockdownY = 5;
 
-    public float knockback;
+    public Vector2 knockback;
     public float ccTime = 0.5f;
 
     private void Awake()
@@ -36,7 +36,7 @@ public class EnemyHitBox : MonoBehaviour
             Health p = collision.GetComponent<Health>();
             if (p.invincible) return;
             Vector2 dir = (collision.transform.position - enemy.transform.position);
-            dir.x = Mathf.Sign(dir.x) * KnockdownX; dir.y = KnockdownY;
+            dir.x = Mathf.Sign(dir.x) * knockback.x; dir.y = knockback.y;
             //p.TakeDamage(finalDamage, dir * knockback, true, currentCCState, 0.5f, true, false, 1.0f);
             p.TakeDamage(finalDamage, dir, false, currentCCState, ccTime);
 

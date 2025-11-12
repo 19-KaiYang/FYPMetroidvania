@@ -72,7 +72,9 @@ public class SwordSlashProjectile : ProjectileBase
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Health enemy = collision.GetComponent<Health>();
+        //Debug.Log("Crimson wave collide");
+        Health enemy = collision.GetComponentInParent<Health>();
+        Debug.Log(enemy);
         if (enemy != null && !enemy.isPlayer)
         {
             if (hitbox != null)
