@@ -137,7 +137,7 @@ public class DialogueSystem : MonoBehaviour, IPointerClickHandler
                 _textBox.maxVisibleCharacters = textLength;
                 break;
             }
-            if (line[i] == ' ')
+            if (line[i] == ' ' && i < textLength - 1)
             {
                 i++;
             }
