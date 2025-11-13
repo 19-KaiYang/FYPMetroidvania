@@ -20,12 +20,7 @@ public class AudioSettings : MonoBehaviour
         SetSFXVolume();
     }
 
-    private void OnDisable()
-    {
-        MasterSlider.value = PlayerPrefs.GetFloat("Master", 10f);
-        SFXSlider.value = PlayerPrefs.GetFloat("BGM", 10f);
-        BGMSlider.value = PlayerPrefs.GetFloat("SFX", 10f);
-    }
+    
 
     // Update is called once per frame
     void Update()
