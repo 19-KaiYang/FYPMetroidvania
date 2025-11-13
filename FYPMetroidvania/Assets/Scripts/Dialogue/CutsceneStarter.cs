@@ -46,6 +46,8 @@ public class CutsceneStarter : MonoBehaviour
                 director.SetGenericBinding(output.sourceObject, signal);
             }
         }
+        controller.animator.Rebind();
+        controller.animator.Update(0f);
         controller.isInCutscene = true;
         director.Play();
     }

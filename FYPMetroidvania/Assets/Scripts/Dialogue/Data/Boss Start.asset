@@ -141,7 +141,7 @@ MonoBehaviour:
   - SpeakerType: 0
     Name: Player
     SpeakerImage: {fileID: -4905368094546260507, guid: 848122712e8a84f489950c10d12034ef, type: 3}
-    Text: You. Hit. Me! And now I'm here! I have no idea what this place is, but
+    Text: You. Hit. Me. And now I'm here! I have no idea what this place is, but
       I don't care, I'm here to defeat you and go back home, stupid truck!
     sfx: 14
     pitch: 0.8
@@ -279,7 +279,7 @@ MonoBehaviour:
   - SpeakerType: 0
     Name: Player
     SpeakerImage: {fileID: 1639174027949059371, guid: 89a0eb1b45e47c740aa21bd41d73cb21, type: 3}
-    Text: 'Know what? I''m gonna say it. '
+    Text: Know what? I'm gonna say it.
     sfx: 14
     pitch: 0.8
     autoskip: 0
@@ -311,7 +311,7 @@ MonoBehaviour:
   - SpeakerType: 1
     Name: Truck
     SpeakerImage: {fileID: 5468087214788390698, guid: 702e956e679fb6841941f7a730ea4249, type: 3}
-    Text: Argh, I hate that name! My name is bloody Kyle!
+    Text: Argh, I hate that name! My bloody name is Kyle!
     sfx: 14
     pitch: 0.5
     autoskip: 0
@@ -323,7 +323,7 @@ MonoBehaviour:
     sfx: 14
     pitch: 0.8
     autoskip: 0
-    screenshake: 0
+    screenshake: 1
   - SpeakerType: 1
     Name: Kyle
     SpeakerImage: {fileID: 5468087214788390698, guid: 702e956e679fb6841941f7a730ea4249, type: 3}
