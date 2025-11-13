@@ -320,8 +320,9 @@ public class SpiritSlash : MonoBehaviour
         bool hasCutin = (cutinAnimator != null);
         Debug.Log($"[SpiritSlash] Has cutin: {hasCutin}");
 
-        // Store original timescale - BUT ensure it's at least 1.0
         float originalTimeScale = Mathf.Max(Time.timeScale, 1.0f);
+
+        AudioManager.PlaySFX(SFXTYPE.SPIRIT_CUTINSFX, 0.8f);
 
         // Freeze gameplay BEFORE cut-in starts
         Time.timeScale = 0f;
@@ -502,6 +503,7 @@ public class SpiritSlash : MonoBehaviour
         CreateBurstRing(12, 0f, 0.3f, 1.5f, Color.white, 0.2f);
         CreateBurstRing(16, 0f, 0.4f, 2.5f, new Color(0, 1, 1), 0.15f);
         CreateShockwaveRing();
+      
     }
 
     private void CreateBurstRing(int count, float delay, float duration, float distance, Color color, float size)

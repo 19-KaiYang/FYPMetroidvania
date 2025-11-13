@@ -19,11 +19,13 @@ public class BreakableBox : MonoBehaviour
         Hitbox hitbox = collision.GetComponent<Hitbox>();
         if (hitbox != null)
         {
+            AudioManager.PlaySFX(SFXTYPE.BARREL_BREAK, 0.5f);
             Break();
         }
 
         if (collision.CompareTag("PlayerProjectile"))
         {
+            AudioManager.PlaySFX(SFXTYPE.BARREL_BREAK, 0.5f);
             Break();
         }
     }

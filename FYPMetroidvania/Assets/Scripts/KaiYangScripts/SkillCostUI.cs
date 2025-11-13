@@ -19,11 +19,11 @@ public class SkillCostUI : MonoBehaviour
 
     private void UpdateSkillCosts()
     {
-        if (playerSkills == null) return;
+        //if (playerSkills == null) return;
 
-        lungingCostText.text = $"{playerSkills.swordDashCost}";
-        uppercutCostText.text = $"{playerSkills.swordUppercutCost}";
-        crimsonCostText.text = $"{playerSkills.swordSlashEnergyCost}";
+        //lungingCostText.text = $"{playerSkills.swordDashCost}";
+        //uppercutCostText.text = $"{playerSkills.swordUppercutCost}";
+        //crimsonCostText.text = $"{playerSkills.swordSlashEnergyCost}";
     }
 
 }

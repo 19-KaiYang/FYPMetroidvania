@@ -45,6 +45,12 @@ public class AudioManager : MonoBehaviour
             }
         }
         isPlayingBGM = false;
+
+        if (SFXSource != null)
+        {
+            SFXSource.ignoreListenerPause = true;
+        }
+
     }
     private void Update()
     {
@@ -105,16 +111,36 @@ public class AudioManager : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
 
-        //switch (scene.name)
-        //{
-        //    case "Room1":
-        //        StartCoroutine(FadeToBGM(BGMType.TOWN_COMBAT));
-        //        break;
+        switch (scene.name)
+        {
+            case "Goblin Camp":
+                PlayBGM(BGMType.OPENING_CUTSCENE);
+                break;
 
-        //    default:
-        //        StopBGM();
-        //        break;
-        //}
+            case "Room1":
+                PlayBGM(BGMType.TOWN_COMBAT);
+                break;
+
+            case "Room2":
+                PlayBGM(BGMType.SECOND_ROOM);
+                break;
+
+            case "Room3":
+                PlayBGM(BGMType.THIRD_ROOM);
+                break;
+
+            case "BossRoom": 
+                PlayBGM(BGMType.BOSS_ROOM);
+                break;
+
+            case "MainMenu":
+                StopBGM();
+                break;
+
+            default:
+                StopBGM();
+                break;
+        }
     }
 
     public IEnumerator FadeToBGM(BGMType newBGM, float fadeTime = 1f)
@@ -171,6 +197,10 @@ public enum SFXTYPE
     HAWK_ATTACK,
     TRUCK_HORN,
     IMPACT,
+    BARREL_BREAK,
+    HEALING,
+    SPIRIT_POTIONSFX,
+    SPIRIT_CUTINSFX,
     REVVING
 }
 [Serializable]
@@ -185,7 +215,10 @@ public enum BGMType
     OPENING_CUTSCENE,
     TOWN_COMBAT,
     BOSS_PHASE1,
-    BOSS_PHASE2
+    BOSS_PHASE2,
+    SECOND_ROOM,
+    THIRD_ROOM,
+    BOSS_ROOM   
 }
 
 

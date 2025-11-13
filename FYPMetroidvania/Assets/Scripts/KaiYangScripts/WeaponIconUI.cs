@@ -36,17 +36,17 @@ public class WeaponIconUI : MonoBehaviour
 
     private void UpdateIcon()
     {
-        switch (lastWeapon)
-        {
-            case WeaponType.Sword:
-                weaponIcon.sprite = swordIcon;
-                break;
-            case WeaponType.Gauntlet:
-                weaponIcon.sprite = gauntletIcon;
-                break;
-            default:
-                weaponIcon.sprite = noneIcon;
-                break;
-        }
+        //switch (lastWeapon)
+        //{
+        //    case WeaponType.Sword:
+        //        weaponIcon.sprite = swordIcon;
+        //        break;
+        //    case WeaponType.Gauntlet:
+        //        weaponIcon.sprite = gauntletIcon;
+        //        break;
+        //    default:
+        //        weaponIcon.sprite = noneIcon;
+        //        break;
+        //}
     }
 }

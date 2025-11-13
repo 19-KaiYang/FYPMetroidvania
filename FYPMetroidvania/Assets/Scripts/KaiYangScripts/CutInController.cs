@@ -29,6 +29,7 @@ public class CutInController : MonoBehaviour
 
     private void OnDestroy()
     {
+
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
