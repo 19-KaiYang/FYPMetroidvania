@@ -382,6 +382,7 @@ public class TruckBoss : Enemy
             case DriveAttackStep.BACKWARD:
                 waitTime = 1;
                 if (!isDriving) driveAttackStep = DriveAttackStep.WAIT;
+                AudioManager.PlaySFX(SFXTYPE.REVVING, 0.5f);
                 break;
 
             case DriveAttackStep.WAIT:
@@ -391,7 +392,6 @@ public class TruckBoss : Enemy
                     if (!canMove)
                     {
                         animator.SetTrigger("forwardStart");
-                        AudioManager.PlaySFX(SFXTYPE.REVVING, 0.5f);
                     }
                     if (canMove)
                     {

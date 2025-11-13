@@ -31,6 +31,7 @@ public class ScreenShakeToggle : MonoBehaviour
                 screenShake = false;
                 break;
         }
+        SettingData.instance.screenshake = screenShake;
         Debug.Log($"Screen shake£º{screenShake}");
     }
 }

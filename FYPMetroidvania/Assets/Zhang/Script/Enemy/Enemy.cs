@@ -84,7 +84,7 @@ public class Enemy : MonoBehaviour
         if (platform)
         {
             isOnPlatform = true;
-            if (rb.linearVelocityY < 0) rb.linearVelocityY = 0;
+            if (rb.linearVelocityY <= 0) rb.linearVelocityY = 0;
         }
         else isOnPlatform = false;
     }
