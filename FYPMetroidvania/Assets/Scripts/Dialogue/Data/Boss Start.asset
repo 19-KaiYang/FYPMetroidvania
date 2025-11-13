@@ -1,0 +1,334 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 413d64d7f6ce4c54c942e901f83eb9b4, type: 3}
+  m_Name: Boss Start
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueTextSO
+  SpeakerType: 0
+  defaultPlayerImage: {fileID: 1639174027949059371, guid: 89a0eb1b45e47c740aa21bd41d73cb21, type: 3}
+  defaultNPCImage: {fileID: 0}
+  hasCutscene: 1
+  Steps:
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: 1639174027949059371, guid: 89a0eb1b45e47c740aa21bd41d73cb21, type: 3}
+    Text: Urgh....
+    sfx: 14
+    pitch: 0.8
+    autoskip: 0
+    screenshake: 0
+  - SpeakerType: 0
+    Name: Elric
+    SpeakerImage: {fileID: 3049418459031337693, guid: 871d73153e1ff9940a05e24c910efabc, type: 3}
+    Text: Oi, rat-face! You alright?
+    sfx: 14
+    pitch: 0.8
+    autoskip: 0
+    screenshake: 0
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: 1639174027949059371, guid: 89a0eb1b45e47c740aa21bd41d73cb21, type: 3}
+    Text: Yeah...think so.
+    sfx: 14
+    pitch: 0.8
+    autoskip: 0
+    screenshake: 0
+  - SpeakerType: 1
+    Name: Truck
+    SpeakerImage: {fileID: 5468087214788390698, guid: 702e956e679fb6841941f7a730ea4249, type: 3}
+    Text: Ahh.....
+    sfx: 14
+    pitch: 0.5
+    autoskip: 0
+    screenshake: 1
+  - SpeakerType: 1
+    Name: Truck
+    SpeakerImage: {fileID: 5468087214788390698, guid: 702e956e679fb6841941f7a730ea4249, type: 3}
+    Text: I think I hit something.
+    sfx: 14
+    pitch: 0.5
+    autoskip: 0
+    screenshake: 0
+  - SpeakerType: 1
+    Name: Truck
+    SpeakerImage: {fileID: 5468087214788390698, guid: 702e956e679fb6841941f7a730ea4249, type: 3}
+    Text: Might have a tattered hood on my wheels now...
+    sfx: 14
+    pitch: 0.5
+    autoskip: 0
+    screenshake: 0
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: -4905368094546260507, guid: 848122712e8a84f489950c10d12034ef, type: 3}
+    Text: Ahem!
+    sfx: 14
+    pitch: 0.8
+    autoskip: 0
+    screenshake: 0
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: 3516079381801495997, guid: b0206ccead3847d49911a68f16ebc122, type: 3}
+    Text: Behold, it is I, your reckoning! Prepare to meet your maker-
+    sfx: 14
+    pitch: 0.8
+    autoskip: 1
+    screenshake: 0
+  - SpeakerType: 1
+    Name: Truck
+    SpeakerImage: {fileID: 5468087214788390698, guid: 702e956e679fb6841941f7a730ea4249, type: 3}
+    Text: Oh shoot I got a pet? Coooooool.
+    sfx: 14
+    pitch: 0.5
+    autoskip: 0
+    screenshake: 0
+  - SpeakerType: 1
+    Name: Truck
+    SpeakerImage: {fileID: 5468087214788390698, guid: 702e956e679fb6841941f7a730ea4249, type: 3}
+    Text: It's kinda ugly but cute...eh I'll take it.
+    sfx: 14
+    pitch: 0.5
+    autoskip: 0
+    screenshake: 0
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: 1639174027949059371, guid: 89a0eb1b45e47c740aa21bd41d73cb21, type: 3}
+    Text: ...
+    sfx: 14
+    pitch: 0.8
+    autoskip: 0
+    screenshake: 0
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: 1639174027949059371, guid: 89a0eb1b45e47c740aa21bd41d73cb21, type: 3}
+    Text: As I was saying, I am not your pet! I am your destruction, your-
+    sfx: 14
+    pitch: 0.8
+    autoskip: 1
+    screenshake: 0
+  - SpeakerType: 1
+    Name: Truck
+    SpeakerImage: {fileID: 5468087214788390698, guid: 702e956e679fb6841941f7a730ea4249, type: 3}
+    Text: Well I have no idea how you even got here...
+    sfx: 14
+    pitch: 0.5
+    autoskip: 0
+    screenshake: 0
+  - SpeakerType: 1
+    Name: Truck
+    SpeakerImage: {fileID: 5468087214788390698, guid: 702e956e679fb6841941f7a730ea4249, type: 3}
+    Text: Are you also a dimensional traveller? This isn't the right place for you,
+      buddy. This is-
+    sfx: 14
+    pitch: 0.5
+    autoskip: 1
+    screenshake: 0
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: -4905368094546260507, guid: 848122712e8a84f489950c10d12034ef, type: 3}
+    Text: Will you pay attention to me for 5 seconds?!
+    sfx: 14
+    pitch: 0.8
+    autoskip: 0
+    screenshake: 1
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: -4905368094546260507, guid: 848122712e8a84f489950c10d12034ef, type: 3}
+    Text: You. Hit. Me. And now I'm here! I have no idea what this place is, but
+      I don't care, I'm here to defeat you and go back home, stupid truck!
+    sfx: 14
+    pitch: 0.8
+    autoskip: 0
+    screenshake: 1
+  - SpeakerType: 1
+    Name: Truck
+    SpeakerImage: {fileID: 5468087214788390698, guid: 702e956e679fb6841941f7a730ea4249, type: 3}
+    Text: Huh...wait really? But that can't be...
+    sfx: 14
+    pitch: 0.5
+    autoskip: 0
+    screenshake: 0
+  - SpeakerType: 1
+    Name: Truck
+    SpeakerImage: {fileID: 5468087214788390698, guid: 702e956e679fb6841941f7a730ea4249, type: 3}
+    Text: No person...no, nothing has ever been hit by me and come to this dimension
+      with me. They all just go flying off to who knows where.
+    sfx: 14
+    pitch: 0.5
+    autoskip: 0
+    screenshake: 0
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: 1639174027949059371, guid: 89a0eb1b45e47c740aa21bd41d73cb21, type: 3}
+    Text: Well, petrol-brain, you hit me before, and sent me to that stupid city
+      and had to deal with their stupid cult worshipping you!
+    sfx: 14
+    pitch: 0.8
+    autoskip: 0
+    screenshake: 0
+  - SpeakerType: 1
+    Name: Truck
+    SpeakerImage: {fileID: 5468087214788390698, guid: 702e956e679fb6841941f7a730ea4249, type: 3}
+    Text: Oh yeah they do go there. Funny how that works.
+    sfx: 14
+    pitch: 0.5
+    autoskip: 0
+    screenshake: 0
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: 3516079381801495997, guid: b0206ccead3847d49911a68f16ebc122, type: 3}
+    Text: Wait, aren't you working with them, like, aren't you their God? How do
+      you not know?
+    sfx: 14
+    pitch: 0.8
+    autoskip: 0
+    screenshake: 0
+  - SpeakerType: 1
+    Name: Truck
+    SpeakerImage: {fileID: 5468087214788390698, guid: 702e956e679fb6841941f7a730ea4249, type: 3}
+    Text: Erm, no. I couldn't care less what they do to be honest. Their rituals
+      are kinda funny though. I like watching them be idiots. They'll worship whatever
+      they think is powerful, doesn't matter if its a God or not.
+    sfx: 14
+    pitch: 0.5
+    autoskip: 0
+    screenshake: 0
+  - SpeakerType: 1
+    Name: Truck
+    SpeakerImage: {fileID: 5468087214788390698, guid: 702e956e679fb6841941f7a730ea4249, type: 3}
+    Text: They'd worship a wooden plank if they thought it had magic or something.
+    sfx: 14
+    pitch: 0.5
+    autoskip: 0
+    screenshake: 0
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: -974322534847537677, guid: bb801f31584f7f54ca838f9bf9fcc606, type: 3}
+    Text: Tell me about it.
+    sfx: 14
+    pitch: 0.8
+    autoskip: 0
+    screenshake: 0
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: -4905368094546260507, guid: 848122712e8a84f489950c10d12034ef, type: 3}
+    Text: Wait, no! Why am I agreeing with you? I'm here to defeat you and drive
+      you back home, dammit!
+    sfx: 14
+    pitch: 0.8
+    autoskip: 0
+    screenshake: 1
+  - SpeakerType: 1
+    Name: Truck
+    SpeakerImage: {fileID: 5468087214788390698, guid: 702e956e679fb6841941f7a730ea4249, type: 3}
+    Text: You? Drive me? Kid, you don't even know what you ask. You wouldn't even
+      live to floor a pedal, even if you could beat me in a fight.
+    sfx: 14
+    pitch: 0.5
+    autoskip: 0
+    screenshake: 0
+  - SpeakerType: 1
+    Name: Truck
+    SpeakerImage: {fileID: 5468087214788390698, guid: 702e956e679fb6841941f7a730ea4249, type: 3}
+    Text: I'm not fighting you. It's a waste of my time.
+    sfx: 14
+    pitch: 0.5
+    autoskip: 0
+    screenshake: 0
+  - SpeakerType: 0
+    Name: Elric
+    SpeakerImage: {fileID: -3207848478005086627, guid: 37897eb04d386a644bb0d930fcfb8c2c, type: 3}
+    Text: Not like you spend your time doing anything useful anyways!
+    sfx: 14
+    pitch: 0.8
+    autoskip: 0
+    screenshake: 0
+  - SpeakerType: 1
+    Name: Truck
+    SpeakerImage: {fileID: 5468087214788390698, guid: 702e956e679fb6841941f7a730ea4249, type: 3}
+    Text: Hey! Driving between dimensions and ramming into random people is a fruitful
+      activity!
+    sfx: 14
+    pitch: 0.5
+    autoskip: 0
+    screenshake: 0
+  - SpeakerType: 1
+    Name: Truck
+    SpeakerImage: {fileID: 5468087214788390698, guid: 702e956e679fb6841941f7a730ea4249, type: 3}
+    Text: Do you even know how many light novels have been written because of me?
+      How much trash anime I've caused to exist?
+    sfx: 14
+    pitch: 0.5
+    autoskip: 0
+    screenshake: 0
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: 1639174027949059371, guid: 89a0eb1b45e47c740aa21bd41d73cb21, type: 3}
+    Text: ...
+    sfx: 14
+    pitch: 0.8
+    autoskip: 0
+    screenshake: 0
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: 1639174027949059371, guid: 89a0eb1b45e47c740aa21bd41d73cb21, type: 3}
+    Text: Know what? I'm gonna say it.
+    sfx: 14
+    pitch: 0.8
+    autoskip: 0
+    screenshake: 0
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: 1639174027949059371, guid: 89a0eb1b45e47c740aa21bd41d73cb21, type: 3}
+    Text: Trucks. Are. Lame.
+    sfx: 14
+    pitch: 0.8
+    autoskip: 0
+    screenshake: 0
+  - SpeakerType: 1
+    Name: Truck
+    SpeakerImage: {fileID: 5468087214788390698, guid: 702e956e679fb6841941f7a730ea4249, type: 3}
+    Text: WHAT?!
+    sfx: 14
+    pitch: 0.5
+    autoskip: 0
+    screenshake: 1
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: -4905368094546260507, guid: 848122712e8a84f489950c10d12034ef, type: 3}
+    Text: Yeah! Come prove me wrong! Fight me, Truck-kun!
+    sfx: 14
+    pitch: 0.8
+    autoskip: 0
+    screenshake: 0
+  - SpeakerType: 1
+    Name: Truck
+    SpeakerImage: {fileID: 5468087214788390698, guid: 702e956e679fb6841941f7a730ea4249, type: 3}
+    Text: Argh, I hate that name! My bloody name is Kyle!
+    sfx: 14
+    pitch: 0.5
+    autoskip: 0
+    screenshake: 0
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: 3516079381801495997, guid: b0206ccead3847d49911a68f16ebc122, type: 3}
+    Text: Nice try, but names can't bleed.
+    sfx: 14
+    pitch: 0.8
+    autoskip: 0
+    screenshake: 1
+  - SpeakerType: 1
+    Name: Kyle
+    SpeakerImage: {fileID: 5468087214788390698, guid: 702e956e679fb6841941f7a730ea4249, type: 3}
+    Text: Alright, you asked for it!
+    sfx: 14
+    pitch: 0.5
+    autoskip: 0
+    screenshake: 1

@@ -5,7 +5,10 @@ public class EndingScene : MonoBehaviour
 {
     public void BackToMenu()
     {
-        //SceneManager.LoadScene("MainMenu");
+        SceneManager.LoadScene("MainMenu");
+    }
+    public void Quit()
+    {
         Application.Quit();
     }
 }

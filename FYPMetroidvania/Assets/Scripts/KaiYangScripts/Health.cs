@@ -79,6 +79,7 @@ public class Health : MonoBehaviour
     public Action<Health> damageTaken;
     public System.Action<GameObject> enemyDeath;
     public Action<Health, float, Color> updateUI;
+    public Action<float,float> updateArmour;
 
     private AudioSource audioSource;
     private Rigidbody2D rb;
@@ -269,6 +270,7 @@ public class Health : MonoBehaviour
             amount -= armorDamage;
 
             Debug.Log($"Armor take {armorDamage} damage£¬current armor£º{truckBoss.currentArmor}");
+            updateArmour?.Invoke(truckBoss.currentArmor, armorDamage);
             if (amount <= 0f) return;
         }
 
