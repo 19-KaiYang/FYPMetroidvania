@@ -15,11 +15,6 @@ public class CameraTransition : MonoBehaviour
             Camera1.gameObject.SetActive(false);
             Camera2.gameObject.SetActive(true);
         }
-        else
-        {
-            Camera1.gameObject.SetActive(true);
-            Camera2.gameObject.SetActive(false);
-        }
         if(disableonactivate) gameObject.SetActive(false);
     }
 }

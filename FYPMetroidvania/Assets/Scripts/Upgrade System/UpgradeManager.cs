@@ -198,7 +198,7 @@ public class UpgradeManager : MonoBehaviour
         if (projectilebase != null)
         {
             projectilebase.direction = dir;
-            projectile.GetComponent<SpriteRenderer>().flipX = player.facingRight ? false : true;
+            proj.GetComponent<SpriteRenderer>().flipX = player.facingRight ? false : true;
         }
     }
 
