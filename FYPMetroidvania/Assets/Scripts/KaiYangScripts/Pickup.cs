@@ -27,11 +27,10 @@ public class Pickup : MonoBehaviour
 
     private void Update()
     {
-        // Float animation
+
         float newY = startPos.y + Mathf.Sin(Time.time * floatSpeed) * floatHeight;
         transform.position = new Vector3(transform.position.x, newY, transform.position.z);
 
-        // Pull towards player when close
         if (player != null && Vector2.Distance(transform.position, player.position) < 2f)
         {
             transform.position = Vector3.MoveTowards(transform.position, player.position, 5f * Time.deltaTime);
@@ -48,10 +47,10 @@ public class Pickup : MonoBehaviour
                 if (health != null)
                 {
                     health.Heal(healAmount);
-                    Debug.Log($"Healed {healAmount} HP");
 
                     if (healthParticlePrefab != null)
                     {
+                        AudioManager.PlaySFX(SFXTYPE.HEALING, 0.5f);
                         GameObject fx = Instantiate(healthParticlePrefab, collision.transform.position, Quaternion.identity);
                         Destroy(fx, 2f);
                     }
@@ -63,10 +62,10 @@ public class Pickup : MonoBehaviour
                 if (spirit != null)
                 {
                     spirit.Refill(spiritAmount);
-                    Debug.Log($"Restored {spiritAmount} Spirit");
 
                     if (spiritParticlePrefab != null)
                     {
+                        AudioManager.PlaySFX(SFXTYPE.SPIRIT_POTIONSFX, 0.7f);
                         GameObject fx = Instantiate(spiritParticlePrefab, collision.transform.position, Quaternion.identity);
                         Destroy(fx, 2f);
                     }

@@ -67,25 +67,43 @@ public class SceneTransitionManager : MonoBehaviour
     }
     public IEnumerator FadeAndLoadScene(FadeDirection _fadeDir, string _sceneName)
     {
-        // SAVE UPGRADES BEFORE CHANGING SCENES
         RoomSaveManager.PrepareForSceneChange();
 
-        if (currentSceneName == "GoblinCamp") AudioManager.instance.StopBGM();
         fadeImage.enabled = true;
-        //string random = GetRandomRoom();
-        //if (random != null) _sceneName = random;
         if (roomIndex < rooms.Count)
         {
             _sceneName = rooms[roomIndex];
             if (currentSceneName != progressionData.startingScene) roomIndex++;
         }
         else _sceneName = progressionData.bossScene;
-        if(currentSceneName == progressionData.bossScene) _sceneName = progressionData.EndingScene;
+        if (currentSceneName == progressionData.bossScene) _sceneName = progressionData.EndingScene;
+
         if (_sceneName != null)
         {
+            if (AudioManager.instance != null && AudioManager.instance.isPlayingBGM)
+            {
+                StartCoroutine(FadeBGMOut(fadeTime));
+            }
+
             yield return Fade(_fadeDir);
             SceneManager.LoadScene(_sceneName);
         }
+    }
+    private IEnumerator FadeBGMOut(float duration)
+    {
+        AudioSource bgmSource = AudioManager.instance.BGMSource;
+        float startVolume = bgmSource.volume;
+        float t = 0f;
+
+        while (t < duration)
+        {
+            t += Time.deltaTime;
+            bgmSource.volume = Mathf.Lerp(startVolume, 0f, t / duration);
+            yield return null;
+        }
+
+        bgmSource.volume = 0f;
+        AudioManager.instance.StopBGM();
     }
     public IEnumerator Fade(FadeDirection _fadeDir)
     {
@@ -207,33 +225,6 @@ public class SceneTransitionManager : MonoBehaviour
         currentSceneName = scene.name;
         roomLoaded?.Invoke(currentSceneName);
 
-        // Stop BGM when entering main menu
-        if (currentSceneName == "MainMenu")
-        {
-            if (AudioManager.instance != null)
-            {
-                AudioManager.instance.StopBGM();
-            }
-            return;
-        }
-        if (currentSceneName == progressionData.startingScene)
-        {
-            if (PlayerController.instance != null)
-            {
-                PlayerController.instance.isInCutscene = true;
-            }
-            if (AudioManager.instance != null)
-            {
-                AudioManager.instance.PlayBGM(BGMType.OPENING_CUTSCENE);
-            }
-        }
-        else if (progressionData != null && progressionData.rooms.Contains(currentSceneName))
-        {
-            if (AudioManager.instance != null)
-            {
-                AudioManager.instance.PlayBGM(BGMType.TOWN_COMBAT);
-            }
-        }
         var cutscene = FindFirstObjectByType<CutsceneStarter>();
         if (cutscene != null)
         {
