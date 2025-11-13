@@ -12,9 +12,9 @@ public class SpiritGauge : MonoBehaviour
     public bool IsEmpty => currentSpirit <= 0f;
     public bool IsFull => currentSpirit >= maxSpirit;
 
-    private void Awake()
+    private void Start()
     {
-        currentSpirit = maxSpirit;
+        currentSpirit = 0f;
     }
 
     private void Update()

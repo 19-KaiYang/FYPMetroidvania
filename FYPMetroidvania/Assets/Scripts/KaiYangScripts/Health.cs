@@ -16,6 +16,7 @@ public class Health : MonoBehaviour
     private PlayerController pc;
     private Skills skills;
     private CombatSystem combat;
+    private TruckBoss truckBoss;
 
     [Header("Health Settings")]
     public float maxHealth = 100f;
@@ -92,7 +93,7 @@ public class Health : MonoBehaviour
         currentHealth = maxHealth;
         rb = GetComponent<Rigidbody2D>();
         audioSource = GetComponent<AudioSource>();
-
+        truckBoss = GetComponent<TruckBoss>();
 
         Transform spriteTransform = transform.Find("Sprite");
         if (spriteTransform != null)
@@ -124,25 +125,25 @@ public class Health : MonoBehaviour
         // === CC TIMERS ===
         if (currentCCState != CrowdControlState.None)
         {
+            bool landed = false;
+            if (isPlayer)
+            {
+                landed = PlayerController.instance != null && PlayerController.instance.IsGrounded;
+            }
+            else
+            {
+                float rayDist = groundCheckValue > 0 ? groundCheckValue : 0.5f;
+                LayerMask groundMask = LayerMask.GetMask("Ground") | LayerMask.GetMask("Platform");
+                RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, rayDist, groundMask);
+
+                bool touchingGround = hit.collider != null;
+                bool stoppedFalling = rb != null && Mathf.Abs(rb.linearVelocity.y) < 0.1f;
+
+                landed = touchingGround && stoppedFalling;
+            }
+            if (landed) juggleTime = 0f;
             if (currentCCState == CrowdControlState.Knockdown)
             {
-                bool landed = false;
-
-                if (isPlayer)
-                {
-                    landed = PlayerController.instance != null && PlayerController.instance.IsGrounded;
-                }
-                else
-                {
-                    float rayDist = groundCheckValue > 0 ? groundCheckValue : 0.5f;
-                    LayerMask groundMask = LayerMask.GetMask("Ground") | LayerMask.GetMask("Platform");
-                    RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, rayDist, groundMask);
-
-                    bool touchingGround = hit.collider != null;
-                    bool stoppedFalling = rb != null && Mathf.Abs(rb.linearVelocity.y) < 0.1f;
-
-                    landed = touchingGround && stoppedFalling;
-                }
                 // Regular knockdown timer countdown (only when grounded)
                 if (!landed) isInArcKnockdown = true;
                 else if (landed) isInArcKnockdown = false;
@@ -182,6 +183,14 @@ public class Health : MonoBehaviour
                 if (ccTimer >= 0f)
                 {
                     ccTimer -= Time.deltaTime;
+                    if (rb != null && !isPlayer)
+                    {
+                        // Apply custom gravity
+                        Vector2 currentVel = rb.linearVelocity;
+                        float gravityMult = 0.75f + (juggleTime * 0.5f);
+                        currentVel.y -= arcKnockdownGravity * gravityMult * Time.deltaTime;
+                        rb.linearVelocity = currentVel;
+                    }
                     if (ccTimer <= 0f)
                     {
                         currentCCState = CrowdControlState.None;
@@ -261,7 +270,6 @@ public class Health : MonoBehaviour
     {
         if (isPlayer && invincible) return;
 
-        TruckBoss truckBoss = GetComponent<TruckBoss>();
         if (truckBoss != null && truckBoss.armor)
         {
             amount /= 2;
