@@ -24,6 +24,10 @@ public class SpiritGauge : MonoBehaviour
             currentSpirit -= drainPerSecond * Time.deltaTime;
             if (currentSpirit < 0f) currentSpirit = 0f;
         }
+        else if(draining && currentSpirit <= 0f)
+        {
+            StopDrain();
+        }
     }
 
     public void StartDrain()

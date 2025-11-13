@@ -25,6 +25,7 @@ MonoBehaviour:
     sfx: 14
     pitch: 1.2
     autoskip: 0
+    screenshake: 0
   - SpeakerType: 1
     Name: Ste_ve
     SpeakerImage: {fileID: -6372313868896128620, guid: 69b61d5a4814e3b4baa90836be9a2ade, type: 3}
@@ -33,6 +34,7 @@ MonoBehaviour:
     sfx: 14
     pitch: 0.65
     autoskip: 0
+    screenshake: 0
   - SpeakerType: 1
     Name: Ryo
     SpeakerImage: {fileID: 0}
@@ -40,6 +42,7 @@ MonoBehaviour:
     sfx: 14
     pitch: 0.8
     autoskip: 0
+    screenshake: 0
   - SpeakerType: 0
     Name: Player
     SpeakerImage: {fileID: 3516079381801495997, guid: b0206ccead3847d49911a68f16ebc122, type: 3}
@@ -47,6 +50,7 @@ MonoBehaviour:
     sfx: 14
     pitch: 0.8
     autoskip: 0
+    screenshake: 1
   - SpeakerType: 1
     Name: Ryo
     SpeakerImage: {fileID: 0}
@@ -54,6 +58,7 @@ MonoBehaviour:
     sfx: 14
     pitch: 0.8
     autoskip: 0
+    screenshake: 0
   - SpeakerType: 0
     Name: Player
     SpeakerImage: {fileID: 1639174027949059371, guid: 89a0eb1b45e47c740aa21bd41d73cb21, type: 3}
@@ -61,6 +66,7 @@ MonoBehaviour:
     sfx: 14
     pitch: 0.8
     autoskip: 1
+    screenshake: 0
   - SpeakerType: 1
     Name: Roblin
     SpeakerImage: {fileID: 0}
@@ -68,6 +74,7 @@ MonoBehaviour:
     sfx: 14
     pitch: 0.8
     autoskip: 0
+    screenshake: 0
   - SpeakerType: 1
     Name: Ruru
     SpeakerImage: {fileID: -5687063585625507936, guid: d446dddc2e8127a4e84b0c752c5c872d, type: 3}
@@ -75,6 +82,7 @@ MonoBehaviour:
     sfx: 14
     pitch: 1.2
     autoskip: 0
+    screenshake: 0
   - SpeakerType: 1
     Name: Ryo
     SpeakerImage: {fileID: 0}
@@ -82,6 +90,7 @@ MonoBehaviour:
     sfx: 14
     pitch: 0.8
     autoskip: 0
+    screenshake: 0
   - SpeakerType: 0
     Name: Player
     SpeakerImage: {fileID: -974322534847537677, guid: bb801f31584f7f54ca838f9bf9fcc606, type: 3}
@@ -89,6 +98,7 @@ MonoBehaviour:
     sfx: 14
     pitch: 0.8
     autoskip: 0
+    screenshake: 0
   - SpeakerType: 0
     Name: Player
     SpeakerImage: {fileID: -974322534847537677, guid: bb801f31584f7f54ca838f9bf9fcc606, type: 3}
@@ -97,3 +107,4 @@ MonoBehaviour:
     sfx: 14
     pitch: 0.8
     autoskip: 0
+    screenshake: 0

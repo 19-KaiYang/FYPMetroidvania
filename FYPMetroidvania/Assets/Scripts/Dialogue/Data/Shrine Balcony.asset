@@ -1,0 +1,128 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 413d64d7f6ce4c54c942e901f83eb9b4, type: 3}
+  m_Name: Shrine Balcony
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueTextSO
+  SpeakerType: 0
+  defaultPlayerImage: {fileID: -974322534847537677, guid: bb801f31584f7f54ca838f9bf9fcc606, type: 3}
+  defaultNPCImage: {fileID: 0}
+  hasCutscene: 1
+  Steps:
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: -974322534847537677, guid: bb801f31584f7f54ca838f9bf9fcc606, type: 3}
+    Text: Well...finally here.
+    sfx: 14
+    pitch: 0.8
+    autoskip: 0
+    screenshake: 0
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: 3516079381801495997, guid: b0206ccead3847d49911a68f16ebc122, type: 3}
+    Text: Are you sure this is the place?
+    sfx: 14
+    pitch: 0.8
+    autoskip: 0
+    screenshake: 0
+  - SpeakerType: 0
+    Name: Elric
+    SpeakerImage: {fileID: 3049418459031337693, guid: 871d73153e1ff9940a05e24c910efabc, type: 3}
+    Text: Definitely. I see those cultists coming up here all the time, not that
+      I ever came here myself though. They don't let common knights in.
+    sfx: 14
+    pitch: 0.7
+    autoskip: 0
+    screenshake: 0
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: 3516079381801495997, guid: b0206ccead3847d49911a68f16ebc122, type: 3}
+    Text: What's up with this particular balcony again? And how are we gonna meet
+      that stupid truck here?
+    sfx: 14
+    pitch: 0.8
+    autoskip: 0
+    screenshake: 0
+  - SpeakerType: 0
+    Name: Elric
+    SpeakerImage: {fileID: 3049418459031337693, guid: 871d73153e1ff9940a05e24c910efabc, type: 3}
+    Text: According to the cultists, every 37 days, the truck will drive by here
+      during sunset. It's incredibly fast, but they would literally kill to catch
+      even a glimpse of it for a split second.
+    sfx: 14
+    pitch: 0.7
+    autoskip: 0
+    screenshake: 0
+  - SpeakerType: 0
+    Name: Elric
+    SpeakerImage: {fileID: 3049418459031337693, guid: 871d73153e1ff9940a05e24c910efabc, type: 3}
+    Text: That being said...are you sure you want to go with this plan? What if the
+      truck hits you and you just...die?
+    sfx: 14
+    pitch: 0.7
+    autoskip: 0
+    screenshake: 0
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: 3516079381801495997, guid: b0206ccead3847d49911a68f16ebc122, type: 3}
+    Text: ...
+    sfx: 14
+    pitch: 0.8
+    autoskip: 0
+    screenshake: 0
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: 3516079381801495997, guid: b0206ccead3847d49911a68f16ebc122, type: 3}
+    Text: Nah, I'd win.
+    sfx: 14
+    pitch: 0.8
+    autoskip: 0
+    screenshake: 0
+  - SpeakerType: 2
+    Name: Narrator
+    SpeakerImage: {fileID: 0}
+    Text: '*rumbling*'
+    sfx: 0
+    pitch: 0.8
+    autoskip: 0
+    screenshake: 1
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: 3516079381801495997, guid: b0206ccead3847d49911a68f16ebc122, type: 3}
+    Text: Was that...
+    sfx: 14
+    pitch: 0.8
+    autoskip: 0
+    screenshake: 0
+  - SpeakerType: 0
+    Name: Elric
+    SpeakerImage: {fileID: 3049418459031337693, guid: 871d73153e1ff9940a05e24c910efabc, type: 3}
+    Text: The sound of its engine? I think so. It's coming soon.
+    sfx: 14
+    pitch: 0.7
+    autoskip: 0
+    screenshake: 0
+  - SpeakerType: 2
+    Name: Knights
+    SpeakerImage: {fileID: 0}
+    Text: Hey! How dare you tread on the blessed balcony of the Truck Almighty?!
+    sfx: 14
+    pitch: 0.7
+    autoskip: 0
+    screenshake: 1
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: -4905368094546260507, guid: 848122712e8a84f489950c10d12034ef, type: 3}
+    Text: Dammit! I thought I took them all out!
+    sfx: 14
+    pitch: 0.8
+    autoskip: 0
+    screenshake: 0
