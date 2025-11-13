@@ -637,7 +637,7 @@ public class TruckBoss : Enemy
                 float value1 = new float[] { 0.1f, 1.0f}[Random.Range(0, 2)];
                 float value2 = new float[] { 0.1f, 1.0f}[Random.Range(0, 2)];
                 value1 = 1f;
-                value2 = 1f;
+                value2 = 0.75f;
                 slashCharge1Time = value1;
                 slashCharge2Time = value2;
                 slashChargeTimer = slashCharge1Time;
@@ -845,14 +845,16 @@ public class TruckBoss : Enemy
             case RefuelStep.DIZZY:
                 dizzyTimer -= Time.deltaTime;
                 animator.SetBool("isDizzy", true);
-                health.knockbackMult = 1.25f;
+                health.knockbackMult = 1f;
                 health.stunImmune = false;
+                if (!isGround) health.juggleTime += Time.deltaTime;
                 if (dizzyTimer <= 0 && isGround)
                 {
                     animator.SetBool("isDizzy", false);
                     refuelStep = RefuelStep.END;
                     health.knockbackMult = 0f;
                     health.stunImmune = true;
+                    health.juggleTime = 0f;
                 }
                 break;
 
@@ -1441,14 +1443,14 @@ public class TruckBoss : Enemy
         {
             dizzyTime = 5;
             enemy.animator.SetBool("isDizzy", true);
-            enemy.health.knockbackMult = 1.25f;
+            enemy.health.knockbackMult = 1f;
             enemy.health.stunImmune = false;
         }
         public void OnUpdate()
         {
             dizzyTime -= Time.deltaTime;
-
-            if(dizzyTime <= 0 && enemy.isGround)
+            if (!enemy.isGround) enemy.health.juggleTime += Time.deltaTime;
+            if (dizzyTime <= 0 && enemy.isGround)
             {
                 enemy.stateMachine.ChangeState(new TruckBossIdleState(enemy));
             } 
@@ -1457,6 +1459,7 @@ public class TruckBoss : Enemy
         {
             enemy.health.knockbackMult = 0;
             enemy.health.stunImmune = true;
+            enemy.health.juggleTime = 0f;
             enemy.animator.SetBool("isDizzy", false);
         }
     }
