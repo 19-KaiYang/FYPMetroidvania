@@ -12,10 +12,10 @@ public class EnemyHealthUI : MonoBehaviour
     [SerializeField] private Transform damageNumberTransform;
     [SerializeField] List<DamageNumber> damageNumberObjPool;
     [SerializeField] GameObject damageNumberPrefab;
+    public Slider armourBar;
 
     private void Start()
     {
-
         for(int i = 0; i < 10; i++)
         {
             GameObject number = Instantiate(damageNumberPrefab, damageNumberTransform);
@@ -31,10 +31,19 @@ public class EnemyHealthUI : MonoBehaviour
         {
             dmgNumber.gameObject.SetActive(false);
         }
+        if(armourBar != null)
+        {
+            health.updateArmour += UpdateArmourUI;
+            armourBar.gameObject.SetActive(false);
+        }
     }
     private void OnDisable()
     {
         health.updateUI -= UpdateHealthUI;
+        if (armourBar != null)
+        {
+            health.updateArmour -= UpdateArmourUI;
+        }
     }
     private void Update()
     {
@@ -58,6 +67,7 @@ public class EnemyHealthUI : MonoBehaviour
                 Vector3 position = dmgNumber.transform.position;
                 dmgNumber.transform.SetParent(null, false);
                 dmgNumber.transform.position = position;
+                dmgNumber.transform.rotation = Quaternion.identity;
 
                 DG.Tweening.Sequence numberSequence = DOTween.Sequence();
                 numberSequence.Append(dmgNumber.transform.DOScale(Vector3.one, 0.2f));
@@ -76,21 +86,38 @@ public class EnemyHealthUI : MonoBehaviour
             }
         }
     }
-    IEnumerator DamageNumberCoroutine(DamageNumber dmgNumber)
+    void UpdateArmourUI(float currentArmour, float armourDamage)
     {
-        dmgNumber.transform.localScale = Vector3.one * 0.25f;
-        dmgNumber.transform.localPosition = new Vector3(Random.Range(-0.7f, 0.7f), Random.Range(0f, 0.5f), 0f);
-        dmgNumber.transform.SetParent(null, true);
+        armourBar.value = currentArmour;
+        foreach (var dmgNumber in damageNumberObjPool)
+        {
+            if (!dmgNumber.gameObject.activeInHierarchy)
+            {
+                dmgNumber.gameObject.SetActive(true);
+                dmgNumber.Initialize(Mathf.RoundToInt(armourDamage), Color.orange);
+                //StartCoroutine(DamageNumberCoroutine(dmgNumber));
+                dmgNumber.transform.localScale = Vector3.one * 0.25f;
+                dmgNumber.transform.localPosition = new Vector3(Random.Range(-0.7f, 0.7f), Random.Range(0f, 0.5f), 0f);
+                Vector3 position = dmgNumber.transform.position;
+                dmgNumber.transform.SetParent(null, false);
+                dmgNumber.transform.position = position;
+                dmgNumber.transform.rotation = Quaternion.identity;
 
-        DG.Tweening.Sequence numberSequence = DOTween.Sequence();
-        numberSequence.Append(dmgNumber.transform.DOScale(Vector3.one, 0.2f));
-        numberSequence.Join(dmgNumber.numberText.DOFade(1f, 0.2f));
-        numberSequence.AppendInterval(0.5f);
-        Tween myTween = dmgNumber.numberText.DOFade(0.1f, 1f);
-        numberSequence.Append(myTween);
-
-        yield return myTween.WaitForCompletion();
-        dmgNumber.transform.SetParent(damageNumberTransform);
-        dmgNumber.gameObject.SetActive(false);
+                DG.Tweening.Sequence numberSequence = DOTween.Sequence();
+                numberSequence.Append(dmgNumber.transform.DOScale(Vector3.one, 0.2f));
+                numberSequence.Join(dmgNumber.numberText.DOFade(1f, 0.2f));
+                numberSequence.AppendInterval(0.5f);
+                numberSequence.Append(dmgNumber.numberText.DOFade(0f, 0.75f));
+                numberSequence.Join(dmgNumber.transform.DOScale(Vector3.one * 0.25f, 0.75f));
+                TweenCallback endDamageNumber = new TweenCallback(() =>
+                {
+                    dmgNumber.transform.SetParent(damageNumberTransform);
+                    dmgNumber.gameObject.SetActive(false);
+                    Debug.Log("Damage number disabled");
+                });
+                numberSequence.AppendCallback(endDamageNumber);
+                return;
+            }
+        }
     }
 }

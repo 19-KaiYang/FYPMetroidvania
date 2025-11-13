@@ -79,7 +79,8 @@ public class SceneTransitionManager : MonoBehaviour
             _sceneName = rooms[roomIndex];
             if (currentSceneName != progressionData.startingScene) roomIndex++;
         }
-        else _sceneName = progressionData.EndingScene;
+        else _sceneName = progressionData.bossScene;
+        if(currentSceneName == progressionData.bossScene) _sceneName = progressionData.EndingScene;
         if (_sceneName != null)
         {
             yield return Fade(_fadeDir);
@@ -232,6 +233,11 @@ public class SceneTransitionManager : MonoBehaviour
             {
                 AudioManager.instance.PlayBGM(BGMType.TOWN_COMBAT);
             }
+        }
+        var cutscene = FindFirstObjectByType<CutsceneStarter>();
+        if (cutscene != null)
+        {
+            cutscene.StartCutscene();
         }
     }
     #endregion

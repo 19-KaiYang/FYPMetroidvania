@@ -43,10 +43,7 @@ public class Ramp : MonoBehaviour
             dir = (collision.transform.position - owner.transform.position);
             dir.x = Mathf.Sign(dir.x) * 15; dir.y = 8f;
 
-            //p.TakeDamage(finalDamage, dir, true, CrowdControlState.Knockdown, 0f);
             p.TakeDamage(finalDamage, dir, false, currentCCState, 0.5f);
-            if (currentCCState == CrowdControlState.Stunned) p.ApplyStun(1, dir);
-            else if (currentCCState == CrowdControlState.Knockdown) p.ApplyKnockdown(1, false, dir);
         }
     }
 }
