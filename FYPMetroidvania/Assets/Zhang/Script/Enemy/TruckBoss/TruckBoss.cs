@@ -202,6 +202,7 @@ public class TruckBoss : Enemy
     [SerializeField] private Vector2 rampCheckSize;
     [SerializeField] private Vector2 rampCheckOffset;
     [SerializeField] private bool hasFlipped = true;
+    [SerializeField] EnemyHealthUI healthUI;
     Coroutine myRoutine;
 
     protected override void Awake()
@@ -225,6 +226,7 @@ public class TruckBoss : Enemy
     }
     protected override void Update()
     {
+        if (health.currentHealth <= 0) return;
         base.Update();
         Detect();
         distanceToLeftRampPos = (Vector2)transform.position - leftRampPos;
@@ -249,6 +251,9 @@ public class TruckBoss : Enemy
                 animator.SetTrigger("changePhase");
 
                 stateMachine.ChangeState(new TruckBossIdleState(this));
+                healthUI.armourBar.maxValue = maxArmor;
+                healthUI.armourBar.value = currentArmor;
+                healthUI.armourBar.gameObject.SetActive(true);
             }
         }
         if (currentArmor <= 0) armor = false;
@@ -256,7 +261,7 @@ public class TruckBoss : Enemy
         if (bossPhase == BossPhase.Phase2 && armor == false)
         {
             if (armorBreak) return;
-
+            healthUI.armourBar.gameObject.SetActive(false);
             armorBreak = true;
             if(rampageStep!=RampageStep.NONE) rampageStep = RampageStep.END;
             if(refuelStep != RefuelStep.NONE) refuelStep = RefuelStep.END;
@@ -265,6 +270,7 @@ public class TruckBoss : Enemy
 
             stateMachine.ChangeState(new TruckBossDizzyState(this));
         }
+
 
         float dir = transform.localScale.x;
         float vel = rb.linearVelocityX;
@@ -296,6 +302,7 @@ public class TruckBoss : Enemy
     }
     private void FixedUpdate()
     {
+        if (health.currentHealth <= 0) return;
         Drive();
         stateMachine.Update();
     }
@@ -355,7 +362,7 @@ public class TruckBoss : Enemy
                 return;
 
             case DriveAttackStep.START:
-                float value = new float[] { 0.8f, 1.4f, 2.0f }[Random.Range(0, 3)];
+                float value = new float[] { 0.8f, 1.2f, 1.5f }[Random.Range(0, 3)];
                 driveSpeed = value;
                 FaceToPlayer();
                 if (distanceToPlayer.x >= 0)
@@ -542,7 +549,7 @@ public class TruckBoss : Enemy
                 return;
 
             case RampageStep.START:
-                delayTime = Random.Range(1.5f, 4f);
+                delayTime = Random.Range(1.5f, 2f);
                 if (Mathf.Abs(distanceToRightRampPos.x) < Mathf.Abs(distanceToLeftRampPos.x))
                 {
                     if (transform.localScale.x < 0) Flip();
@@ -556,8 +563,8 @@ public class TruckBoss : Enemy
 
             case RampageStep.MOVE:
 
-                if (isOnRamp) rb.linearVelocity = Mathf.Sign(transform.localScale.x) * moveSpeed * transform.right;
-                else rb.linearVelocity = new Vector2(Mathf.Sign(transform.localScale.x) * moveSpeed, rb.linearVelocityY);
+                if (isOnRamp) rb.linearVelocity = Mathf.Sign(transform.localScale.x) * moveSpeed * 3f * transform.right;
+                else rb.linearVelocity = new Vector2(Mathf.Sign(transform.localScale.x) * moveSpeed * 3f, rb.linearVelocityY);
                 if (transform.eulerAngles.z >= 70) rb.AddForce(-transform.up * 70);
 
                 if (rDetect == true)
@@ -577,11 +584,13 @@ public class TruckBoss : Enemy
                     float newX = Mathf.Lerp(0.5f, 5.0f, delayTimer / delayTime);
                     ray.transform.localScale = new Vector3(newX, 25, transform.localScale.z);
                 }
-
-                transform.position = new Vector3(
-                    player.transform.position.x, 
-                    posY + 5, 
-                    transform.position.z);
+                if (delayTimer > delayTime / 5)
+                {
+                    transform.position = new Vector3(
+                        player.transform.position.x,
+                        posY + 5,
+                        transform.position.z);
+                }
 
                 if(delayTimer <= 0 && rampageStep == RampageStep.DELAY)
                 {
@@ -627,6 +636,8 @@ public class TruckBoss : Enemy
             case SlashComboStep.START:
                 float value1 = new float[] { 0.1f, 1.0f}[Random.Range(0, 2)];
                 float value2 = new float[] { 0.1f, 1.0f}[Random.Range(0, 2)];
+                value1 = 1f;
+                value2 = 1f;
                 slashCharge1Time = value1;
                 slashCharge2Time = value2;
                 slashChargeTimer = slashCharge1Time;
@@ -834,10 +845,14 @@ public class TruckBoss : Enemy
             case RefuelStep.DIZZY:
                 dizzyTimer -= Time.deltaTime;
                 animator.SetBool("isDizzy", true);
-                if (dizzyTimer <= 0)
+                health.knockbackMult = 1.25f;
+                health.stunImmune = false;
+                if (dizzyTimer <= 0 && isGround)
                 {
                     animator.SetBool("isDizzy", false);
                     refuelStep = RefuelStep.END;
+                    health.knockbackMult = 0f;
+                    health.stunImmune = true;
                 }
                 break;
 
@@ -1027,7 +1042,7 @@ public class TruckBoss : Enemy
         }
         public void OnEnter()
         {
-            randomIdleTime = Random.Range(1f, 3.0f);
+            randomIdleTime = Random.Range(2.5f, 4.0f);
             //enemy.StartCoroutine(IdleTIme(randomIdleTime));
         }
         public void OnUpdate()
@@ -1426,20 +1441,22 @@ public class TruckBoss : Enemy
         {
             dizzyTime = 5;
             enemy.animator.SetBool("isDizzy", true);
-
-            
+            enemy.health.knockbackMult = 1.25f;
+            enemy.health.stunImmune = false;
         }
         public void OnUpdate()
         {
             dizzyTime -= Time.deltaTime;
 
-            if(dizzyTime <= 0)
+            if(dizzyTime <= 0 && enemy.isGround)
             {
                 enemy.stateMachine.ChangeState(new TruckBossIdleState(enemy));
             } 
         }
         public void OnExit()
         {
+            enemy.health.knockbackMult = 0;
+            enemy.health.stunImmune = true;
             enemy.animator.SetBool("isDizzy", false);
         }
     }

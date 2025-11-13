@@ -6,7 +6,7 @@ public class Enemy : MonoBehaviour
 {
     //[Header("-")]
     protected Rigidbody2D rb;
-    protected Animator animator;
+    public Animator animator;
     public PlayerController player;
     protected StateMachine stateMachine;
 
@@ -66,7 +66,7 @@ public class Enemy : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         //animator = GetComponent<Animator>();
-        animator = GetComponentInChildren<Animator>();
+        if(animator == null) animator = GetComponentInChildren<Animator>();
         player = PlayerController.instance;
         if (player == null) player = FindFirstObjectByType<PlayerController>();
         health = GetComponent<Health>();

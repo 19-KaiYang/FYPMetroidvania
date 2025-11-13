@@ -68,7 +68,9 @@ public class DialogueSystem : MonoBehaviour, IPointerClickHandler
     }
     public void StartDialogue(DialogueTextSO dialogueData)
     {
+        StopAllCoroutines();
         //currentDialogueStep = null;
+        DialogueData = dialogueData;
         DialogueCanvas.enabled = true;
         dialogueActive = true;
         PlayerController.instance.isInCutscene = true;
