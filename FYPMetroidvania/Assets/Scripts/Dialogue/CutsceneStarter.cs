@@ -10,6 +10,7 @@ public class CutsceneStarter : MonoBehaviour
     [SerializeField] PlayableAsset endingCutscene;
     private TruckBoss boss;
     public PlayerController controller;
+    private AudioSource sfxPlayer;
 
     private void Awake()
     {
@@ -22,11 +23,14 @@ public class CutsceneStarter : MonoBehaviour
     }
     public void StartCutscene()
     {
+        sfxPlayer = AudioManager.instance.SFXSource;
+
         boss = FindFirstObjectByType<TruckBoss>();
         boss.health.enemyDeath += EndingCutscene;
 
         controller = PlayerController.instance;
         if (controller == null) return;
+
         var animator = controller.GetComponent<Animator>();
         animator.enabled = true;
         var signal = controller.GetComponentInChildren<SignalReceiver>();
@@ -44,6 +48,10 @@ public class CutsceneStarter : MonoBehaviour
             else if(output.streamName == "Player Signal")
             {
                 director.SetGenericBinding(output.sourceObject, signal);
+            }
+            else if(output.streamName == "Audio Track")
+            {
+                director.SetGenericBinding(output.sourceObject, sfxPlayer);
             }
         }
         controller.animator.Rebind();

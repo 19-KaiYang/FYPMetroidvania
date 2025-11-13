@@ -200,7 +200,8 @@ public enum SFXTYPE
     BARREL_BREAK,
     HEALING,
     SPIRIT_POTIONSFX,
-    SPIRIT_CUTINSFX
+    SPIRIT_CUTINSFX,
+    REVVING
 }
 [Serializable]
 public class BGM
