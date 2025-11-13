@@ -95,7 +95,7 @@ public class Hitbox : MonoBehaviour
                 OnHit?.Invoke(this, h);
                 float directionalXknockback = PlayerController.instance.facingRight ? X_Knockback : -X_Knockback;
                 h.TakeDamage(damage, new Vector2(directionalXknockback, Y_Knockback), false, CCType, CCDuration);
-                if (screenshake && impulseSource != null)
+                if (screenshake && impulseSource != null && SettingData.instance.screenshake)
                 {
                     impulseSource.GenerateImpulse(screenshakeForce);
                 }

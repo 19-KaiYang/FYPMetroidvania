@@ -31,7 +31,7 @@ public class CutsceneHandler : MonoBehaviour
             cutscene.time = cutscene.duration * 0.99f;
             cutscene.Resume();
             cutscene.Evaluate();
-            if (!AudioManager.instance.isPlayingBGM) AudioManager.instance.PlayBGM(BGMType.OPENING_CUTSCENE);
+            if (!AudioManager.instance.isPlayingBGM && SceneTransitionManager.instance.currentSceneName == "Goblin Camp") AudioManager.instance.PlayBGM(BGMType.OPENING_CUTSCENE);
         }
     }
     public void CanSkip()

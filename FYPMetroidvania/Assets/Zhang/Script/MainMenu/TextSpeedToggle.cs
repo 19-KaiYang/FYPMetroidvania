@@ -34,6 +34,7 @@ public class TextSpeedToggle : MonoBehaviour
                 currentSpeed = 1.5f;
                 break;
         }
+        SettingData.instance.textSpeedMult = currentSpeed;
         Debug.Log($"Text Speed£º{currentSpeed}");
     }
 }

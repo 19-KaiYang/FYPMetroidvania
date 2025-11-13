@@ -126,9 +126,9 @@ public class DialogueSystem : MonoBehaviour, IPointerClickHandler
         int textSize = _textBox.text.Length;
         char[] line = dialoguestep.Text.ToCharArray();
         int textLength = line.Length;
-        float speed = 1f / TextSpeed;
+        float speed = 1f / (TextSpeed * SettingData.instance.textSpeedMult);
 
-        if (dialoguestep.screenshake) impulseSource.GenerateImpulse(0.2f);
+        if (dialoguestep.screenshake && SettingData.instance.screenshake) impulseSource.GenerateImpulse(0.2f);
         for (int i = 0; i < textLength; i++)
         {
             if (nextInputbuffer)

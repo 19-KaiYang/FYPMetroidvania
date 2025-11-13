@@ -513,6 +513,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6877b7d5ce4e8e5418b6e832e8f38b3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DaggerCultist
+  animator: {fileID: 0}
   player: {fileID: 0}
   playerLayer:
     serializedVersion: 2
@@ -603,6 +604,7 @@ MonoBehaviour:
   isBloodMarked: 0
   bloodMarkHealAmount: 10
   bloodMarkIcon: {fileID: 2233509978581388961}
+  bloodMarkDamageTaken: 0
   debuffVFXs: []
 --- !u!1 &3137144012426382684
 GameObject:
@@ -1257,6 +1259,7 @@ MonoBehaviour:
   damageNumberTransform: {fileID: 7350727592015837844}
   damageNumberObjPool: []
   damageNumberPrefab: {fileID: 1262934999775421051, guid: 179548dd35fac9c41b57c7521bba91ad, type: 3}
+  armourBar: {fileID: 0}
 --- !u!1001 &6959683353941923995
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1311,7 +1314,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9570669
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
       propertyPath: m_LocalRotation.x
@@ -1323,7 +1326,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.28986716
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -1343,7 +1346,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 33.7
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9109311307756738106, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
       propertyPath: m_Name

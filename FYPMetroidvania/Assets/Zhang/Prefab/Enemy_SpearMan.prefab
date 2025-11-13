@@ -396,7 +396,7 @@ MonoBehaviour:
   attackMultiplier: 1.5
   finalDamage: 0
   attackDamage: 0
-  knockback: 10
+  knockback: {x: 0, y: 0}
   ccTime: 0.5
 --- !u!1 &1658455315795194318
 GameObject:
@@ -5666,6 +5666,7 @@ MonoBehaviour:
   damageNumberTransform: {fileID: 3175681851646992484}
   damageNumberObjPool: []
   damageNumberPrefab: {fileID: 1262934999775421051, guid: 179548dd35fac9c41b57c7521bba91ad, type: 3}
+  armourBar: {fileID: 0}
 --- !u!1 &5195414865044503270
 GameObject:
   m_ObjectHideFlags: 0
@@ -5699,7 +5700,7 @@ RectTransform:
   m_Father: {fileID: 5589993661541007395}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 1.666687, y: 0}
   m_SizeDelta: {x: -1.666687, y: 0}
   m_Pivot: {x: 0, y: 0.5}
@@ -6101,7 +6102,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5180712474465827317
 Transform:
   m_ObjectHideFlags: 0
@@ -6269,6 +6270,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a4202a8a58ac604ea1be2e90cb4d5b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Spearman
+  animator: {fileID: 0}
   player: {fileID: 0}
   playerLayer:
     serializedVersion: 2
@@ -6363,6 +6365,7 @@ MonoBehaviour:
   isBloodMarked: 0
   bloodMarkHealAmount: 10
   bloodMarkIcon: {fileID: 2055024200357677500}
+  bloodMarkDamageTaken: 0
   debuffVFXs: []
 --- !u!1001 &7128687763136487302
 PrefabInstance:
@@ -6418,19 +6421,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9570669
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.28986716
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -6450,7 +6453,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 33.7
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9109311307756738106, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
       propertyPath: m_Name
