@@ -391,6 +391,7 @@ public class TruckBoss : Enemy
                     if (!canMove)
                     {
                         animator.SetTrigger("forwardStart");
+                        AudioManager.PlaySFX(SFXTYPE.REVVING, 0.5f);
                     }
                     if (canMove)
                     {

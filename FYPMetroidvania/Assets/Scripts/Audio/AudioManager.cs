@@ -170,7 +170,8 @@ public enum SFXTYPE
     ENEMY_ATTACKFLASH,
     HAWK_ATTACK,
     TRUCK_HORN,
-    IMPACT
+    IMPACT,
+    REVVING
 }
 [Serializable]
 public class BGM
