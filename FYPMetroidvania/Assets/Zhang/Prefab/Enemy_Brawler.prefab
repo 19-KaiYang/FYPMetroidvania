@@ -682,6 +682,7 @@ MonoBehaviour:
   damageNumberTransform: {fileID: 9005422149735966451}
   damageNumberObjPool: []
   damageNumberPrefab: {fileID: 1262934999775421051, guid: 179548dd35fac9c41b57c7521bba91ad, type: 3}
+  armourBar: {fileID: 0}
 --- !u!1 &4026990737734762289
 GameObject:
   m_ObjectHideFlags: 0
@@ -731,7 +732,7 @@ MonoBehaviour:
   attackMultiplier: 2
   finalDamage: 0
   attackDamage: 0
-  knockback: 8
+  knockback: {x: 0, y: 0}
   ccTime: 0.5
 --- !u!61 &2147137083326911622
 BoxCollider2D:
@@ -799,7 +800,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5033397307062096171
 Transform:
   m_ObjectHideFlags: 0
@@ -966,6 +967,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 561c6486d18beb343b01f9aeac18feb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MeleeEnemy
+  animator: {fileID: 0}
   player: {fileID: 0}
   playerLayer:
     serializedVersion: 2
@@ -1011,7 +1013,7 @@ MonoBehaviour:
   gravityA: 3
   gravityB: 3
   distanceOffset: 3
-  maxJumpRange: 10
+  maxJumpRange: 20
   jumpHitbox: {fileID: 7688238546090216199}
   jumpTrail: {fileID: 5057681478030813393}
   meleeAttackCooldown: 0
@@ -1061,6 +1063,7 @@ MonoBehaviour:
   isBloodMarked: 0
   bloodMarkHealAmount: 10
   bloodMarkIcon: {fileID: 8271615029836355076}
+  bloodMarkDamageTaken: 0
   debuffVFXs: []
 --- !u!1 &4944658150897055525
 GameObject:
@@ -1296,7 +1299,7 @@ MonoBehaviour:
   attackMultiplier: 1
   finalDamage: 0
   attackDamage: 0
-  knockback: 0
+  knockback: {x: 0, y: 0}
   ccTime: 0.5
 --- !u!61 &1884260015455104130
 BoxCollider2D:
@@ -1644,7 +1647,7 @@ MonoBehaviour:
   attackMultiplier: 1
   finalDamage: 0
   attackDamage: 0
-  knockback: 8
+  knockback: {x: 0, y: 0}
   ccTime: 1
 --- !u!61 &8130619938128346494
 BoxCollider2D:
@@ -1725,7 +1728,7 @@ RectTransform:
   m_Father: {fileID: 7067308921444624326}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 1.666687, y: 0}
   m_SizeDelta: {x: -1.666687, y: 0}
   m_Pivot: {x: 0, y: 0.5}
@@ -1821,7 +1824,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9570669
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
       propertyPath: m_LocalRotation.x
@@ -1833,7 +1836,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.28986716
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -1853,7 +1856,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 33.7
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9109311307756738106, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
       propertyPath: m_Name
