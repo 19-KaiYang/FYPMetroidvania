@@ -70,6 +70,7 @@ public class PlayerController : MonoBehaviour
     public float groundCheckRadius = 0.2f;
     public LayerMask groundLayer;
     public LayerMask platformLayer;
+    public LayerMask wallLayer;
     private LayerMask GroundCheckLayer;
 
     [Header("Collider")]
@@ -385,7 +386,7 @@ public class PlayerController : MonoBehaviour
                 wallCoyoteCounter -= Time.deltaTime;
         }
 
-        if (canWallSlide && IsTouchingWall() && !IsGrounded && velocity.y < 0 && !isDashing && !externalVelocityOverride)
+        if (canWallSlide && IsTouchingWall() && !IsGrounded && velocity.y < 0 && !isDashing && !externalVelocityOverride && !skills.IsUsingSkill)
         {
             isWallSliding = true;
             velocity.y = Mathf.Max(velocity.y, -wallSlideSpeed);
@@ -516,8 +517,10 @@ public class PlayerController : MonoBehaviour
         }
         else if (!IsGrounded)
         {
+            
             if (IsTouchingWall())
             {
+                if (skills.IsUsingSkill || combat.isAttacking) return;
                 bool wallOnRight = IsWallOnRight();
                 bool wallOnLeft = IsWallOnLeft();
 
@@ -650,14 +653,14 @@ public class PlayerController : MonoBehaviour
     {
         float offsetX = colliderSize.x / 2f + 0.05f;
         Vector2 originRight = (Vector2)transform.position + Vector2.right * offsetX;
-        return Physics2D.Raycast(originRight, Vector2.right, wallCheckDistance, groundLayer);
+        return Physics2D.Raycast(originRight, Vector2.right, wallCheckDistance, wallLayer);
     }
 
     private bool IsWallOnLeft()
     {
         float offsetX = colliderSize.x / 2f + 0.05f;
         Vector2 originLeft = (Vector2)transform.position + Vector2.left * offsetX;
-        return Physics2D.Raycast(originLeft, Vector2.left, wallCheckDistance, groundLayer);
+        return Physics2D.Raycast(originLeft, Vector2.left, wallCheckDistance, wallLayer);
     }
 
     public void SetVelocity(Vector2 newVel)

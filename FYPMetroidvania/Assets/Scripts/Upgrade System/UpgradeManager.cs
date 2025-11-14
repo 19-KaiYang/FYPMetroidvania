@@ -59,7 +59,7 @@ public class UpgradeManager : MonoBehaviour
         Skills.skillEnd += OnSkillEnd;
 
         Skills.OnUltimateStart += OnUltimateStart;
-        Skills.OnUltimateHit += OnUltimateHit;
+        Hitbox.OnUltHit += OnUltimateHit;
         Skills.OnUltimateEnd += OnUltimateEnd;
 
     }
@@ -159,7 +159,7 @@ public class UpgradeManager : MonoBehaviour
             SpiritUpgrade.TryEffects(Trigger.OnStart, context);
 
         foreach (Upgrade misc in MiscUpgrades)
-            misc.TryEffects(Trigger.OnSkillStart, context);
+            misc.TryEffects(Trigger.OnUltimateStart, context);
     }
 
     void OnUltimateHit(Hitbox hitbox, Health enemy)
@@ -171,7 +171,7 @@ public class UpgradeManager : MonoBehaviour
 
         // Trigger for misc upgrades
         foreach (Upgrade misc in MiscUpgrades)
-            misc.TryEffects(Trigger.OnSkillHit, context);
+            misc.TryEffects(Trigger.OnUltimateHit, context);
     }
 
     void OnUltimateEnd()
@@ -183,7 +183,7 @@ public class UpgradeManager : MonoBehaviour
 
         // Trigger for misc upgrades
         foreach (Upgrade misc in MiscUpgrades)
-            misc.TryEffects(Trigger.OnSkillEnd, context);
+            misc.TryEffects(Trigger.OnUltimateEnd, context);
     }
 
     // Misc

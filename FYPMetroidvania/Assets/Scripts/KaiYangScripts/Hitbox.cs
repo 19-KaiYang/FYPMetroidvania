@@ -44,6 +44,7 @@ public class Hitbox : MonoBehaviour
 
     // Events
     public static Action<Hitbox, Health> OnHit;
+    public static Action<Hitbox, Health> OnUltHit;
 
     private void Awake()
     {
@@ -92,9 +93,10 @@ public class Hitbox : MonoBehaviour
                 if(sfx != SFXTYPE.NONE) AudioManager.PlaySFX(sfx, 0.3f);
                 hitEnemies.Add(h);
 
-                OnHit?.Invoke(this, h);
+                if (isUltimateHitbox) OnUltHit?.Invoke(this, h);
+                else OnHit?.Invoke(this, h);
                 float directionalXknockback = PlayerController.instance.facingRight ? X_Knockback : -X_Knockback;
-                h.TakeDamage(damage, new Vector2(directionalXknockback, Y_Knockback), false, CCType, CCDuration);
+                h.TakeDamage(damage, new Vector2(directionalXknockback, Y_Knockback), false, CCType, CCDuration, isCritical: isCritical);
                 if (screenshake && impulseSource != null && SettingData.instance.screenshake)
                 {
                     impulseSource.GenerateImpulse(screenshakeForce);

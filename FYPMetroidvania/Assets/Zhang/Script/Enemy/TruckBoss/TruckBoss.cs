@@ -147,7 +147,7 @@ public class TruckBoss : Enemy
     [Header("Refuel")]//¡ö¡ö¡ö¡ö¡ö¡ö¡ö¡ö¡ö¡ö
     public List<GameObject> enemyPrefabs = new List<GameObject>();
     public List<Transform> spawnPoints = new List<Transform>();
-    private List<GameObject> aliveEnemies = new List<GameObject>();
+    public List<GameObject> aliveEnemies = new List<GameObject>();
     public int totalEnemiesToSpawn = 2;
     [SerializeField] private float refuelTime = 10;
     private float refuelTimer;
@@ -381,8 +381,11 @@ public class TruckBoss : Enemy
 
             case DriveAttackStep.BACKWARD:
                 waitTime = 1;
-                if (!isDriving) driveAttackStep = DriveAttackStep.WAIT;
-                AudioManager.PlaySFX(SFXTYPE.REVVING, 0.5f);
+                if (!isDriving)
+                {
+                    driveAttackStep = DriveAttackStep.WAIT;
+                    AudioManager.PlaySFX(SFXTYPE.REVVING, 0.5f);
+                }
                 break;
 
             case DriveAttackStep.WAIT:
@@ -767,6 +770,7 @@ public class TruckBoss : Enemy
 
             GameObject enemy = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation);
             aliveEnemies.Add(enemy);
+            enemy.SetActive(true);
 
             Health hp = enemy.GetComponent<Health>();
             if (hp != null && hp.gameObject != this.gameObject)

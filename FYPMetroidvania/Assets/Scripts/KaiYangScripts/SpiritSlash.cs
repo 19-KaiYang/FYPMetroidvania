@@ -79,7 +79,7 @@ public class SpiritSlash : MonoBehaviour
             sr.enabled = false;
 
         // event subscribe
-        Hitbox.OnHit += OnSpiritSlashHit;
+        Hitbox.OnUltHit += OnSpiritSlashHit;
 
         // Start ultimate
         Skills.InvokeUltimateStart(hitbox);
@@ -152,19 +152,6 @@ public class SpiritSlash : MonoBehaviour
         if (!hitEnemyIds.Contains(id))
         {
             hitEnemyIds.Add(id);
-
-            Skills.InvokeUltimateHit(hitbox, h);
-
-            Vector2 knockDir = (h.transform.position - transform.position).normalized;
-
-            h.TakeDamage(spiritSlashBloodCost, knockDir, false, CrowdControlState.None, 0f, true, false, 0f);
-
-            Skills skills = player.GetComponent<Skills>();
-            if (skills != null)
-            {
-                skills.ApplySkillCC(h, knockDir, groundedCC, airborneCC, ccDuration,
-                                   stunKnockbackMultiplier, knockdownKnockbackMultiplier);
-            }
 
             h.ApplyBloodMark(bloodMarkHeal);
         }
@@ -293,7 +280,7 @@ public class SpiritSlash : MonoBehaviour
 
     private void OnDestroy()
     {
-        Hitbox.OnHit -= OnSpiritSlashHit;
+        Hitbox.OnUltHit -= OnSpiritSlashHit;
         Skills.InvokeUltimateEnd();
     }
 

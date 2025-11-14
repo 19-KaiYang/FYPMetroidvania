@@ -11,10 +11,11 @@ public class DamageNumber : MonoBehaviour
         Canvas canvas = GetComponent<Canvas>();
         canvas.worldCamera = Camera.main;
     }
-    public void Initialize(int damage, Color color)
+    public void Initialize(int damage, Color color, bool critical = false)
     {
         numberText.color = color;
         numberText.alpha = 0.1f;
         numberText.text = damage.ToString();
+        if (critical) numberText.text += "!";
     }
 }

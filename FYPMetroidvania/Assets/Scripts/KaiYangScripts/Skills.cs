@@ -569,26 +569,6 @@ public class Skills : MonoBehaviour
         while(!lungeStart) yield return null;
 
         AudioManager.PlaySFX(SFXTYPE.SWORD_DASH, 0.5f);
-        // --- Hook into hitbox for Sword Dash specific logic ---
-        //void OnDashHit(Hitbox hb, Health h)
-        //{
-        //    if (h == null || h.isPlayer) return;
-
-        //    //Vector2 knockDir = 
-
-        //    //h.TakeDamage(dashFlatDamage, knockDir, false, CrowdControlState.None, 0f, true, false, 0f);
-
-        //    // Spirit + BloodMark + HealthCost (only Sword)
-        //    h.ApplyBloodMark(bloodMarkHealAmount);
-        //    GainSpirit(spiritGainPerHit);
-
-        //    // Local hitstop
-        //    //if (hitstop > 0f)
-        //    //{
-        //    //    StartCoroutine(LocalHitstop(h.GetComponent<Rigidbody2D>(), hitstop));
-        //    //    StartCoroutine(LocalHitstop(rb, hitstop));
-        //    //}
-        //}
 
         Hitbox.OnHit += OnSkillHit;
         //SKILL START, SKILL HIT, SKILL END
@@ -1127,9 +1107,6 @@ public class Skills : MonoBehaviour
         // Unsubscribe
         Hitbox.OnHit -= onHit;
     }
-
-
-
     public void ApplySkillCC(Health target, Vector2 knockDir,
    CrowdControlState groundedCC, CrowdControlState airborneCC,
    float ccDuration = 0f, float stunKnockbackMultiplier = 1f, float knockdownKnockbackMultiplier = 1f)
