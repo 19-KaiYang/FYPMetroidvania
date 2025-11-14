@@ -54,6 +54,11 @@ public class UpgradeDescriptionUI : MonoBehaviour
     {
         // Find the new UpgradeManager when a scene loads
         FindUpgradeManager();
+
+        if (scene.name == "MainMenu")
+        {
+            Destroy(gameObject);
+        }
     }
 
     void Start()
@@ -164,8 +169,8 @@ public class UpgradeDescriptionUI : MonoBehaviour
             Color targetColor = showingUpgrade ? selectedTabColor : unselectedTabColor;
             colors.normalColor = targetColor;
             colors.highlightedColor = targetColor;
-            colors.selectedColor = targetColor; // Add this line
-            colors.pressedColor = targetColor;  // Optional: also set pressed color
+            colors.selectedColor = targetColor; 
+            colors.pressedColor = targetColor;  
             upgradeTabButton.colors = colors;
             upgradeTabButton.targetGraphic.color = targetColor;
         }
