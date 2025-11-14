@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5666887810853791225}
   - component: {fileID: 7202069678498631190}
   - component: {fileID: 786583344897588331}
+  - component: {fileID: 2027492093151634530}
   m_Layer: 0
   m_Name: SwordProjectile
   m_TagString: PlayerProjectile
@@ -196,6 +197,36 @@ MonoBehaviour:
   - {fileID: 4030550102243885832, guid: 055219424ebe353409813abe95829989, type: 3}
   spriteRenderer: {fileID: 5824866668852457502}
   impactParticle: {fileID: 8822243154195151418}
+--- !u!114 &2027492093151634530
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1827530487365237664}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85f2735b1d4274748ae03c2735e0e881, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Hitbox
+  baseDamage: 25
+  damage: 0
+  isCritical: 0
+  hitstopDuration: 0.05
+  applyHitstop: 0
+  X_Knockback: 7
+  Y_Knockback: 8
+  facingRight: 0
+  CCType: 1
+  CCDuration: 1
+  sfx: 5
+  applyBloodMark: 1
+  isSkillHitbox: 1
+  isProjectile: 1
+  isUltimateHitbox: 0
+  screenshake: 0
+  impulseSource: {fileID: 0}
+  screenshakeForce: 0.5
 --- !u!1001 &6915285369431135197
 PrefabInstance:
   m_ObjectHideFlags: 0

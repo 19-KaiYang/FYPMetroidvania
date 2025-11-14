@@ -14,6 +14,7 @@ public class SwordSlashProjectile : ProjectileBase
     private Vector3 startPos;
     private Health playerHealth;
     private Hitbox hitbox;
+    private Skills playerSkills;
     private bool hasInvokedStart = false;
     [SerializeField] Sprite[] sprites;
     [SerializeField] private SpriteRenderer spriteRenderer;
@@ -54,7 +55,7 @@ public class SwordSlashProjectile : ProjectileBase
             Despawn();
     }
 
-    public void Init(Vector2 dir)
+    public void Init(Vector2 dir, Skills skills)
     {
         if (!rb) rb = GetComponent<Rigidbody2D>();
         rb.linearVelocity = dir.normalized * speed;
@@ -63,40 +64,53 @@ public class SwordSlashProjectile : ProjectileBase
             transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
         }
 
+        playerSkills = skills;
+
         if (hitbox != null && !hasInvokedStart)
         {
             hasInvokedStart = true;
             Skills.InvokeSkillStart(hitbox);
+
+            hitbox.OnProjectileHit += OnSlashHit;
         }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         //Debug.Log("Crimson wave collide");
-        if (!collision.gameObject.CompareTag("Hurtbox")) return;
-        Health enemy = collision.GetComponentInParent<Health>();
-        Debug.Log(enemy);
-        if (enemy != null && !enemy.isPlayer)
-        {
-            if (hitbox != null)
-            {
-                Skills.InvokeSkillHit(hitbox, enemy);
-            }
+        //if (!collision.gameObject.CompareTag("Hurtbox")) return;
+        //Health enemy = collision.GetComponentInParent<Health>();
+        //Debug.Log(enemy);
+        //if (enemy != null && !enemy.isPlayer)
+        //{
+        //    if (hitbox != null)
+        //    {
+        //        Skills.InvokeSkillHit(hitbox, enemy);
+        //    }
 
-            float directionalXknockback = rb.linearVelocity.x > 0 ? X_Knockback : -X_Knockback;
-            // Damage without knockback (CC handles it)
-            enemy.TakeDamage(damage, new Vector2(directionalXknockback, Y_Knockback), false, crowdControl, ccDuration);
-            enemy.ApplyBloodMark(20f);
-            impactParticle.transform.SetParent(null);
-            impactParticle.transform.position = transform.position;
-            impactParticle.SetActive(true);
+        //    float directionalXknockback = rb.linearVelocity.x > 0 ? X_Knockback : -X_Knockback;
+        //    // Damage without knockback (CC handles it)
+        //    enemy.TakeDamage(damage, new Vector2(directionalXknockback, Y_Knockback), false, crowdControl, ccDuration);
+        //    enemy.ApplyBloodMark(20f);
+        //    impactParticle.transform.SetParent(null);
+        //    impactParticle.transform.position = transform.position;
+        //    impactParticle.SetActive(true);
 
-            Despawn();
-        }
+        //    Despawn();
+        //}
     }
+    public void OnSlashHit(Hitbox hitbox, Health h)
+    {
+        playerSkills.OnSkillHit(hitbox, h);
+        impactParticle.transform.SetParent(null);
+        impactParticle.transform.position = transform.position;
+        impactParticle.SetActive(true);
 
+        Despawn();
+    }
     public override void Despawn()
     {
+        hitbox.OnProjectileHit -= OnSlashHit;
         Skills.InvokeSkillEnd();
         base.Despawn();
     }

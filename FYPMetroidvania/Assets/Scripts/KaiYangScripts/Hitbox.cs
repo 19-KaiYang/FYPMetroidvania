@@ -32,6 +32,7 @@ public class Hitbox : MonoBehaviour
     [Header("Special Settings")]
     public bool applyBloodMark = false;
     public bool isSkillHitbox = false;
+    public bool isProjectile = false;
     public bool isUltimateHitbox = false;
 
     [Header("Screenshake")]
@@ -44,24 +45,22 @@ public class Hitbox : MonoBehaviour
 
     // Events
     public static Action<Hitbox, Health> OnHit;
+    public static Action<Hitbox, Health> OnSkillHit;
+    public Action<Hitbox, Health> OnProjectileHit;
     public static Action<Hitbox, Health> OnUltHit;
 
     private void Awake()
     {
         owner = GetComponentInParent<CombatSystem>();
         col = GetComponent<Collider2D>();
-        skills = UnityEngine.Object.FindFirstObjectByType<Skills>();
     }
 
     private void OnEnable()
     {
         hitEnemies.Clear();
         isCritical = false;
-        if (owner != null)
-        {
-            damage = baseDamage;
-            facingRight = PlayerController.instance.facingRight;
-        }
+        damage = baseDamage;
+        facingRight = PlayerController.instance.facingRight;
     }
 
     public void EnableCollider(float duration)
@@ -94,8 +93,12 @@ public class Hitbox : MonoBehaviour
                 hitEnemies.Add(h);
 
                 if (isUltimateHitbox) OnUltHit?.Invoke(this, h);
+                if (isSkillHitbox) OnSkillHit?.Invoke(this, h);
                 else OnHit?.Invoke(this, h);
-                float directionalXknockback = PlayerController.instance.facingRight ? X_Knockback : -X_Knockback;
+
+                if(isProjectile) OnProjectileHit?.Invoke(this, h);  
+
+                float directionalXknockback = facingRight ? X_Knockback : -X_Knockback;
                 h.TakeDamage(damage, new Vector2(directionalXknockback, Y_Knockback), false, CCType, CCDuration, isCritical: isCritical);
                 if (screenshake && impulseSource != null && SettingData.instance.screenshake)
                 {
@@ -105,16 +108,7 @@ public class Hitbox : MonoBehaviour
                 {
                     StartCoroutine(LocalHitstop(owner.GetComponent<Rigidbody2D>(), hitstopDuration));
                 }
-                
-                //// hitstop 
-                //if (skills != null)
-                //{
-                //    if (applyHitstopToEnemy)
-                //        skills.StartCoroutine(skills.LocalHitstop(h.GetComponent<Rigidbody2D>(), hitstopDuration));
-
-                //    if (applyHitstopToPlayer)
-                //        skills.StartCoroutine(skills.LocalHitstop(skills.GetComponent<Rigidbody2D>(), hitstopDuration));
-                //}
+               
             }
         }
     }

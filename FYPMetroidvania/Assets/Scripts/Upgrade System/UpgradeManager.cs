@@ -55,7 +55,7 @@ public class UpgradeManager : MonoBehaviour
         Hitbox.OnHit += OnBasicAttackHit;
 
         Skills.skillStart += OnSkillStart;
-        Skills.skillHit += OnSkillHit;
+        Hitbox.OnSkillHit += OnSkillHit;
         Skills.skillEnd += OnSkillEnd;
 
         Skills.OnUltimateStart += OnUltimateStart;

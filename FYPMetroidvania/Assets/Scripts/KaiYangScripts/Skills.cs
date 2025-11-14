@@ -527,7 +527,7 @@ public class Skills : MonoBehaviour
         if (proj != null)
         {
             proj.bloodCost = swordSlashBloodCost;
-            proj.Init(dir);
+            proj.Init(dir, this);
             AudioManager.PlaySFX(SFXTYPE.SWORD_PROJECTILE);
         }
         while(waveStart) yield return null;
@@ -570,7 +570,7 @@ public class Skills : MonoBehaviour
 
         AudioManager.PlaySFX(SFXTYPE.SWORD_DASH, 0.5f);
 
-        Hitbox.OnHit += OnSkillHit;
+        Hitbox.OnSkillHit += OnSkillHit;
         //SKILL START, SKILL HIT, SKILL END
         Coroutine hitboxRoutine = StartCoroutine(ActivateSkillHitbox(swordDashHitbox, dashDuration));
         dashParticle.Play();
@@ -611,7 +611,7 @@ public class Skills : MonoBehaviour
         if (hitboxRoutine != null)
             yield return hitboxRoutine; 
 
-        Hitbox.OnHit -= OnSkillHit;
+        Hitbox.OnSkillHit -= OnSkillHit;
 
         if (collisionToggled)
             Physics2D.IgnoreLayerCollision(playerLayer, enemyLayer, false);
@@ -669,7 +669,7 @@ public class Skills : MonoBehaviour
         //    GainSpirit(spiritGainPerHit);
         //}
 
-        Hitbox.OnHit += OnSkillHit;
+        Hitbox.OnSkillHit += OnSkillHit;
 
         // --- Phase 1: short forward dash ---
         controller.animator.SetTrigger("Sword Uppercut");
@@ -696,7 +696,7 @@ public class Skills : MonoBehaviour
             yield return hitboxRoutine;
 
         // Cleanup
-        Hitbox.OnHit -= OnSkillHit;
+        Hitbox.OnSkillHit -= OnSkillHit;
 
         // Restore collisions
         if (collisionToggled)
@@ -1085,13 +1085,6 @@ public class Skills : MonoBehaviour
         Hitbox hb = hitbox.GetComponent<Hitbox>();
         if (hb == null) yield break;
 
-        
-        System.Action<Hitbox, Health> onHit = (h, enemy) =>
-        {
-            skillHit?.Invoke(h, enemy);  
-        };
-        Hitbox.OnHit += onHit;
-
         skillStart?.Invoke(hb);
 
         // Activate
@@ -1103,9 +1096,6 @@ public class Skills : MonoBehaviour
 
         // Fire end event
         skillEnd?.Invoke();
-
-        // Unsubscribe
-        Hitbox.OnHit -= onHit;
     }
     public void ApplySkillCC(Health target, Vector2 knockDir,
    CrowdControlState groundedCC, CrowdControlState airborneCC,
