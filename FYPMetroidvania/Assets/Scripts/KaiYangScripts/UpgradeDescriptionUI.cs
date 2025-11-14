@@ -10,14 +10,17 @@ public class UpgradeDescriptionUI : MonoBehaviour
 
     [Header("UI References")]
     [SerializeField] private GameObject panelBackground;
+    [SerializeField] private GameObject scrollBackdrop;
     [SerializeField] private GameObject upgradePanel;
     [SerializeField] private GameObject skillPanel;
     [SerializeField] private Transform contentParent;
     [SerializeField] private GameObject upgradeEntryPrefab;
 
-    [Header("Toggle Button")]
-    [SerializeField] private Button toggleButton;
-    [SerializeField] private TextMeshProUGUI buttonText;
+    [Header("Tab Buttons")]
+    [SerializeField] private Button upgradeTabButton;
+    [SerializeField] private Button skillTabButton;
+    [SerializeField] private Color selectedTabColor = Color.white;
+    [SerializeField] private Color unselectedTabColor = Color.gray;
 
     private UpgradeManager upgradeManager;
     private bool isOpen = false;
@@ -32,8 +35,11 @@ public class UpgradeDescriptionUI : MonoBehaviour
         }
         else Destroy(gameObject);
 
-        if (toggleButton)
-            toggleButton.onClick.AddListener(TogglePanels);
+        // Hook up both tab buttons
+        if (upgradeTabButton)
+            upgradeTabButton.onClick.AddListener(ShowUpgradeTab);
+        if (skillTabButton)
+            skillTabButton.onClick.AddListener(ShowSkillTab);
 
         // Subscribe to scene loaded to refresh UpgradeManager reference
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -56,9 +62,11 @@ public class UpgradeDescriptionUI : MonoBehaviour
 
         // Hide everything at start
         if (panelBackground) panelBackground.SetActive(false);
+        if (scrollBackdrop) scrollBackdrop.SetActive(false);
         if (upgradePanel) upgradePanel.SetActive(false);
         if (skillPanel) skillPanel.SetActive(false);
-        if (toggleButton) toggleButton.gameObject.SetActive(false);
+        if (upgradeTabButton) upgradeTabButton.gameObject.SetActive(false);
+        if (skillTabButton) skillTabButton.gameObject.SetActive(false);
     }
 
     // Helper method to find the current UpgradeManager
@@ -93,21 +101,21 @@ public class UpgradeDescriptionUI : MonoBehaviour
         isOpen = !isOpen;
 
         if (panelBackground) panelBackground.SetActive(isOpen);
-        if (toggleButton) toggleButton.gameObject.SetActive(isOpen);
+        if (scrollBackdrop) scrollBackdrop.SetActive(isOpen);
+        if (upgradeTabButton) upgradeTabButton.gameObject.SetActive(isOpen);
+        if (skillTabButton) skillTabButton.gameObject.SetActive(isOpen);
 
         if (isOpen)
         {
             Time.timeScale = 0f;
             showingUpgrade = true;
-            UpdateButtonText();
-            upgradePanel.SetActive(true);
-            skillPanel.SetActive(false);
-            RefreshUI();
+            ShowUpgradeTab(); // Start with upgrade tab selected
         }
         else
         {
             Time.timeScale = 1f;
             panelBackground.SetActive(false);
+            scrollBackdrop.SetActive(false);
             upgradePanel.SetActive(false);
             skillPanel.SetActive(false);
             ClearUI();
@@ -118,33 +126,61 @@ public class UpgradeDescriptionUI : MonoBehaviour
         }
     }
 
-    // ---------- PANEL SWITCH ----------
-    void TogglePanels()
+    // ---------- TAB SWITCHING ----------
+    void ShowUpgradeTab()
     {
-        showingUpgrade = !showingUpgrade;
-        UpdateButtonText();
+        showingUpgrade = true;
 
-        if (showingUpgrade)
-        {
-            // Show upgrade panel
-            skillPanel.SetActive(false);
-            upgradePanel.SetActive(true);
-            RefreshUI();
-        }
-        else
-        {
-            // Show skill panel
-            upgradePanel.SetActive(false);
-            ClearUI();
-            skillPanel.SetActive(true);
-        }
+        // Switch panels
+        skillPanel.SetActive(false);
+        upgradePanel.SetActive(true);
+
+        // Update tab button visuals
+        UpdateTabVisuals();
+
+        // Refresh upgrade list
+        RefreshUI();
     }
 
-    // ---------- UPDATE BUTTON LABEL ----------
-    void UpdateButtonText()
+    void ShowSkillTab()
     {
-        if (buttonText)
-            buttonText.text = showingUpgrade ? "Skill" : "Upgrade";
+        showingUpgrade = false;
+
+        // Switch panels
+        upgradePanel.SetActive(false);
+        ClearUI();
+        skillPanel.SetActive(true);
+
+        // Update tab button visuals
+        UpdateTabVisuals();
+    }
+
+    // ---------- UPDATE TAB BUTTON VISUALS ----------
+    void UpdateTabVisuals()
+    {
+        if (upgradeTabButton)
+        {
+            var colors = upgradeTabButton.colors;
+            Color targetColor = showingUpgrade ? selectedTabColor : unselectedTabColor;
+            colors.normalColor = targetColor;
+            colors.highlightedColor = targetColor;
+            colors.selectedColor = targetColor; // Add this line
+            colors.pressedColor = targetColor;  // Optional: also set pressed color
+            upgradeTabButton.colors = colors;
+            upgradeTabButton.targetGraphic.color = targetColor;
+        }
+
+        if (skillTabButton)
+        {
+            var colors = skillTabButton.colors;
+            Color targetColor = showingUpgrade ? unselectedTabColor : selectedTabColor;
+            colors.normalColor = targetColor;
+            colors.highlightedColor = targetColor;
+            colors.selectedColor = targetColor; // Add this line
+            colors.pressedColor = targetColor;  // Optional: also set pressed color
+            skillTabButton.colors = colors;
+            skillTabButton.targetGraphic.color = targetColor;
+        }
     }
 
     // ---------- UPGRADE LIST CREATION ----------
