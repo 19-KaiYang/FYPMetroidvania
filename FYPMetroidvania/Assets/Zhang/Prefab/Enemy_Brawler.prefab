@@ -732,7 +732,7 @@ MonoBehaviour:
   attackMultiplier: 2
   finalDamage: 0
   attackDamage: 0
-  knockback: {x: 0, y: 0}
+  knockback: {x: 8, y: 0}
   ccTime: 0.5
 --- !u!61 &2147137083326911622
 BoxCollider2D:
@@ -800,7 +800,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5033397307062096171
 Transform:
   m_ObjectHideFlags: 0
@@ -1647,7 +1647,7 @@ MonoBehaviour:
   attackMultiplier: 1
   finalDamage: 0
   attackDamage: 0
-  knockback: {x: 0, y: 0}
+  knockback: {x: 10, y: 0}
   ccTime: 1
 --- !u!61 &8130619938128346494
 BoxCollider2D:
@@ -1728,7 +1728,7 @@ RectTransform:
   m_Father: {fileID: 7067308921444624326}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 1.666687, y: 0}
   m_SizeDelta: {x: -1.666687, y: 0}
   m_Pivot: {x: 0, y: 0.5}

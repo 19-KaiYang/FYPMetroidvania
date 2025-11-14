@@ -491,7 +491,7 @@ public class PlayerController : MonoBehaviour
     public void OnJump()
     {
         if (skills != null && skills.IsChargeLocked) return;
-
+        if (health.currentCCState != CrowdControlState.None) return;
         if (platformDropping) return;
 
         jumpBufferCounter = jumpBufferTime;
@@ -595,8 +595,7 @@ public class PlayerController : MonoBehaviour
         if (skills != null && skills.IsUsingSkill) return;
         if (isInCutscene) return;
 
-        var health = GetComponent<Health>();
-        if (health != null && health.currentCCState == CrowdControlState.Knockdown) return;
+        if (health.currentCCState != CrowdControlState.None) return;
 
         if (dashCooldownTimer > 0f) return;
         if (dashesRemaining <= 0) return;

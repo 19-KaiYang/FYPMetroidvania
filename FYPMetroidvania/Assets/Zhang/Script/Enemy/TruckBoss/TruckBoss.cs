@@ -888,6 +888,7 @@ public class TruckBoss : Enemy
                 animator.SetTrigger("startRevving");
                 FaceToPlayer();
                 revvingRampageStep = RevvingRampageStep.CHARGE;
+                AudioManager.PlaySFX(SFXTYPE.REVVING, 0.5f);
                 break;
 
             case RevvingRampageStep.CHARGE:
