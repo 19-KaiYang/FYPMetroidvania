@@ -8,10 +8,13 @@ public class MainMenuUI : MonoBehaviour
     [SerializeField] private GameObject pausePanel;
     [SerializeField] private GameObject settingPanel;
     [SerializeField] private GameObject MainMenu;
-    [SerializeField] private GameObject continueButton; 
+    [SerializeField] private GameObject continueButton;
 
     private bool isPause = false;
     private bool otherPanel = false;
+
+    private bool startGame = false;
+    public GameObject bg;
 
     private void Awake()
     {
@@ -118,6 +121,36 @@ public class MainMenuUI : MonoBehaviour
     }
     public void NewGameButton()
     {
+        bg.GetComponent<Animator>().SetTrigger("StartGame");
+
+        //if (AudioManager.instance != null)
+        //{
+        //    AudioManager.instance.StopBGM();
+        //}
+
+        //RoomSaveManager.ClearSaveData();
+
+        //if (SceneTransitionManager.instance != null)
+        //{
+        //    SceneTransitionManager.instance.roomIndex = 0;
+        //    SceneTransitionManager.instance.currentSceneName = "GoblinCamp";
+        //    SceneTransitionManager.instance.lastSceneName = "";
+        //}
+        //if (SceneTransitionManager.instance != null)
+        //{
+        //    Destroy(SceneTransitionManager.instance.gameObject);
+        //    SceneTransitionManager.instance = null;
+        //}
+
+        //// Hide UI and start game
+        //MainMenu.SetActive(false);
+        //Time.timeScale = 1f;
+
+        //Debug.Log("=== Starting New Game from Goblin Camp ===");
+        //SceneManager.LoadScene("Goblin Camp");
+    }
+    public void NewGame()
+    {
         if (AudioManager.instance != null)
         {
             AudioManager.instance.StopBGM();
@@ -144,7 +177,6 @@ public class MainMenuUI : MonoBehaviour
         Debug.Log("=== Starting New Game from Goblin Camp ===");
         SceneManager.LoadScene("Goblin Camp");
     }
-
     public void MainMenuButton()
     {
         if (AudioManager.instance != null)
