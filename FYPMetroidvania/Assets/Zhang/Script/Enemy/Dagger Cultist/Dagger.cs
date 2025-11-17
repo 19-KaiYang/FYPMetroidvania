@@ -24,9 +24,10 @@ public class Dagger : ProjectileBase
         playerPosition = PlayerController.instance.transform.position;
         Vector3 f = transform.localScale;
         if (playerPosition.x < transform.position.x) f.y = -1;
-        else f.y = 1;
+        else f.y = 0.5f;
         transform.localScale = f;
         timer = 0f;
+        Destroy(gameObject, 2);
     }
     public void SetOwner(DaggerCultist enemy)
     {
@@ -52,20 +53,22 @@ public class Dagger : ProjectileBase
     {
         base.Update();
 
-        if (rb != null)
-        {
-            Vector2 v = rb.linearVelocity;
-            if (v.sqrMagnitude > 0.01f)
-            {
-                float angle = Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg;
-                transform.rotation = Quaternion.Euler(0, 0, angle);
-            }
-        }
+        
 
-        R.Rotate(0,0,1200 * Time.deltaTime, Space.Self);
+        //if (rb != null)
+        //{
+        //    Vector2 v = rb.linearVelocity;
+        //    if (v.sqrMagnitude > 0.01f)
+        //    {
+        //        float angle = Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg;
+        //        transform.rotation = Quaternion.Euler(0, 0, angle);
+        //    }
+        //}
 
-        timer += Time.deltaTime;
-        if (timer > 2.5f) Despawn();
+        //R.Rotate(0,0,1200 * Time.deltaTime, Space.Self);
+
+        //timer += Time.deltaTime;
+        //if (timer > 2.5f) Despawn();
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
