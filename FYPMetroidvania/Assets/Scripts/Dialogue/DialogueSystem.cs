@@ -3,11 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using Unity.Cinemachine;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Playables;
-using UnityEngine.Timeline;
 using UnityEngine.UI;
 
 public class DialogueSystem : MonoBehaviour, IPointerClickHandler
@@ -16,11 +14,13 @@ public class DialogueSystem : MonoBehaviour, IPointerClickHandler
     [SerializeField] PlayableDirector cutscenePlayer;
     [SerializeField] CinemachineImpulseSource impulseSource;
     [SerializeField] private Canvas DialogueCanvas;
+    [SerializeField] private Canvas KeybindIndicator;
     [SerializeField] private Image characterImage;
     [SerializeField] private Image npcImage;
     [SerializeField] private Image textPanel;
     [SerializeField] private Image namePanel;
     [SerializeField] private Image nextIndicator;
+    private Vector3 nextArrowPosition;
     [SerializeField] private TextMeshProUGUI _speakerNameBox;
     [SerializeField] private TextMeshProUGUI _textBox;
     public List<Button> optionButtons;
@@ -33,7 +33,9 @@ public class DialogueSystem : MonoBehaviour, IPointerClickHandler
     public DialogueStep currentDialogueStep = null;
     public int currentStepIndex;
     private bool textDone;
-    public bool skipSpace = true;
+    public bool autoplaying = false;
+    public float autoContinueTime = 1f;
+    public Image autoplayHighlight;
 
     public bool DebugClick = false;
 
@@ -59,12 +61,45 @@ public class DialogueSystem : MonoBehaviour, IPointerClickHandler
         textPanel.gameObject.SetActive(false);
         nextIndicator.enabled = false;
         textDone = false;
+        nextArrowPosition = nextIndicator.rectTransform.anchoredPosition;
+        KeybindIndicator.gameObject.SetActive(false);
         //foreach (var button in optionButtons) button.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (dialogueActive)
+        {
+            // Tracking inputs
+            if(Input.GetKeyDown(KeyCode.Backspace))
+            {
+                StopAllCoroutines();
+                DialogueCanvas.enabled = false;
+                dialogueActive = false;
+                PlayerController.instance.isInCutscene = false;
+                KeybindIndicator.gameObject.SetActive(false);
+            }
+            else if(Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.Space))
+            {
+                nextInputbuffer = true;  
+            }
+            else if(Input.GetKeyDown(KeyCode.Tab))
+            {
+                autoplaying = !autoplaying;
+                if (autoplaying)
+                {
+                    autoplayHighlight.gameObject.SetActive(true);
+                    autoplayHighlight.fillAmount = 0f;
+                    autoplayHighlight.DOFillAmount(1f, 3f).SetEase(Ease.Linear).SetLoops(-1, LoopType.Restart);
+                }
+                else
+                {
+                    autoplayHighlight.gameObject.SetActive(false);
+                    autoplayHighlight.DOKill();
+                }
+            }
+        } 
     }
     public void StartDialogue(DialogueTextSO dialogueData)
     {
@@ -74,6 +109,9 @@ public class DialogueSystem : MonoBehaviour, IPointerClickHandler
         DialogueCanvas.enabled = true;
         dialogueActive = true;
         PlayerController.instance.isInCutscene = true;
+        KeybindIndicator.gameObject.SetActive(true);
+        autoplaying = false;
+        autoplayHighlight.gameObject.SetActive(false);
         StartCoroutine(DialogueCoroutine(dialogueData));
     }
     IEnumerator DialogueCoroutine(DialogueTextSO dialogueData, int startstep = 0)
@@ -91,6 +129,7 @@ public class DialogueSystem : MonoBehaviour, IPointerClickHandler
         bool animate = true;
         currentStepIndex = startstep;
         DialogueStep dialogueStep;
+        float autoTimer = 0f;
 
         for (int i = startstep; i < dialogueData.Steps.Count; i++)
         {
@@ -98,14 +137,19 @@ public class DialogueSystem : MonoBehaviour, IPointerClickHandler
             animate = dialogueStep.Name != currSpeaker;
             SpeakerTransition(dialogueStep);
             Debug.Log("next dialogue step");
-            nextIndicator.enabled = true;
             while (!textDone) yield return null;
             if (!dialogueStep.autoskip)
             {
-                while (!nextInputbuffer) yield return null; // Wait for player input
+                //autoTimer += Time.deltaTime;
+                while (!(autoplaying && autoTimer > autoContinueTime) && !nextInputbuffer)
+                {
+                    autoTimer += Time.deltaTime;
+                    yield return null;
+                }
+                //while (!nextInputbuffer) yield return null; // Wait for player input
             }
+            autoTimer = 0f;
             nextInputbuffer = false;
-            nextIndicator.enabled = false;
             currSpeaker = dialogueStep.Name;
             currentStepIndex++;
         }
@@ -117,9 +161,13 @@ public class DialogueSystem : MonoBehaviour, IPointerClickHandler
         }
         else PlayerController.instance.isInCutscene = false;
         if (postCutsceneObject != null) postCutsceneObject.SetActive(true);
+        KeybindIndicator.gameObject.SetActive(false);
     }
     IEnumerator DialogueTextCoroutine(DialogueStep dialoguestep)
     {
+        nextIndicator.enabled = false;
+        nextIndicator.rectTransform.DOKill();
+        nextIndicator.rectTransform.anchoredPosition = nextArrowPosition;
         _textBox.text = dialoguestep.Text;
         _speakerNameBox.text = dialoguestep.Name;
         currentDialogueStep = dialoguestep;
@@ -148,6 +196,11 @@ public class DialogueSystem : MonoBehaviour, IPointerClickHandler
             yield return new WaitForSeconds(speed);
         }
         textDone = true;
+        if (!autoplaying)
+        {
+            nextIndicator.enabled = true;
+            nextIndicator.rectTransform.DOAnchorPosY(nextIndicator.rectTransform.anchoredPosition.y - 10f, 1f).SetEase(Ease.InQuad).SetLoops(-1, LoopType.Yoyo);
+        }
     }
     void SpeakerTransition(DialogueStep nextStep, float duration = 0.5f)
     {
@@ -260,4 +313,5 @@ public class DialogueSystem : MonoBehaviour, IPointerClickHandler
         else postCutsceneObject = null;
         StartDialogue(DialogueData);
     }
+
 }

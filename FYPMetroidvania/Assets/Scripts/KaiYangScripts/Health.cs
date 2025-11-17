@@ -269,7 +269,7 @@ public class Health : MonoBehaviour
      bool triggerEffects = true, bool isDebuff = false, float knockbackMultiplier = 1f, 
      Color? damageNumberColor = null, bool isCritical = false)
     {
-        if (isPlayer && invincible) return;
+        if (invincible) return;
 
         if (truckBoss != null && truckBoss.armor)
         {
@@ -404,6 +404,7 @@ public class Health : MonoBehaviour
     {
         currentHealth += healAmount;
         currentHealth = Mathf.Min(currentHealth, maxHealth);
+        updateUI?.Invoke(this, healAmount, Color.green, false);
     }
 
     public float GetHealthPercentage() => currentHealth / maxHealth;
