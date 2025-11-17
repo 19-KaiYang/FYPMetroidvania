@@ -78,6 +78,7 @@ public class DialogueSystem : MonoBehaviour, IPointerClickHandler
                 DialogueCanvas.enabled = false;
                 dialogueActive = false;
                 PlayerController.instance.isInCutscene = false;
+                if (postCutsceneObject != null) postCutsceneObject.SetActive(true);
                 KeybindIndicator.gameObject.SetActive(false);
             }
             else if(Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.Space))
@@ -191,7 +192,7 @@ public class DialogueSystem : MonoBehaviour, IPointerClickHandler
             }
             _textBox.maxVisibleCharacters = i + 1;
             AudioManager.PlaySFX(dialoguestep.sfx, 0.5f, pitch: dialoguestep.pitch);
-            if (line[i] == '.') yield return new WaitForSeconds(0.3f);
+            if (line[i] == '.' || line[i] == '!' || line[i] == '?') yield return new WaitForSeconds(0.3f);
             else if (line[i] == ',') yield return new WaitForSeconds(0.15f);
             yield return new WaitForSeconds(speed);
         }

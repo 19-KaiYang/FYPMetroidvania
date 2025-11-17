@@ -249,6 +249,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54b2d9bffaec2234d97268917921d6b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ComicDialogue
+  text: {fileID: 0}
+  textSpeed: 30
 --- !u!114 &230944780
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -338,6 +340,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54b2d9bffaec2234d97268917921d6b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ComicDialogue
+  text: {fileID: 0}
+  textSpeed: 30
 --- !u!114 &255476258
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1766,7 +1770,7 @@ MonoBehaviour:
   currentPage: 0
   pageAnchor: {fileID: 1338374896}
   pageWidth: 1620
-  pageSpacing: 200
+  pageSpacing: 50
 --- !u!114 &1343394439
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2107,6 +2111,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54b2d9bffaec2234d97268917921d6b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ComicDialogue
+  text: {fileID: 0}
+  textSpeed: 30
 --- !u!114 &1561082189
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2196,6 +2202,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54b2d9bffaec2234d97268917921d6b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ComicDialogue
+  text: {fileID: 0}
+  textSpeed: 30
 --- !u!114 &1585631353
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2421,6 +2429,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54b2d9bffaec2234d97268917921d6b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ComicDialogue
+  text: {fileID: 0}
+  textSpeed: 30
 --- !u!114 &1681659176
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2510,6 +2520,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54b2d9bffaec2234d97268917921d6b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ComicDialogue
+  text: {fileID: 0}
+  textSpeed: 30
 --- !u!114 &1819610531
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2771,6 +2783,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54b2d9bffaec2234d97268917921d6b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ComicDialogue
+  text: {fileID: 0}
+  textSpeed: 30
 --- !u!114 &2084698527
 MonoBehaviour:
   m_ObjectHideFlags: 0
