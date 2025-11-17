@@ -84,9 +84,18 @@ public class Enemy : MonoBehaviour
         if (platform)
         {
             isOnPlatform = true;
-            if (rb.linearVelocityY <= 0) rb.linearVelocityY = 0;
+            if (rb.linearVelocityY <= 0)
+            {
+                rb.linearVelocityY = 0;
+                rb.gravityScale = 0f;
+                //transform.position += (Vector3)(Vector2.up * Mathf.Abs(groundCheck.position.y - platform.point.y));
+            }
         }
-        else isOnPlatform = false;
+        else
+        {
+            rb.gravityScale = 3f;
+            isOnPlatform = false;
+        }
     }
 
     protected virtual void SpawnParticle(Health health)

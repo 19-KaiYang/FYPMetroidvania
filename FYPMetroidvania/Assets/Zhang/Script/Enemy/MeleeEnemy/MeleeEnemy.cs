@@ -61,14 +61,14 @@ public class MeleeEnemy : Enemy
         stateMachine.Update();
         DetectPlayer();
 
-        if (rb.linearVelocity.y < 0)
-        {
-            rb.gravityScale = gravityB;
-        }
-        else
-        {
-            rb.gravityScale = gravityA;
-        }
+        //if (rb.linearVelocity.y < 0)
+        //{
+        //    rb.gravityScale = gravityB;
+        //}
+        //else
+        //{
+        //    rb.gravityScale = gravityA;
+        //}
         if (Input.GetKeyDown(KeyCode.N))
         {
             animator.SetTrigger("Attack");

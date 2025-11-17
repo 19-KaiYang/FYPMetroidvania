@@ -1,5 +1,3 @@
-using System.Data;
-using System.Diagnostics;
 using UnityEngine;
 
 public abstract class Debuff : ScriptableObject
@@ -22,7 +20,7 @@ public abstract class Debuff : ScriptableObject
         DebuffInstance match = owner.debuffs.Find(s => s.debuff.debuffName == debuffName);
         if (match != null)
         {
-            match.stacks += Mathf.Clamp(stacks, 0, maxStacks);
+            match.stacks = Mathf.Clamp(match.stacks + stacks, 0, maxStacks);
             match.duration = duration;
         }
         else
