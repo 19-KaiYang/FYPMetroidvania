@@ -61,7 +61,8 @@ public class DialogueSystem : MonoBehaviour, IPointerClickHandler
         textPanel.gameObject.SetActive(false);
         nextIndicator.enabled = false;
         textDone = false;
-        nextArrowPosition = nextIndicator.rectTransform.position;
+        nextArrowPosition = nextIndicator.rectTransform.anchoredPosition;
+        KeybindIndicator.gameObject.SetActive(false);
         //foreach (var button in optionButtons) button.gameObject.SetActive(false);
     }
 
@@ -71,11 +72,13 @@ public class DialogueSystem : MonoBehaviour, IPointerClickHandler
         if (dialogueActive)
         {
             // Tracking inputs
-            if(Input.GetKeyDown(KeyCode.Backspace) && !DialogueData.hasCutscene)
+            if(Input.GetKeyDown(KeyCode.Backspace))
             {
+                StopAllCoroutines();
                 DialogueCanvas.enabled = false;
                 dialogueActive = false;
                 PlayerController.instance.isInCutscene = false;
+                KeybindIndicator.gameObject.SetActive(false);
             }
             else if(Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.Space))
             {
@@ -106,7 +109,7 @@ public class DialogueSystem : MonoBehaviour, IPointerClickHandler
         DialogueCanvas.enabled = true;
         dialogueActive = true;
         PlayerController.instance.isInCutscene = true;
-        KeybindIndicator.enabled = true;
+        KeybindIndicator.gameObject.SetActive(true);
         autoplaying = false;
         autoplayHighlight.gameObject.SetActive(false);
         StartCoroutine(DialogueCoroutine(dialogueData));
@@ -158,13 +161,13 @@ public class DialogueSystem : MonoBehaviour, IPointerClickHandler
         }
         else PlayerController.instance.isInCutscene = false;
         if (postCutsceneObject != null) postCutsceneObject.SetActive(true);
-        KeybindIndicator.enabled = false;
+        KeybindIndicator.gameObject.SetActive(false);
     }
     IEnumerator DialogueTextCoroutine(DialogueStep dialoguestep)
     {
         nextIndicator.enabled = false;
         nextIndicator.rectTransform.DOKill();
-        nextIndicator.rectTransform.position = nextArrowPosition;
+        nextIndicator.rectTransform.anchoredPosition = nextArrowPosition;
         _textBox.text = dialoguestep.Text;
         _speakerNameBox.text = dialoguestep.Name;
         currentDialogueStep = dialoguestep;
@@ -196,7 +199,7 @@ public class DialogueSystem : MonoBehaviour, IPointerClickHandler
         if (!autoplaying)
         {
             nextIndicator.enabled = true;
-            nextIndicator.rectTransform.DOMoveY(nextIndicator.rectTransform.position.y - 20f, 1f).SetEase(Ease.InQuad).SetLoops(-1, LoopType.Yoyo);
+            nextIndicator.rectTransform.DOAnchorPosY(nextIndicator.rectTransform.anchoredPosition.y - 10f, 1f).SetEase(Ease.InQuad).SetLoops(-1, LoopType.Yoyo);
         }
     }
     void SpeakerTransition(DialogueStep nextStep, float duration = 0.5f)
