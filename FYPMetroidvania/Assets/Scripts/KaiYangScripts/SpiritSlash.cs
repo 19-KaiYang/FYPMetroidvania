@@ -184,6 +184,9 @@ public class SpiritSlash : MonoBehaviour
         yield return null;
 
         col.enabled = true;
+
+        AudioManager.PlaySFX(SFXTYPE.SPIRIT_SLASHSFX, 0.7f);
+
         yield return new WaitForFixedUpdate();
         col.enabled = false;
 
@@ -309,7 +312,7 @@ public class SpiritSlash : MonoBehaviour
 
         float originalTimeScale = Mathf.Max(Time.timeScale, 1.0f);
 
-        AudioManager.PlaySFX(SFXTYPE.SPIRIT_CUTINSFX, 0.8f);
+        AudioManager.PlaySFX(SFXTYPE.SPIRIT_SWORDINTROSFX, 0.8f);
 
         // Freeze gameplay BEFORE cut-in starts
         Time.timeScale = 0f;
@@ -392,6 +395,9 @@ public class SpiritSlash : MonoBehaviour
 
         // Burst effects while time is frozen
         CreateDramaticBurst();
+
+        
+        AudioManager.PlaySFX(SFXTYPE.SPIRIT_CUTINSFX, 0.8f);
 
         // Fade in spirit slash while still frozen
         elapsed = 0f;
