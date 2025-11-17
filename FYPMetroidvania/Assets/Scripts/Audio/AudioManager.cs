@@ -201,7 +201,9 @@ public enum SFXTYPE
     HEALING,
     SPIRIT_POTIONSFX,
     SPIRIT_CUTINSFX,
-    REVVING
+    REVVING,
+    SPIRIT_SLASHSFX,
+    SPIRIT_SWORDINTROSFX
 }
 [Serializable]
 public class BGM
