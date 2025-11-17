@@ -50,7 +50,7 @@ public class EnemyHealthUI : MonoBehaviour
         if (health.transform.localScale.x < 0) transform.localScale = new Vector3(-1f, 1f, 1f);
         else transform.localScale = new Vector3(1f, 1f, 1f);
     }
-    void UpdateHealthUI(Health health, float numberValue, Color numberColor)
+    void UpdateHealthUI(Health health, float numberValue, Color numberColor, bool isCritical = false)
     {
         if (numberValue <= 0) return;
         healthBar.value = health.currentHealth / health.maxHealth;
@@ -60,7 +60,7 @@ public class EnemyHealthUI : MonoBehaviour
             if(!dmgNumber.gameObject.activeInHierarchy)
             {
                 dmgNumber.gameObject.SetActive(true);
-                dmgNumber.Initialize(Mathf.RoundToInt(numberValue), numberColor);
+                dmgNumber.Initialize(Mathf.RoundToInt(numberValue), numberColor, isCritical);
                 //StartCoroutine(DamageNumberCoroutine(dmgNumber));
                 dmgNumber.transform.localScale = Vector3.one * 0.25f;
                 dmgNumber.transform.localPosition = new Vector3(Random.Range(-0.7f, 0.7f), Random.Range(0f, 0.5f), 0f);
@@ -70,7 +70,7 @@ public class EnemyHealthUI : MonoBehaviour
                 dmgNumber.transform.rotation = Quaternion.identity;
 
                 DG.Tweening.Sequence numberSequence = DOTween.Sequence();
-                numberSequence.Append(dmgNumber.transform.DOScale(Vector3.one, 0.2f));
+                numberSequence.Append(dmgNumber.transform.DOScale(isCritical ? Vector3.one * 1.2f : Vector3.one, 0.2f));
                 numberSequence.Join(dmgNumber.numberText.DOFade(1f, 0.2f));
                 numberSequence.AppendInterval(0.5f);
                 numberSequence.Append(dmgNumber.numberText.DOFade(0f, 0.75f));
@@ -86,7 +86,7 @@ public class EnemyHealthUI : MonoBehaviour
             }
         }
     }
-    void UpdateArmourUI(float currentArmour, float armourDamage)
+    void UpdateArmourUI(float currentArmour, float armourDamage, bool isCritical = false)
     {
         armourBar.value = currentArmour;
         foreach (var dmgNumber in damageNumberObjPool)
@@ -94,7 +94,7 @@ public class EnemyHealthUI : MonoBehaviour
             if (!dmgNumber.gameObject.activeInHierarchy)
             {
                 dmgNumber.gameObject.SetActive(true);
-                dmgNumber.Initialize(Mathf.RoundToInt(armourDamage), Color.orange);
+                dmgNumber.Initialize(Mathf.RoundToInt(armourDamage), Color.orange, isCritical);
                 //StartCoroutine(DamageNumberCoroutine(dmgNumber));
                 dmgNumber.transform.localScale = Vector3.one * 0.25f;
                 dmgNumber.transform.localPosition = new Vector3(Random.Range(-0.7f, 0.7f), Random.Range(0f, 0.5f), 0f);
@@ -104,7 +104,7 @@ public class EnemyHealthUI : MonoBehaviour
                 dmgNumber.transform.rotation = Quaternion.identity;
 
                 DG.Tweening.Sequence numberSequence = DOTween.Sequence();
-                numberSequence.Append(dmgNumber.transform.DOScale(Vector3.one, 0.2f));
+                numberSequence.Append(dmgNumber.transform.DOScale(isCritical ? Vector3.one * 1.2f : Vector3.one, 0.2f));
                 numberSequence.Join(dmgNumber.numberText.DOFade(1f, 0.2f));
                 numberSequence.AppendInterval(0.5f);
                 numberSequence.Append(dmgNumber.numberText.DOFade(0f, 0.75f));

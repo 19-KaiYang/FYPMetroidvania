@@ -272,6 +272,7 @@ MonoBehaviour:
   defaultDamageColor: {r: 0, g: 0, b: 0, a: 0}
   arcKnockdownGravity: 15
   isInArcKnockdown: 0
+  juggleTime: 0
   knockbackForce: 1
   stunPushbackForce: 1
   groundCheckValue: 1
@@ -289,6 +290,7 @@ MonoBehaviour:
   isBloodMarked: 0
   bloodMarkHealAmount: 10
   bloodMarkIcon: {fileID: 1490575184413014164}
+  bloodMarkDamageTaken: 0
   debuffVFXs: []
 --- !u!114 &8791482666006796526
 MonoBehaviour:
@@ -302,6 +304,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7da4b99e1e5cf7842ad26297d17da583, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TrainingDummy
+  animator: {fileID: 0}
   player: {fileID: 0}
   playerLayer:
     serializedVersion: 2
@@ -322,6 +325,7 @@ MonoBehaviour:
   distanceToPlayer: {x: 0, y: 0}
   groundCheck: {fileID: 8750132239345747604}
   groundCheckRadius: 0.1
+  health: {fileID: 0}
   damageParticle: {fileID: 6966180119663813987, guid: edda90ab5a07d484ca1c0c2ce435f1a7, type: 3}
   bloodParticle: {fileID: 0}
   damageParticlePos: {fileID: 3452096356016260859}
@@ -1092,6 +1096,7 @@ MonoBehaviour:
   damageNumberTransform: {fileID: 4856395519017941355}
   damageNumberObjPool: []
   damageNumberPrefab: {fileID: 1262934999775421051, guid: 179548dd35fac9c41b57c7521bba91ad, type: 3}
+  armourBar: {fileID: 0}
 --- !u!1001 &7693643931522248366
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1146,7 +1151,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9570669
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
       propertyPath: m_LocalRotation.x
@@ -1158,7 +1163,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.28986716
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -1178,7 +1183,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4689560137712299053, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 33.7
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9109311307756738106, guid: 8647731dbfc2cc142b50c3b59e8761a6, type: 3}
       propertyPath: m_Name

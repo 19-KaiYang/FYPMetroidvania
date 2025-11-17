@@ -527,7 +527,7 @@ public class Skills : MonoBehaviour
         if (proj != null)
         {
             proj.bloodCost = swordSlashBloodCost;
-            proj.Init(dir);
+            proj.Init(dir, this);
             AudioManager.PlaySFX(SFXTYPE.SWORD_PROJECTILE);
         }
         while(waveStart) yield return null;
@@ -569,28 +569,8 @@ public class Skills : MonoBehaviour
         while(!lungeStart) yield return null;
 
         AudioManager.PlaySFX(SFXTYPE.SWORD_DASH, 0.5f);
-        // --- Hook into hitbox for Sword Dash specific logic ---
-        //void OnDashHit(Hitbox hb, Health h)
-        //{
-        //    if (h == null || h.isPlayer) return;
 
-        //    //Vector2 knockDir = 
-
-        //    //h.TakeDamage(dashFlatDamage, knockDir, false, CrowdControlState.None, 0f, true, false, 0f);
-
-        //    // Spirit + BloodMark + HealthCost (only Sword)
-        //    h.ApplyBloodMark(bloodMarkHealAmount);
-        //    GainSpirit(spiritGainPerHit);
-
-        //    // Local hitstop
-        //    //if (hitstop > 0f)
-        //    //{
-        //    //    StartCoroutine(LocalHitstop(h.GetComponent<Rigidbody2D>(), hitstop));
-        //    //    StartCoroutine(LocalHitstop(rb, hitstop));
-        //    //}
-        //}
-
-        Hitbox.OnHit += OnSkillHit;
+        Hitbox.OnSkillHit += OnSkillHit;
         //SKILL START, SKILL HIT, SKILL END
         Coroutine hitboxRoutine = StartCoroutine(ActivateSkillHitbox(swordDashHitbox, dashDuration));
         dashParticle.Play();
@@ -631,7 +611,7 @@ public class Skills : MonoBehaviour
         if (hitboxRoutine != null)
             yield return hitboxRoutine; 
 
-        Hitbox.OnHit -= OnSkillHit;
+        Hitbox.OnSkillHit -= OnSkillHit;
 
         if (collisionToggled)
             Physics2D.IgnoreLayerCollision(playerLayer, enemyLayer, false);
@@ -689,7 +669,7 @@ public class Skills : MonoBehaviour
         //    GainSpirit(spiritGainPerHit);
         //}
 
-        Hitbox.OnHit += OnSkillHit;
+        Hitbox.OnSkillHit += OnSkillHit;
 
         // --- Phase 1: short forward dash ---
         controller.animator.SetTrigger("Sword Uppercut");
@@ -716,7 +696,7 @@ public class Skills : MonoBehaviour
             yield return hitboxRoutine;
 
         // Cleanup
-        Hitbox.OnHit -= OnSkillHit;
+        Hitbox.OnSkillHit -= OnSkillHit;
 
         // Restore collisions
         if (collisionToggled)
@@ -1105,13 +1085,6 @@ public class Skills : MonoBehaviour
         Hitbox hb = hitbox.GetComponent<Hitbox>();
         if (hb == null) yield break;
 
-        
-        System.Action<Hitbox, Health> onHit = (h, enemy) =>
-        {
-            skillHit?.Invoke(h, enemy);  
-        };
-        Hitbox.OnHit += onHit;
-
         skillStart?.Invoke(hb);
 
         // Activate
@@ -1123,13 +1096,7 @@ public class Skills : MonoBehaviour
 
         // Fire end event
         skillEnd?.Invoke();
-
-        // Unsubscribe
-        Hitbox.OnHit -= onHit;
     }
-
-
-
     public void ApplySkillCC(Health target, Vector2 knockDir,
    CrowdControlState groundedCC, CrowdControlState airborneCC,
    float ccDuration = 0f, float stunKnockbackMultiplier = 1f, float knockdownKnockbackMultiplier = 1f)

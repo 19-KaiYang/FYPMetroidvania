@@ -79,8 +79,8 @@ public class Health : MonoBehaviour
     // Events
     public Action<Health> damageTaken;
     public System.Action<GameObject> enemyDeath;
-    public Action<Health, float, Color> updateUI;
-    public Action<float,float> updateArmour;
+    public Action<Health, float, Color, bool> updateUI;
+    public Action<float, float, bool> updateArmour;
 
     private AudioSource audioSource;
     private Rigidbody2D rb;
@@ -266,7 +266,8 @@ public class Health : MonoBehaviour
 
     public void TakeDamage(float amount, Vector2? hitDirection = null, bool useRawForce = false,
      CrowdControlState forceCC = CrowdControlState.None, float forceCCDuration = 0f,
-     bool triggerEffects = true, bool isDebuff = false, float knockbackMultiplier = 1f, Color? damageNumberColor = null)
+     bool triggerEffects = true, bool isDebuff = false, float knockbackMultiplier = 1f, 
+     Color? damageNumberColor = null, bool isCritical = false)
     {
         if (isPlayer && invincible) return;
 
@@ -278,13 +279,13 @@ public class Health : MonoBehaviour
             amount -= armorDamage;
 
             Debug.Log($"Armor take {armorDamage} damage£¬current armor£º{truckBoss.currentArmor}");
-            updateArmour?.Invoke(truckBoss.currentArmor, armorDamage);
+            updateArmour?.Invoke(truckBoss.currentArmor, armorDamage, isCritical);
             if (amount <= 0f) return;
         }
 
         currentHealth -= amount;
         bloodMarkDamageTaken += amount;
-        updateUI?.Invoke(this, amount, damageNumberColor.HasValue ? damageNumberColor.Value : Color.white);
+        updateUI?.Invoke(this, amount, damageNumberColor.HasValue ? damageNumberColor.Value : Color.white, isCritical);
         if (triggerEffects) damageTaken?.Invoke(this);
 
         if (spriteRenderer != null && gameObject.activeInHierarchy && spriteRenderer.color == Color.white)
@@ -416,8 +417,8 @@ public class Health : MonoBehaviour
         if (animator != null)
             animator.SetTrigger("Die");
 
-        for (int i = debuffs.Count - 1; i >= 0; i--)
-            RemoveDebuff(debuffs[i]);
+        //for (int i = debuffs.Count - 1; i >= 0; i--)
+        //    RemoveDebuff(debuffs[i]);
 
         if (!isPlayer && isBloodMarked)
         {

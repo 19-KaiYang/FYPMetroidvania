@@ -691,10 +691,13 @@ MonoBehaviour:
   groundCheckRadius: 0.1
   groundLayer:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 4224
   platformLayer:
     serializedVersion: 2
     m_Bits: 512
+  wallLayer:
+    serializedVersion: 2
+    m_Bits: 128
   colliderSize: {x: 0.5, y: 1}
   isInKnockback: 0
   knockbackTimer: 0
@@ -1065,7 +1068,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpiritGauge
   maxSpirit: 100
-  drainPerSecond: 20
+  drainPerSecond: 30
 --- !u!95 &456017791776340822
 Animator:
   serializedVersion: 7
