@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuUI : MonoBehaviour
 {
-    private static MainMenuUI instance;
+    public static MainMenuUI instance { get; private set; }
 
     [SerializeField] private GameObject pausePanel;
     [SerializeField] private GameObject settingPanel;
@@ -28,7 +28,6 @@ public class MainMenuUI : MonoBehaviour
 
     private void Start()
     {
-        
         if (SceneManager.GetActiveScene().name == "MainMenu")
         {
             UpdateContinueButtonState();
@@ -50,6 +49,10 @@ public class MainMenuUI : MonoBehaviour
     
         if (scene.name == "MainMenu")
         {
+            bg = GameObject.Find("bg");
+            bg.GetComponentInChildren<MainMenuAnimationEvent>();
+            //bg.GetComponent<Animator>().SetTrigger("StartGame");    
+
             MainMenu.SetActive(true);
             pausePanel.SetActive(false);
             settingPanel.SetActive(false);
