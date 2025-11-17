@@ -599,7 +599,7 @@ public class TruckBoss : Enemy
                 if(delayTimer <= 0 && rampageStep == RampageStep.DELAY)
                 {
                     rb.bodyType = RigidbodyType2D.Dynamic;
-                    rb.gravityScale = 10;
+                    rb.gravityScale = 14;
                     ray.SetActive(false);
                     ray.transform.localScale = new Vector3(raywidth, 25, transform.localScale.z);
                     hitBox.SetActive(true);
@@ -805,6 +805,7 @@ public class TruckBoss : Enemy
                 refuelTimer = refuelTime;
                 
                 refuelStep =RefuelStep.REFUEL;
+                health.invincible = true;
                 break;
 
             case RefuelStep.REFUEL:
@@ -829,8 +830,7 @@ public class TruckBoss : Enemy
                 {
                     SuccessRefuel = true;
                     animator.SetBool("isRefuel", false);
-                    health.currentHealth += health.maxHealth * 0.3f;
-                    if(health.currentHealth > health.maxHealth) health.currentHealth = health.maxHealth;
+                    health.Heal(health.maxHealth * 0.3f);
 
                     var enemiesToKill = new List<GameObject>(aliveEnemies);
                     foreach (GameObject enemy in enemiesToKill)
@@ -848,6 +848,7 @@ public class TruckBoss : Enemy
                 break;
 
             case RefuelStep.DIZZY:
+                health.invincible = false;
                 dizzyTimer -= Time.deltaTime;
                 animator.SetBool("isDizzy", true);
                 health.knockbackMult = 1f;
@@ -864,6 +865,7 @@ public class TruckBoss : Enemy
                 break;
 
             case RefuelStep.END:
+                health.invincible = false;
                 SuccessRefuel = false;
                 enemyDead = false;
                 hurtBox.SetActive(true);

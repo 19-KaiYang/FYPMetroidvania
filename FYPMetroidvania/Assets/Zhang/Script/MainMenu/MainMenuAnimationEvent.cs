@@ -5,6 +5,11 @@ public class MainMenuAnimationEvent : MonoBehaviour
     public MainMenuUI mainMenuUI;
     public GameObject[] image;
 
+    private void Start()
+    {
+        //DontDestroyOnLoad(gameObject);
+        mainMenuUI = MainMenuUI.instance;
+    }
     public void StartGame()
     {
         mainMenuUI.NewGame();

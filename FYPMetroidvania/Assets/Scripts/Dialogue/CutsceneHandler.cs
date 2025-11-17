@@ -10,7 +10,7 @@ public class CutsceneHandler : MonoBehaviour
     private void Start()
     {
         //inCutscene = true;
-        skipIndicator.enabled = false;
+        skipIndicator.gameObject.SetActive(false);
         canSkip = false;
     }
     // Update is called once per frame
@@ -20,7 +20,7 @@ public class CutsceneHandler : MonoBehaviour
         else
         {
             inCutscene = false;
-            skipIndicator.enabled = false;
+            skipIndicator.gameObject.SetActive(false);
             canSkip = false;
         }
         if (!inCutscene) return;
@@ -36,7 +36,7 @@ public class CutsceneHandler : MonoBehaviour
     }
     public void CanSkip()
     {
-        skipIndicator.enabled = true;
+        skipIndicator.gameObject.SetActive(true);
         canSkip = true;
     }
 }
