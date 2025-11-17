@@ -2,16 +2,21 @@ using DG.Tweening;
 using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ComicHandler : MonoBehaviour
 {
     public List<ComicPage> Pages;
     public int currentPage;
     public RectTransform pageAnchor;
+    public Image autoplayHighlight;
 
     [Header("View Settings")]
     public int pageWidth = 1620;
     public int pageSpacing = 200;
+    public bool autoplaying;
+    public float autoplaytime = 2f;
+    private float autoTimer;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -27,10 +32,32 @@ public class ComicHandler : MonoBehaviour
             page.rectTransform.anchoredPosition = Vector2.zero + new Vector2(i * (pageWidth + pageSpacing), 0f);
             page.InitialisePage();
         }
+        autoplaying = false;
+        autoTimer = 0f;
     }
     // Update is called once per frame
     void Update()
     {
+        if (autoplaying)
+        {
+            autoTimer += Time.deltaTime;
+            if(autoTimer > autoplaytime)
+            {
+                autoTimer = 0f;
+                if (Pages[currentPage].TryNextPanel() == false)
+                {
+                    currentPage++;
+                    if (currentPage < Pages.Count)
+                    {
+                        NextPage();
+                    }
+                    else
+                    {
+                        Debug.Log("Comic finished");
+                    }
+                }
+            }
+        }
         // Handle all inputs
         if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0))
         {
@@ -47,10 +74,25 @@ public class ComicHandler : MonoBehaviour
                 }
             }
         }
+        if(Input.GetKeyDown(KeyCode.Tab))
+        {
+            autoplaying = !autoplaying;
+            if (autoplaying)
+            {
+                autoplayHighlight.gameObject.SetActive(true);
+                autoplayHighlight.fillAmount = 0f;
+                autoplayHighlight.DOFillAmount(1f, 3f).SetEase(Ease.Linear).SetLoops(-1, LoopType.Restart);
+            }
+            else
+            {
+                autoplayHighlight.gameObject.SetActive(false);
+                autoplayHighlight.DOKill();
+            }
+        }
     }
 
     void NextPage()
     {
-        pageAnchor.DOAnchorPosX(pageAnchor.anchoredPosition.x - pageWidth - pageSpacing, 1f).SetEase(Ease.OutSine);
+        pageAnchor.DOAnchorPosX(pageAnchor.anchoredPosition.x - pageWidth - pageSpacing, 0.3f).SetEase(Ease.OutSine);
     }
 }

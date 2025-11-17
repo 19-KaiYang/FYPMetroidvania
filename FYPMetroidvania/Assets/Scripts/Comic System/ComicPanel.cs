@@ -19,7 +19,7 @@ public class ComicPanel : MonoBehaviour
     }
     public void InitialiseDialogues()
     {
-        currentDialogue = 0;
+        currentDialogue = -1;
         for (int i = 0;i < SpeechBubbles.Count;i++)
         {
             var bubble = SpeechBubbles[i];
@@ -29,10 +29,19 @@ public class ComicPanel : MonoBehaviour
 
     public bool TryNextDialogue()
     {
+        if (currentDialogue >= 0)
+        {
+            if (!SpeechBubbles[currentDialogue].isDone)
+            {
+                SpeechBubbles[currentDialogue].skip = true;
+                return true;
+            }
+        }
+        currentDialogue++;
         if (currentDialogue < SpeechBubbles.Count)
         {
             SpeechBubbles[currentDialogue].transform.DOScale(Vector3.one, 0.25f);
-            currentDialogue++;
+            SpeechBubbles[currentDialogue].PlayDialogueBox();
             return true;
         }
 
