@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Dagger : ProjectileBase
+public class Tire : ProjectileBase
 {
     public CrowdControlState currentCCState = CrowdControlState.None;
     private PlayerController player;
@@ -32,76 +32,59 @@ public class Dagger : ProjectileBase
     {
         owner = enemy;
     }
-
     protected override void Awake()
     {
         base.Awake();
-        
+
     }
     private void Start()
     {
         finalDamage = attackMultiplier * owner.attackDamage;
     }
 
-    protected override void Move()
-    {
-          
-    }
-
+    // Update is called once per frame
     protected override void Update()
     {
         base.Update();
 
-
-
-        if (rb != null)
-        {
-            Vector2 v = rb.linearVelocity;
-            if (v.sqrMagnitude > 0.01f)
-            {
-                float angle = Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg;
-                transform.rotation = Quaternion.Euler(0, 0, angle);
-            }
-        }
-
-        R.Rotate(0, 0, 1200 * Time.deltaTime, Space.Self);
-
         timer += Time.deltaTime;
-        if (timer > 2.5f) Despawn();
-    }
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        //Health player = collision.GetComponent<Health>();
-        //if (player != null && player.isPlayer)
-        //{
-        //    player.TakeDamage(damage);
-
-        //    //Rigidbody2D rbEnemy = player.GetComponent<Rigidbody2D>();
-        //    //if (rbEnemy != null)
-        //    //{
-        //    //    Vector2 knockDir = (player.transform.position - transform.position).normalized;
-        //    //    ApplyKnockback(player, knockDir);
-        //    //}
-
-        //    Despawn();
-        //}
-
-        if (collision.CompareTag("Player"))
+        if (timer >= 1f && rb.linearVelocityX == 0)
         {
-            Health p = collision.GetComponent<Health>();
+            Despawn();
+        }
+    }
+    protected override void Move()
+    {
+
+    }
+    //private void OnTriggerEnter2D(Collider2D collision)
+    //{
+
+    //    if (collision.CompareTag("Player"))
+    //    {
+    //        Health p = collision.GetComponent<Health>();
+    //        if (p.invincible) return;
+    //        Vector2 dir;
+    //        dir = (collision.transform.position - this.transform.position).normalized;
+
+    //        p.TakeDamage(finalDamage, dir, true, CrowdControlState.Stunned, 0.5f);
+
+    //        Despawn();
+    //    }
+    //}
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag==("Player"))
+        {
+            Health p = collision.gameObject.GetComponent<Health>();
             if (p.invincible) return;
             Vector2 dir;
             dir = (collision.transform.position - this.transform.position).normalized;
 
             p.TakeDamage(finalDamage, dir, true, CrowdControlState.Stunned, 0.5f);
 
-
             Despawn();
         }
-
-        //if (!collision.CompareTag("Enemy") && !collision.CompareTag("Hurtbox") && timer >= 0.5f)
-        //{
-        //    Despawn();
-        //}
     }
 }
