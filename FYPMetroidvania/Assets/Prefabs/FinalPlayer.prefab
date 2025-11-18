@@ -137,6 +137,7 @@ MonoBehaviour:
   sfx: 0
   applyBloodMark: 0
   isSkillHitbox: 0
+  isProjectile: 0
   isUltimateHitbox: 0
   screenshake: 0
   impulseSource: {fileID: 0}
@@ -245,6 +246,7 @@ MonoBehaviour:
   sfx: 0
   applyBloodMark: 0
   isSkillHitbox: 0
+  isProjectile: 0
   isUltimateHitbox: 0
   screenshake: 0
   impulseSource: {fileID: 0}
@@ -353,6 +355,7 @@ MonoBehaviour:
   sfx: 7
   applyBloodMark: 0
   isSkillHitbox: 0
+  isProjectile: 0
   isUltimateHitbox: 0
   screenshake: 0
   impulseSource: {fileID: 0}
@@ -461,6 +464,7 @@ MonoBehaviour:
   sfx: 7
   applyBloodMark: 0
   isSkillHitbox: 0
+  isProjectile: 0
   isUltimateHitbox: 0
   screenshake: 0
   impulseSource: {fileID: 0}
@@ -849,7 +853,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af196f38ea8868b40a61bf0922e5bf00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
+  maxHealth: 500
   destroyOnDeath: 0
   isPlayer: 1
   currentHealth: 0
@@ -917,7 +921,7 @@ MonoBehaviour:
   dashSpeed: 22
   dashDuration: 0.2
   dashFlatDamage: 23
-  swordDashHealthCost: 5
+  swordDashHealthCost: 15
   swordDashGroundedCC: 2
   swordDashAirborneCC: 2
   swordDashCCDuration: 1.5
@@ -931,14 +935,14 @@ MonoBehaviour:
   uppercutForwardSpeed: 1
   uppercutDuration: 0.065
   uppercutFlatDamage: 10
-  swordUppercutHealthCost: 8
+  swordUppercutHealthCost: 10
   swordUppercutGroundedCC: 2
   swordUppercutAirborneCC: 2
   swordUppercutCCDuration: 2
   swordUppercutCooldown: 0
   swordUppercutCost: 20
   projectileSpawnPoint: {fileID: 7738462632357222821}
-  swordSlashBloodCost: 10
+  swordSlashBloodCost: 20
   swordSlashEnergyCost: 30
   crimsonWaveGroundedCC: 1
   crimsonWaveAirborneCC: 2
@@ -1483,6 +1487,7 @@ MonoBehaviour:
   sfx: 0
   applyBloodMark: 0
   isSkillHitbox: 0
+  isProjectile: 0
   isUltimateHitbox: 0
   screenshake: 0
   impulseSource: {fileID: 0}
@@ -6498,6 +6503,7 @@ MonoBehaviour:
   sfx: 7
   applyBloodMark: 0
   isSkillHitbox: 0
+  isProjectile: 0
   isUltimateHitbox: 0
   screenshake: 0
   impulseSource: {fileID: 0}
@@ -6606,6 +6612,7 @@ MonoBehaviour:
   sfx: 7
   applyBloodMark: 0
   isSkillHitbox: 1
+  isProjectile: 0
   isUltimateHitbox: 0
   screenshake: 0
   impulseSource: {fileID: 0}
@@ -6715,6 +6722,7 @@ MonoBehaviour:
   sfx: 8
   applyBloodMark: 0
   isSkillHitbox: 0
+  isProjectile: 0
   isUltimateHitbox: 0
   screenshake: 1
   impulseSource: {fileID: 2240046582288963860}
@@ -7202,6 +7210,7 @@ MonoBehaviour:
   sfx: 8
   applyBloodMark: 0
   isSkillHitbox: 1
+  isProjectile: 0
   isUltimateHitbox: 0
   screenshake: 0
   impulseSource: {fileID: 0}
@@ -7452,6 +7461,7 @@ MonoBehaviour:
   sfx: 0
   applyBloodMark: 0
   isSkillHitbox: 0
+  isProjectile: 0
   isUltimateHitbox: 0
   screenshake: 0
   impulseSource: {fileID: 0}
@@ -7560,6 +7570,7 @@ MonoBehaviour:
   sfx: 7
   applyBloodMark: 0
   isSkillHitbox: 0
+  isProjectile: 0
   isUltimateHitbox: 0
   screenshake: 0
   impulseSource: {fileID: 0}
@@ -7668,6 +7679,7 @@ MonoBehaviour:
   sfx: 0
   applyBloodMark: 0
   isSkillHitbox: 0
+  isProjectile: 0
   isUltimateHitbox: 0
   screenshake: 0
   impulseSource: {fileID: 0}
@@ -7776,6 +7788,7 @@ MonoBehaviour:
   sfx: 7
   applyBloodMark: 0
   isSkillHitbox: 0
+  isProjectile: 0
   isUltimateHitbox: 0
   screenshake: 0
   impulseSource: {fileID: 0}
@@ -7869,6 +7882,7 @@ MonoBehaviour:
   sfx: 0
   applyBloodMark: 0
   isSkillHitbox: 1
+  isProjectile: 0
   isUltimateHitbox: 0
   screenshake: 0
   impulseSource: {fileID: 0}
@@ -8045,6 +8059,7 @@ MonoBehaviour:
   sfx: 8
   applyBloodMark: 0
   isSkillHitbox: 1
+  isProjectile: 0
   isUltimateHitbox: 0
   screenshake: 1
   impulseSource: {fileID: 4799895844113451317}

@@ -852,6 +852,7 @@ public class TruckBoss : Enemy
                 break;
 
             case RefuelStep.DIZZY:
+                rb.freezeRotation = true;
                 health.invincible = false;
                 dizzyTimer -= Time.deltaTime;
                 animator.SetBool("isDizzy", true);
@@ -865,6 +866,7 @@ public class TruckBoss : Enemy
                     health.knockbackMult = 0f;
                     health.stunImmune = true;
                     health.juggleTime = 0f;
+                    rb.freezeRotation = false;
                 }
                 break;
 
@@ -1464,6 +1466,9 @@ public class TruckBoss : Enemy
             enemy.animator.SetBool("isDizzy", true);
             enemy.health.knockbackMult = 1f;
             enemy.health.stunImmune = false;
+            enemy.rb.bodyType = RigidbodyType2D.Dynamic;
+            enemy.rb.gravityScale = enemy.gScale;
+            enemy.rb.freezeRotation = true;
             AudioManager.PlaySFX(SFXTYPE.BOSS_DIZZY, 0.5f);
         }
         public void OnUpdate()
@@ -1481,6 +1486,7 @@ public class TruckBoss : Enemy
             enemy.health.stunImmune = true;
             enemy.health.juggleTime = 0f;
             enemy.animator.SetBool("isDizzy", false);
+            enemy.rb.freezeRotation = false;
         }
     }
     
