@@ -2,6 +2,7 @@ using DG.Tweening;
 using NUnit.Framework;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEngine.CullingGroup;
@@ -16,6 +17,7 @@ public class TruckBoss : Enemy
     [Space(20)]
     [Header("TruckBoss")]
     [SerializeField] public string currentState;
+    public string lastAttackName;
     private Vector2 rampTangent = Vector2.zero;
     private float zAngle = 0f;
     public float rotationSpeed;
@@ -129,6 +131,7 @@ public class TruckBoss : Enemy
     private float slashChargeTimer;
     [SerializeField] public bool slashFinished;
     [SerializeField] public bool startSlash = false;
+    public bool slashIndicatorPlayed = false;
     
 
     private enum SlashComboStep
@@ -353,6 +356,7 @@ public class TruckBoss : Enemy
     private void StartDriveAttack()
     {
         driveAttackStep = DriveAttackStep.START;
+        lastAttackName = "Drive";
     }
     private void DriveAttack()
     {
@@ -402,6 +406,7 @@ public class TruckBoss : Enemy
                         if (isRight) StartDrive(Mathf.Sign(transform.localScale.x), Mathf.Abs(distanceToLeftRampPos.x) - 3, moveSpeed * driveSpeed);
                         else if (!isRight) StartDrive(Mathf.Sign(transform.localScale.x), Mathf.Abs(distanceToRightRampPos.x) - 3, moveSpeed * driveSpeed);
                         driveAttackStep = DriveAttackStep.FORWARD;
+                        AudioManager.PlaySFX(SFXTYPE.BOSS_DRILL, 0.5f);
                     }
                     
                 }
@@ -445,6 +450,7 @@ public class TruckBoss : Enemy
     private void StartRampAttack()
     {
         rampAttackStep = RampAttackStep.START;
+        lastAttackName = "Ramp";
     }
     private void RampAttack()
     {
@@ -470,6 +476,7 @@ public class TruckBoss : Enemy
                         StartDrive(-transform.localScale.x, 5, moveSpeed * reverseSpeed);
                     }
                     rampAttackStep = RampAttackStep.BACKWARD;
+                    AudioManager.PlaySFX(SFXTYPE.BOSS_RAMP, 0.5f);
                 }
                 break;
 
@@ -497,6 +504,7 @@ public class TruckBoss : Enemy
                         rb.AddForce(transform.localScale.x * transform.right * moveSpeed * 1.5f, ForceMode2D.Impulse);
                         debugTimer = 3f;
                         rampAttackStep = RampAttackStep.FORWARD;
+                        AudioManager.PlaySFX(SFXTYPE.BOSS_DRILL, 0.5f);
                     }
                 }
                 break;
@@ -526,6 +534,7 @@ public class TruckBoss : Enemy
                     rampAttackStep = RampAttackStep.END;
                     landingHitBox.SetActive(true);
                     landing = true;
+                    AudioManager.PlaySFX(SFXTYPE.BOSS_LAND, 0.5f);
                 }
                 else if (debugTimer <= 0)
                 {
@@ -544,6 +553,7 @@ public class TruckBoss : Enemy
     private void StartRampage()
     {
         rampageStep = RampageStep.START;
+        lastAttackName = "Rampage";
     }
     private void Rampage()
     {
@@ -577,6 +587,7 @@ public class TruckBoss : Enemy
                     rb.linearVelocity = Vector2.zero;
                     delayTimer = delayTime;
                     rampageStep = RampageStep.DELAY;
+                    AudioManager.PlaySFXContinuous(SFXTYPE.BOSS_HOVER, 0.3f, true);
                 }
                 break;
 
@@ -604,6 +615,7 @@ public class TruckBoss : Enemy
                     ray.transform.localScale = new Vector3(raywidth, 25, transform.localScale.z);
                     hitBox.SetActive(true);
                     rampageStep = RampageStep.DROP;
+                    AudioManager.StopSFXContinuous();
                 }
                 break;
 
@@ -614,6 +626,7 @@ public class TruckBoss : Enemy
                     hitBox.SetActive(false);
                     rb.gravityScale = gScale;
                     rampageStep = RampageStep.END;
+                    AudioManager.PlaySFX(SFXTYPE.BOSS_LAND, 0.5f);
                 }
                 break;
 
@@ -629,6 +642,7 @@ public class TruckBoss : Enemy
     private void StartSlashCombo()
     {
         slashComboStep = SlashComboStep.START;
+        lastAttackName = "Slash";
     }
     private void SlashCombo()   
     {
@@ -651,45 +665,26 @@ public class TruckBoss : Enemy
                 break;
 
             case SlashComboStep.CHARGE1:
+                FaceToPlayer();
                 if (startSlash)
                 {
                     slashChargeTimer -= Time.deltaTime;
                     animator.SetBool("isSlashCharging", true);
                 }
-
+                if(slashChargeTimer <= 0.5f && !slashIndicatorPlayed)
+                {
+                    AudioManager.PlaySFX(SFXTYPE.ENEMY_ATTACKFLASH, 0.5f);
+                    slashIndicatorPlayed = true;
+                }
                 if (slashChargeTimer <= 0)
                 {
                     //animator.SetBool("isSlashCharging", false);
                     //animator.SetTrigger("slash1");
                     //slashComboStep = SlashComboStep.SLASH1;
-
-                    float r = Random.value;
-                    if (r < 0.8f)
-                    {
-                        FaceToPlayer();
-                        animator.SetBool("isSlashCharging", false);
-                        animator.SetTrigger("slash1");
-                        slashComboStep = SlashComboStep.SLASH1;
-
-                        //float rr = Random.value;
-                        //if (rr < 0.0f)
-                        //{
-                        //    FaceToPlayer();
-                        //    animator.SetBool("isSlashCharging", false);
-                        //    animator.SetTrigger("slash1");
-                        //    slashComboStep = SlashComboStep.SLASH1;
-                        //}
-                        //else if (rr < 1.0f)
-                        //{
-                        //    FaceToPlayer();
-                        //    StartDrive(Mathf.Sign(transform.localScale.x), Mathf.Abs(distanceToPlayer.x) - 5, moveSpeed * 3);
-                        //    slashComboStep = SlashComboStep.SLASH1_1;
-                        //}
-                    }
-                    else if (r < 1.0f)
-                    {
-                        slashComboStep = SlashComboStep.END;
-                    }
+                    animator.SetBool("isSlashCharging", false);
+                    animator.SetTrigger("slash1");
+                    slashComboStep = SlashComboStep.SLASH1;
+                    slashIndicatorPlayed = false;
                 }
                 break;
 
@@ -725,18 +720,21 @@ public class TruckBoss : Enemy
                 {
                     animator.SetBool("isSlashCharging", false);
                     FaceToPlayer();
-                    if (distanceToPlayer.y <= 1)
-                    {
-                        float r = Random.value;
-                        if (r < 0.3f) animator.SetTrigger("slash2");//down
-                        else if (r < 1.0f) animator.SetTrigger("slash3");//up
-                    }
-                    else
-                    {
-                        float r = Random.value;
-                        if (r < 0.3f) animator.SetTrigger("slash3");
-                        else if (r < 1.0f) animator.SetTrigger("slash2");
-                    }
+                    float r = Random.value;
+                    if(r < 0.5f) animator.SetTrigger("slash2");//down
+                    else animator.SetTrigger("slash3");//up
+                    //if (distanceToPlayer.y <= 1)
+                    //{
+                    //    float r = Random.value;
+                    //    if (r < 0.3f) animator.SetTrigger("slash2");//down
+                    //    else if (r < 1.0f) animator.SetTrigger("slash3");//up
+                    //}
+                    //else
+                    //{
+                    //    float r = Random.value;
+                    //    if (r < 0.3f) animator.SetTrigger("slash3");
+                    //    else if (r < 1.0f) animator.SetTrigger("slash2");
+                    //}
                     slashComboStep = SlashComboStep.SLASH2;
                 }
                 break;
@@ -792,6 +790,7 @@ public class TruckBoss : Enemy
     private void StartRefuel()
     {
         refuelStep = RefuelStep.START;
+        lastAttackName = "Refuel";
     }
     private void Refuel()
     {
@@ -806,6 +805,7 @@ public class TruckBoss : Enemy
                 
                 refuelStep =RefuelStep.REFUEL;
                 health.invincible = true;
+                AudioManager.PlaySFXContinuous(SFXTYPE.BOSS_REFUEL, 0.3f, true);
                 break;
 
             case RefuelStep.REFUEL:
@@ -825,6 +825,8 @@ public class TruckBoss : Enemy
                     hurtBox.SetActive(true);
                     refuelStep = RefuelStep.DIZZY;
                     dizzyTimer = dizzyTime;
+                    AudioManager.StopSFXContinuous();
+                    AudioManager.PlaySFX(SFXTYPE.BOSS_DIZZY, 0.5f);
                 }
                 else if (refuelTimer <= 0)
                 {
@@ -844,6 +846,7 @@ public class TruckBoss : Enemy
                     aliveEnemies.Clear();
                     particle.SetActive(false);
                     refuelStep = RefuelStep.END;
+                    AudioManager.StopSFXContinuous();
                 }
                 break;
 
@@ -870,6 +873,7 @@ public class TruckBoss : Enemy
                 enemyDead = false;
                 hurtBox.SetActive(true);
                 refuelStep = RefuelStep.NONE;
+                hasRefuel = false;
                 break;
         }
     }
@@ -877,6 +881,7 @@ public class TruckBoss : Enemy
     {
         revDashCount = Random.Range(minDashes, maxDashes + 1);
         revvingRampageStep = RevvingRampageStep.START;
+        lastAttackName = "Revving";
     }
     private void RevvingRampage()
     {
@@ -890,7 +895,7 @@ public class TruckBoss : Enemy
                 animator.SetTrigger("startRevving");
                 FaceToPlayer();
                 revvingRampageStep = RevvingRampageStep.CHARGE;
-                AudioManager.PlaySFX(SFXTYPE.REVVING, 0.5f);
+                AudioManager.PlaySFX(SFXTYPE.REVVING, 0.5f, pitch: Random.Range(0.9f, 1.05f));
                 break;
 
             case RevvingRampageStep.CHARGE:
@@ -914,6 +919,7 @@ public class TruckBoss : Enemy
                 {
                     hasFlipped = false;
                     revvingRampageStep = RevvingRampageStep.DASH;
+                    AudioManager.PlaySFX(SFXTYPE.BOSS_DRILL, 0.6f);
                 }
                 break;
 
@@ -929,6 +935,7 @@ public class TruckBoss : Enemy
                     animator.SetTrigger("startRevving");
                     revvingRampageStep = RevvingRampageStep.CHARGE;
                     revChargeTimer = revChargeTime;
+                    AudioManager.PlaySFX(SFXTYPE.REVVING, 0.5f, pitch: Random.Range(0.9f, 1.05f));
                 }
                 else revvingRampageStep = RevvingRampageStep.RETURN;
 
@@ -1052,7 +1059,7 @@ public class TruckBoss : Enemy
         }
         public void OnEnter()
         {
-            randomIdleTime = Random.Range(2.5f, 4.0f);
+            randomIdleTime = Random.Range(2.0f, 3.5f);
             //enemy.StartCoroutine(IdleTIme(randomIdleTime));
         }
         public void OnUpdate()
@@ -1070,7 +1077,7 @@ public class TruckBoss : Enemy
                         {
                             enemy.stateMachine.ChangeState(new TruckBossBurstState(enemy));
                         }
-                        else if(r < 0.6f)
+                        else if(r < 0.6f && enemy.lastAttackName != "Drive")
                         {
                             enemy.stateMachine.ChangeState(new TruckBossDriveAttackState(enemy));
                         }
@@ -1087,7 +1094,7 @@ public class TruckBoss : Enemy
                         {
                             enemy.stateMachine.ChangeState(new TruckBossRampAttackState(enemy));
                         }
-                        else if (r < 0.8f)
+                        else if (r < 0.8f && enemy.lastAttackName != "Drive")
                         {
                             enemy.stateMachine.ChangeState(new TruckBossDriveAttackState(enemy));
                         }
@@ -1099,7 +1106,7 @@ public class TruckBoss : Enemy
                     else
                     {
                         float r = Random.value;
-                        if (r < 0.7f)
+                        if (r < 0.7f && enemy.lastAttackName != "Drive")
                         {
                             enemy.stateMachine.ChangeState(new TruckBossDriveAttackState(enemy));
                         }
@@ -1127,17 +1134,21 @@ public class TruckBoss : Enemy
                             {
                                 enemy.stateMachine.ChangeState(new TruckBossSlashState(enemy));
                             }
-                            else if (r < 0.7f)
+                            else if (r < 0.7f && enemy.lastAttackName != "Rampage")
                             {
                                 enemy.stateMachine.ChangeState(new TruckBossRampageState(enemy));
                             }
-                            else if (r < 0.9f)
+                            else if (r < 0.9f && enemy.lastAttackName != "Revving")
                             {
                                 enemy.stateMachine.ChangeState(new TruckBossRevvingRampageState(enemy));
                             }
                             else if (r < 1.0f && enemy.health.currentHealth <= enemy.health.maxHealth * 0.3f && enemy.hasRefuel)
                             {
                                 enemy.stateMachine.ChangeState(new TruckBossRefuelState(enemy));
+                            }
+                            else
+                            {
+                                enemy.stateMachine.ChangeState(new TruckBossSlashState(enemy));
                             }
                         }
                         else
@@ -1453,6 +1464,7 @@ public class TruckBoss : Enemy
             enemy.animator.SetBool("isDizzy", true);
             enemy.health.knockbackMult = 1f;
             enemy.health.stunImmune = false;
+            AudioManager.PlaySFX(SFXTYPE.BOSS_DIZZY, 0.5f);
         }
         public void OnUpdate()
         {

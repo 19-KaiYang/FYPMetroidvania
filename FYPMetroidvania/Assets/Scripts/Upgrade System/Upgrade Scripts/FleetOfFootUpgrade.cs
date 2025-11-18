@@ -6,6 +6,7 @@ public class FleetOfFootUpgrade : Upgrade
     public override void OnApply(UpgradeManager upgradeManager)
     {
         PlayerController.instance.dashSpeed *= 1.25f;
+        PlayerController.instance.dashDuration /= 1.15f;
         PlayerController.instance.dashCount = 2;
         PlayerController.instance.dashesRemaining = 2;
 
@@ -15,6 +16,7 @@ public class FleetOfFootUpgrade : Upgrade
     public override void OnRemove(UpgradeManager upgradeManager)
     {
         PlayerController.instance.dashSpeed /= 1.25f;
+        PlayerController.instance.dashDuration *= 1.15f;
         PlayerController.instance.dashCount = 1;
         PlayerController.instance.dashesRemaining = 1;
 
