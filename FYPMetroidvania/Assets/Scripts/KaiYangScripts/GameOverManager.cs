@@ -44,6 +44,12 @@ public class GameOverManager : MonoBehaviour
         {
             mainMenuButton.onClick.AddListener(OnMainMenuClicked);
         }
+
+        GameObject player = GameObject.FindWithTag("Player");
+        if (player != null)
+        {
+            Destroy(player);
+        }
     }
 
     public static void SetDeathInfo(string cause)
@@ -76,11 +82,11 @@ public class GameOverManager : MonoBehaviour
     {
         if (enemy == null) return "Unknown";
 
-        if (enemy.GetComponent<MeleeEnemy>() != null) return "Brawler";
-        if (enemy.GetComponent<Spearman>() != null) return "Spearman";
-        if (enemy.GetComponent<DaggerCultist>() != null) return "Dagger Cultist";
-        if (enemy.GetComponent<FlyEnemy>() != null) return "Flying Enemy";
-        if (enemy.GetComponent<TruckBoss>() != null) return "Truck Boss";
+        if (enemy.GetComponent<MeleeEnemy>() != null) return " Brawler";
+        if (enemy.GetComponent<Spearman>() != null) return " Spearman";
+        if (enemy.GetComponent<DaggerCultist>() != null) return " Dagger Cultist";
+        if (enemy.GetComponent<FlyEnemy>() != null) return " Red Hawk";
+        if (enemy.GetComponent<TruckBoss>() != null) return " Truck Boss";
 
         return enemy.name.Replace("(Clone)", "").Trim();
     }
