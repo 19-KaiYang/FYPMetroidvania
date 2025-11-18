@@ -38,7 +38,7 @@ public class EnemyHitBox : MonoBehaviour
             Vector2 dir = (collision.transform.position - enemy.transform.position);
             dir.x = Mathf.Sign(dir.x) * knockback.x; dir.y = knockback.y;
             //p.TakeDamage(finalDamage, dir * knockback, true, currentCCState, 0.5f, true, false, 1.0f);
-            p.TakeDamage(finalDamage, dir, false, currentCCState, ccTime);
+            p.TakeDamage(finalDamage, dir, false, currentCCState, ccTime, attacker: enemy.gameObject);
 
         }
     }   

@@ -63,6 +63,9 @@ public class Health : MonoBehaviour
     public float invincibilityDuration = 0.3f; // player only
     private Animator animator;
 
+    [Header("Death Tracking")]
+    public GameObject lastAttacker;
+
     public bool invincible = false;
 
     //Enemy Use
@@ -267,9 +270,15 @@ public class Health : MonoBehaviour
     public void TakeDamage(float amount, Vector2? hitDirection = null, bool useRawForce = false,
      CrowdControlState forceCC = CrowdControlState.None, float forceCCDuration = 0f,
      bool triggerEffects = true, bool isDebuff = false, float knockbackMultiplier = 1f, 
-     Color? damageNumberColor = null, bool isCritical = false)
+     Color? damageNumberColor = null, bool isCritical = false, GameObject attacker = null)
     {
         if (invincible) return;
+
+        if (attacker != null && isPlayer)
+        {
+            lastAttacker = attacker;
+            Debug.Log($"Attacker set to: {attacker.name}");
+        }
 
         if (truckBoss != null && truckBoss.armor)
         {
@@ -344,9 +353,17 @@ public class Health : MonoBehaviour
         // Death handling
         if (currentHealth <= 0)
         {
-            //currentHealth = 0;
             if (isPlayer)
-                StartCoroutine(RespawnPlayer());
+            {
+
+                string cause = lastAttacker != null
+                    ? GameOverManager.GetFriendlyEnemyName(lastAttacker)
+                    : "Environmental Hazard";
+
+                GameOverManager.SetDeathInfo(cause);
+                Die();
+                GameOverManager.LoadGameOverScene();
+            }
             else
                 Die();
         }

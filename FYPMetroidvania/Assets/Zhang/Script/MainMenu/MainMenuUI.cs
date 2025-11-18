@@ -32,6 +32,7 @@ public class MainMenuUI : MonoBehaviour
         {
             UpdateContinueButtonState();
         }
+
     }
 
     private void OnEnable()
@@ -74,6 +75,7 @@ public class MainMenuUI : MonoBehaviour
         {
             continueButton.SetActive(RoomSaveManager.HasSaveData());
         }
+
     }
 
     private void Update()
@@ -81,6 +83,12 @@ public class MainMenuUI : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.Escape))
         {
             string currentScene = SceneManager.GetActiveScene().name;
+
+
+            if (currentScene == "GameOver" || currentScene == "EndingScene" || currentScene == "MainMenu")
+            {
+                return; 
+            }
 
             if (currentScene != "MainMenu")
             {
