@@ -266,6 +266,9 @@ MonoBehaviour:
   - key: 30
     clips:
     - {fileID: 8300000, guid: eff2e156e8c637443a23dba2adc8607f, type: 3}
+  - key: 31
+    clips:
+    - {fileID: 8300000, guid: dab04eb5543df7848b657dde45e5af80, type: 3}
   BGMList:
   - key: 0
     audio: {fileID: 8300000, guid: 4decf866f62e53348b47e2ba4fa4d677, type: 3}
@@ -281,6 +284,9 @@ MonoBehaviour:
     volume: 0.5
   - key: 6
     audio: {fileID: 8300000, guid: 8d8c9ce5731cce040b104a5ca1a982a9, type: 3}
+    volume: 0.5
+  - key: 7
+    audio: {fileID: 8300000, guid: a6ffd3147ff550049af42fc329de93d7, type: 3}
     volume: 0.5
   SFXSource: {fileID: 6615455267367338444}
   BGMSource: {fileID: 1608373893773276610}

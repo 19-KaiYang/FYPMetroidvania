@@ -51,6 +51,11 @@ public class AudioManager : MonoBehaviour
             SFXSource.ignoreListenerPause = true;
         }
 
+        string currentScene = SceneManager.GetActiveScene().name;
+        if (currentScene == "MainMenu")
+        {
+            PlayBGM(BGMType.MAIN_MENU);
+        }
     }
     private void Update()
     {
@@ -134,7 +139,7 @@ public class AudioManager : MonoBehaviour
                 break;
 
             case "MainMenu":
-                StopBGM();
+                PlayBGM(BGMType.MAIN_MENU);
                 break;
 
             default:
@@ -203,7 +208,8 @@ public enum SFXTYPE
     SPIRIT_CUTINSFX,
     REVVING,
     SPIRIT_SLASHSFX,
-    SPIRIT_SWORDINTROSFX
+    SPIRIT_SWORDINTROSFX,
+    TRUCK_CRASH
 }
 [Serializable]
 public class BGM
@@ -220,7 +226,8 @@ public enum BGMType
     BOSS_PHASE2,
     SECOND_ROOM,
     THIRD_ROOM,
-    BOSS_ROOM   
+    BOSS_ROOM,
+    MAIN_MENU
 }
 
 
