@@ -28,7 +28,7 @@ public class WindSlashProjectile : ProjectileBase
         Health enemy = collision.GetComponent<Health>();
         if (enemy != null && !enemy.isPlayer)
         {
-            enemy.TakeDamage(damage, forceCC: CrowdControlState.Stunned, forceCCDuration: 0.5f, triggerEffects: false);
+            enemy.TakeDamage(damage, Vector2.one, forceCC: CrowdControlState.Stunned, forceCCDuration: 0.5f, triggerEffects: false);
             if (bleedDebuff != null)
                 bleedDebuff.ApplyDebuff(enemy, 1, bleedTime);
             Despawn();

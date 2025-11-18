@@ -48,6 +48,7 @@ public class Tire : ProjectileBase
         base.Update();
 
         timer += Time.deltaTime;
+        rb.linearVelocity = rb.linearVelocity.normalized * speed;
         if (timer >= 1f && rb.linearVelocityX == 0)
         {
             Despawn();
@@ -82,7 +83,7 @@ public class Tire : ProjectileBase
             Vector2 dir;
             dir = (collision.transform.position - this.transform.position).normalized;
 
-            p.TakeDamage(finalDamage, dir, true, CrowdControlState.Stunned, 0.5f);
+            p.TakeDamage(finalDamage, dir, true, currentCCState, 0.5f);
 
             Despawn();
         }

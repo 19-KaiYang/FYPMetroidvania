@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DamageOverTime
   debuffName: Pixie Dust
   triggerType: 2
-  maxStacks: 10
+  maxStacks: 20
   tickRate: 1
   VFX: {fileID: 1175162504483515896, guid: 333a68e533bd6e448a5794c26207ddef, type: 3}
-  damagePerStack: 2
+  damagePerStack: 1
   damageColor: {r: 0.53062755, g: 0, b: 0.5698112, a: 0}

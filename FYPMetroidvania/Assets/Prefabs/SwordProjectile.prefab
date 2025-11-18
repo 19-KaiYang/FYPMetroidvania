@@ -181,16 +181,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SwordSlashProjectile
   damage: 25
-  speed: 20
+  speed: 35
   knockback: 2
   rb: {fileID: 5666887810853791225}
   direction: {x: 0, y: 0}
-  maxDistance: 8
+  maxDistance: 15
   bloodCost: 10
   crowdControl: 1
   ccDuration: 1
   X_Knockback: 7
-  Y_Knockback: 4
+  Y_Knockback: 8
   sprites:
   - {fileID: -2304741076594719113, guid: 055219424ebe353409813abe95829989, type: 3}
   - {fileID: 4030209539379040288, guid: 055219424ebe353409813abe95829989, type: 3}

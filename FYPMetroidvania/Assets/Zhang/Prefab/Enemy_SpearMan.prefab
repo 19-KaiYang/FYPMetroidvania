@@ -5700,7 +5700,7 @@ RectTransform:
   m_Father: {fileID: 5589993661541007395}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 1.666687, y: 0}
   m_SizeDelta: {x: -1.666687, y: 0}
   m_Pivot: {x: 0, y: 0.5}
@@ -6102,7 +6102,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5180712474465827317
 Transform:
   m_ObjectHideFlags: 0
@@ -6285,7 +6285,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   moveSpeed: 3
-  attackDamage: 6
+  attackDamage: 30
   isFacingRight: 1
   isFacingLeft: 0
   distanceToPlayer: {x: 0, y: 0}
