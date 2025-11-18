@@ -416,7 +416,10 @@ public class Health : MonoBehaviour
         enemyDeath?.Invoke(gameObject);
 
         if (animator != null)
-            animator.SetTrigger("Die");
+        {
+            animator.Rebind();
+            animator.Play("Dying");
+        }
 
         //for (int i = debuffs.Count - 1; i >= 0; i--)
         //    RemoveDebuff(debuffs[i]);

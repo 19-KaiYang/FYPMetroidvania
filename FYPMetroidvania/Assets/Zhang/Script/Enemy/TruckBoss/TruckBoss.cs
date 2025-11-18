@@ -611,6 +611,7 @@ public class TruckBoss : Enemy
                 {
                     rb.bodyType = RigidbodyType2D.Dynamic;
                     rb.gravityScale = 14;
+                    rb.AddForce(Vector2.down * 10, ForceMode2D.Impulse);
                     ray.SetActive(false);
                     ray.transform.localScale = new Vector3(raywidth, 25, transform.localScale.z);
                     hitBox.SetActive(true);
@@ -873,7 +874,6 @@ public class TruckBoss : Enemy
                 enemyDead = false;
                 hurtBox.SetActive(true);
                 refuelStep = RefuelStep.NONE;
-                hasRefuel = false;
                 break;
         }
     }
@@ -1142,7 +1142,7 @@ public class TruckBoss : Enemy
                             {
                                 enemy.stateMachine.ChangeState(new TruckBossRevvingRampageState(enemy));
                             }
-                            else if (r < 1.0f && enemy.health.currentHealth <= enemy.health.maxHealth * 0.3f && enemy.hasRefuel)
+                            else if (r < 1.0f && enemy.health.currentHealth <= enemy.health.maxHealth * 0.3f && !enemy.hasRefuel)
                             {
                                 enemy.stateMachine.ChangeState(new TruckBossRefuelState(enemy));
                             }
@@ -1154,21 +1154,21 @@ public class TruckBoss : Enemy
                         else
                         {
                             float r = Random.value;
-                            if (r < 0.2f)
-                            {
-                                enemy.stateMachine.ChangeState(new TruckBossSlashState(enemy));
-                            }
-                            else if (r < 0.5f)
+                            if (r < 0.4f && enemy.lastAttackName != "Rampage")
                             {
                                 enemy.stateMachine.ChangeState(new TruckBossRampageState(enemy));
                             }
-                            else if (r < 0.9f)
+                            else if (r < 0.8f && enemy.lastAttackName != "Revving")
                             {
                                 enemy.stateMachine.ChangeState(new TruckBossRevvingRampageState(enemy));
                             }
-                            else if (r < 1.0f && enemy.health.currentHealth <= enemy.health.maxHealth * 0.3f && enemy.hasRefuel)
+                            else if (r < 1.0f && enemy.health.currentHealth <= enemy.health.maxHealth * 0.3f && !enemy.hasRefuel)
                             {
                                 enemy.stateMachine.ChangeState(new TruckBossRefuelState(enemy));
+                            }
+                            else
+                            {
+                                enemy.stateMachine.ChangeState(new TruckBossRampageState(enemy));
                             }
                         }
                     }
