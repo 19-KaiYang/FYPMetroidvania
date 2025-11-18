@@ -22,4 +22,14 @@ public class MainMenuAnimationEvent : MonoBehaviour
             item.gameObject.SetActive(false);
         }
     }
+
+    public void PlayTruckHorn()
+    {
+        AudioManager.PlaySFX(SFXTYPE.REVVING);
+    }
+
+    public void PlayTruckCrash()
+    {
+        AudioManager.PlaySFX(SFXTYPE.TRUCK_CRASH);
+    }
 }
