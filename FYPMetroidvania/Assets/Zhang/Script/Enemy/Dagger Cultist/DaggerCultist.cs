@@ -33,6 +33,7 @@ public class DaggerCultist : Enemy
     [SerializeField] private float aimingTime;
     [SerializeField] private float throwingTime;
     [SerializeField] private GameObject daggerPrefab;
+    [SerializeField] private GameObject tirePrefab;
     [SerializeField] private Transform throwPoint;
 
     protected override void Awake()
@@ -115,11 +116,24 @@ public class DaggerCultist : Enemy
             yield return new WaitForSeconds(throwingTime);
             //throw dagger
             animator.SetTrigger("attack");
-            GameObject daggerObj = Instantiate(daggerPrefab, throwPoint.position, Quaternion.identity);
-            Dagger spear = daggerObj.GetComponentInChildren<Dagger>();
-            spear.SetOwner(this);
 
-            spear.Init(attackDamage, this, dir);
+            switch (gameObject.name)
+            {
+                case "DaggerCultist":
+                    GameObject daggerObj = Instantiate(daggerPrefab, throwPoint.position, Quaternion.identity);
+                    Dagger dagger = daggerObj.GetComponentInChildren<Dagger>();
+                    dagger.SetOwner(this);
+                    dagger.Init(attackDamage, this, dir);
+                    break;
+
+                case "TireCultist":
+                    GameObject TireObj = Instantiate(tirePrefab, throwPoint.position, Quaternion.identity);
+                    Tire tire = TireObj.GetComponentInChildren<Tire>();
+                    tire.SetOwner(this);
+                    tire.Init(attackDamage, this, new Vector2(-transform.localScale.x, 0));
+                    break;
+            }
+
             line.enabled = false;
             isAiming = false;
             yield return new WaitForSeconds(dCooldown);
@@ -192,6 +206,7 @@ public class DaggerCultist : Enemy
         public void OnEnter()
         {
             attackRoutine = enemy.StartCoroutine(enemy.ThrowDagger());
+
             enemy.line.enabled = true;
         }
         public void OnUpdate()
