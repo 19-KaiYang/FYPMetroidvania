@@ -70,6 +70,23 @@ public class AudioManager : MonoBehaviour
         instance.SFXSource.pitch = pitch;
         instance.SFXSource.PlayOneShot(clipChosen,volume);
     }
+    public static void PlaySFXContinuous(SFXTYPE type, float volume, bool loop)
+    {
+        if (!SFXDictionary.ContainsKey(type) || instance.SFXSource == null) return;
+
+        // Get sfx from dictionary
+        AudioClip[] audioClips = SFXDictionary[type];
+        AudioClip clipChosen = audioClips[Random.Range(0, audioClips.Length)];
+        instance.SFXSource.clip = clipChosen;
+        instance.SFXSource.volume = volume;
+        instance.SFXSource.loop = loop;
+        instance.SFXSource.Play();
+    }
+    public static void StopSFXContinuous()
+    {
+        instance.SFXSource.Stop();
+        instance.SFXSource.clip = null;
+    }
     public void PlayBGM(AudioClip song)
     {
         BGMSource.clip = song;
@@ -209,7 +226,15 @@ public enum SFXTYPE
     REVVING,
     SPIRIT_SLASHSFX,
     SPIRIT_SWORDINTROSFX,
-    TRUCK_CRASH
+    TRUCK_CRASH,
+    BOSS_DRILL,
+    BOSS_RAMP,
+    BOSS_HOVER,
+    BOSS_LAND,
+    BOSS_SLASH,
+    BOSS_BURST,
+    BOSS_REFUEL,
+    BOSS_DIZZY
 }
 [Serializable]
 public class BGM

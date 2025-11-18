@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Xml.Serialization;
 using UnityEngine;
 
@@ -93,7 +94,18 @@ public class EnemyAnimationEvent : MonoBehaviour
     {
         AudioManager.PlaySFX(SFXTYPE.HAWK_ATTACK, 0.5f);
     }
-
+    private void BossSlashSFX(float pitch)
+    {
+        AudioManager.PlaySFX(SFXTYPE.BOSS_SLASH, 0.6f, pitch: pitch);
+    }
+    private void BossBurstSFX()
+    {
+        AudioManager.PlaySFX(SFXTYPE.BOSS_BURST, 0.75f);
+    }
+    private void PlayPitchedAttackFlash(float pitch)
+    {
+        AudioManager.PlaySFX(SFXTYPE.ENEMY_ATTACKFLASH, 0.65f, pitch: pitch);
+    }
     private void EnableHurtBox()
     {
         boss.hurtBox.SetActive(true);

@@ -630,8 +630,8 @@ public class CombatSystem : MonoBehaviour
             animator.SetInteger("ComboStep", 0);
 
 
-        //controller.externalVelocityOverride = false;
-        //controller.SetHitstop(false);
+        controller.externalVelocityOverride = false;
+        controller.SetHitstop(false);
         canTransition = true;
         isBuffered = false;
     }
