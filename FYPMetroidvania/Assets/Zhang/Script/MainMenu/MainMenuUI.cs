@@ -9,6 +9,7 @@ public class MainMenuUI : MonoBehaviour
     [SerializeField] private GameObject settingPanel;
     [SerializeField] private GameObject MainMenu;
     [SerializeField] private GameObject continueButton;
+    [SerializeField] private GameObject journalButton;
 
     private bool isPause = false;
     private bool otherPanel = false;

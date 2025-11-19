@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class JournalNavigator : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class JournalNavigator : MonoBehaviour
     [Header("Navigation Buttons")]
     public Button nextButton;
     public Button previousButton;
+    public Button mainmenuButton;
 
     private int currentPageIndex = 0;
 
@@ -16,7 +18,13 @@ public class JournalNavigator : MonoBehaviour
     {
         nextButton.onClick.AddListener(NextPage);
         previousButton.onClick.AddListener(PreviousPage);
+        mainmenuButton.onClick.AddListener(backToMainMenu);
         ShowPage(currentPageIndex);
+    }
+
+    void backToMainMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
     }
 
     void ShowPage(int index)

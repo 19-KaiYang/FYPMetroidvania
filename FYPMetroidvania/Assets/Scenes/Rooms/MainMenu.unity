@@ -241,6 +241,7 @@ MonoBehaviour:
   settingPanel: {fileID: 1075069493}
   MainMenu: {fileID: 309385061}
   continueButton: {fileID: 957267693}
+  journalButton: {fileID: 1201030106}
   bg: {fileID: 1298457714}
 --- !u!1 &29957236
 GameObject:
@@ -5639,7 +5640,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 5467486}
         m_TargetAssemblyTypeName: MainMenuUI, Assembly-CSharp
-        m_MethodName: NewGameButton
+        m_MethodName: JournalButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
