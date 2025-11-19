@@ -9,6 +9,7 @@ public class MainMenuUI : MonoBehaviour
     [SerializeField] private GameObject settingPanel;
     [SerializeField] private GameObject MainMenu;
     [SerializeField] private GameObject continueButton;
+    [SerializeField] private GameObject journalButton;
 
     private bool isPause = false;
     private bool otherPanel = false;
@@ -229,5 +230,10 @@ public class MainMenuUI : MonoBehaviour
     public void EndGame()
     {
         Application.Quit();
+    }
+
+    public void JournalButton()
+    {
+        SceneManager.LoadScene("JournalScene");
     }
 }
