@@ -28,7 +28,7 @@ public class HealingSpot : MonoBehaviour
         while (target != null && target.IsAlive() &&
                target.GetComponent<Collider2D>().IsTouching(GetComponent<Collider2D>()))
         {
-            target.Heal(healPerSecond * tickInterval);
+            //target.Heal(healPerSecond * tickInterval);
             yield return new WaitForSeconds(tickInterval);
         }
     }

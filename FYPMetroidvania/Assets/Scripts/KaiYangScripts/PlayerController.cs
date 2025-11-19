@@ -490,6 +490,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnJump()
     {
+        if (isInCutscene) return;
         if (skills != null && skills.IsChargeLocked) return;
         if (health.currentCCState != CrowdControlState.None) return;
         if (platformDropping) return;

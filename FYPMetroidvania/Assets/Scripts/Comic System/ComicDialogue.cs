@@ -9,6 +9,8 @@ public class ComicDialogue : MonoBehaviour
     public int TextSpeed = 30;
     public bool isDone = false;
     public bool skip = false;
+    public SFXTYPE dialougeSound;
+    public float pitch = 1f;
 
     private void Awake()
     {
@@ -41,6 +43,7 @@ public class ComicDialogue : MonoBehaviour
                 _textBox.maxVisibleCharacters = textLength;
                 break;
             }
+            if (dialougeSound != SFXTYPE.NONE) AudioManager.PlaySFX(SFXTYPE.DIALOGUE_1, pitch: pitch);
             if (line[i] == '.' || line[i] == '!' || line[i] == '?') yield return new WaitForSeconds(0.15f);
             else if (line[i] == ',') yield return new WaitForSeconds(0.05f);
             yield return new WaitForSeconds(speed);

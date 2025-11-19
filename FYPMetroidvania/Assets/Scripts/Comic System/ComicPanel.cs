@@ -12,6 +12,7 @@ public class ComicPanel : MonoBehaviour
     [Header("Animation Settings")]
     public Vector2 startPosition;
     public Vector2 endPosition;
+    public float dialogueAppearTime = 0.25f;
 
     [Header("Audio")]
     public SFXTYPE sfx;
@@ -46,7 +47,7 @@ public class ComicPanel : MonoBehaviour
         currentDialogue++;
         if (currentDialogue < SpeechBubbles.Count)
         {
-            SpeechBubbles[currentDialogue].transform.DOScale(Vector3.one, 0.25f);
+            SpeechBubbles[currentDialogue].transform.DOScale(Vector3.one, dialogueAppearTime);
             SpeechBubbles[currentDialogue].PlayDialogueBox();
             return true;
         }

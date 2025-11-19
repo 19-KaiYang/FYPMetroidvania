@@ -13,6 +13,7 @@ public class ComicHandler : MonoBehaviour
     public RectTransform pageAnchor;
     public CanvasGroup fade;
     public Image autoplayHighlight;
+    public bool bgm;
 
     [Header("View Settings")]
     public int pageWidth = 1620;
@@ -24,6 +25,8 @@ public class ComicHandler : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        fade.alpha = 1f;
+        fade.DOFade(0f, 0.5f);
         currentPage = 0;
         InitializeComic();
     }
@@ -37,7 +40,7 @@ public class ComicHandler : MonoBehaviour
         }
         autoplaying = false;
         autoTimer = 0f;
-        AudioManager.instance.PlayBGM(BGMType.ENDING_COMIC);
+        if(bgm) AudioManager.instance.PlayBGM(BGMType.ENDING_COMIC);
         Pages[currentPage].ActivatePage();
     }
     // Update is called once per frame
