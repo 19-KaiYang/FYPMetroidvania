@@ -5553,7 +5553,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   moveSpeed: 15
-  attackDamage: 60
+  attackDamage: 50
   isFacingRight: 1
   isFacingLeft: 0
   distanceToPlayer: {x: 0, y: 0}
@@ -5691,6 +5691,7 @@ MonoBehaviour:
   knockdownImmune: 1
   ccTimer: 0
   invincibilityDuration: 0.3
+  lastAttacker: {fileID: 0}
   invincible: 0
   isBloodMarked: 0
   bloodMarkHealAmount: 10
@@ -6093,7 +6094,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHitBox
   currentCCState: 2
-  attackMultiplier: 1.5
+  attackMultiplier: 1
   finalDamage: 0
   attackDamage: 0
   knockback: {x: 0, y: 0}
