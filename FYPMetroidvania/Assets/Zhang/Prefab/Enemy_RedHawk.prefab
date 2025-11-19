@@ -274,7 +274,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   moveSpeed: 0
-  attackDamage: 3
+  attackDamage: 20
   isFacingRight: 1
   isFacingLeft: 0
   distanceToPlayer: {x: 0, y: 0}
@@ -343,6 +343,7 @@ MonoBehaviour:
   knockdownImmune: 0
   ccTimer: 0
   invincibilityDuration: 0.3
+  lastAttacker: {fileID: 0}
   invincible: 0
   isBloodMarked: 0
   bloodMarkHealAmount: 10

@@ -729,7 +729,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHitBox
   currentCCState: 1
-  attackMultiplier: 2
+  attackMultiplier: 0.3
   finalDamage: 0
   attackDamage: 0
   knockback: {x: 12, y: 4}
@@ -1297,7 +1297,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHitBox
   currentCCState: 1
-  attackMultiplier: 1
+  attackMultiplier: 0.3
   finalDamage: 0
   attackDamage: 0
   knockback: {x: 3, y: 5}
@@ -1645,7 +1645,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHitBox
   currentCCState: 2
-  attackMultiplier: 1
+  attackMultiplier: 0.5
   finalDamage: 0
   attackDamage: 0
   knockback: {x: 10, y: 9}
