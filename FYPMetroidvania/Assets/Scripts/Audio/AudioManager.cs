@@ -234,7 +234,9 @@ public enum SFXTYPE
     BOSS_SLASH,
     BOSS_BURST,
     BOSS_REFUEL,
-    BOSS_DIZZY
+    BOSS_DIZZY,
+    ELECTRIC_EXPLOSION,
+    COMIC_TRANSFORM
 }
 [Serializable]
 public class BGM
@@ -252,7 +254,8 @@ public enum BGMType
     SECOND_ROOM,
     THIRD_ROOM,
     BOSS_ROOM,
-    MAIN_MENU
+    MAIN_MENU,
+    ENDING_COMIC
 }
 
 

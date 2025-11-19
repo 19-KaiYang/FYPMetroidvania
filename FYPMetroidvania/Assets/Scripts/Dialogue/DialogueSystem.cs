@@ -27,6 +27,7 @@ public class DialogueSystem : MonoBehaviour, IPointerClickHandler
     [SerializeField] private RectTransform characterOffscreenPos;
     public Vector3 characterOnscreenPos;
     public float activeXposition, inactiveXposition;
+    public string playerName = "Eris";
 
     public DialogueTextSO DialogueData;
     public float TextSpeed = 1.0f;
@@ -170,7 +171,8 @@ public class DialogueSystem : MonoBehaviour, IPointerClickHandler
         nextIndicator.rectTransform.DOKill();
         nextIndicator.rectTransform.anchoredPosition = nextArrowPosition;
         _textBox.text = dialoguestep.Text;
-        _speakerNameBox.text = dialoguestep.Name;
+        if (dialoguestep.SpeakerType == SPEAKER_TYPE.PLAYER && dialoguestep.Name == "Player") _speakerNameBox.text = playerName;
+        else _speakerNameBox.text = dialoguestep.Name;
         currentDialogueStep = dialoguestep;
         int textSize = _textBox.text.Length;
         char[] line = dialoguestep.Text.ToCharArray();

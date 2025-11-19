@@ -82,10 +82,10 @@ public class GameOverManager : MonoBehaviour
     {
         if (enemy == null) return "Unknown";
 
-        if (enemy.GetComponent<MeleeEnemy>() != null) return " Brawler";
-        if (enemy.GetComponent<Spearman>() != null) return " Spearman";
-        if (enemy.GetComponent<DaggerCultist>() != null) return " Dagger Cultist";
-        if (enemy.GetComponent<FlyEnemy>() != null) return " Red Hawk";
+        if (enemy.GetComponent<MeleeEnemy>() != null) return " Claw Knight";
+        if (enemy.GetComponent<Spearman>() != null) return " Spear Knight";
+        if (enemy.GetComponent<DaggerCultist>() != null) return " Truck Cultist";
+        if (enemy.GetComponent<FlyEnemy>() != null) return " Bird Knight";
         if (enemy.GetComponent<TruckBoss>() != null) return " Truck Boss";
 
         return enemy.name.Replace("(Clone)", "").Trim();
