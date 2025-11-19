@@ -230,4 +230,9 @@ public class MainMenuUI : MonoBehaviour
     {
         Application.Quit();
     }
+
+    public void JournalButton()
+    {
+        SceneManager.LoadScene("JournalScene");
+    }
 }
