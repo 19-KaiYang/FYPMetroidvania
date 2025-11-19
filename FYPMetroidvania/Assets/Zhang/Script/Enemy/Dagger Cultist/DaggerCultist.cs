@@ -35,6 +35,7 @@ public class DaggerCultist : Enemy
     [SerializeField] private GameObject daggerPrefab;
     [SerializeField] private GameObject tirePrefab;
     [SerializeField] private Transform throwPoint;
+    [SerializeField] bool isDagger;
 
     protected override void Awake()
     {
@@ -117,16 +118,16 @@ public class DaggerCultist : Enemy
             //throw dagger
             animator.SetTrigger("attack");
 
-            switch (gameObject.name)
+            switch (isDagger)
             {
-                case "DaggerCultist":
+                case true:
                     GameObject daggerObj = Instantiate(daggerPrefab, throwPoint.position, Quaternion.identity);
                     Dagger dagger = daggerObj.GetComponentInChildren<Dagger>();
                     dagger.SetOwner(this);
                     dagger.Init(attackDamage, this, dir);
                     break;
 
-                case "TireCultist":
+                case false:
                     GameObject TireObj = Instantiate(tirePrefab, throwPoint.position, Quaternion.identity);
                     Tire tire = TireObj.GetComponentInChildren<Tire>();
                     tire.SetOwner(this);

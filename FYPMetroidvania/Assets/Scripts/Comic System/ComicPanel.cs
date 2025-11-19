@@ -13,6 +13,9 @@ public class ComicPanel : MonoBehaviour
     public Vector2 startPosition;
     public Vector2 endPosition;
 
+    [Header("Audio")]
+    public SFXTYPE sfx;
+
     void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
@@ -26,7 +29,10 @@ public class ComicPanel : MonoBehaviour
             bubble.transform.localScale = Vector2.zero;
         }
     }
-
+    public void ActivatePanel()
+    {
+        if(sfx != SFXTYPE.NONE) AudioManager.PlaySFX(sfx);
+    }
     public bool TryNextDialogue()
     {
         if (currentDialogue >= 0)

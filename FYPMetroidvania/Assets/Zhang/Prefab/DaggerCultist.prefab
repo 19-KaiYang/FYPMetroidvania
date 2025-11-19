@@ -513,7 +513,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6877b7d5ce4e8e5418b6e832e8f38b3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DaggerCultist
-  animator: {fileID: 0}
+  animator: {fileID: 6241215281586376824}
   player: {fileID: 0}
   playerLayer:
     serializedVersion: 2
@@ -528,7 +528,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   moveSpeed: 0
-  attackDamage: 2
+  attackDamage: 20
   isFacingRight: 0
   isFacingLeft: 0
   distanceToPlayer: {x: 0, y: 0}
@@ -558,9 +558,11 @@ MonoBehaviour:
   isAiming: 0
   daggerCooldown: {x: 1, y: 2}
   aimingTime: 1
-  throwingTime: 0.5
+  throwingTime: 0.4
   daggerPrefab: {fileID: 6543586195944055859, guid: 6226b805d007ec94193ac7159cdecc98, type: 3}
+  tirePrefab: {fileID: 0}
   throwPoint: {fileID: 5467460775812442715}
+  isDagger: 1
 --- !u!114 &8702589858316454365
 MonoBehaviour:
   m_ObjectHideFlags: 0

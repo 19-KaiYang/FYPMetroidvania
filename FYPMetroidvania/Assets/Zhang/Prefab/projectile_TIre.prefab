@@ -142,8 +142,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 27.1, y: -2.28, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 2127378913691608666}
   m_Father: {fileID: 0}
@@ -234,13 +234,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Tire
   damage: 5
-  speed: 12
+  speed: 10
   knockback: 0
   rb: {fileID: 0}
   direction: {x: 0, y: 0}
   currentCCState: 2
   R: {fileID: 0}
   ownerAttackDamage: 0
-  attackMultiplier: 0
+  attackMultiplier: 1
   finalDamage: 0
   timer: 0

@@ -5185,7 +5185,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 12.8, y: 7.2}
+  m_Size: {x: 8.533334, y: 4.8}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -5264,7 +5264,7 @@ BoxCollider2D:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 8.533334, y: 4.8}
-    newSize: {x: 12.8, y: 7.2}
+    newSize: {x: 8.533334, y: 4.8}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
@@ -5553,7 +5553,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   moveSpeed: 15
-  attackDamage: 20
+  attackDamage: 60
   isFacingRight: 1
   isFacingLeft: 0
   distanceToPlayer: {x: 0, y: 0}
@@ -5568,6 +5568,7 @@ MonoBehaviour:
   getUp: 0
   bossPhase: 0
   currentState: 
+  lastAttackName: 
   rotationSpeed: 8
   RampAttackSpeed: 7
   rampAttackJumpForce: {x: 28, y: 10}
@@ -5617,6 +5618,7 @@ MonoBehaviour:
   slashCharge2Time: 1
   slashFinished: 0
   startSlash: 0
+  slashIndicatorPlayed: 0
   slashComboStep: 0
   enemyPrefabs:
   - {fileID: 4298579516614745451, guid: 6095385f0dfa2c441b76d2095f29d64d, type: 3}

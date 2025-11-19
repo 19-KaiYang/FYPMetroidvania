@@ -1,64 +1,10 @@
 fileFormatVersion: 2
-guid: 728095c254071714ea5f19622d6e7d5b
+guid: 22782c2fe5c81964dae6e6de222dcc23
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -4320295261928297051
-    second: logo_0
-  - first:
-      213: 5470614613321624601
-    second: logo_1
-  - first:
-      213: 4560591551370500262
-    second: logo_2
-  - first:
-      213: 6640445872580291462
-    second: logo_3
-  - first:
-      213: 7220771215297418599
-    second: logo_4
-  - first:
-      213: -8223382129855978605
-    second: logo_5
-  - first:
-      213: -1318215486492414624
-    second: logo_6
-  - first:
-      213: 2547678001213806659
-    second: logo_7
-  - first:
-      213: 7966619702581107187
-    second: logo_8
-  - first:
-      213: -4158264754640302621
-    second: logo_9
-  - first:
-      213: -456560011164628789
-    second: logo_10
-  - first:
-      213: 8265423726798506560
-    second: logo_11
-  - first:
-      213: -5881772203921295813
-    second: logo_12
-  - first:
-      213: 3279490269522818815
-    second: logo_13
-  - first:
-      213: 5399540843189412849
-    second: logo_14
-  - first:
-      213: -7659919998633512378
-    second: logo_15
-  - first:
-      213: -5920777163311385063
-    second: logo_16
-  - first:
-      213: -3217387466338767218
-    second: logo_17
-  - first:
-      213: 209502182205696960
-    second: logo_18
+      213: 430114629868002371
+    second: Panel 9 3_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,7 +46,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -150,27 +96,53 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: logo_0
+      name: Panel 9 3_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 1193
         y: 0
-        width: 3000
-        height: 3000
+        width: 727
+        height: 1080
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5ade5f3695a3b04c0800000000000000
-      internalID: -4320295261928297051
+      spriteID: 34c1bfd1af218f500800000000000000
+      internalID: 430114629868002371
       vertices: []
       indices: 
       edges: []
@@ -179,7 +151,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 11eb6fe9797f8464ebea6c189d184475
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -187,11 +159,9 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries:
-      - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":3000.0,"y":3000.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
+      entries: []
     nameFileIdTable:
-      logo_0: -4320295261928297051
+      Panel 9 3_0: 430114629868002371
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
