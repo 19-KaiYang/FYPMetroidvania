@@ -155,8 +155,18 @@ public class AudioManager : MonoBehaviour
                 PlayBGM(BGMType.BOSS_ROOM);
                 break;
 
+            case "GameOver":
+                PlayBGM(BGMType.GAME_OVER);
+                break;
+
             case "MainMenu":
-                PlayBGM(BGMType.MAIN_MENU);
+                if (!isPlayingBGM || BGMSource.clip != BGMDictionary[BGMType.MAIN_MENU].audio)
+                {
+                    PlayBGM(BGMType.MAIN_MENU);
+                }
+                break;
+
+            case "JournalScene":
                 break;
 
             default:
@@ -255,7 +265,8 @@ public enum BGMType
     THIRD_ROOM,
     BOSS_ROOM,
     MAIN_MENU,
-    ENDING_COMIC
+    ENDING_COMIC,
+    GAME_OVER
 }
 
 
