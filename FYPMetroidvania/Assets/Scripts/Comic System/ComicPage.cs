@@ -27,7 +27,10 @@ public class ComicPage : MonoBehaviour
             panel.InitialiseDialogues();
         }
     }
-    
+    public void ActivatePage()
+    {
+        Panels[currentPanel].ActivatePanel();
+    }
     public bool TryNextPanel()
     {
         if (Panels[currentPanel].TryNextDialogue() == false)
@@ -50,6 +53,7 @@ public class ComicPage : MonoBehaviour
     void NextPanel()
     {
         Panels[currentPanel].rectTransform.DOAnchorPos(Panels[currentPanel].endPosition, 0.5f);
+        ActivatePage();
     }
     // Update is called once per frame
     void Update()

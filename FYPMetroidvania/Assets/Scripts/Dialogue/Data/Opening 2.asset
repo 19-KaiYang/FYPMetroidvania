@@ -102,8 +102,23 @@ MonoBehaviour:
   - SpeakerType: 1
     Name: Boblin
     SpeakerImage: {fileID: -1139428579820881798, guid: 70e25c439bdb282458d05136c06b45f5, type: 3}
-    Text: "I do actually remember how you first arrived. How confused you were as
-      you recounted your story to us\u2026"
+    Text: I do actually remember how you first arrived here at Guublinkamp.
+    sfx: 14
+    pitch: 0.95
+    autoskip: 0
+    screenshake: 0
+  - SpeakerType: 0
+    Name: Eris
+    SpeakerImage: {fileID: -974322534847537677, guid: bb801f31584f7f54ca838f9bf9fcc606, type: 3}
+    Text: Gosh I still can't believe the camp of goblins is called Guublinkamp...
+    sfx: 14
+    pitch: 0.9
+    autoskip: 1
+    screenshake: 0
+  - SpeakerType: 1
+    Name: Boblin
+    SpeakerImage: {fileID: -1139428579820881798, guid: 70e25c439bdb282458d05136c06b45f5, type: 3}
+    Text: I remember how confused you were..
     sfx: 14
     pitch: 0.95
     autoskip: 0
@@ -111,7 +126,7 @@ MonoBehaviour:
   - SpeakerType: 0
     Name: Player
     SpeakerImage: {fileID: -4905368094546260507, guid: 848122712e8a84f489950c10d12034ef, type: 3}
-    Text: Anyone would be if they got hit by a truck and sent to the different dimension
+    Text: Anyone would be if they got hit by a truck and sent to a different dimension
       as a rat!
     sfx: 14
     pitch: 0.9

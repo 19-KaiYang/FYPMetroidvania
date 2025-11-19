@@ -605,20 +605,24 @@ public class PlayerController : MonoBehaviour
         else
             dashDirection = new Vector2(facingRight ? 1f : -1f, 0f);
 
-        isDashing = true;
-        health.invincible = true;
-        dashTimer = dashDuration;
-        velocity = dashDirection * dashSpeed;
-        animator.SetBool("isDashing", true);
-        dashTrail.emitting = true;
-        dashesRemaining--;
-        if (combat != null && combat.isAttacking){
+        if (combat != null && combat.isAttacking)
+        {
             combat.SetCanTransition(1);
             ResetState();
             SetHitstop(false);
             combat.HideVFX();
             combat.DisableAllHitboxes();
         }
+        isDashing = true;
+        health.invincible = true;
+        dashTimer = dashDuration;
+        velocity = dashDirection * dashSpeed;
+        dashTrail.emitting = true;
+        dashesRemaining--;
+        animator.Rebind();
+        animator.Update(0f);
+        animator.SetBool("isDashing", true);
+
         AudioManager.PlaySFX(SFXTYPE.PLAYER_DASH);
 
 

@@ -22,7 +22,7 @@ public class Interactable : MonoBehaviour
     {
         if (canInteract)
         {
-            if (Input.GetKeyDown(KeyCode.Return))
+            if (Input.GetKeyDown(KeyCode.Return) && !PlayerController.instance.isInCutscene)
             {
                 Debug.Log("Start dialogue");
                 _dialogueSystem.gameObject.SetActive(true);

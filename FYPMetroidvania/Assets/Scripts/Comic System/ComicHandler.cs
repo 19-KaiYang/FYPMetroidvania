@@ -1,7 +1,9 @@
 using DG.Tweening;
 using NUnit.Framework;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class ComicHandler : MonoBehaviour
@@ -9,6 +11,7 @@ public class ComicHandler : MonoBehaviour
     public List<ComicPage> Pages;
     public int currentPage;
     public RectTransform pageAnchor;
+    public CanvasGroup fade;
     public Image autoplayHighlight;
 
     [Header("View Settings")]
@@ -34,6 +37,8 @@ public class ComicHandler : MonoBehaviour
         }
         autoplaying = false;
         autoTimer = 0f;
+        AudioManager.instance.PlayBGM(BGMType.ENDING_COMIC);
+        Pages[currentPage].ActivatePage();
     }
     // Update is called once per frame
     void Update()
@@ -67,10 +72,11 @@ public class ComicHandler : MonoBehaviour
                 if (currentPage < Pages.Count)
                 {
                     NextPage();
+                    Pages[currentPage].ActivatePage();
                 }
                 else
                 {
-                    Debug.Log("Comic finished");
+                    StartCoroutine(FadeOut());
                 }
             }
         }
@@ -90,9 +96,15 @@ public class ComicHandler : MonoBehaviour
             }
         }
     }
-
     void NextPage()
     {
         pageAnchor.DOAnchorPosX(pageAnchor.anchoredPosition.x - pageWidth - pageSpacing, 0.3f).SetEase(Ease.OutSine);
+    }
+
+    IEnumerator FadeOut()
+    {
+        fade.alpha = 0f;
+        yield return fade.DOFade(1f, 3f);
+        SceneManager.LoadScene("CreditsScreen");
     }
 }

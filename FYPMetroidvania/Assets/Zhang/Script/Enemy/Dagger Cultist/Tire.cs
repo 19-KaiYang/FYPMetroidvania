@@ -6,6 +6,7 @@ public class Tire : ProjectileBase
     private PlayerController player;
     private Vector3 playerPosition;
     public Transform R;
+    public Vector2 dir;
 
     private DaggerCultist owner;
     [SerializeField] private float ownerAttackDamage;
@@ -17,6 +18,7 @@ public class Tire : ProjectileBase
 
     public void Init(float _attackDamage, DaggerCultist _enemy, Vector2 dir)
     {
+        this.dir = dir;
         ownerAttackDamage = _attackDamage;
         owner = _enemy;
         rb.linearVelocity = dir * speed;
@@ -48,11 +50,11 @@ public class Tire : ProjectileBase
         base.Update();
 
         timer += Time.deltaTime;
-        rb.linearVelocity = rb.linearVelocity.normalized * speed;
-        if (timer >= 1f && rb.linearVelocityX == 0)
+        if (timer >= 2f && rb.linearVelocityX == 0)
         {
             Despawn();
         }
+        rb.linearVelocity = new Vector2(dir.x * speed, rb.linearVelocityY);
     }
     protected override void Move()
     {
@@ -79,11 +81,10 @@ public class Tire : ProjectileBase
         if (collision.gameObject.tag==("Player"))
         {
             Health p = collision.gameObject.GetComponent<Health>();
-            if (p.invincible) return;
             Vector2 dir;
             dir = (collision.transform.position - this.transform.position).normalized;
 
-            p.TakeDamage(finalDamage, dir, true, currentCCState, 0.5f);
+            if (!p.invincible) p.TakeDamage(finalDamage, dir, true, currentCCState, 0.5f);
 
             Despawn();
         }

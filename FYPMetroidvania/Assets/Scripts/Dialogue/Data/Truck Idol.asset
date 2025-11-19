@@ -63,9 +63,9 @@ MonoBehaviour:
   - SpeakerType: 2
     Name: Narrator
     SpeakerImage: {fileID: 0}
-    Text: '"To the almighty one. May its wheels be blessed and ever turning, its
-      engine never stalling and its fumes choking our enemies. All glory and power
-      to the Truck of Trucks!'
+    Text: '"To the almighty one, the God of our city: Evuul-Kult. May its wheels
+      be blessed and ever turning, its engine never stalling and its fumes choking
+      our enemies. All glory and power to the Truck of Trucks!"'
     sfx: 0
     pitch: 0.8
     autoskip: 0
@@ -95,10 +95,9 @@ MonoBehaviour:
     autoskip: 0
     screenshake: 1
   - SpeakerType: 2
-    Name: Knights
-    SpeakerImage: {fileID: 0}
-    Text: Its power is far beyond your imagination! Who are you to cross us, its
-      noble servants?
+    Name: Wolf Knight
+    SpeakerImage: {fileID: -8171068775573993944, guid: 7b2f1f6ada005db478230a1c006c332c, type: 3}
+    Text: Who even are you? And what are you doing here in Evuul-Kult?
     sfx: 14
     pitch: 0.7
     autoskip: 0
@@ -106,8 +105,44 @@ MonoBehaviour:
   - SpeakerType: 0
     Name: Player
     SpeakerImage: {fileID: 1639174027949059371, guid: 89a0eb1b45e47c740aa21bd41d73cb21, type: 3}
-    Text: Ah great, the fun squad is here.
+    Text: I was just looking for Maniac Street down to Idiot Creek! But I guess I've
+      already found it!
     sfx: 14
     pitch: 0.8
+    autoskip: 0
+    screenshake: 0
+  - SpeakerType: 0
+    Name: Elric
+    SpeakerImage: {fileID: 3049418459031337693, guid: 871d73153e1ff9940a05e24c910efabc, type: 3}
+    Text: Actually that's a real place in this city.
+    sfx: 14
+    pitch: 0.8
+    autoskip: 0
+    screenshake: 0
+  - SpeakerType: 2
+    Name: Wolf Knight
+    SpeakerImage: {fileID: -8171068775573993944, guid: 7b2f1f6ada005db478230a1c006c332c, type: 3}
+    Text: You mean Manaiek Street, that's just a left turn. And Edeeh-Uht Creek is
+      the opposite direction, buddy. You're not from here are you?
+    sfx: 14
+    pitch: 0.7
+    autoskip: 0
+    screenshake: 0
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: 1639174027949059371, guid: 89a0eb1b45e47c740aa21bd41d73cb21, type: 3}
+    Text: Why is everyone in this city all lunatics and morons! Including your stupid
+      truck-kun!
+    sfx: 14
+    pitch: 0.8
+    autoskip: 0
+    screenshake: 1
+  - SpeakerType: 2
+    Name: Knights
+    SpeakerImage: {fileID: 0}
+    Text: Its power is far beyond your imagination! Who are you to speak against
+      our God, and against us, its noble servants?
+    sfx: 14
+    pitch: 0.7
     autoskip: 0
     screenshake: 0

@@ -18,12 +18,13 @@ MonoBehaviour:
   hasCutscene: 1
   Steps:
   - SpeakerType: 0
-    Name: Player
+    Name: Eris
     SpeakerImage: {fileID: 3516079381801495997, guid: b0206ccead3847d49911a68f16ebc122, type: 3}
     Text: Alrighty. This is it. No pressure.
     sfx: 14
     pitch: 0.8
     autoskip: 0
+    screenshake: 0
   - SpeakerType: 0
     Name: Player
     SpeakerImage: {fileID: 1639174027949059371, guid: 89a0eb1b45e47c740aa21bd41d73cb21, type: 3}
@@ -32,6 +33,7 @@ MonoBehaviour:
     sfx: 14
     pitch: 0.8
     autoskip: 0
+    screenshake: 0
   - SpeakerType: 1
     Name: Roblin
     SpeakerImage: {fileID: 689575766274090883, guid: b0ce799feecbda345b3d0ec58a524717, type: 3}
@@ -39,3 +41,4 @@ MonoBehaviour:
     sfx: 14
     pitch: 1
     autoskip: 0
+    screenshake: 0

@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CreditScene : MonoBehaviour
 {
@@ -32,6 +33,9 @@ public class CreditScene : MonoBehaviour
             StartCoroutine(Scroll(element));
             yield return new WaitForSeconds(time);
         }
+
+        yield return new WaitForSeconds(2.0f);
+        SceneManager.LoadScene("EndingScene");
     }
 
     IEnumerator Scroll(RectTransform element)
