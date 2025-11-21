@@ -129,8 +129,16 @@ MonoBehaviour:
     autoskip: 0
     screenshake: 0
   - SpeakerType: 0
-    Name: Player
+    Name: Eris
     SpeakerImage: {fileID: 1639174027949059371, guid: 89a0eb1b45e47c740aa21bd41d73cb21, type: 3}
+    Text: ...
+    sfx: 14
+    pitch: 0.8
+    autoskip: 0
+    screenshake: 0
+  - SpeakerType: 0
+    Name: Player
+    SpeakerImage: {fileID: -4905368094546260507, guid: 848122712e8a84f489950c10d12034ef, type: 3}
     Text: Why is everyone in this city all lunatics and morons! Including your stupid
       truck-kun!
     sfx: 14
