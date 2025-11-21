@@ -32,7 +32,7 @@ public class ComicPanel : MonoBehaviour
     }
     public void ActivatePanel()
     {
-        if(sfx != SFXTYPE.NONE) AudioManager.PlaySFX(sfx);
+        if(sfx != SFXTYPE.NONE) AudioManager.PlaySFX(sfx, 1);
     }
     public bool TryNextDialogue()
     {

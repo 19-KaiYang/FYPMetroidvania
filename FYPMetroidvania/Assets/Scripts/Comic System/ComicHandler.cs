@@ -61,7 +61,8 @@ public class ComicHandler : MonoBehaviour
                     }
                     else
                     {
-                        Debug.Log("Comic finished");
+
+                        StartCoroutine(FadeOut());
                     }
                 }
             }
@@ -101,6 +102,7 @@ public class ComicHandler : MonoBehaviour
     }
     void NextPage()
     {
+        pageAnchor.DOComplete();
         pageAnchor.DOAnchorPosX(pageAnchor.anchoredPosition.x - pageWidth - pageSpacing, 0.3f).SetEase(Ease.OutSine);
     }
 
